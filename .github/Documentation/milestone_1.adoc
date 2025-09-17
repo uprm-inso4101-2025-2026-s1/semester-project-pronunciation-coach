@@ -1,0 +1,101 @@
+= Pronunciation Coach – First Milestone
+:toc:
+:toclevels: 3
+:sectnums:
+:revdate: {docdate}
+
+== 1. Informative Part
+
+=== 1.1 Teams
+- List each team with their members 
+- Identify any external partners (clients, experts, etc.)
+- Describe roles and responsibilities
+
+=== 1.2 Current Situation, Needs, Ideas
+
+==== 1.2.1 Current Situation
+- Describe context and environment
+- Reference sources or data if possible
+
+==== 1.2.2 Needs
+- List the needs people have in this context
+- Keep needs independent of your app/system
+
+==== 1.2.3 Ideas
+- Document your ideas for satisfying the needs
+- Keep it feature-oriented, not implementation-oriented
+
+=== 1.3 Scope, Span, and Synopsis
+
+==== 1.3.1 Scope and Span
+- Broad area (scope) and specific concern (span)
+
+==== 1.3.2 Synopsis
+- Executive summary of the whole project
+
+=== 1.4 Other Activities (Beyond Coding)
+- Domain engineering
+- Requirements analysis
+- Architecture
+- Testing
+- Deployment
+
+=== 1.5 Derived Goals
+- Secondary outcomes, beyond the primary project goal
+
+== 2. Descriptive Part
+
+=== 2.1 Domain Description
+
+==== 2.1.1 Domain Rough Sketch
+- Brainstormed/raw notes, interviews, observations
+
+==== 2.1.2 Terminology
+- Define important terms from the domain
+- Distinguish domain vs. non-domain concepts
+
+==== 2.1.3 Domain Terminology vs Rough Sketch
+- Show how terminology came from sketch analysis
+
+==== 2.1.4 Narrative
+- Story of the domain independent of your system-to-be
+
+==== 2.1.5 Events, Actions, Behaviors
+- Distinguish between events, actions, and behaviors
+
+==== 2.1.6 Function Signatures
+- Functions as operations in the domain (not code yet)
+
+=== 2.2 Requirements
+
+==== 2.2.1 User Stories, Epics, Features
+- Document user stories in “As a … I want … so that …” format
+
+==== 2.2.2 Personas
+- Introduce fictional but realistic personas
+
+==== 2.2.3 Domain Requirements
+- Derive system requirements from domain properties
+
+==== 2.2.4 Interface Requirements
+- Shared phenomena between system and domain
+
+==== 2.2.5 Machine Requirements
+- Measurable constraints on performance, stability, etc.
+
+=== 2.3 Implementation
+
+==== 2.3.1 Selected Fragments of Implementation
+- Architecture diagrams
+- Screen sketches
+- Code snippets (only if they clarify something)
+
+== 3. Analytic Part
+
+=== 3.1 Concept Analysis
+- Analyze rough sketch → abstractions → terminology → narrative
+
+=== 3.2 Validation and Verification
+- Testing plans
+- Walkthroughs
+- Scenarios used for validation
