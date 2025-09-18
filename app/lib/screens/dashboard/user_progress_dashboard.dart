@@ -1,3 +1,4 @@
+import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/dashboard/progress_visualization_widget.dart';
@@ -49,6 +50,26 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ChallengesPage(),
+                ),
+              );
+            },
+            child: const Text(
+              "Challenges",
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              )
+            )
+          ,)
+        ]
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
