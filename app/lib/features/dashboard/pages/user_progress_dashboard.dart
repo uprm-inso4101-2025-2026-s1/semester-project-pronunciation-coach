@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../widgets/dashboard/progress_visualization_widget.dart';
-import '../../widgets/dashboard/recent_activity_timeline.dart';
-import '../../constants/colors.dart';
-import '../../constants/text_styles.dart';
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
+import '../widgets/progress_visualization_widget.dart';
+import '../widgets/recent_activity_timeline.dart';
+
 
 class UserProgressDashboard extends StatefulWidget {
   const UserProgressDashboard({Key? key}) : super(key: key);

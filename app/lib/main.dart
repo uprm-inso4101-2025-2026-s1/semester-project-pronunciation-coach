@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'screens/dashboard/user_progress_dashboard.dart';
+
+import 'features/dashboard/pages/user_progress_dashboard.dart';
+
 
 void main() {
   runApp(const MyApp());
