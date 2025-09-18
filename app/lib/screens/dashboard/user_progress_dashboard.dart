@@ -57,23 +57,59 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Display Selected Language
+              _buildSelectedLanguage(),
+              const SizedBox(height: 20),
+
               // Progress Overview Cards (Portrait Layout)
               _buildProgressOverview(),
               const SizedBox(height: 20),
-              
+
               // Pronunciation Skills Progress
               const ProgressVisualizationWidget(),
               const SizedBox(height: 20),
-              
+
               // Practice Statistics
               _buildPracticeStatistics(),
               const SizedBox(height: 20),
-              
+
               // Recent Practice Sessions
               const RecentActivityTimeline(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSelectedLanguage() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Selected Pace: ' + 'VAR_SELECTED_PACE',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 0),
+        ],
       ),
     );
   }
@@ -102,7 +138,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildOverviewCard(String title, String value, IconData icon, Color color) {
+  Widget _buildOverviewCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -141,15 +182,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            value,
-            style: AppTextStyles.progressValue,
-          ),
+          Text(value, style: AppTextStyles.progressValue),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTextStyles.bodySmall,
-          ),
+          Text(title, style: AppTextStyles.bodySmall),
         ],
       ),
     );
@@ -214,7 +249,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildStatItem(String title, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Container(
@@ -236,10 +276,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         ),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           textAlign: TextAlign.center,
         ),
       ],
