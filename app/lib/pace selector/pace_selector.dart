@@ -12,8 +12,12 @@ class ChallengesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Challenges"),
+        title: const Text("Pace Selector"),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
       ),
       body: ChangeNotifierProvider(
         create: (_) => MyAppState(),
@@ -117,18 +121,16 @@ class PaceSelector extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: selected
-            ? theme.colorScheme.primary.withOpacity(0.15)
-            : theme.colorScheme.surface,
+        color: _getButtonColorBox(pace, selected),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: selected ? theme.colorScheme.primary : theme.dividerColor,
+          color: selected ? Colors.blue : Colors.grey,
           width: 2,
         ),
         boxShadow: [
           if (selected)
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.3),
+              color: Colors.blue.withOpacity(0.3),
               blurRadius: 10,
               spreadRadius: 1,
             ),
@@ -137,9 +139,7 @@ class PaceSelector extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: selected
-              ? theme.colorScheme.primary
-              : theme.colorScheme.onSurface,
+          color: Colors.black,
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
@@ -149,5 +149,22 @@ class PaceSelector extends StatelessWidget {
         onTap: () => appState.setPace(pace),
       ),
     );
+  }
+}
+
+Color _getButtonColorBox(LearningPace pace, bool selected){
+  if (selected){
+    switch (pace) {
+      case LearningPace.casual:
+        return Colors.yellow.shade400;
+      case LearningPace.standard:
+        return Colors.orange.shade400;
+      case LearningPace.intensive:
+        return Colors.red.shade400;
+      default:
+      return Colors.grey.shade200;
+    } 
+  } else {
+    return Colors.white;
   }
 }

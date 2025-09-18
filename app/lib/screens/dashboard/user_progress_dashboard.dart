@@ -62,7 +62,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               );
             },
             child: const Text(
-              "Challenges",
+              "Pace",
               style: TextStyle(
                 color: Colors.blue,
                 fontWeight: FontWeight.bold,
