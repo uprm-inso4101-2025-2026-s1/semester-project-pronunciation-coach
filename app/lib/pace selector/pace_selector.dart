@@ -124,13 +124,13 @@ class PaceSelector extends StatelessWidget {
         color: _getButtonColorBox(pace, selected),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: selected ? Colors.blue : Colors.grey,
+          color: selected ? Colors.transparent : Colors.grey,
           width: 2,
         ),
         boxShadow: [
           if (selected)
             BoxShadow(
-              color: Colors.blue.withOpacity(0.3),
+              color: Colors.black.withOpacity(0.3),
               blurRadius: 10,
               spreadRadius: 1,
             ),
@@ -144,7 +144,7 @@ class PaceSelector extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: selected
-            ? Icon(Icons.check_circle, color: theme.colorScheme.primary)
+            ? Icon(Icons.check_circle, color: Colors.black)
             : null,
         onTap: () => appState.setPace(pace),
       ),
