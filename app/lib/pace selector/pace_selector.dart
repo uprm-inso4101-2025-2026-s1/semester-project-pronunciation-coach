@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,13 +17,11 @@ class ChallengesPage extends StatelessWidget {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: ChangeNotifierProvider(
-        create: (_) => MyAppState(),
-        child: const PaceSelector(),
-        ),
-      );
+      body: const PaceSelector(),
+    );
   }
 }
+
 class MyAppState extends ChangeNotifier {
   LearningPace? selectedPace;
 
@@ -115,7 +111,6 @@ class PaceSelector extends StatelessWidget {
     required bool selected,
   }) {
     var appState = context.read<MyAppState>();
-    final theme = Theme.of(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -137,10 +132,7 @@ class PaceSelector extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.black,
-        ),
+        leading: Icon(icon, color: Colors.black),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: selected
@@ -152,8 +144,8 @@ class PaceSelector extends StatelessWidget {
   }
 }
 
-Color _getButtonColorBox(LearningPace pace, bool selected){
-  if (selected){
+Color _getButtonColorBox(LearningPace pace, bool selected) {
+  if (selected) {
     switch (pace) {
       case LearningPace.casual:
         return Colors.yellow.shade400;
@@ -162,8 +154,8 @@ Color _getButtonColorBox(LearningPace pace, bool selected){
       case LearningPace.intensive:
         return Colors.red.shade400;
       default:
-      return Colors.grey.shade200;
-    } 
+        return Colors.grey.shade200;
+    }
   } else {
     return Colors.white;
   }

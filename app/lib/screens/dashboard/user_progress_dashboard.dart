@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,20 +57,15 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const ChallengesPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const ChallengesPage()),
               );
             },
             child: const Text(
-              "Pace",
-              style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-              )
-            )
-          ,)
-        ]
+              "Select Pace",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -78,8 +74,8 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Display Selected Language
-              _buildSelectedLanguage(),
+              // Display Selected Pace
+              _buildSelectedPace(context),
               const SizedBox(height: 20),
 
               // Progress Overview Cards (Portrait Layout)
@@ -103,7 +99,24 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildSelectedLanguage() {
+  Widget _buildSelectedPace(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    String paceText;
+    switch (appState.selectedPace) {
+      case LearningPace.casual:
+        paceText = '🟡 Casual 🟡';
+        break;
+      case LearningPace.standard:
+        paceText = '🟠 Standard 🟠';
+        break;
+      case LearningPace.intensive:
+        paceText = '🔴 Intensive 🔴';
+        break;
+      default:
+        paceText = '⚪ Not selected ⚪';
+    }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -118,19 +131,13 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Selected Pace: ' + 'VAR_SELECTED_PACE',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 0),
-        ],
+      child: Text(
+        'Selected Pace: $paceText',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textPrimary,
+        ),
       ),
     );
   }
