@@ -1,7 +1,7 @@
 = Pronunciation Coach – First Milestone
 :toc:
 :toclevels: 3
-:sectnums:
+:sectnums: 1
 :revdate: {docdate}
 
 == 1. Informative Part
@@ -9,6 +9,7 @@
 === 1.1 Teams
 
 Team 1 - UI Foundation & Architectural Setup Team:
+
 * Alondra Arce - Team Leader & Architecture Specialist
 * Fabian Velez - Researcher & Documentation Lead
 * Julian A. Toro - Security & Research
@@ -18,6 +19,7 @@ Team 1 - UI Foundation & Architectural Setup Team:
 * Kevin Ruiz - Data & Offline Strategy
 
 Roles and Responsibilities:
+
 * Alondra Arce: Project coordination, architecture design, routing and state management implementation, technical decision-making.
 * Fabian Velez: Domain research, UI/UX component system design, documentation management, requirements analysis.
 * Julian A. Toro: Research on secure authentication methods and pipeline design.
@@ -73,8 +75,7 @@ The project encompasses mobile development with Flutter, initial architecture se
 
 ==== 1.3.2 Synopsis
 
-Pronunciation Coach is a Flutter-based mobile application designed to help Spanish-speaking adults improve their English pronunciation through targeted exercises and AI-driven feedback.  
-The project involves developing a robust architecture for handling authentication flows, creating a comprehensive component system for consistent UI/UX, implementing speech analysis functionality, and designing an engaging activity-based learning progression.  
+Pronunciation Coach is a Flutter-based mobile application designed to help Spanish-speaking adults improve their English pronunciation through targeted exercises and AI-driven feedback. The project involves developing a robust architecture for handling authentication flows, creating a comprehensive component system for consistent UI/UX, implementing speech analysis functionality, and designing an engaging activity-based learning progression.  
 
 The solution aims to make pronunciation practice accessible, effective, and engaging through technology-enabled learning tools.
 
@@ -207,6 +208,7 @@ lib/
 ----
 
 Screen Sketches:
+
 * *Login Screen*: Based on Research #45 and #50. Features a centered card with a header, email field, password field (with toggle), a prominent "Login" button, and secondary links ("Forgot Password?", "Sign Up").
 * *Home Screen*: Based on Research #42 and #48. Features a welcome message, a "Progress Card" displaying a streak, a "Daily Challenge" card with a CTA button, and a bottom navigation bar.
 
@@ -224,6 +226,7 @@ The technical research (auth security, architecture) ensures the solution space 
 === 3.2 Validation and Verification
 
 *Testing Plans:* As per Research #14 and #19, testing will include:
+
 ** Unit Tests: For the SessionController state changes (login/logout logic).
 ** Widget Tests: For Login Screen input validation and button enabling/disabling.
 ** Integration Tests: For the complete flow from Login to Home navigation.
@@ -231,6 +234,7 @@ The technical research (auth security, architecture) ensures the solution space 
 *Walkthroughs:* The team will conduct peer code reviews on all pull requests to verify architecture adherence and code quality.
 
 *Scenarios used for validation:*
+
 1. Happy Path: Enter valid credentials -> Login button enables -> Press button -> Navigates to Home.
 2. Validation Error: Enter invalid email format -> Error message appears under field -> Login button remains disabled.
 3. Authentication Error: Enter incorrect credentials -> SnackBar with generic error message appears.
