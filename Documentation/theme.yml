@@ -1,0 +1,11 @@
+extends: default
+title_page:
+  title:
+    font_size: 26
+    align: center
+  authors:
+    font_size: 18
+    align: center
+  revision_date:
+    font_size: 14
+    align: center
