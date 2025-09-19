@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:provider/provider.dart';
+import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,6 +79,20 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChallengesPage()),
+              );
+            },
+            child: const Text(
+              "Select Pace",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -117,15 +133,69 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Display Selected Pace
+              _buildSelectedPace(context),
+              const SizedBox(height: 20),
+
+              // Progress Overview Cards (Portrait Layout)
               _buildProgressOverview(),
               const SizedBox(height: 20),
+
+              // Pronunciation Skills Progress
               const ProgressVisualizationWidget(),
               const SizedBox(height: 20),
+
+              // Practice Statistics
               _buildPracticeStatistics(),
               const SizedBox(height: 20),
+
+              // Recent Practice Sessions
               const RecentActivityTimeline(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelectedPace(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    String paceText;
+    switch (appState.selectedPace) {
+      case LearningPace.casual:
+        paceText = '🟡 Casual 🟡';
+        break;
+      case LearningPace.standard:
+        paceText = '🟠 Standard 🟠';
+        break;
+      case LearningPace.intensive:
+        paceText = '🔴 Intensive 🔴';
+        break;
+      default:
+        paceText = '⚪ Not selected ⚪';
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Text(
+        'Selected Pace: $paceText',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textPrimary,
         ),
       ),
     );
@@ -376,8 +446,6 @@ class UserProgress {
 /// -------------------------------
 ///  DAILY CHALLENGE PAGE WITH RANDOM PHRASES
 /// -------------------------------
-// Duplicate class definition removed
-
 class DailyChallengePage extends StatefulWidget {
   const DailyChallengePage({super.key});
 

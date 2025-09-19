@@ -1,9 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screens/dashboard/user_progress_dashboard.dart';
+import 'pace selector/pace_selector.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
