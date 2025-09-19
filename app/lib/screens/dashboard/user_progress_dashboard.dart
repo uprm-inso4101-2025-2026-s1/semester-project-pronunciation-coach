@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../widgets/dashboard/progress_visualization_widget.dart';
@@ -49,6 +51,21 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChallengesPage()),
+              );
+            },
+            child: const Text(
+              "Select Pace",
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -57,22 +74,69 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Display Selected Pace
+              _buildSelectedPace(context),
+              const SizedBox(height: 20),
+
               // Progress Overview Cards (Portrait Layout)
               _buildProgressOverview(),
               const SizedBox(height: 20),
-              
+
               // Pronunciation Skills Progress
               const ProgressVisualizationWidget(),
               const SizedBox(height: 20),
-              
+
               // Practice Statistics
               _buildPracticeStatistics(),
               const SizedBox(height: 20),
-              
+
               // Recent Practice Sessions
               const RecentActivityTimeline(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSelectedPace(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    String paceText;
+    switch (appState.selectedPace) {
+      case LearningPace.casual:
+        paceText = '🟡 Casual 🟡';
+        break;
+      case LearningPace.standard:
+        paceText = '🟠 Standard 🟠';
+        break;
+      case LearningPace.intensive:
+        paceText = '🔴 Intensive 🔴';
+        break;
+      default:
+        paceText = '⚪ Not selected ⚪';
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Text(
+        'Selected Pace: $paceText',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textPrimary,
         ),
       ),
     );
@@ -102,7 +166,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildOverviewCard(String title, String value, IconData icon, Color color) {
+  Widget _buildOverviewCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -141,15 +210,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            value,
-            style: AppTextStyles.progressValue,
-          ),
+          Text(value, style: AppTextStyles.progressValue),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTextStyles.bodySmall,
-          ),
+          Text(title, style: AppTextStyles.bodySmall),
         ],
       ),
     );
@@ -214,7 +277,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildStatItem(String title, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Container(
@@ -236,10 +304,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         ),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           textAlign: TextAlign.center,
         ),
       ],
