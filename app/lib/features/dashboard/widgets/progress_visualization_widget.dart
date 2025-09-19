@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/dashboard/course_progress.dart';
-import '../../constants/colors.dart';
-import '../../constants/text_styles.dart';
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
+import '../models/course_progress.dart';
 
 class ProgressVisualizationWidget extends StatefulWidget {
   final List<CourseProgress>? courses;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/dashboard/activity.dart';
-import '../../constants/colors.dart';
-import '../../constants/text_styles.dart';
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
+import '../models/activity.dart';
 
 class RecentActivityTimeline extends StatelessWidget {
   final List<Activity>? activities;
