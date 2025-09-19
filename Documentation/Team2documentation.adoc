@@ -1,12 +1,14 @@
 = Pronunciation Coach – First Milestone
+:author: Jorge L. Luna Pagán; Team 2
+:revdate: 19 September 2025
+:sectnums:
 :toc:
 :toclevels: 3
-:sectnums:
-:revdate: {docdate}
+:title-page:
 
-== 1. Informative Part
+== Informative Part
 
-=== 1.1 Teams
+=== Teams
 // - List each team with their members 
 // - Identify any external partners (clients, experts, etc.)
 // - Describe roles and responsibilities'
@@ -50,9 +52,9 @@
 | Research accent variation in pronunciation, build orthographic dictionary
 |===
 
-=== 1.2 Current Situation, Needs, Ideas
+=== Current Situation, Needs, Ideas
 
-==== 1.2.1 Current Situation
+==== Current Situation
 // - Describe context and environment
 // - Reference sources or data if possible
 
@@ -68,7 +70,7 @@ For example, these are great software to learn a languege, but lack of that pron
 [Duolingo]: https://www.duolingo.com, 
 [Babbel]: https://www.babbel.com
 
-==== 1.2.2 Needs
+==== Needs
 // - List the needs people have in this context
 // - Keep needs independent of your app/system
 
@@ -93,7 +95,7 @@ From the current situation, several categories of user and domain needs can be i
 * Mechanisms to highlight frequent pronunciation errors for focused practice.
 * Transparent and explainable evaluation methods, showing why certain pronunciations are marked as incorrect or needing improvement.
 
-==== 1.2.3 Ideas
+==== Ideas
 // - Document your ideas for satisfying the needs
 // - Keep it feature-oriented, not implementation-oriented
 
@@ -118,9 +120,9 @@ To address the identified needs, the following feature-oriented ideas have been 
 * Ensure transparency in feedback by showing how evaluations are derived (e.g., highlighting words or phonemes instead of giving only scores).
 * Enable exporting progress reports for personal review or sharing with tutors/mentors.
 
-=== 1.3 Scope, Span, and Synopsis
+=== Scope, Span, and Synopsis
 
-==== 1.3.1 Scope and Span
+==== Scope and Span
 // - Broad area (scope) and specific concern (span)
 *Scope*  
 
@@ -128,12 +130,12 @@ A digital language learning app, specifically tools designed to help learners im
 
 *Span* The Pronunciation Coach focuses on a specific segment of this domain: an application that provides learners with detailed, actionable feedback on their pronunciation at both word and phoneme levels. The project emphasizes accessibility, low-cost solutions, and visual progress tracking for independent learners.
 
-==== 1.3.2 Synopsis
+==== Synopsis
 // I imagine you have this but yeah
 *Synopsis*
 The Pronunciation Coach is a software tool aimed at helping language learners improve their English pronunciation. By leveraging open-source speech-to-text models, the application evaluates user speech at the word and phoneme levels, highlights errors, and provides clear, actionable feedback. The tool is designed to track progress over time to motivate continued practice. This solution addresses the gap in current language learning tools that often provide minimal or non-specific pronunciation feedback.
 
-=== 1.4 Other Activities (Beyond Coding)
+=== Other Activities (Beyond Coding)
 // - Domain engineering
 // - Requirements analysis
 // - Architecture
@@ -172,7 +174,7 @@ In addition to core development, the Pronunciation Coach project involves severa
 * The system should support **offline operation** for core functions (recording, transcription, playback) to ensure accessibility in environments with limited connectivity.  
 * Packaging and installation should be simple, requiring minimal setup for learners to start practicing immediately.  
 
-=== 1.5 Derived Goals
+=== Derived Goals
 
 Beyond the primary objective of helping learners improve pronunciation, the project aims to achieve:
 
@@ -182,11 +184,11 @@ Beyond the primary objective of helping learners improve pronunciation, the proj
 * Promote learner independence by offering a tool that works without requiring continuous teacher intervention.
 
 
-== 2. Descriptive Part
+== Descriptive Part
 
-=== 2.1 Domain Description
+=== Domain Description
 
-==== 2.1.1 Domain Rough Sketch
+==== Domain Rough Sketch
 // - Brainstormed/raw notes, interviews, observations
 
 The domain of pronunciation coaching was explored through brainstorming, observations of language learners, and analysis of existing tools. Key raw notes and observations include:
@@ -206,7 +208,7 @@ The domain of pronunciation coaching was explored through brainstorming, observa
 * Integration with chatbots or AI feedback systems could provide more interactive, personalized learning.
 * Using tools online can be hard for your pronunciation development, we need something intuitive for the user.
 
-==== 2.1.2 Terminology
+==== Terminology
 // - Define important terms from the domain
 // - Distinguish domain vs. non-domain concepts
 * **Learner** – A person practicing pronunciation to improve their spoken English.
@@ -227,7 +229,7 @@ The domain of pronunciation coaching was explored through brainstorming, observa
 * **Phonetic Scoring Algorithm** – Any method that compares learner speech to target phonemes to produce a pronunciation score.
 * **Audio Playback Module** – Component that allows learners to listen to their recorded speech for self-assessment.
 
-==== 2.1.3 Domain Terminology vs Rough Sketch
+==== Domain Terminology vs Rough Sketch
 // - Show how terminology came from sketch analysis
 This section maps key terms to the raw observations and brainstorming notes collected in the Domain Rough Sketch. It demonstrates how the terminology was derived from real-world user and domain insights.
 
@@ -258,7 +260,7 @@ This section maps key terms to the raw observations and brainstorming notes coll
 * **MFA (Montreal Forced Alignment)**  
   *Derived from:* Research showing alignment tools improve the accuracy of phoneme-level analysis.  
 
-==== 2.1.4 Narrative
+==== Narrative
 // - Story of the domain independent of your system-to-be
 In the modern landscape of language learning, many learners strive to improve their spoken English independently. While apps and courses provide vocabulary and grammar exercises, most learners struggle to obtain detailed feedback on pronunciation. Mispronunciations, especially of certain consonants, vowels, and clusters, often persist because learners lack immediate, actionable guidance.
 
@@ -268,7 +270,7 @@ Existing speech-to-text engines offer high transcription accuracy, but most are 
 
 The domain narrative highlights a clear need: tools that empower learners to practice pronunciation accurately, monitor their own progress, and receive understandable, actionable feedback. Such tools would bridge the gap between the learner’s effort and effective improvement, providing a path toward mastery without reliance on constant teacher intervention.
 
-==== 2.1.5 Events, Actions, Behaviors
+==== Events, Actions, Behaviors
 // - Distinguish between events, actions, and behaviors
 This section categorizes key phenomena in the pronunciation coaching domain into **events**, **actions**, and **behaviors**:
 
@@ -297,7 +299,7 @@ This section categorizes key phenomena in the pronunciation coaching domain into
 
 By separating these elements, the domain model clarifies **how the learner interacts with the domain** and **what the system must be able to observe or respond to**.
 
-==== 2.1.6 Function Signatures
+==== Function Signatures
 // - Functions as operations in the domain (not code yet)
 
 The following functions describe operations in the pronunciation coaching domain. They are **conceptual and domain-focused**, grounded in what has been implemented or explored through research and prototyping.
@@ -320,9 +322,10 @@ These functions have been studied, prototyped, or conceptually investigated but 
 * `exportProgressReport(learnerData)` → Considered exporting summaries of learner performance for personal review or tutor use.
 
 *Note:* All explored functions are **derived from domain research and observations** and will be formally implemented in subsequent milestones.
-=== 2.2 Requirements
 
-==== 2.2.1 User Stories, Epics, Features
+=== Requirements
+
+==== User Stories, Epics, Features
 // - Document user stories in “As a … I want … so that …” format
 The following user stories capture the key functionality and goals of the Pronunciation Coach, based on implemented and explored features:
 
@@ -344,7 +347,7 @@ The following user stories capture the key functionality and goals of the Pronun
 - **User Story 3.2:** As a learner, I want my progress tracked over time so that I can see improvement.  
   - **Feature:** `updateProgress()` and `visualizeProgress()` (conceptually explored).
 
-==== 2.2.2 Personas
+==== Personas
 // - Introduce fictional but realistic personas
 The following personas represent typical users of the Pronunciation Coach, highlighting their goals, challenges, and behaviors:
 
@@ -383,7 +386,7 @@ The following personas represent typical users of the Pronunciation Coach, highl
 *Summary:*  
 These personas represent the diversity of learners in terms of age, goals, and contexts. They help justify the **user stories, features, and design choices** made in this project.
 
-==== 2.2.3 Domain Requirements
+==== Domain Requirements
 // - Derive system requirements from domain properties
 The following domain requirements describe essential capabilities and constraints derived from the Pronunciation Coach domain, research, and user personas:
 
@@ -416,7 +419,7 @@ The following domain requirements describe essential capabilities and constraint
 
 *Note:* Additional requirements related to hints, export reports, or advanced AI feedback are **planned for future milestones** and are not included here as they have not been fully explored or prototyped.
 
-==== 2.2.4 Interface Requirements
+==== Interface Requirements
 // - Shared phenomena between system and domain
 The following interface requirements describe the interactions between the Pronunciation Coach system and its environment (learners, audio devices, and external resources):
 
@@ -446,7 +449,7 @@ The following interface requirements describe the interactions between the Pronu
 
 *Note:* Additional interfaces for advanced AI feedback, hints, or report export are **planned for future milestones** and are not included here, as they have not been fully explored or prototyped.
 
-==== 2.2.5 Machine Requirements
+==== Machine Requirements
 // - Measurable constraints on performance, stability, etc.
 The following machine requirements define technical constraints and performance expectations for the Pronunciation Coach system:
 
@@ -470,9 +473,9 @@ The following machine requirements define technical constraints and performance 
 
 *Note:* Advanced requirements for AI hints or export functionality are **planned for future milestones** and are not included here, as they have not yet been prototyped or researched.
 
-=== 2.3 Implementation
+=== Implementation
 
-==== 2.3.1 Selected Fragments of Implementation
+==== Selected Fragments of Implementation
 // - Architecture diagrams
 // - Screen sketches
 // - Code snippets (only if they clarify something)
@@ -503,9 +506,9 @@ digraph G {
 - **Playback Control:** Play, pause, and stop buttons for listening to recorded audio.  
 - **Progress Visualization (Explored):** Prototype charts showing learner improvement over time. 
 
-== 3. Analytic Part
+== Analytic Part
 
-=== 3.1 Concept Analysis
+=== Concept Analysis
 // - Analyze rough sketch → abstractions → terminology → narrative
 The Concept Analysis links the observations, research, and domain understanding collected in the rough sketch to the abstractions and terminology used in the Pronunciation Coach.
 
@@ -532,7 +535,7 @@ The Concept Analysis links the observations, research, and domain understanding 
 
 *Note:* This analysis validates that the project’s scope, features, and terminology are consistent with the **learners’ needs and domain observations**, providing a solid foundation for implementation in subsequent milestones.
 
-=== 3.2 Validation and Verification
+=== Validation and Verification
 // - Testing plans
 // - Walkthroughs
 // - Scenarios used for validation'
