@@ -95,7 +95,10 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.local_fire_department, color: Colors.red),
+              leading: const Icon(
+                Icons.local_fire_department,
+                color: Colors.red,
+              ),
               title: const Text("Daily Challenge"),
               onTap: () {
                 Navigator.push(
@@ -152,7 +155,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildOverviewCard(String title, String value, IconData icon, Color color) {
+  Widget _buildOverviewCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -191,15 +199,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            value,
-            style: AppTextStyles.progressValue,
-          ),
+          Text(value, style: AppTextStyles.progressValue),
           const SizedBox(height: 4),
-          Text(
-            title,
-            style: AppTextStyles.bodySmall,
-          ),
+          Text(title, style: AppTextStyles.bodySmall),
         ],
       ),
     );
@@ -264,7 +266,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
-  Widget _buildStatItem(String title, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Column(
       children: [
         Container(
@@ -286,10 +293,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         ),
         Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           textAlign: TextAlign.center,
         ),
       ],
@@ -298,26 +302,23 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
 }
 
 /// -------------------------------
-///  USER PROGRESS & DAILY CHALLENGE LÓGICA
+///  USER PROGRESS & DAILY CHALLENGE LOGIC
 /// -------------------------------
 class UserProgress {
   int streak;
   int points;
   DateTime? lastActiveDate;
 
-  UserProgress({
-    this.streak = 0,
-    this.points = 0,
-    this.lastActiveDate,
-  });
+  UserProgress({this.streak = 0, this.points = 0, this.lastActiveDate});
 
   static Future<UserProgress> load() async {
     final prefs = await SharedPreferences.getInstance();
     final streak = prefs.getInt("streak") ?? 0;
     final points = prefs.getInt("points") ?? 0;
     final lastDateString = prefs.getString("lastActiveDate");
-    final lastDate =
-        lastDateString != null ? DateTime.tryParse(lastDateString) : null;
+    final lastDate = lastDateString != null
+        ? DateTime.tryParse(lastDateString)
+        : null;
 
     return UserProgress(
       streak: streak,
@@ -331,57 +332,49 @@ class UserProgress {
     await prefs.setInt("streak", streak);
     await prefs.setInt("points", points);
     if (lastActiveDate != null) {
-      await prefs.setString("lastActiveDate", lastActiveDate!.toIso8601String());
+      await prefs.setString(
+        "lastActiveDate",
+        lastActiveDate!.toIso8601String(),
+      );
     }
   }
 
   bool hasCompletedToday() {
-  if (lastActiveDate == null) return false;
-  final now = DateTime.now();
-  // Permitir hacer un challenge cada 10 segundos
-  return now.difference(lastActiveDate!).inSeconds < 10;
-}
-
+    if (lastActiveDate == null) return false;
+    final today = DateTime.now();
+    return today.year == lastActiveDate!.year &&
+        today.month == lastActiveDate!.month &&
+        today.day == lastActiveDate!.day;
+  }
 
   Duration timeUntilNextChallenge() {
     if (lastActiveDate == null) return Duration.zero;
-    final next = lastActiveDate!.add(const Duration(seconds: 10));
+    final next = lastActiveDate!.add(const Duration(days: 1));
     final now = DateTime.now();
-    return next.difference(now).isNegative ? Duration.zero : next.difference(now);
+    return next.difference(now).isNegative
+        ? Duration.zero
+        : next.difference(now);
   }
 
-  void completeActivity({bool testingMode = false}) {
-  final now = DateTime.now();
-
-  if (lastActiveDate != null) {
-    int difference;
-
-    if (testingMode) {
-      // Para pruebas con cooldown corto: diferencia en segundos
-      difference = now.difference(lastActiveDate!).inSeconds;
-      if (difference >= 10) {
-        streak++; // Cada vez que pase el cooldown, sube streak
-      }
-    } else {
-      // Para uso normal: diferencia en días
-      difference = now.difference(lastActiveDate!).inDays;
+  void completeActivity() {
+    final today = DateTime.now();
+    if (lastActiveDate != null) {
+      final difference = today.difference(lastActiveDate!).inDays;
       if (difference == 1) {
         streak++;
       } else if (difference > 1) {
         streak = 1;
       }
+    } else {
+      streak = 1;
     }
-  } else {
-    streak = 1;
+    points += 100;
+    lastActiveDate = today;
   }
-
-  points += 100;
-  lastActiveDate = now;
-}
 }
 
 /// -------------------------------
-///  DAILY CHALLENGE PAGE CON FRASE RANDOM
+///  DAILY CHALLENGE PAGE WITH RANDOM PHRASES
 /// -------------------------------
 // Duplicate class definition removed
 
@@ -434,12 +427,18 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
   void _updateCountdown() {
     final remaining = _userProgress.timeUntilNextChallenge();
     if (remaining == Duration.zero) {
-      _countdownText = "¡Nuevo Daily Challenge disponible!";
+      _countdownText = "¡New Daily Challenge Available!";
     } else {
       final hours = remaining.inHours.remainder(24).toString().padLeft(2, '0');
-      final minutes = remaining.inMinutes.remainder(60).toString().padLeft(2, '0');
-      final seconds = remaining.inSeconds.remainder(60).toString().padLeft(2, '0');
-      _countdownText = "$hours:$minutes:$seconds hasta el próximo challenge";
+      final minutes = remaining.inMinutes
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      final seconds = remaining.inSeconds
+          .remainder(60)
+          .toString()
+          .padLeft(2, '0');
+      _countdownText = "$hours:$minutes:$seconds until next challenge!";
     }
   }
 
@@ -457,21 +456,21 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
   }
 
   Future<void> _startChallenge() async {
-   if (_userProgress.hasCompletedToday()) {
-   ScaffoldMessenger.of(context).showSnackBar(
-     const SnackBar(
-       content: Text("✅ Ya completaste el Daily Challenge de hoy."),
-       duration: Duration(seconds: 3),
-     ),
-   );
-   return;
- }
+    if (_userProgress.hasCompletedToday()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "✅ You already completed the Daily Challenge of today!",
+          ),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
 
-
-  _generateRandomPhrase();
-  _showChallengeDialog();
-}
-
+    _generateRandomPhrase();
+    _showChallengeDialog();
+  }
 
   void _showChallengeDialog() {
     showDialog(
@@ -479,18 +478,21 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: const Text("Daily Challenge"),
+          title: const Text("Daily Challenge:"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _currentPhrase ?? "",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               const Text(
-                "Pronuncia la frase y confirma si lo hiciste correctamente.",
+                "Pronounce the phrase and confirm if you did it correctly.",
                 textAlign: TextAlign.center,
               ),
             ],
@@ -498,7 +500,8 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
+              child: const Text("Cancel"),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
             ),
             ElevatedButton(
               onPressed: () {
@@ -506,7 +509,8 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
                 Navigator.pop(context);
                 _handleChallengeResult(correcto);
               },
-              child: const Text("Confirmar"),
+              child: const Text("Confirm"),
+              style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
             ),
           ],
         );
@@ -515,44 +519,46 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
   }
 
   Future<void> _handleChallengeResult(bool correcto) async {
-  if (correcto) {
-    setState(() {
-      _userProgress.completeActivity(testingMode: true);
-      _updateCountdown();
-    });
+    if (correcto) {
+      setState(() {
+        _userProgress.completeActivity();
+        _updateCountdown();
+      });
 
-    await _userProgress.save();
+      await _userProgress.save();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("🎉 Challenge completado correctamente! +100 XP"),
-        duration: Duration(seconds: 3),
-      ),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("❌ No lo pronunciaste correctamente. Intenta mañana."),
-        duration: Duration(seconds: 3),
-      ),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("🎉 Challenge completed! +100 XP"),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "❌ You did not pronounce it correctly. Try again tomorrow!",
+          ),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final completedToday = _userProgress.hasCompletedToday();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Daily Challenge"),
+        title: const Text(
+          "Daily Challenge",
+          style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.red,
       ),
       body: Padding(
@@ -579,7 +585,7 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
                 _buildStatCard(
                   icon: Icons.local_fire_department,
                   label: "Streak",
-                  value: "${_userProgress.streak} días",
+                  value: "${_userProgress.streak} days",
                   color: Colors.red,
                 ),
                 _buildStatCard(
@@ -598,41 +604,48 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
             ElevatedButton.icon(
               onPressed: completedToday ? null : _startChallenge,
               icon: const Icon(Icons.local_fire_department),
-              label: const Text("Iniciar Daily Challenge"),
+              label: const Text("Start Daily Challenge"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: completedToday ? Colors.grey : Colors.red,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
                 textStyle: const TextStyle(fontSize: 18),
               ),
             ),
-          const SizedBox(height: 16), // Espacio entre botones
-
-// ------------------------------
-// Botón Reset Progreso (solo para pruebas)
-// ------------------------------
-ElevatedButton(
-  onPressed: () async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt("streak", 0);
-    await prefs.setInt("points", 0);
-    await prefs.remove("lastActiveDate");
-    setState(() {
-      _userProgress.streak = 0;
-      _userProgress.points = 0;
-      _userProgress.lastActiveDate = null;
-      _updateCountdown(); // Reinicia el contador
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("✅ Progreso reseteado a 0")),
-    );
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.grey,
-    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-  ),
-  child: const Text("Reset Progreso (Solo pruebas)"),
-),
-],
+            const SizedBox(height: 16), // Espacio entre botones
+            // ------------------------------
+            // Botón Reset Progreso (solo para pruebas)
+            // ------------------------------
+            ElevatedButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setInt("streak", 0);
+                await prefs.setInt("points", 0);
+                await prefs.remove("lastActiveDate");
+                setState(() {
+                  _userProgress.streak = 0;
+                  _userProgress.points = 0;
+                  _userProgress.lastActiveDate = null;
+                  _updateCountdown(); // Reinicia el contador
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("✅ Progress reset to 0")),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+              ),
+              child: const Text("Reset All (Testing Only)"),
+            ),
+          ],
         ),
       ),
     );
@@ -655,7 +668,11 @@ ElevatedButton(
             const SizedBox(height: 8),
             Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
