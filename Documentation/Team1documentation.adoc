@@ -1,32 +1,48 @@
 = Pronunciation Coach – First Milestone
+:author: Fabian L. Velez Ocasio; Team 1
+:revdate: 19 September 2025
+:sectnums:
 :toc:
 :toclevels: 3
-:sectnums: 1
-:revdate: {docdate}
+:title-page:
 
 == 1. Informative Part
 
 === 1.1 Teams
 
-Team 1 - UI Foundation & Architectural Setup Team:
+[cols="1,3,3"]
+|===
+| **Team** | **Member Name** | **Role & Key Contributions**
 
-* Alondra Arce - Team Leader & Architecture Specialist
-* Fabian Velez - Researcher & Documentation Lead
-* Julian A. Toro - Security & Research
-* Aryam Z. Diaz - Research & Quality Assurance
-* Jaydiemar Vazquez - Architecture & Design
-* Kevin Lara - Backend Research
-* Kevin Ruiz - Data & Offline Strategy
 
-Roles and Responsibilities:
+| 1
+| Alondra Arce
+| Team Leader & Architecture Specialist. Project coordination, architecture design, routing and state management.
 
-* Alondra Arce: Project coordination, architecture design, routing and state management implementation, technical decision-making.
-* Fabian Velez: Domain research, UI/UX component system design, documentation management, requirements analysis.
-* Julian A. Toro: Research on secure authentication methods and pipeline design.
-* Aryam Z. Diaz: Research on login UI structure, input validation, and CI/CD/performance strategies.
-* Jaydiemar Vazquez: Research on clean architecture, state management, and home screen visual design.
-* Kevin Lara: Research on backend-as-a-service solutions (Firebase vs. Supabase).
-* Kevin Ruiz: Research on data fetching, caching, and offline strategies for the Home Page.
+| 1
+| Fabian Velez
+| Researcher & Documentation Lead. Domain research, UI/UX component system design, requirements analysis.
+
+| 1
+| Julian A. Toro
+| Security & Research. Research on secure authentication methods and pipeline design.
+
+| 1
+| Aryam Z. Diaz
+| Research & Quality Assurance. Research on login UI structure, input validation, and CI/CD/performance strategies.
+
+| 1
+| Jaydiemar Vazquez
+| Architecture & Design. Research on clean architecture, state management, and home screen visual design.
+
+| 1
+| Kevin Lara
+| Backend Research. Research on backend-as-a-service solutions (Firebase vs. Supabase).
+
+| 1
+| Kevin Ruiz
+| Data & Offline Strategy. Research on data fetching, caching, and offline strategies for the Home Page.
+|===
 
 === 1.2 Current Situation, Needs, Ideas
 
@@ -125,9 +141,7 @@ Terms like *Phoneme* and *Progress* come from the educational domain, while *JWT
 ==== 2.1.4 Narrative
 
 A user, Maria, wants to improve her English pronunciation.  
-She downloads the Pronunciation Coach app. Upon opening it, she is presented with a clean login screen. She enters her credentials and is securely authenticated.  
-
-She arrives at her home page, which welcomes her and shows her current learning streak, recent progress, and suggests a new sound to practice. The app is intuitive, responsive, and makes her feel confident to start her practice session.
+She downloads the Pronunciation Coach app. Upon opening it, she is presented with a clean login screen. She enters her credentials and is securely authenticated. She arrives at her home page, which welcomes her and shows her current learning streak, recent progress, and suggests a new sound to practice. The app is intuitive, responsive, and makes her feel confident to start her practice session.
 
 ==== 2.1.5 Events, Actions, Behaviors
 
@@ -191,19 +205,33 @@ She arrives at her home page, which welcomes her and shows her current learning 
 
 ----
 lib/
+
 ├── core/
+
 │   ├── constants/
+
 │   ├── widgets/ (reusable components)
+
 │   └── providers/ (state management e.g., SessionController)
+
 ├── features/
+
 │   ├── auth/
+
 │   │   ├── screens/
+
 │   │   │   └── login_screen.dart
+
 │   │   └── widgets/
+
 │   └── home/
+
 │       ├── screens/
+
 │       │   └── home_screen.dart
+
 │       └── widgets/
+
 └── main.dart
 ----
 
@@ -239,3 +267,4 @@ The technical research (auth security, architecture) ensures the solution space 
 2. Validation Error: Enter invalid email format -> Error message appears under field -> Login button remains disabled.
 3. Authentication Error: Enter incorrect credentials -> SnackBar with generic error message appears.
 4. Offline Scenario: With no internet, the Home screen should still render any cached data.
+
