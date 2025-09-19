@@ -7,9 +7,9 @@ class RecentActivityTimeline extends StatelessWidget {
   final List<Activity>? activities;
 
   const RecentActivityTimeline({
-    Key? key,
+    super.key,
     this.activities,
-  }) : super(key: key);
+  });
 
   // Mock data - replace with widget.activities when available
   List<Activity> get activityList => activities ?? const [
