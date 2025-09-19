@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../constants/colors.dart';
-import '../constants/text_styles.dart';
+
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
 
 // Simple challenge types
 enum ChallengeType { name, word }

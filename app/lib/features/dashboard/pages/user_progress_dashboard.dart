@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
+import '../widgets/daily_challenge.dart';
+import '../widgets/progress_visualization_widget.dart';
+import '../widgets/recent_activity_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/dashboard/progress_visualization_widget.dart';
-import '../../widgets/dashboard/recent_activity_timeline.dart';
-import '../../widgets/daily_challenge.dart';
-import '../../constants/colors.dart';
-import '../../constants/text_styles.dart';
+
 
 void main() {
   runApp(const MyApp());

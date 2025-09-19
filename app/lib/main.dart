@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
-import 'screens/dashboard/user_progress_dashboard.dart';
+import 'features/dashboard/pages/user_progress_dashboard.dart';
+
 import 'pace selector/pace_selector.dart';
 
 void main() {
