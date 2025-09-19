@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/dashboard/progress_visualization_widget.dart';
 import '../../widgets/dashboard/recent_activity_timeline.dart';
+import '../../widgets/daily_challenge.dart';
 import '../../constants/colors.dart';
 import '../../constants/text_styles.dart';
 
@@ -133,6 +134,13 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Daily Challenge Widget
+              DailyChallengeWidget(
+                currentStreak: 5, // TODO: Get from user progress
+                totalXp: 1250, // TODO: Get from user progress
+              ),
+              const SizedBox(height: 20),
+
               // Display Selected Pace
               _buildSelectedPace(context),
               const SizedBox(height: 20),
