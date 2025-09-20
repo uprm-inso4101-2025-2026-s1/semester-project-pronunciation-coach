@@ -4,8 +4,8 @@
   "managers": ["Fernando18Torres", "Yulio7", "jorge-belgo2", "pedroamorales"],
   "milestones": {
     "Milestone #1": {
-      "startDate": "2025-08-25T08:00:00:00-04:00",
-      "endDate": "2025-09-19T08:00:00-4:00",
+      "startDate": "2025-08-25T08:00:00-04:00",
+      "endDate": "2025-09-19T24:00:00-4:00",
       "projectedGroupGrade": 100.0
     },
     "Milestone #2": {
