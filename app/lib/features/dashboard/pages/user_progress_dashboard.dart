@@ -11,7 +11,6 @@ import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -29,13 +28,97 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const UserProgressDashboard(),
+      home: const MainNavigationScreen(),
     );
   }
 }
 
 /// -------------------------------
-///  USER PROGRESS DASHBOARD CON DRAWER
+///  MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
+/// -------------------------------
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
+
+  @override
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+}
+
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _currentIndex = 0;
+
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      const UserProgressDashboard(),
+      const DailyChallengePage(),
+      const ProfilePagePlaceholder(),
+    ];
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey[600],
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 12,
+          ),
+          elevation: 0,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard_outlined),
+              activeIcon: Icon(Icons.dashboard),
+              label: 'Dashboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_fire_department_outlined),
+              activeIcon: Icon(Icons.local_fire_department),
+              label: 'Challenge',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// -------------------------------
+///  USER PROGRESS DASHBOARD (UPDATED - NO DRAWER)
 /// -------------------------------
 class UserProgressDashboard extends StatefulWidget {
   const UserProgressDashboard({super.key});
@@ -74,13 +157,14 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
-          'Pronunciation Coach',
+          'Dashboard',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: AppColors.cardBackground,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        automaticallyImplyLeading: false, // Remove back button
         actions: [
           TextButton(
             onPressed: () {
@@ -95,38 +179,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             ),
           ),
         ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                "Menú",
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.dashboard),
-              title: const Text("Dashboard"),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.local_fire_department,
-                color: Colors.red,
-              ),
-              title: const Text("Daily Challenge"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const DailyChallengePage()),
-                );
-              },
-            ),
-          ],
-        ),
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -160,6 +212,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
 
               // Recent Practice Sessions
               const RecentActivityTimeline(),
+
+              // Add bottom padding for tab bar
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -381,6 +436,76 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
 }
 
 /// -------------------------------
+///  PROFILE PAGE - PLACEHOLDER
+/// -------------------------------
+class ProfilePagePlaceholder extends StatelessWidget {
+  const ProfilePagePlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        title: const Text('Profile'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false, // Remove back button
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.person, size: 50, color: Colors.white),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Profile Page',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Placeholder - Ready for Development',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            SizedBox(height: 30),
+            Card(
+              margin: EdgeInsets.all(20),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Text(
+                      'Coming Soon!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'User profile management, settings, statistics, achievements, and account preferences will be implemented here.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// -------------------------------
 ///  USER PROGRESS & DAILY CHALLENGE LOGIC
 /// -------------------------------
 class UserProgress {
@@ -453,7 +578,7 @@ class UserProgress {
 }
 
 /// -------------------------------
-///  DAILY CHALLENGE PAGE WITH RANDOM PHRASES
+///  DAILY CHALLENGE PAGE WITH RANDOM PHRASES (FROM ORIGINAL FILE)
 /// -------------------------------
 class DailyChallengePage extends StatefulWidget {
   const DailyChallengePage({super.key});
@@ -582,7 +707,7 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                final correcto = true; // Aquí se simula reconocimiento
+                final correcto = true; // Simulated speech recognition
                 Navigator.pop(context);
                 _handleChallengeResult(correcto);
               },
@@ -637,6 +762,9 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
           style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading:
+            false, // Remove back button for tab navigation
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -684,7 +812,7 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
               label: const Text("Start Daily Challenge"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: completedToday ? Colors.grey : Colors.red,
-                foregroundColor: Colors.black,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 14,
@@ -722,6 +850,9 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
               ),
               child: const Text("Reset All (Testing Only)"),
             ),
+
+            // Add bottom padding for tab bar
+            const SizedBox(height: 20),
           ],
         ),
       ),
