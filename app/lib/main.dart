@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const UserProgressDashboard(),
+      home: const MainNavigationScreen(),
     );
   }
 }
