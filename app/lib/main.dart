@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'features/dashboard/pages/user_progress_dashboard.dart';
+import 'features/dashboard/pages/login_page.dart';
 
 import 'pace selector/pace_selector.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MainNavigationScreen(),
+      home: const LoginPage(),
     );
   }
 }
