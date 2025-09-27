@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'features/dashboard/pages/user_progress_dashboard.dart';
+import 'package:sizer/sizer.dart';
 import 'features/dashboard/pages/login_page.dart';
 
 import 'pace selector/pace_selector.dart';
@@ -17,15 +18,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pronunciation Coach',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'SF Pro Display',
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const LoginPage(),
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return ChangeNotifierProvider(
+          create: (_) => MyAppState(),
+          child: MaterialApp(
+            title: 'Pronunciation Coach',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              fontFamily: 'SF Pro Display',
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            home: const LoginPage(),
+          ),
+        );
+      },
     );
   }
 }
