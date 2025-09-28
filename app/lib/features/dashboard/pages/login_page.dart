@@ -23,24 +23,24 @@ class LoginPage extends StatelessWidget {
               Text(
                 'Welcome Back',
                 style: AppTextStyles.welcomeTitle.copyWith(
-                  fontSize: 18.sp, // 18 unidades responsive
+                  fontSize: 24.sp, // Increased from 18.sp to 24.sp
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 2.h),
               Text(
                 'Sign in to continue your learning journey',
                 style: AppTextStyles.welcomeSubtitle.copyWith(
-                  fontSize: 12.sp,
+                  fontSize: 16.sp, // Increased from 12.sp to 16.sp
                 ),
               ),
               
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               
               // Login Form
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(5.w),
+                padding: EdgeInsets.all(6.w), // Increased padding
                 decoration: BoxDecoration(
                   color: AppColors.cardBackground,
                   borderRadius: BorderRadius.circular(3.w),
@@ -57,10 +57,11 @@ class LoginPage extends StatelessWidget {
                   children: [
                     // Email Field
                     TextField(
+                      style: TextStyle(fontSize: 14.sp), // Added text size
                       decoration: InputDecoration(
                         labelText: 'Email',
                         labelStyle: AppTextStyles.bodyMedium.copyWith(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp, // Increased from 12.sp to 14.sp
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(3.w),
@@ -71,19 +72,20 @@ class LoginPage extends StatelessWidget {
                           borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         prefixIcon: Icon(Icons.email_outlined, 
-                            color: AppColors.textMuted, size: 18.sp),
+                            color: AppColors.textMuted, size: 20.sp), // Increased icon size
                       ),
                     ),
                     
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 4.h),
                     
                     // Password Field
                     TextField(
                       obscureText: true,
+                      style: TextStyle(fontSize: 14.sp), // Added text size
                       decoration: InputDecoration(
                         labelText: 'Password',
                         labelStyle: AppTextStyles.bodyMedium.copyWith(
-                          fontSize: 12.sp,
+                          fontSize: 14.sp, // Increased from 12.sp to 14.sp
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(3.w),
@@ -94,11 +96,11 @@ class LoginPage extends StatelessWidget {
                           borderSide: BorderSide(color: Colors.grey.shade300),
                         ),
                         prefixIcon: Icon(Icons.lock_outlined, 
-                            color: AppColors.textMuted, size: 18.sp),
+                            color: AppColors.textMuted, size: 20.sp), // Increased icon size
                       ),
                     ),
                     
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 4.h),
                     
                     // Remember Me & Forgot Password
                     Row(
@@ -110,11 +112,12 @@ class LoginPage extends StatelessWidget {
                               value: false,
                               onChanged: (value) {},
                               activeColor: AppColors.primary,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
                             Text(
                               'Remember me',
                               style: AppTextStyles.bodySmall.copyWith(
-                                fontSize: 10.sp,
+                                fontSize: 12.sp, // Increased from 10.sp to 12.sp
                               ),
                             ),
                           ],
@@ -126,19 +129,19 @@ class LoginPage extends StatelessWidget {
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
-                              fontSize: 10.sp,
+                              fontSize: 12.sp, // Increased from 10.sp to 12.sp
                             ),
                           ),
                         ),
                       ],
                     ),
                     
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 5.h),
                     
                     // Sign In Button (Disabled)
                     SizedBox(
                       width: double.infinity,
-                      height: 6.h,
+                      height: 7.h, // Increased height
                       child: ElevatedButton(
                         onPressed: null,
                         style: ElevatedButton.styleFrom(
@@ -152,18 +155,18 @@ class LoginPage extends StatelessWidget {
                           style: AppTextStyles.bodyLarge.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp, // Increased from 14.sp to 16.sp
                           ),
                         ),
                       ),
                     ),
                     
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 3.h),
                     
                     // Create Account Button (Disabled)
                     SizedBox(
                       width: double.infinity,
-                      height: 6.h,
+                      height: 7.h, // Increased height
                       child: ElevatedButton(
                         onPressed: null,
                         style: ElevatedButton.styleFrom(
@@ -177,19 +180,19 @@ class LoginPage extends StatelessWidget {
                           style: AppTextStyles.bodyLarge.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp, // Increased from 14.sp to 16.sp
                           ),
                         ),
                       ),
                     ),
                     
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 4.h),
                     
                     // Divider
                     Row(
                       children: [
                         Expanded(
-                          child: Divider(color: Colors.grey.shade300),
+                          child: Divider(color: Colors.grey.shade300, thickness: 1),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4.w),
@@ -197,22 +200,22 @@ class LoginPage extends StatelessWidget {
                             'or',
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.textMuted,
-                              fontSize: 10.sp,
+                              fontSize: 12.sp, // Increased from 10.sp to 12.sp
                             ),
                           ),
                         ),
                         Expanded(
-                          child: Divider(color: Colors.grey.shade300),
+                          child: Divider(color: Colors.grey.shade300, thickness: 1),
                         ),
                       ],
                     ),
                     
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 4.h),
                     
                     // Continue to App Button
                     SizedBox(
                       width: double.infinity,
-                      height: 6.h,
+                      height: 7.h, // Increased height
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
@@ -225,34 +228,35 @@ class LoginPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(3.w),
                           ),
-                          side: BorderSide(color: AppColors.primary),
+                          side: BorderSide(color: AppColors.primary, width: 2),
                         ),
                         child: Text(
                           'Continue to App',
                           style: AppTextStyles.bodyMedium.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
-                            fontSize: 12.sp,
+                            fontSize: 14.sp, // Increased from 12.sp to 14.sp
                           ),
                         ),
                       ),
                     ),
                     
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 4.h),
                     
                     // Footer text
                     Text(
                       "App in testing phase",
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.textMuted,
-                        fontSize: 10.sp,
+                        fontSize: 12.sp, // Increased from 10.sp to 12.sp
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
               
-              SizedBox(height: 5.h),
+              SizedBox(height: 6.h),
             ],
           ),
         ),
