@@ -220,7 +220,7 @@ class LoginPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const UserProgressDashboard(),
+                              builder: (context) => const MainNavigationScreen(),
                             ),
                           );
                         },
