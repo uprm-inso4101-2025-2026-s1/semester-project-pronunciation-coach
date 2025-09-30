@@ -29,11 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const UserInfoBox(
-                  name: "Peter Griffin",
-                  avatarURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
-                  proficiencyLevel: "Intermediate Student",
-                ),
+                Text("test"),
               ]              
             )
         );

@@ -56,7 +56,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const UserProgressDashboard(),
       const DailyChallengePage(),
       const ProfilePagePlaceholder(),
-      const HomeScreen(),
     ];
   }
 
@@ -111,12 +110,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person),
               label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_activity),
-              activeIcon: Icon(Icons.local_activity),
-              label: 'Home', 
-            ),                
+            ),               
           ],
         ),
       ),
