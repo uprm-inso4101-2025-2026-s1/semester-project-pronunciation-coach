@@ -32,7 +32,52 @@ class UserInfoBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('test'),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(avatarURL),
+                radius: 20,
+              ),
+              const SizedBox(
+                width: 10
+              ),
+              Text(
+                name,
+                style: AppTextStyles.heading2,
+              ),
+            ],
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(width: 50),
+              Text(
+                proficiencyLevel
+              ),
+            ]
+          ),
+          const SizedBox(height: 50),
+          Row(
+            children: [
+              const SizedBox(width: 50),
+              Column(
+                children: [
+                  Icon(Icons.calendar_month),
+                  Text("15"),
+                  Text("Active Days"),
+                ],
+              ),
+              const SizedBox(width: 50),
+                            Column(
+                children: [
+                  Icon(Icons.arrow_outward_rounded),
+                  Text("92%"),
+                  Text("Precision"),
+                ],
+              ),
+            ],
+          ),
         ],
       ),      
     );
