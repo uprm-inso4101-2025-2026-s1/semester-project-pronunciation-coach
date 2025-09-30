@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:app/features/homescreen/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const UserProgressDashboard(),
       const DailyChallengePage(),
       const ProfilePagePlaceholder(),
+      const HomeScreen(),
     ];
   }
 
@@ -94,7 +96,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             fontSize: 12,
           ),
           elevation: 0,
-          items: const [
+          items: const [        
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined),
               activeIcon: Icon(Icons.dashboard),
@@ -110,6 +112,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               activeIcon: Icon(Icons.person),
               label: 'Profile',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_activity),
+              activeIcon: Icon(Icons.local_activity),
+              label: 'Home', 
+            ),                
           ],
         ),
       ),
