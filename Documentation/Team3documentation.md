@@ -116,6 +116,50 @@ This project encompasses multiple software engineering activities beyond impleme
 - Create a case study demonstrating successful integration of audio processing technologies with mobile user interfaces
 - Develop documentation and processes that support future expansion of the system to include additional linguistic features
 - Build team expertise in Flutter development, audio processing, and mobile application design that supports future projects
+  
+### 1.6 Glossary of Terms
+
+This section provides clear definitions for all technical terms used in Team 3 documentation. Cross-references indicate where each term appears in the documentation.
+
+**Accuracy Score**
+A numerical measure of how correct a learner's response is compared to the expected answer.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Adaptive Difficulty**
+A system that adjusts the challenge of tasks based on the user's performance to promote effective learning.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Elo Rating System**
+A method for calculating the relative skill levels of learners, commonly used in games and adaptive learning systems.
+*Used in Sections 1.1.1 and 1.2.3.*
+
+**Flutter**
+An open-source UI software development toolkit created by Google, used to build natively compiled applications for mobile, web, and desktop.
+*Used in Section 2.3.*
+
+**Gamification**
+The use of game-like elements, such as points, badges, or leaderboards, in non-game contexts to increase motivation.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**IPA (International Phonetic Alphabet)**
+A standardized system of phonetic notation that represents the sounds of spoken language.
+*Used in Section 1.1.1 (IPA-based TTS).*
+
+**MFCC (Mel-Frequency Cepstral Coefficients)**
+A feature extraction technique used in audio processing to represent the spectrum of sound, commonly applied in speech recognition and analysis.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Progressive Disclosure**
+A design strategy that reveals information gradually to avoid overwhelming the user.
+*Used in Section 1.2.3.*
+
+**Provider Pattern**
+A software design pattern in Flutter used to manage and synchronize states across different parts of an application.
+*Used in Section 2.3.1.*
+
+**SharedPreferences**
+A storage mechanism in mobile development for saving things such as user settings or preferences, that persist across app sessions.
+*Used throughout Section 2.3.*
 
 ---
 
