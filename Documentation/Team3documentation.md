@@ -12,16 +12,16 @@
 
 #### 1.1.1 Team Members and Partners
 
-| Name | Role | Responsibilities |
-|------|------|-----------------|
-| Alex Morales | Team Leader | Led project coordination and research, conducted UX research on gamification strategies for dashboards and quizzes, created Flutter UI components for progress dashboards |
-| Ignacio Gomez | Developer | Designed regional/cultural name pronunciation packs using IPA-based TTS and native recordings, developed Flutter daily challenge dashboard widget and page with XP and streak rewards |
-| Enrique Vilela | Developer | Designed and implemented daily streak and points tracking system with gamification features, researched best practices for daily challenge score and streak systems |
-| Gabriel Visbal | Developer | Researched sourcing native pronunciation audio, recommending YouGlish integration, built UI for users to select preferred learning pace |
-| Ivan Morales | Developer | Explored backend progress analytics options with xAPI and open-source LRS, recommended progressive disclosure UX for adaptive dashboards |
-| Jan Davey | Developer | Researched real-time pronunciation feedback using MFCC and Integral Approximation, implemented confirmation page for learning pace selection |
-| Bruno Vergara | Developer | Investigated Flutter mic/audio packages for real-time speech processing, developed daily challenge prompt UI |
-| Abdiel Velazquez | Developer | Researched adaptive difficulty algorithms and recommended Elo rating system for personalized pronunciation challenges |
+| Name             | Role        | Responsibilities                                                                                                                                                                      |
+| ---------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alex Morales     | Team Leader | Led project coordination and research, conducted UX research on gamification strategies for dashboards and quizzes, created Flutter UI components for progress dashboards             |
+| Ignacio Gomez    | Developer   | Designed regional/cultural name pronunciation packs using IPA-based TTS and native recordings, developed Flutter daily challenge dashboard widget and page with XP and streak rewards |
+| Enrique Vilela   | Developer   | Designed and implemented daily streak and points tracking system with gamification features, researched best practices for daily challenge score and streak systems                   |
+| Gabriel Visbal   | Developer   | Researched sourcing native pronunciation audio, recommending YouGlish integration, built UI for users to select preferred learning pace                                               |
+| Ivan Morales     | Developer   | Explored backend progress analytics options with xAPI and open-source LRS, recommended progressive disclosure UX for adaptive dashboards                                              |
+| Jan Davey        | Developer   | Researched real-time pronunciation feedback using MFCC and Integral Approximation, implemented confirmation page for learning pace selection                                          |
+| Bruno Vergara    | Developer   | Investigated Flutter mic/audio packages for real-time speech processing, developed daily challenge prompt UI                                                                          |
+| Abdiel Velazquez | Developer   | Researched adaptive difficulty algorithms and recommended Elo rating system for personalized pronunciation challenges                                                                 |
 
 **Partners Beyond Team Members**: Currently no external partners have been identified. The team operates as a self-contained unit within the academic environment. Potential future partners could include language learning experts, native speakers for audio validation, or educational institutions for user testing.
 
@@ -32,7 +32,7 @@
 Language learners, particularly those studying English as a second language, face significant challenges in pronunciation practice. Traditional language learning approaches often lack consistent feedback mechanisms for pronunciation improvement. Students frequently struggle with:
 
 - Limited access to native speaker pronunciation models
-- Lack of personalized feedback on pronunciation accuracy  
+- Lack of personalized feedback on pronunciation accuracy
 - Insufficient motivation systems to maintain daily practice habits
 - Difficulty tracking progress in pronunciation skills over time
 - Inconsistent practice schedules leading to skill degradation
@@ -42,6 +42,7 @@ Current pronunciation learning tools are fragmented, with some focusing solely o
 #### 1.2.2 Needs
 
 **Primary Needs**:
+
 - Language learners need consistent daily practice opportunities to improve pronunciation skills
 - Language learners need immediate feedback on pronunciation accuracy to correct mistakes early
 - Language learners need motivation systems to maintain long-term engagement with pronunciation practice
@@ -49,6 +50,7 @@ Current pronunciation learning tools are fragmented, with some focusing solely o
 - Language learners need progress tracking to visualize improvement over time
 
 **Secondary Needs**:
+
 - Educators need tools to supplement classroom pronunciation instruction
 - Language learning institutions need data on student engagement and progress
 - Native speakers need platforms to contribute authentic pronunciation samples
@@ -56,6 +58,7 @@ Current pronunciation learning tools are fragmented, with some focusing solely o
 #### 1.2.3 Ideas
 
 **Core System Features**:
+
 - Daily challenge system with streak tracking to maintain consistent practice habits
 - Adaptive difficulty system using Elo rating to personalize pronunciation challenges
 - Multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day)
@@ -64,6 +67,7 @@ Current pronunciation learning tools are fragmented, with some focusing solely o
 - Gamified progress tracking with XP points, badges, and visual progress indicators
 
 **Implementation Approach**:
+
 - Flutter-based mobile application for cross-platform accessibility
 - Local data storage for offline capability and privacy
 - Progressive disclosure UI to reduce cognitive overload for beginners
@@ -106,6 +110,7 @@ This project encompasses multiple software engineering activities beyond impleme
 **Primary Goal**: Enable language learners to improve pronunciation skills through consistent, feedback-driven practice in a gamified environment.
 
 **Secondary Goals**:
+
 - Contribute to educational technology research by documenting effective gamification patterns for language learning applications
 - Establish a reusable framework for pronunciation coaching applications that can be extended to additional language pairs
 - Create a case study demonstrating successful integration of audio processing technologies with mobile user interfaces
@@ -136,6 +141,8 @@ Observation notes from language learning center: Students frequently practice pr
 
 **Native Speaker**: A person who learned a language from birth, providing authentic pronunciation models for language learners.
 
+**Tutor**: A person (teacher, language coach, or peer) who evaluates learner pronunciation and provides corrective feedback.
+
 **Pronunciation Accuracy**: The degree to which a learner's spoken pronunciation matches native speaker patterns, measurable through acoustic analysis.
 
 **Daily Practice**: Regular pronunciation exercises performed consistently each day to build muscle memory and phonetic familiarity.
@@ -149,6 +156,10 @@ Observation notes from language learning center: Students frequently practice pr
 **Pronunciation Challenge**: A specific pronunciation task or word that a learner attempts to master, varying in difficulty based on phonetic complexity.
 
 **Progress Tracking**: The systematic recording and visualization of improvement in pronunciation skills over time.
+
+**Practice Session**: A time-bounded period during which a learner engages in pronunciation exercises.
+
+**Pronunciation Model**: An example of correct pronunciation, typically demonstrated by a native speaker or tutor.
 
 #### 2.1.3 Domain Narrative
 
@@ -168,48 +179,89 @@ Cultural context influences pronunciation learning motivation. Learners show inc
 
 **Language Learner**: Individual with specific pronunciation goals, available practice time, current skill level, and motivation patterns.
 
-**Pronunciation Model**: Audio representation of correct pronunciation, associated with specific words or phrases, originating from native speakers.
+**Native Speaker**: Person who speaks a language from birth, serving as pronunciation model and reference standard.
 
-**Practice Session**: Time-bounded pronunciation practice activity with defined learning objectives, duration, and completion criteria.
+**Tutor**: Person who evaluates learner pronunciation attempts and provides corrective feedback and guidance.
 
-**Pronunciation Attempt**: Learner's spoken effort to pronounce specific words, captured as audio data for comparison against models.
+**Pronunciation Model**: Audio or live demonstration of correct pronunciation for specific words or phrases.
 
-**Feedback Response**: Information about pronunciation accuracy, including specific guidance on articulation improvements.
+**Practice Session**: Time-bounded pronunciation practice activity with defined duration and completion criteria.
 
-**Daily Streak**: Consecutive sequence of completed practice sessions, serving as motivation and progress indicator.
+**Pronunciation Attempt**: Learner's spoken effort to pronounce specific words, subject to evaluation.
 
-**Learning Progress**: Measurable improvement in pronunciation accuracy over time, tracked through various metrics.
+**Feedback Response**: Information about pronunciation accuracy provided by tutors, including specific guidance on articulation improvements.
+
+**Daily Streak**: Consecutive sequence of days with completed practice sessions, serving as motivation indicator.
+
+**Learning Progress**: Observable improvement in pronunciation accuracy over time.
 
 #### 2.1.5 Domain Functions
 
 ```
-assessPronunciation : PronunciationAttempt × PronunciationModel → AccuracyScore
-Description: Compares learner's pronunciation attempt against native speaker model, producing measurable accuracy score.
+evaluatePronunciation : Tutor × PronunciationAttempt × PronunciationModel → FeedbackResponse
+Description: A tutor listens to a learner's pronunciation attempt, compares it mentally against their knowledge of correct native pronunciation, and provides specific feedback on accuracy and areas for improvement.
 
-trackDailyProgress : Learner × PracticeSession → LearningProgress  
-Description: Records completion of practice session and updates learner's overall progress metrics.
+trackProgress : Tutor × Learner × PracticeHistory → ProgressAssessment
+Description: A tutor reviews a learner's practice history over time and assesses overall improvement in pronunciation accuracy.
 
-maintainStreak : Learner × Date → StreakStatus
-Description: Updates consecutive practice day count based on daily completion status.
+maintainPracticeStreak : Learner × Date × PreviousStreak → CurrentStreak
+Description: A learner maintains awareness of consecutive practice days, either extending the streak through daily practice or breaking it through missed days.
 
-generateFeedback : AccuracyScore × PronunciationModel → FeedbackResponse
-Description: Produces specific guidance for pronunciation improvement based on accuracy analysis.
+selectPracticeMaterial : Learner × SkillLevel → PronunciationChallenge
+Description: A learner (or tutor) chooses appropriate pronunciation material based on current skill level and learning goals.
 
-selectPronunciationChallenge : Learner × DifficultyLevel → PronunciationChallenge
-Description: Chooses appropriate pronunciation task based on learner skill level and progress.
+conductPracticeSession : Learner × PronunciationModel × Duration → PracticeOutcome
+Description: A learner engages in pronunciation practice for a set duration, repeatedly attempting to match pronunciation models.
 ```
 
 #### 2.1.6 Domain Events
 
-**Practice Session Completed**: Occurs when learner finishes daily pronunciation practice, triggering progress updates and streak maintenance.
+**Practice Session Started**: Occurs when learner begins a scheduled pronunciation practice period.
 
-**Pronunciation Accuracy Achieved**: Happens when learner's pronunciation attempt meets or exceeds accuracy threshold, indicating skill improvement.
+**Pronunciation Attempt Completed**: Happens when learner finishes speaking a word or phrase for evaluation.
 
-**Daily Streak Extended**: Takes place when learner completes practice on consecutive days, extending motivation tracking.
+**Feedback Provided**: Takes place when tutor delivers assessment and guidance on pronunciation attempt.
 
-**Feedback Delivered**: Occurs immediately after pronunciation assessment, providing learner with improvement guidance.
+**Practice Session Completed**: Occurs when learner finishes the planned practice duration or exercise set.
 
-**Progress Milestone Reached**: Happens when learner achieves significant improvement markers, triggering recognition and encouragement.
+**Daily Streak Extended**: Happens when learner completes practice on consecutive days.
+
+**Daily Streak Broken**: Occurs when learner fails to practice on a given day after having an active streak.
+
+**Progress Milestone Observed**: Takes place when tutor or learner recognizes significant improvement in pronunciation ability.
+
+#### 2.1.7 Domain Behaviors
+
+**Behavior: Learner Conducts Daily Practice Session**
+
+1. **Event**: Practice session scheduled time arrives
+2. **Action**: Learner allocates time and prepares to practice
+3. **Event**: Practice session begins
+4. **Action**: Learner reviews pronunciation model (listens to native speaker example)
+5. **Event**: Model review completed
+6. **Action**: Learner attempts to reproduce pronunciation
+7. **Event**: Pronunciation attempt completed
+8. **Action**: Learner self-evaluates (or tutor evaluates if present)
+9. **Event**: Evaluation completed
+10. **Action**: Learner incorporates feedback and attempts again
+11. **Event**: Multiple attempts completed
+12. **Action**: Learner marks practice session as complete
+13. **Event**: Practice session ended
+14. **Action**: Learner updates personal streak tracking
+15. **Event**: Streak status updated (extended or maintained)
+
+This behavior may repeat daily, with variations in duration (5-30 minutes) and material difficulty based on learner's available time and skill progression.
+
+---
+
+**Note on Triptych Framework Application**: Section 2.1 (Domain Description) has been revised to strictly follow the "Phases of Software Engineering" Triptych lecture principles. Specifically:
+
+- Section 2.1.5 now describes domain functions (operations performed by tutors and learners) rather than system functions
+- Section 2.1.7 documents domain behaviors as event/action sequences
+- All references to "the system" have been removed from domain description sections
+- Clear separation maintained between domain description (as-is) and requirements (Section 2.2, system-to-be)
+
+---
 
 ### 2.2 Requirements
 
@@ -218,7 +270,8 @@ Description: Chooses appropriate pronunciation task based on learner skill level
 **Epic: Daily Practice Management**
 As a language learner, I want to maintain consistent daily pronunciation practice so that I can steadily improve my pronunciation skills without losing momentum.
 
-*User Stories within Epic:*
+_User Stories within Epic:_
+
 - As a busy professional, I want to select a 5-minute daily practice option so that I can fit pronunciation improvement into my commute schedule.
 - As a dedicated student, I want to choose a 30-minute intensive practice mode so that I can accelerate my pronunciation improvement.
 - As a forgetful learner, I want to receive gentle reminders about my daily practice so that I can maintain my learning streak.
@@ -226,7 +279,8 @@ As a language learner, I want to maintain consistent daily pronunciation practic
 **Epic: Pronunciation Feedback System**
 As a language learner, I want immediate feedback on my pronunciation attempts so that I can correct mistakes and reinforce proper pronunciation patterns.
 
-*User Stories within Epic:*
+_User Stories within Epic:_
+
 - As an uncertain learner, I want to see visual feedback on my pronunciation accuracy so that I understand whether I'm pronouncing words correctly.
 - As an improvement-focused learner, I want specific guidance on how to improve my pronunciation so that I know exactly what to adjust.
 - As a progress-conscious learner, I want to track my pronunciation accuracy over time so that I can see my improvement.
@@ -234,7 +288,8 @@ As a language learner, I want immediate feedback on my pronunciation attempts so
 **Epic: Gamified Motivation System**  
 As a language learner, I want engaging motivation features so that I remain committed to daily pronunciation practice over extended periods.
 
-*User Stories within Epic:*
+_User Stories within Epic:_
+
 - As a goal-oriented learner, I want to earn XP points for completing pronunciation challenges so that I feel rewarded for my efforts.
 - As a streak-motivated learner, I want to see my consecutive practice days so that I'm motivated to maintain my learning momentum.
 - As a competitive learner, I want to unlock achievement badges so that I have concrete goals to work toward.
@@ -242,6 +297,7 @@ As a language learner, I want engaging motivation features so that I remain comm
 #### 2.2.2 Personas
 
 **Maria the Commuter Student**
+
 - Age: 24, Graduate student from Puerto Rico studying in mainland US
 - Goal: Improve English pronunciation for academic presentations
 - Available time: 5-10 minutes during bus commute
@@ -250,14 +306,16 @@ As a language learner, I want engaging motivation features so that I remain comm
 - Challenge: Inconsistent practice due to busy schedule
 
 **David the Dedicated Learner**
+
 - Age: 19, Undergraduate studying abroad
 - Goal: Perfect American English pronunciation for social integration
-- Available time: 30-45 minutes daily in focused study sessions  
+- Available time: 30-45 minutes daily in focused study sessions
 - Motivation: Social acceptance and cultural integration
 - Technology comfort: High, enjoys gamified applications
 - Challenge: Perfectionist tendencies leading to frustration with gradual progress
 
 **Carmen the Professional**
+
 - Age: 32, Business professional requiring English for client meetings
 - Goal: Improve pronunciation of English business terms and names
 - Available time: 15 minutes during lunch breaks
@@ -301,7 +359,7 @@ The system shall operate on mobile devices with minimum 2GB RAM and 1GB availabl
 
 The system shall maintain responsive user interface performance with touch response times under 100 milliseconds during normal operation, supporting smooth user interaction experience.
 
-*Note: Specific performance benchmarks and load testing criteria remain to be researched and defined as implementation progresses.*
+_Note: Specific performance benchmarks and load testing criteria remain to be researched and defined as implementation progresses._
 
 ### 2.3 Implementation
 
@@ -326,7 +384,7 @@ The architecture supports modular development allowing independent testing and d
 ```dart
 class MyAppState extends ChangeNotifier {
   LearningPace? selectedPace;
-  
+
   void setPace(LearningPace pace) async {
     selectedPace = pace;
     notifyListeners();
@@ -354,7 +412,7 @@ Future<void> _savePace(LearningPace pace) async {
 Future<void> _loadPace() async {
   final prefs = await SharedPreferences.getInstance();
   final paceString = prefs.getString("selectedPace");
-  
+
   if (paceString != null) {
     selectedPace = LearningPace.values.firstWhere(
       (e) => e.toString() == paceString,
@@ -439,6 +497,6 @@ void completeActivity() {
 
 ---
 
-*Last Updated: September 19, 2025*  
-*Document Version: 1.0*  
-*Team 3 - INSO4101*
+_Last Updated: September 29, 2025_  
+_Document Version: 1.1_  
+_Team 3 - INSO4101_
