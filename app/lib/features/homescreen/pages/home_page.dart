@@ -1,5 +1,6 @@
 import 'package:app/core/constants/colors.dart';
 import 'package:app/features/homescreen/widgets/user_info_box.dart';
+import 'package:app/features/homescreen/widgets/welcome_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Home Page',
                     style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                backgroundColor: AppColors.cardBackground,
-                foregroundColor: AppColors.textPrimary,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.background,
                 elevation: 0,
                 systemOverlayStyle: SystemUiOverlayStyle.dark,
                 automaticallyImplyLeading: false,
@@ -34,6 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   avatarURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
                   proficiencyLevel: "Intermediate Student",
                 ),
+                const SizedBox(height: 10),
+                const WelcomeBackBox(
+                  name: "Maria", 
+                  ),
               ]              
             )
         );

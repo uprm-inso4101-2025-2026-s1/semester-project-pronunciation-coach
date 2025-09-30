@@ -53,10 +53,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void initState() {
     super.initState();
     _screens = [
+      const HomeScreen(),
       const UserProgressDashboard(),
       const DailyChallengePage(),
       const ProfilePagePlaceholder(),
-      const HomeScreen(),
     ];
   }
 
@@ -96,7 +96,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             fontSize: 12,
           ),
           elevation: 0,
-          items: const [        
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.house_rounded),
+              activeIcon: Icon(Icons.house_rounded),
+              label: 'Home', 
+            ),          
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined),
               activeIcon: Icon(Icons.dashboard),
@@ -111,12 +116,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person),
               label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_activity),
-              activeIcon: Icon(Icons.local_activity),
-              label: 'Home', 
-            ),                
+            ),              
           ],
         ),
       ),
