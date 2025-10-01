@@ -2,7 +2,73 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum LearningPace { none, casual, standard, intensive }
+enum LearningPace {
+  casual, 
+  standard, 
+  intensive;
+
+  static LearningPace get defaultPace => LearningPace.casual;
+
+  //Operation: get next pace
+  LearningPace next(){
+    switch (this){
+      case LearningPace.casual:
+        return LearningPace.standard;
+      case LearningPace.standard:
+        return LearningPace.intensive;
+      case LearningPace.intensive:
+        return LearningPace.intensive;
+    }
+  }
+  //Operation: get previous pace
+  LearningPace previous(){
+  switch (this){
+    case LearningPace.casual:
+      return LearningPace.casual;
+    case LearningPace.standard:
+      return LearningPace.casual;
+    case LearningPace.intensive:
+      return LearningPace.standard;
+    }
+  }
+  //Operation: get minutes for pace
+  int get minutes{
+    switch(this){
+      case LearningPace.casual:
+        return 5;
+      case LearningPace.standard:
+        return 15;
+      case LearningPace.intensive:
+        return 30;
+    }
+  }
+  //Helper: display name
+  String get displayName{
+    switch(this){
+      case LearningPace.casual:
+        return "Casual";
+      case LearningPace.standard:
+        return "Standard";
+      case LearningPace.intensive:
+        return "Intensive";
+    }
+  }
+  //Helper: subtitle
+  String get subtitle => "$minutes minutes/day";
+
+  //Helper: icon
+  IconData get icon{
+    switch(this){
+      case LearningPace.casual:
+        return Icons.coffee;
+      case LearningPace.standard:
+        return Icons.access_time;
+      case LearningPace.intensive:
+        return Icons.flash_on;
+    }
+  }
+}
+
 
 class ChallengesPage extends StatelessWidget {
   const ChallengesPage({super.key});
@@ -23,21 +89,34 @@ class ChallengesPage extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  LearningPace? selectedPace;
+  LearningPace _selectedPace = LearningPace.defaultPace;
+
+  LearningPace get selectedPace => _selectedPace;
 
   MyAppState() {
     _loadPace();
   }
 
   void setPace(LearningPace pace) async {
-    selectedPace = pace;
+    //The algebra operation: replacing one value with another from the carrier set
+    _selectedPace = pace;
     notifyListeners();
     _savePace(pace);
   }
 
+  //Operation: increment the pacce
+  void incrementPace(){
+    setPace(_selectedPace.next());
+  }
+
+  //Operation: decrement the pace
+  void decrementPace(){
+    setPace(_selectedPace.previous());
+  }
+
   Future<void> _savePace(LearningPace pace) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString("selectedPace", pace.toString());
+    prefs.setString("selectedPace", pace.name);
   }
 
   Future<void> _loadPace() async {
@@ -45,10 +124,11 @@ class MyAppState extends ChangeNotifier {
     final paceString = prefs.getString("selectedPace");
 
     if (paceString != null) {
-      selectedPace = LearningPace.values.firstWhere(
-        (e) => e.toString() == paceString,
-        orElse: () => LearningPace.casual,
-      );
+      try{
+        _selectedPace = LearningPace.values.byName(paceString);
+      } catch(e){
+        _selectedPace = LearningPace.defaultPace;
+      }
       notifyListeners();
     }
   }
@@ -73,30 +153,42 @@ class PaceSelector extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          _buildOption(
-            context,
-            icon: Icons.coffee,
-            title: "Casual",
-            subtitle: "5 minutes/day",
-            pace: LearningPace.casual,
-            selected: appState.selectedPace == LearningPace.casual,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.black, width: 1),
+                ),
+                onPressed: () => appState.decrementPace(),
+                icon: const Icon(Icons.remove),
+                label: const Text("Slower"),
+              ),
+              const SizedBox(width: 20),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.black, width: 1),
+                ),
+                onPressed: () => appState.incrementPace(),
+                icon: const Icon(Icons.add),
+                label: const Text("Faster"),
+              ),
+            ],
           ),
-          _buildOption(
-            context,
-            icon: Icons.access_time,
-            title: "Standard",
-            subtitle: "15 minutes/day",
-            pace: LearningPace.standard,
-            selected: appState.selectedPace == LearningPace.standard,
-          ),
-          _buildOption(
-            context,
-            icon: Icons.flash_on,
-            title: "Intensive",
-            subtitle: "30 minutes/day",
-            pace: LearningPace.intensive,
-            selected: appState.selectedPace == LearningPace.intensive,
-          ),
+          for (var pace in LearningPace.values)
+            _buildOption(
+              context,
+              pace: pace,
+              selected: appState.selectedPace == pace,
+            ),
+          const SizedBox(height: 30),
+
+          //Algebraic increment/drecrement controls
+          
         ],
       ),
     );
@@ -104,13 +196,9 @@ class PaceSelector extends StatelessWidget {
 
   Widget _buildOption(
     BuildContext context, {
-    required IconData icon,
-    required String title,
-    required String subtitle,
     required LearningPace pace,
     required bool selected,
   }) {
-    var appState = context.read<MyAppState>();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -132,13 +220,15 @@ class PaceSelector extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        leading: Icon(icon, color: Colors.black),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
-        trailing: selected
-            ? Icon(Icons.check_circle, color: Colors.black)
-            : null,
-        onTap: () => appState.setPace(pace),
+        leading: Icon(pace.icon, color: Colors.black),
+        title: Text(
+          pace.displayName, 
+          style: const TextStyle(fontWeight: FontWeight.bold)
+          ),
+        subtitle: Text(pace.subtitle),
+        trailing:
+            selected ? Icon(Icons.check_circle, color: Colors.black) : null,
+        onTap: null,
       ),
     );
   }
@@ -153,8 +243,6 @@ Color _getButtonColorBox(LearningPace pace, bool selected) {
         return Colors.orange.shade400;
       case LearningPace.intensive:
         return Colors.red.shade400;
-      default:
-        return Colors.grey.shade200;
     }
   } else {
     return Colors.white;
