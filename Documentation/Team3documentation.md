@@ -252,6 +252,36 @@ Description: A learner engages in pronunciation practice for a set duration, rep
 
 This behavior may repeat daily, with variations in duration (5-30 minutes) and material difficulty based on learner's available time and skill progression.
 
+#### 2.1.8 Domain Phenomena vs Concepts
+
+- Phenoma: Observable, concrete, specific- "Maria's pronunciation attempt on Sept 15 at 2:45 PM"
+- Concepts: Abstraction, class type - "eg. PronunciationAttempt as a class"
+- Entities: Carry information, can be atomic (simple) or composed (made of parts)
+
+Domain elements classification example: 
+
+| Domain Element       | Phenomenon                                       | Concept                            |
+|----------------------|--------------------------------------------------|------------------------------------|
+| Language Learner     | María Rodriguez, student ID 12345                | `LanguageLearner` (class)          |
+| Pronunciation Attempt | Audio file `"maria_rodriguez_20250915.wav"`     | `PronunciationAttempt` (class)     |
+| Learning Pace       | María’s selection: “Casual” on Sept 15            | `LearningPace` (enum)              |
+| Daily Streak        | María’s current streak: 7 days                    | Streak counter (`integer`)         |
+| Practice Session    | María's practice on Oct 2 lasted 15 minutes       | `PracticeSession` (class)          |
+| Learner Progress    | María reached 85% accuracy on Dec 12              | `ProgessMilestone` (class)         |
+| Pronunciation Feedback | Model comment: "Stress the second syllable more clearly" | `FeedbackResponse` (class) |
+| Xp Points           | María earned 100 XP today"                        | `XPPoints` (integer)               |
+
+
+Classification of the Domain Entities in section 2.1.4 as atomic or composed:
+- Language Learner (composed): Contains learner details (ID, name, history, etc.)
+- Pronunciation Attempt (atomic): a single instance (one audio recording is one attempt)
+- Native Speaker (composed): Contains language(string), regional accent (string), available audio samples (list)
+- Pronunciation Model (composed): Contains of audio data (file reference), target word/phrase (string), phonetic transcription (string), speaker reference
+- Practice Session (composed): Contains a start time (DateTime), end time (DateTime), duration (integer/duration), completion status (boolean), attempted words (list)
+- Feedback Response (composed): Contains accuracy score (float/percentage), specific issues identified (list of strings), improvement suggestions (list of strings) 
+- Daily Streak (atomic): single integer value
+- Learning Progress (atomic): single measurable value (can be percentage or score)
+
 ---
 
 **Note on Triptych Framework Application**: Section 2.1 (Domain Description) has been revised to strictly follow the "Phases of Software Engineering" Triptych lecture principles. Specifically:
