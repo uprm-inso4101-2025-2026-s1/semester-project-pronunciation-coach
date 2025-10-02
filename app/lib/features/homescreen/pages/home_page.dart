@@ -1,5 +1,6 @@
 import 'package:app/core/constants/colors.dart';
 import 'package:app/features/homescreen/widgets/user_info_box.dart';
+import 'package:app/features/homescreen/widgets/welcome_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/features/homescreen/widgets/home_sections.dart';
@@ -21,24 +22,29 @@ class _HomeScreenState extends State<HomeScreen> {
           'Home Page',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        backgroundColor: AppColors.cardBackground,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.background,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const UserInfoBox(
-            name: "Maria Hernandez",
-            avatarURL:
-                "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
-            proficiencyLevel: "Intermediate Student",
-          ),
-          const SizedBox(height: 16), // Espacio
-          const HomeSections(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                const UserInfoBox(
+                    name: "Maria Hernandez",
+                    avatarURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
+                    proficiencyLevel: "Intermediate Student",
+                ),
+                const SizedBox(height: 10),
+                const WelcomeBackBox(
+                    name: "Maria", 
+                ),
+                const SizedBox(height: 16), // Espacio
+                const HomeSections(),
+           ],
+        ),
       ),
     );
   }
