@@ -391,6 +391,28 @@ The system shall maintain responsive user interface performance with touch respo
 
 _Note: Specific performance benchmarks and load testing criteria remain to be researched and defined as implementation progresses._
 
+#### 2.2.6 Function Signatures and Specifications
+
+- Purpose: Define the required system functions formally, focusing on what they must achieve, not how they are implemented.
+- Approach: Each function is described by its signature (inputs and outputs) and its specification (requirement behavior).
+- Relation to Domain: While Section 2.1.5 covered domain functions, this section specifies system-level requirements functions.
+
+- System function examples:
+
+| Function             | Signature                                                    | Specification                                                                                                      |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Assess Pronunciation | `AudioRecording → PronunciationModel → AccuracyScore`        | Given a learner’s audio input and a reference pronunciation model, return an accuracy score reflecting similarity. |
+| Update Streak        | `UserID → Date → StreakStatus`                               | Determine whether the user’s streak continues, resets (gap), or starts new.                                        |
+| Calculate XP         | `ChallengeCompleted → DifficultyLevel → XPPoints`            | Award XP points based on challenge completion and difficulty rules.                                                |
+| Select Challenge     | `UserSkillLevel → AvailablePhrases → PronunciationChallenge` | Select an appropriate challenge based on learner skill and available phrases.                                      |
+| Persist Progress     | `UserProgress → StorageStatus`                               | Save the user’s progress data and confirm successful persistence.                                                  |
+
+- Classification of the functions:
+
+- Core Learning Functions: assessPronunciation, selectChallenge
+- Gamification Functions: updateStreak, calculateXP
+- Persistence Functions: persistProgress
+
 ### 2.3 Implementation
 
 #### 2.3.1 Software Architecture
