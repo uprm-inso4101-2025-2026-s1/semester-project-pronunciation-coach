@@ -418,7 +418,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                 child: InkWell(
                   onTap: _playAudio,
                   borderRadius: BorderRadius.circular(30),
-                  child: Container(
+                  child: SizedBox(
                     width: 60,
                     height: 60,
                     child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),

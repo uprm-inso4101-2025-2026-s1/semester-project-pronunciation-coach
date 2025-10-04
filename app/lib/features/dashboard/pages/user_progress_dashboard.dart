@@ -707,8 +707,8 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
               style: TextButton.styleFrom(foregroundColor: Colors.red),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -716,8 +716,8 @@ class _DailyChallengePageState extends State<DailyChallengePage> {
                 Navigator.pop(context);
                 _handleChallengeResult(correcto);
               },
-              child: const Text("Confirm"),
               style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
+              child: const Text("Confirm"),
             ),
           ],
         );
