@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../models/dashboard/course_progress.dart';
-import '../../constants/colors.dart';
-import '../../constants/text_styles.dart';
+import '../../../core/constants/colors.dart';
+import '../../../core/constants/text_styles.dart';
+import '../models/course_progress.dart';
 
 class ProgressVisualizationWidget extends StatefulWidget {
   final List<CourseProgress>? courses;
 
   const ProgressVisualizationWidget({
-    Key? key,
+    super.key,
     this.courses,
-  }) : super(key: key);
+  });
 
   @override
   State<ProgressVisualizationWidget> createState() => _ProgressVisualizationWidgetState();
@@ -71,7 +71,7 @@ class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidge
             style: AppTextStyles.heading2,
           ),
           const SizedBox(height: 20),
-          ...courses.map((course) => _buildProgressBar(course)).toList(),
+          ...courses.map((course) => _buildProgressBar(course)),
         ],
       ),
     );

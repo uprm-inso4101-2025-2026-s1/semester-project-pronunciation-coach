@@ -1,13 +1,18 @@
-
 import 'package:flutter/material.dart';
-import 'screens/dashboard/user_progress_dashboard.dart';
+
+import 'package:provider/provider.dart';
+import 'features/dashboard/pages/user_progress_dashboard.dart';
+
+import 'pace selector/pace_selector.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'SF Pro Display',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const UserProgressDashboard(),
+      home: const MainNavigationScreen(),
     );
   }
 }

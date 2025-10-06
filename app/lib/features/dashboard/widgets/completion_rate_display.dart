@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
+import '../../../core/constants/colors.dart';
 
 class CompletionRateDisplay extends StatefulWidget {
   final double completionRate;
@@ -7,11 +7,11 @@ class CompletionRateDisplay extends StatefulWidget {
   final Color color;
 
   const CompletionRateDisplay({
-    Key? key,
+    super.key,
     required this.completionRate,
     required this.title,
     this.color = AppColors.primary,
-  }) : super(key: key);
+  });
 
   @override
   State<CompletionRateDisplay> createState() => _CompletionRateDisplayState();

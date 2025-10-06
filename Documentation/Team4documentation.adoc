@@ -1,0 +1,247 @@
+# Pronunciation Coach - Project Documentation
+
+**INSO4101: Introduction to Software Engineering**
+**Team 4**
+**September 19, 2025**
+
+---
+
+##1. Informative Part
+###1.1 Team:
+Joy Martinez | Team Leader:
+- Led project coordination and research
+- Researched about randomization in multiple choice quizzes
+- Worked on a feature to verify a input word's validation
+
+Yediel J Acosta | Developer:
+- Researched about Text to IPA translators
+- Worked on a Speech to Text translator (by dependencies)
+- Documented Team 4's Milestone 1
+- Participating in the presentation of Team 4's Milestone 1
+
+Adriel Bracero | Developer:
+- Researched about the following topics:
+  > Stress Placement and Basic Word Intonation
+  > On-Device Pitch Extraction & Normalization
+  > Noise Robustness and Preprocessing
+
+Diego | Developer:
+- Researched for implementing Slow-Motion audios for Pronunciation Practice
+
+Iralys Sanchez | Developer:
+- Researched about the following topics:
+  > Validation of Spoken Word Input
+  > Methods for Building Quiz Word/Question Back
+
+###1.2 Current Situation, Needs, and Ideas:
+####1.2.1 Current Situation:
+- English language is important to learn, but Pronunciation practice has obstacles:
+  > Lack of Immediate Feedback
+  > Traditional Class Focusing on Writing & Reading Practice
+  > Tutors' high entrance cost
+  > App's absence of broad Pronunciation Practice
+- Mentioned Issues decrease Students' motivation
+- Lacking motivation leads to Inconsistent Practice & Failure
+
+####1.2.2 Needs:
+- App focused on English Speech Practice
+- Said App Needs to Cultivate Motivation & Learning Discipline
+
+####1.2.3 Ideas:
+- "Pronunciation Coach" Project that will Develop a Plataform for English Speech Education
+- App allows Speech Practice and Construct Discipline
+
+###1.3 Scope & Span:
+####1.3.1 Scope:
+- Develop Disciplinary App to Practice English Speech
+- Target Audience: Persons Interested in Individual Coaching
+- "Pronunciation Coach" App Requirements:
+  > Internet Accessibility
+  > Minimally Noisy Environment
+  > Mobile App / Web Browser
+- Development Completed by end of November 2025
+
+####1.3.2 Span:
+- Time Frame: 4 months and 3 weeks, end of November 2025
+- Front End: Flutter & Dart
+- Back End: Python
+- Architecture: Client-Server
+
+###1.4 Synopsis:
+- English Pronunciation Practice has numerous Obstacles
+- Obstacles deter Students' motivation, which deter Practice and Leads to Failure
+- Need for App focused on English Speech Practice that Motivates Students to Learn
+- "Pronunciation Coach" Project will develop a Speech Practice App
+- "Pronunciation Coach" App:
+  > Test English Speech & Constructs Discipline
+  > Targets Students interested in Individual Coaching
+  > Requires Internet Access, Minimally Noisy Environment, and Mobile App / Web Browser
+  > Flutter & Dart Front End, Python Back End with Client-Based Architecture
+  > Development finishes by end of November 2025
+
+###1.6 Other Activities:
+- Multiple Research on topics that can be Implemented in the "Pronunciation Coach" App as the Domain allows it
+- Discuss adjacent topics that allow for a Domain Expansion once Main Objectives are Completed
+- Test Various Features to Confirm Efficiency
+
+###1.7 Derived Goals:
+- Save a Student's previous Exercises to Determine Scores
+- Implement IPA Definitions to Contextualize Information
+- Offer Speech Graphs that Determine pronunciation Information
+
+##2. Descriptive Part
+###2.1 Domain Description:
+####2.1.1 Domain Rough Sketch:
+- LEARNING USER represents User with interest of learning English Speech
+- PRONUNCIATION EDUCATION APPLICATION is the set of entities, behaviors, functions, etc. such:
+  > Educates Users of English Speech
+- SPEECH is verbal communication done in the App
+  > English subset
+- PHONETIC SYMBOLS are the IPA Symbols that represent sounds
+  > English subset
+- TRANSLATOR is the core function that allows conversion of the following inputs:
+  > English words
+  > English IPA Symbols
+  > Speech audio
+
+####2.1.2 Terminology:
+- "Pronunciation Coach" Application:
+  > Set of entities, behaviors, functions, etc. such that allow English Speech Education
+- Student:
+  > User of the App with the Interest of Studying & Learning English Speech
+- Speech:
+  > Verbal communication done through the App, English subset
+- IPA:
+  > International Phonetic Alphabet Symbols that represent sound, English subset
+- Translator:
+  > Functions that allow English words, IPA symbols, or speech to be converted to other symbols
+
+####2.1.3 Domain Terminology VS Rough Sketch:
+Format:
+- Rough Sketch Definition:
+  > Interpretation
+  > Terminology
+
+- Learning User:
+  > Represents Character with Conversation Education Interest
+  > Student
+- Pronunciation Education Application:
+  > Entities, Behaviors, etc. used to Instruct Conversational English
+  > Pronunciation Coach Application
+- Speech:
+  > Verbal English Communication through App
+  > Speech
+- Phonetic Symbols:
+  > Letters that define English sounds by text
+  > IPA
+- [...] Translator:
+  > Function that Converts between English words/IPA/audio
+  > Translator
+
+####2.1.4 Domain Narrative:
+- Assume Arbitrary number of Students:
+  > Subset1 of Students Request IPA
+    * App returns IPA Documentation
+    * App returns IPA Pronunciation
+  > Subset2 of Students Test Speech:
+    * App Translates Speech to Text/Graphs
+    * App Determines Pronunciation Accuracy
+  > Subset3 of Students Test IPA:
+    * App Returns IPA Symbols
+    * App Expects Students' Conversion to Text
+
+####2.1.5 Events, Actions, and Behaviors:
+- Events:
+  > IPA Documentation has been Presented
+  > Speech has been Translated to Text
+  > Student Speech has been Graphed
+- Actions:
+  > IPA Definition:
+    * Students want IPA Context:
+      # IPA Context was Requested
+    * Accept Request:
+      # Return IPA Documentation
+      # IPA Documentation was Presented
+
+####2.1.6 Function Signatures:
+- Save Speech:
+  > Speech: Audio --> Text --> List<Text>
+- Profile Creation:
+  > Profile: Email * Password --> User
+
+###2.2 Requirements:
+####2.2.1 User Stories, Epics, Features:
+- As a forgein Student, I want to be able to know if I'm speaking correctly, so that I can spot my errors & work in fixing them.
+- As a begginer Student, I want the IPA symbols' pronunciations so that I can practice English sounds I struggle with.
+- As a curious Student, I want to be told my mistakes so that I can work on fixing them.
+
+####2.2.2 Personas:
+- Students with strong accent who wants to pronounce American English sounds properly
+- Students who struggle in relating to known phonetic in new words:
+  > Ex. Knowing "come", but not "become"
+- Students who know English, but struggle communicating
+- English mayor Students who want to learn the IPA
+
+####2.2.3 Domain Requirements:
+- System must store Students' profiles
+- System must offer IPA context
+- System must foment Activate practice
+- System must correct unproper speech
+- System must test Students' performance
+
+####2.2.4 Interface Requirements:
+- System must scale for any device
+- System must display speech activities
+- System must show correct profiles
+- System must have legible Information
+- System must allow account creation
+
+####2.3.5 Machine Requirements:
+- System must support 500+ Students
+- System must load lessons by 0.5 seconds
+- System must retrieve profiles by 0,4 seconds
+- System must run on phones or desktops
+- System must avoid 10GB+ space consumption
+
+###2.3 Implementation
+####2.3.1 Selected Fragment of Implementation:
+- [Snippet] Speech to Text Translator: Microphone audio --> Text
+  void _listen() async {
+    if (!_isHearing) {
+      setState(() => _text = "Listening...");
+      _speech.listen(
+        onResult:(result) {
+          setState(() {
+            _text = result.recognizedWords;
+            _confidence = result.confidence;
+          });
+        },
+      );
+      setState(() => _isHearing = true);
+    } else {
+      _speech.stop();
+      setState(() => _isHearing = false,);
+      saveResult(_text);
+      setState(() => _text = "Press the button and speak");
+    }
+  } 
+
+##3. Analytic Part:
+###3.1 Concept Analysis:
+- Student is abstraction of User with Speech interest
+- Speech is an abstraction of Conversational English
+- IPA is an abstraction for English Symbols of International Phonetic Alphabet
+- Translator is an abstract of a function that converts inputs to English words/IPA/audio
+
+###3.2 Validation and Verification:
+- Validation will be constant, with higher emphasis by Milestone Stamps
+  > Moderators that run quality-control:
+    * Professor
+    * Managers
+    * Team Leaders
+    * Team Members
+- Verification will run by Developers during Implementations
+  > Example of Forms of Verification:
+    * Unit Testing
+    * Model-Checking
+
