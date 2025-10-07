@@ -11,6 +11,7 @@ import '../widgets/daily_challenge.dart';
 import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app/features/profile/pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +57,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const HomeScreen(),
       const UserProgressDashboard(),
       const DailyChallengePage(),
-      const ProfilePagePlaceholder(),
+      const ProfilePage(),
     ];
   }
 
