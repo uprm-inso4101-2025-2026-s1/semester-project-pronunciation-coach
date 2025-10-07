@@ -488,6 +488,34 @@ void completeActivity() {
   lastActiveDate = today;
 }
 ```
+### 2.3.4 Domain Engineering Integration
+The backend implementation will align with the principles outlined in the presentation Domain Engineering and Domain Facets. The lecture emphasizes that a system’s design should emerge from a structured understanding of the domain model, its facets, and the stakeholders who interact within it.
+
+Following this approach, the Pronunciation Coach backend will apply the stages of domain engineering as follows:
+
+- The system will acquire domain knowledge through stakeholder interviews, literature review, and field observations documenting how learners and tutors engage with pronunciation practice.
+
+- The system will analyze recurring entities such as Learner, Tutor, PronunciationAttempt, Feedback, and PracticeSession, along with behaviors including daily practice, feedback delivery, and progress tracking.
+
+- The system will model these entities and behaviors as data structures within Supabase and event types within xAPI, providing a unified model of how pronunciation learning occurs.
+
+- The system will validate the domain model by ensuring that each xAPI event type accurately reflects real world domain events observed in learner practice.
+
+- The system will form domain theory by defining analytic rules such as streak calculation, accuracy scoring, and progress rate aggregation derived from the domain model to produce measurable backend logic.
+
+The backend architecture will integrate the following domain facets as part of its design approach:
+
+- The system will implement the intrinsics of the domain Learners, Tutors, Pronunciation Attempts, Feedback Responses, and Progress Records within Supabase as core data entities.
+
+- The system will utilize support technology, including Supabase and xAPI for event tracking, integrated through the Dart backend.
+
+- The system will define management and organization mechanisms through backend APIs responsible for access control, aggregation jobs, and analytics summaries for learners and tutors.
+
+- The system will enforce rules and regulations through validation logic that ensures each xAPI statement includes required fields and that streak calculations maintain internal consistency.
+
+- The system will model human behavior by encoding learner motivation patterns such as daily streaks, point accumulation, and visual progress indicators through event logging and analytics responses.
+
+By grounding the backend in domain engineering principles, the architecture will ensure that every stored record, computed metric, and API response corresponds directly to authentic learner-tutor interactions observed in the real world. The planned integration of Supabase as the storage infrastructure and xAPI as the event standard will make the backend both domain-faithful and scalable, bridging the conceptual model of pronunciation learning with its technical implementation.
 
 ---
 
