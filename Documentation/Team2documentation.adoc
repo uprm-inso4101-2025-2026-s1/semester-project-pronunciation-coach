@@ -319,6 +319,74 @@ These functions have been studied, prototyped, or conceptually investigated but 
 * `provideHints(mispronouncedPhonemes)` → Investigated ways to give actionable corrective suggestions.  
 * `exportProgressReport(learnerData)` → Considered exporting summaries of learner performance for personal review or tutor use.
 
+==== 2.1.7. Stakeholder Perspectives Analysis
+
+This section analyzes the pronunciation coaching domain through the distinct perspectives of its primary stakeholder groups, following domain engineering principles. Recognizing that these groups maintain different mental models of the same domain is essential for identifying requirement conflicts and informing a flexible design.
+
+*Stakeholder Groups*
+
+Based on our personas (Section 2.2.2), we identify four primary stakeholder groups:
+
+* **Academic Learners** (Ana, Sofia): Focused on academic performance. Need structured practice and detailed, corrective feedback.
+* **Professional Learners** (Luis, Carlos): Motivated by career advancement, value efficient, pragmatic feedback on errors that cause workplace miscommunication.
+* **Independent Enthusiasts** (Sofia in leisure): Driven by personal interest; need a flexible, encouraging, and motivating experience to maintain engagement.
+* **Language Instructors** (Secondary): Use the tool for supplementation; require progress analytics and assignment tracking.
+
+*Perspective Analysis on Key Concepts*
+
+[cols="1,1,1,1,1", options="header"]
+|===
+| Concept
+| Academic Learners
+| Professional Learners
+| Independent Enthusiasts
+| Language Instructors
+
+| Pronunciation Feedback
+| Diagnostic, technical, and comprehensive
+| Pragmatic; filters for errors that impact intelligibility
+| Encouraging, positive, and simple
+| Analytical data for identifying class wide error patterns
+
+| Progress Tracking
+| Fine grained, aligned with academic timelines
+| Benchmark based, proving competency for professional goals
+| Flexible, long term trends; forgiving of sporadic use
+| Comparative data across students, aligned with curricula
+
+| Error Sensitivity
+| Low tolerance; flag all errors for precision
+| Moderate tolerance; focus on errors that impede communication
+| High tolerance; avoid discouraging minor errors
+| Variable; should adapt to the learner's proficiency level
+
+| Practice Structure
+| Structured, assignment like sessions
+| Scenario based, efficient practice like meetings
+| Casual, exploratory, and user directed
+| Assignable, trackable content
+|===
+
+*Key Requirement Conflicts & Resolutions*
+
+* **Conflict 1: Feedback Tone and Detail Level** - Academic learners require detailed technical analysis, while enthusiasts need simplified, positive encouragement. *Resolution*: Implement user selectable feedback modes (Detailed, Practical, Encouraging).
+
+* **Conflict 2: Progress Tracking Granularity** - Academic and professional learners want frequent, granular metrics, while enthusiasts need high level, flexible tracking. *Resolution*: Develop an adaptive progress dashboard with multiple views and context specific goals.
+
+* **Conflict 3: Practice Session Structure** - A spectrum exists between system directed practice (preferred by academics/instructors) and complete user autonomy (preferred by professionals/enthusiasts). *Resolution*: Offer selectable practice modes: "Guided," "Assigned," and "Free."
+
+*Design Recommendations*
+
+* **User Profile System**: Onboarding should let users select a profile (Academic, Professional, Casual) to set intelligent defaults for feedback, tracking, and practice structure.
+
+* **Graceful Degradation**: The system must remain functional and motivating for independent enthusiasts with irregular practice patterns, avoiding features that require consistent daily use.
+
+* **Separate Assessment from Encouragement**: Provide objective metrics and subjective encouragement as distinct elements, allowing users to focus on what they value.
+
+* **Modular Instructor Features**: Keep instructor specific features (dashboards, analytics) in an optional layer to avoid complicating the core user experience.
+
+
+
 *Note:* All explored functions are **derived from domain research and observations** and will be formally implemented in subsequent milestones.
 === 2.2 Requirements
 
