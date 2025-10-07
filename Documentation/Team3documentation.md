@@ -161,6 +161,38 @@ A software design pattern in Flutter used to manage and synchronize states acros
 A storage mechanism in mobile development for saving things such as user settings or preferences, that persist across app sessions.
 *Used throughout Section 2.3.*
 
+### 1.6 Project Management and Progress
+
+**Tracking Progress**: This document is accompanied by a detailed logbook, which records the development, management, research process, features added, meetings, document changes and decision-making steps undertaken throughout the project. The logbook provides a chronological account of the project’s development and serves as a reference for the methods used and the reasoning behind key decisions. Specific entries will be referred to throughout the document where relevant, to support and clarify the information presented.
+
+
+### 1.7 Logbook
+
+# 🧾 Development Logbook
+
+This logbook summarizes the key activities throughout the project, categorized by meetings, research, feature development, and documentation. 
+
+
+| Date                     | Category             | Description                                                                                                                                                                                                                       | Status     | Next Action                        |
+| ------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------- |
+| 2025-08-25               | 📅 Meeting           | First meeting: discussed project vision and milestone. Formed sub-teams.                                                                                                                                                          | ✅ Done    | —                                  |
+| 2025-08-29               | 📅 Meeting           | Discussed project scope, user needs, challenges, initial feature ideas.                                                                                                                                                           | ✅ Done    | Create first user stories          |
+| 2025-08-25 to 2025-09-05 | 🧪 Research (6)      | Initial domain research, pronunciation methods, gamification UX, real-time pronunciation feedback, native pronunciation and accent audios, and quiz gamification UX research.                                                     | ✅ Done    | Refine user needs                  |
+| 2025-08-30 to 2025-09-26 | 💻 Features (9)      | Backend streak & points system, dashboard UI components, navigation bar, confirmation page, preference UI, daily challenge prompt UI, daily challenge frontend widgets, backend progress analytics, pace selector implementation. | ✅ Done    | Backend integration                |
+| 2025-08-30 to 2025-09-12 | 📚 Documentation (2) | Added glossary section, fixed domain description in team documentation.                                                                                                                                                           | ✅ Done    | Finalize documentation             |
+| 2025-09-05               | 📅 Meeting           | Reviewed draft user stories and developed personas. Discussed gamification strategies.                                                                                                                                            | ✅ Done    | Start domain modeling              |
+| 2025-09-12               | 📅 Meeting           | Discussed domain modeling, interviews, literature review. Outlined system requirements.                                                                                                                                           | ✅ Done    | Begin interface & machine reqs     |
+| 2025-09-19               | 📅 Meeting           | Finalized requirements and aligned with Triptych framework. Reviewed system architecture draft.                                                                                                                                   | ✅ Done    | Draft system architecture          |
+| 2025-09-13 to 2025-09-19 | 🧪 Research (4)      | Researched flutter mic/audio packages, backend foundation for progress analytics, daily challenge score and streak systems, difficulty based on pronunciation accuracy.                                                           | ✅ Done    | Prototype audio features           |
+| 2025-09-20 to 2025-09-26 | 💻 Features (3)      | Added confirmation page after pace selection, milestone 1 video presentation, team 3 documentation for milestone 1.                                                                                                               | ✅ Done    | Continue testing and integration   |
+| 2025-09-26               | 📅 Meeting           | Discussed software architecture and component roles. Reviewed pace selector and persistence approach.                                                                                                                             | ✅ Done    | Plan component testing             |
+| 2025-10-03               | 📅 Meeting           | Reviewed gamification logic, UI verification, cross-platform performance. Planned next steps for audio logic.                                                                                                                     | ✅ Done    | Continue audio processing planning |
+| 2025-10-01 to 2025-10-06 | 🧪 Research (2)      | Added glossary section and fixed domain description in Team 3 documentation.                                                                                                                                                      | ✅ Done    | Finalize documentation updates     |
+| 2025-10-01 to 2025-10-06 | 💻 Features (1)      | Implemented closed operations for LearningPace Enum                                                                                                                                                                               | ✅ Done    | Prepare for final testing          |
+| 2025-10-10               | 📅 Meeting           | *(To be filled after meeting)*                                                                                                                                                                                                    | ⏳ Pending | —                                  |
+
+
+
 ---
 
 ## 2. Descriptive Part
