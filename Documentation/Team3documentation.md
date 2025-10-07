@@ -117,8 +117,12 @@ This project encompasses multiple software engineering activities beyond impleme
 - Develop documentation and processes that support future expansion of the system to include additional linguistic features
 - Build team expertise in Flutter development, audio processing, and mobile application design that supports future projects
 
+### 1.6 Project Management and Progress
 
-### 1.6 Logbook
+**Tracking Progress**: This document is accompanied by a detailed logbook, which records the development, management, research process, features added, meetings, document changes and decision-making steps undertaken throughout the project. The logbook provides a chronological account of the project’s development and serves as a reference for the methods used and the reasoning behind key decisions. Specific entries will be referred to throughout the document where relevant, to support and clarify the information presented.
+
+
+### 1.7 Logbook
 
 # 🧾 Development Logbook
 
