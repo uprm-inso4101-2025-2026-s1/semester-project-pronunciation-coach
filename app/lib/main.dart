@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'features/dashboard/pages/user_progress_dashboard.dart';
 import 'package:sizer/sizer.dart';
 import 'features/dashboard/pages/login_page.dart';
+import 'features/dashboard/widgets/welcome_screen.dart';
 
 import 'pace selector/pace_selector.dart';
 
@@ -30,7 +31,11 @@ class MyApp extends StatelessWidget {
               fontFamily: 'SF Pro Display',
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: const LoginPage(),
+            home: const WelcomeScreen(),
+            routes: {
+              '/login': (context) => const LoginPage(),
+              '/dashboard': (context) => const MainNavigationScreen(),
+            },
           ),
         );
       },
