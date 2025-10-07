@@ -116,6 +116,50 @@ This project encompasses multiple software engineering activities beyond impleme
 - Create a case study demonstrating successful integration of audio processing technologies with mobile user interfaces
 - Develop documentation and processes that support future expansion of the system to include additional linguistic features
 - Build team expertise in Flutter development, audio processing, and mobile application design that supports future projects
+  
+### 1.6 Glossary of Terms
+
+This section provides clear definitions for all technical terms used in Team 3 documentation. Cross-references indicate where each term appears in the documentation.
+
+**Accuracy Score**
+A numerical measure of how correct a learner's response is compared to the expected answer.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Adaptive Difficulty**
+A system that adjusts the challenge of tasks based on the user's performance to promote effective learning.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Elo Rating System**
+A method for calculating the relative skill levels of learners, commonly used in games and adaptive learning systems.
+*Used in Sections 1.1.1 and 1.2.3.*
+
+**Flutter**
+An open-source UI software development toolkit created by Google, used to build natively compiled applications for mobile, web, and desktop.
+*Used in Section 2.3.*
+
+**Gamification**
+The use of game-like elements, such as points, badges, or leaderboards, in non-game contexts to increase motivation.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**IPA (International Phonetic Alphabet)**
+A standardized system of phonetic notation that represents the sounds of spoken language.
+*Used in Section 1.1.1 (IPA-based TTS).*
+
+**MFCC (Mel-Frequency Cepstral Coefficients)**
+A feature extraction technique used in audio processing to represent the spectrum of sound, commonly applied in speech recognition and analysis.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Progressive Disclosure**
+A design strategy that reveals information gradually to avoid overwhelming the user.
+*Used in Section 1.2.3.*
+
+**Provider Pattern**
+A software design pattern in Flutter used to manage and synchronize states across different parts of an application.
+*Used in Section 2.3.1.*
+
+**SharedPreferences**
+A storage mechanism in mobile development for saving things such as user settings or preferences, that persist across app sessions.
+*Used throughout Section 2.3.*
 
 ---
 
@@ -252,6 +296,36 @@ Description: A learner engages in pronunciation practice for a set duration, rep
 
 This behavior may repeat daily, with variations in duration (5-30 minutes) and material difficulty based on learner's available time and skill progression.
 
+#### 2.1.8 Domain Phenomena vs Concepts
+
+- Phenoma: Observable, concrete, specific- "Maria's pronunciation attempt on Sept 15 at 2:45 PM"
+- Concepts: Abstraction, class type - "eg. PronunciationAttempt as a class"
+- Entities: Carry information, can be atomic (simple) or composed (made of parts)
+
+Domain elements classification example: 
+
+| Domain Element       | Phenomenon                                       | Concept                            |
+|----------------------|--------------------------------------------------|------------------------------------|
+| Language Learner     | María Rodriguez, student ID 12345                | `LanguageLearner` (class)          |
+| Pronunciation Attempt | Audio file `"maria_rodriguez_20250915.wav"`     | `PronunciationAttempt` (class)     |
+| Learning Pace       | María’s selection: “Casual” on Sept 15            | `LearningPace` (enum)              |
+| Daily Streak        | María’s current streak: 7 days                    | Streak counter (`integer`)         |
+| Practice Session    | María's practice on Oct 2 lasted 15 minutes       | `PracticeSession` (class)          |
+| Learner Progress    | María reached 85% accuracy on Dec 12              | `ProgessMilestone` (class)         |
+| Pronunciation Feedback | Model comment: "Stress the second syllable more clearly" | `FeedbackResponse` (class) |
+| Xp Points           | María earned 100 XP today"                        | `XPPoints` (integer)               |
+
+
+Classification of the Domain Entities in section 2.1.4 as atomic or composed:
+- Language Learner (composed): Contains learner details (ID, name, history, etc.)
+- Pronunciation Attempt (atomic): a single instance (one audio recording is one attempt)
+- Native Speaker (composed): Contains language(string), regional accent (string), available audio samples (list)
+- Pronunciation Model (composed): Contains of audio data (file reference), target word/phrase (string), phonetic transcription (string), speaker reference
+- Practice Session (composed): Contains a start time (DateTime), end time (DateTime), duration (integer/duration), completion status (boolean), attempted words (list)
+- Feedback Response (composed): Contains accuracy score (float/percentage), specific issues identified (list of strings), improvement suggestions (list of strings) 
+- Daily Streak (atomic): single integer value
+- Learning Progress (atomic): single measurable value (can be percentage or score)
+
 ---
 
 **Note on Triptych Framework Application**: Section 2.1 (Domain Description) has been revised to strictly follow the "Phases of Software Engineering" Triptych lecture principles. Specifically:
@@ -361,6 +435,28 @@ The system shall maintain responsive user interface performance with touch respo
 
 _Note: Specific performance benchmarks and load testing criteria remain to be researched and defined as implementation progresses._
 
+#### 2.2.6 Function Signatures and Specifications
+
+- Purpose: Define the required system functions formally, focusing on what they must achieve, not how they are implemented.
+- Approach: Each function is described by its signature (inputs and outputs) and its specification (requirement behavior).
+- Relation to Domain: While Section 2.1.5 covered domain functions, this section specifies system-level requirements functions.
+
+- System function examples:
+
+| Function             | Signature                                                    | Specification                                                                                                      |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Assess Pronunciation | `AudioRecording → PronunciationModel → AccuracyScore`        | Given a learner’s audio input and a reference pronunciation model, return an accuracy score reflecting similarity. |
+| Update Streak        | `UserID → Date → StreakStatus`                               | Determine whether the user’s streak continues, resets (gap), or starts new.                                        |
+| Calculate XP         | `ChallengeCompleted → DifficultyLevel → XPPoints`            | Award XP points based on challenge completion and difficulty rules.                                                |
+| Select Challenge     | `UserSkillLevel → AvailablePhrases → PronunciationChallenge` | Select an appropriate challenge based on learner skill and available phrases.                                      |
+| Persist Progress     | `UserProgress → StorageStatus`                               | Save the user’s progress data and confirm successful persistence.                                                  |
+
+- Classification of the functions:
+
+- Core Learning Functions: assessPronunciation, selectChallenge
+- Gamification Functions: updateStreak, calculateXP
+- Persistence Functions: persistProgress
+
 ### 2.3 Implementation
 
 #### 2.3.1 Software Architecture
@@ -444,6 +540,34 @@ void completeActivity() {
   lastActiveDate = today;
 }
 ```
+### 2.3.4 Domain Engineering Integration
+The backend implementation will align with the principles outlined in the presentation Domain Engineering and Domain Facets. The lecture emphasizes that a system’s design should emerge from a structured understanding of the domain model, its facets, and the stakeholders who interact within it.
+
+Following this approach, the Pronunciation Coach backend will apply the stages of domain engineering as follows:
+
+- The system will acquire domain knowledge through stakeholder interviews, literature review, and field observations documenting how learners and tutors engage with pronunciation practice.
+
+- The system will analyze recurring entities such as Learner, Tutor, PronunciationAttempt, Feedback, and PracticeSession, along with behaviors including daily practice, feedback delivery, and progress tracking.
+
+- The system will model these entities and behaviors as data structures within Supabase and event types within xAPI, providing a unified model of how pronunciation learning occurs.
+
+- The system will validate the domain model by ensuring that each xAPI event type accurately reflects real world domain events observed in learner practice.
+
+- The system will form domain theory by defining analytic rules such as streak calculation, accuracy scoring, and progress rate aggregation derived from the domain model to produce measurable backend logic.
+
+The backend architecture will integrate the following domain facets as part of its design approach:
+
+- The system will implement the intrinsics of the domain Learners, Tutors, Pronunciation Attempts, Feedback Responses, and Progress Records within Supabase as core data entities.
+
+- The system will utilize support technology, including Supabase and xAPI for event tracking, integrated through the Dart backend.
+
+- The system will define management and organization mechanisms through backend APIs responsible for access control, aggregation jobs, and analytics summaries for learners and tutors.
+
+- The system will enforce rules and regulations through validation logic that ensures each xAPI statement includes required fields and that streak calculations maintain internal consistency.
+
+- The system will model human behavior by encoding learner motivation patterns such as daily streaks, point accumulation, and visual progress indicators through event logging and analytics responses.
+
+By grounding the backend in domain engineering principles, the architecture will ensure that every stored record, computed metric, and API response corresponds directly to authentic learner-tutor interactions observed in the real world. The planned integration of Supabase as the storage infrastructure and xAPI as the event standard will make the backend both domain-faithful and scalable, bridging the conceptual model of pronunciation learning with its technical implementation.
 
 ---
 
