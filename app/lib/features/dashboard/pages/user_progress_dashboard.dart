@@ -1,3 +1,4 @@
+import 'package:app/features/dashboard/widgets/streak_xp.dart';
 import 'package:app/features/homescreen/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
@@ -8,7 +9,7 @@ import '../../../core/constants/text_styles.dart';
 import '../widgets/daily_challenge.dart';
 import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
-import '../widgets/streak_xp.dart';
+
 
 void main() {
   runApp(const MyApp());
