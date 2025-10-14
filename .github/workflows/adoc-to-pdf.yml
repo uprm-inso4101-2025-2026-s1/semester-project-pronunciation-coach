@@ -2,12 +2,12 @@ name: Build & Commit AsciiDoc PDFs
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "**/*.adoc"
       - ".github/workflows/adoc-to-pdf.yml"
-    # Avoid loops when PDFs are committed back:
-    paths-ignore:
-      - "docs/pdf/**"
+      - "!docs/pdf/**"   # exclude committed PDFs to prevent loops
   pull_request:
     paths:
       - "**/*.adoc"
