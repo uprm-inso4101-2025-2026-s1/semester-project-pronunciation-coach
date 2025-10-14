@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
+import '../../quiz/pages/quiz_page.dart';
 import '../widgets/daily_challenge.dart';
 import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
@@ -56,6 +57,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const HomeScreen(),
       const UserProgressDashboard(),
       const DailyChallengePage(),
+      const QuizHomePage(),
       const ProfilePage(),
     ];
   }
@@ -100,8 +102,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.local_activity),
               activeIcon: Icon(Icons.local_activity),
-              label: 'Home', 
-            ),         
+              label: 'Home',
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined),
               activeIcon: Icon(Icons.dashboard),
@@ -113,10 +115,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: 'Challenge',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.quiz_outlined),
+              activeIcon: Icon(Icons.quiz),
+              label: 'Quiz',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
               activeIcon: Icon(Icons.person),
               label: 'Profile',
-            ),               
+            ),
           ],
         ),
       ),
