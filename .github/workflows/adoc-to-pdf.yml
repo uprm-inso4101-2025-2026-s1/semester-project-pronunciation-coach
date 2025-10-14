@@ -1,4 +1,4 @@
-name: Build & Commit AsciiDoc PDFs
+name: Build AsciiDoc PDFs (PR flow)
 
 on:
   push:
@@ -7,16 +7,23 @@ on:
     paths:
       - "**/*.adoc"
       - ".github/workflows/adoc-to-pdf.yml"
-      - "!docs/pdf/**"   # exclude committed PDFs to prevent loops
+      - "!docs/pdf/**"   # avoid rebuild loops
   pull_request:
+    branches:
+      - main
     paths:
       - "**/*.adoc"
 
 permissions:
-  contents: write
+  contents: write        # create commits on a branch
+  pull-requests: write   # open/update PRs
+
+concurrency:
+  group: pdfs-pr-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-pr:
     runs-on: ubuntu-latest
     container: asciidoctor/docker-asciidoctor:latest
 
@@ -29,7 +36,7 @@ jobs:
       - name: Build PDFs from all .adoc under docs/
         run: |
           mkdir -p build
-          # Add -r asciidoctor-diagram if you use PlantUML/Graphviz/Mermaid blocks
+          # add -r asciidoctor-diagram if you use diagrams
           find docs -name "*.adoc" -print0 \
             | xargs -0 -I{} asciidoctor-pdf -r asciidoctor-diagram -D build {}
 
@@ -38,15 +45,29 @@ jobs:
           mkdir -p docs/pdf
           mv build/*.pdf docs/pdf/ || true
 
-      # 👇 Fix "detected dubious ownership" inside container
-      - name: Configure git safe directory & identity
+      - name: Configure git (safe dir & identity)
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit PDFs back to repo
-        uses: stefanzweifel/git-auto-commit-action@v5
+      # Create a PR with any changes in docs/pdf/*
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          commit_message: "chore(docs): update generated PDFs"
-          file_pattern: docs/pdf/*.pdf
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(docs): update generated PDFs"
+          title: "chore(docs): update generated PDFs"
+          body: |
+            This PR updates the generated PDFs in **docs/pdf/**.
+            - Source: AsciiDoc files changed in this run
+            - Action: Built via asciidoctor-pdf in CI
+          branch: pdfs/update-${{ github.run_id }}
+          base: main
+          add-paths: |
+            docs/pdf/**
+          labels: |
+            docs
+            automated
+          signoff: false
+          draft: false
