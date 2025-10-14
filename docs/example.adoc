@@ -1,0 +1,10 @@
+= Example Documentation
+:author: Your Team
+:revnumber: 1.0
+:revdate: 2025-10-14
+
+== Introduction
+This is a simple test document.
+
+== Section
+AsciiDoc → PDF conversion test
