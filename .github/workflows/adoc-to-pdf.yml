@@ -13,7 +13,7 @@ on:
       - "**/*.adoc"
 
 permissions:
-  contents: write   # allow committing back with GITHUB_TOKEN
+  contents: write
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # needed so the commit step has history
+          fetch-depth: 0
 
       - name: Build PDFs from all .adoc under docs/
         run: |
@@ -37,6 +37,13 @@ jobs:
         run: |
           mkdir -p docs/pdf
           mv build/*.pdf docs/pdf/ || true
+
+      # 👇 Fix "detected dubious ownership" inside container
+      - name: Configure git safe directory & identity
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Commit PDFs back to repo
         uses: stefanzweifel/git-auto-commit-action@v5
