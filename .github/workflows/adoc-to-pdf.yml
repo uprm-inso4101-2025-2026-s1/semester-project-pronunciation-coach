@@ -1,0 +1,45 @@
+name: Build & Commit AsciiDoc PDFs
+
+on:
+  push:
+    paths:
+      - "**/*.adoc"
+      - ".github/workflows/adoc-to-pdf.yml"
+    # Avoid loops when PDFs are committed back:
+    paths-ignore:
+      - "docs/pdf/**"
+  pull_request:
+    paths:
+      - "**/*.adoc"
+
+permissions:
+  contents: write   # allow committing back with GITHUB_TOKEN
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: asciidoctor/docker-asciidoctor:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed so the commit step has history
+
+      - name: Build PDFs from all .adoc under docs/
+        run: |
+          mkdir -p build
+          # Add -r asciidoctor-diagram if you use PlantUML/Graphviz/Mermaid blocks
+          find docs -name "*.adoc" -print0 \
+            | xargs -0 -I{} asciidoctor-pdf -r asciidoctor-diagram -D build {}
+
+      - name: Place PDFs in docs/pdf/
+        run: |
+          mkdir -p docs/pdf
+          mv build/*.pdf docs/pdf/ || true
+
+      - name: Commit PDFs back to repo
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(docs): update generated PDFs"
+          file_pattern: docs/pdf/*.pdf
