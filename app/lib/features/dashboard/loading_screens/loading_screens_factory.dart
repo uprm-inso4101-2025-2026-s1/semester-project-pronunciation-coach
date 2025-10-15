@@ -3,8 +3,28 @@ import 'package:flutter/material.dart';
 import 'loading_screens_core.dart';
 import '../../../core/constants/colors.dart';
 
-/// Factory Pattern: Loading Strategy Factory
+/// ===========================================================================
+/// FACTORY PATTERN: Loading Strategy Factory
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Centralizes object creation logic for loading strategies
+/// - Provides a simple interface to create different loading animations
+/// - Encapsulates the complexity of strategy instantiation
+/// - Supports both random and specific strategy creation
+/// 
+/// BENEFITS:
+/// - Loose coupling: Client code doesn't need to know concrete classes
+/// - Easy maintenance: Strategy creation logic in one place
+/// - Extensibility: Easy to add new strategies without modifying client code
+/// 
+/// USAGE:
+/// - Random strategy: LoadingStrategyFactory.createRandomStrategy()
+/// - Specific strategy: LoadingStrategyFactory.createPulsatingWave()
+/// ===========================================================================
+
 class LoadingStrategyFactory {
+  /// Creates a random loading strategy for variety and user engagement
   static LoadingStrategy createRandomStrategy() {
     final random = DateTime.now().millisecondsSinceEpoch % 4;
     switch (random) {
@@ -21,6 +41,7 @@ class LoadingStrategyFactory {
     }
   }
 
+  /// Factory method for Pulsating Wave strategy
   static LoadingStrategy createPulsatingWave({
     Color primaryColor = AppColors.primary,
     Color secondaryColor = AppColors.cardBackground,
@@ -31,6 +52,7 @@ class LoadingStrategyFactory {
     );
   }
 
+  /// Factory method for Progress Stages strategy
   static LoadingStrategy createProgressStages({
     List<String> stages = const [
       'Initializing',
@@ -50,6 +72,7 @@ class LoadingStrategyFactory {
     );
   }
 
+  /// Factory method for Morphing Shape strategy
   static LoadingStrategy createMorphingShape({
     Color shapeColor = AppColors.primary,
     List<IconData> shapeSequence = const [
@@ -66,6 +89,8 @@ class LoadingStrategyFactory {
     );
   }
 
+  /// Factory method for Text Typing strategy
+  /// (Needs fix animation wise)
   static LoadingStrategy createTextTyping({
     Color textColor = AppColors.textPrimary,
     List<String> messageSequence = const [

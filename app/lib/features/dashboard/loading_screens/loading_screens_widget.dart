@@ -5,7 +5,21 @@ import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
 import 'loading_screens_facts.dart';
 
-/// Base Loading Widget with common functionality
+/// ===========================================================================
+/// TEMPLATE METHOD PATTERN: Base Loading Widget
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Defines the skeleton of loading widgets in base class
+/// - Lets subclasses override specific steps without changing structure
+/// - Provides common functionality (facts display, layout) to all loaders
+/// 
+/// TEMPLATE METHODS:
+/// - build(): Defines overall widget structure (template)
+/// - buildLoadingContent(): Abstract method for subclasses to implement (hook)
+/// - _buildFactWidget(): Common functionality reused by all subclasses
+/// ===========================================================================
+
 abstract class BaseLoadingWidget extends StatefulWidget {
   final String message;
   final String? fact;
@@ -16,6 +30,10 @@ abstract class BaseLoadingWidget extends StatefulWidget {
     this.fact,
   }) : super(key: key);
 
+   /// =========================================================================
+  /// TEMPLATE METHOD: Abstract hook for subclasses
+  /// Subclasses must implement this to provide their specific loading content
+  /// =========================================================================
   Widget buildLoadingContent(BuildContext context);
   
   @override
@@ -33,7 +51,11 @@ abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget> extends State
 
   // Abstract method that subclasses must implement
   Widget buildLoadingContent(BuildContext context);
-  
+
+  /// =========================================================================
+  /// TEMPLATE METHOD: Defines the overall widget structure
+  /// This is the template that all loading widgets follow
+  /// =========================================================================
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,6 +72,10 @@ abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget> extends State
     );
   }
 
+  /// =========================================================================
+  /// COMMON FUNCTIONALITY: Reused by all concrete loading widgets
+  /// Demonstrates code reuse through Template Method Pattern
+  /// =========================================================================
   Widget _buildFactWidget() {
     return Container(
       width: double.infinity,

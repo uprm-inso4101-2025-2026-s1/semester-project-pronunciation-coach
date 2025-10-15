@@ -50,10 +50,27 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
+  // =============================================================================
+  // DEMONSTRATING DESIGN PATTERNS IN USAGE:
+  // =============================================================================
+  // 
+  // FACTORY PATTERN: Creating loading strategy
+  // - LoadingStrategyFactory.createRandomStrategy() for normal loading
+  // - LoadingStrategyFactory.createPulsatingWave() for error state
+  //
+  // STRATEGY PATTERN: Interchangeable loading behaviors
+  // - Different strategies can be swapped at runtime
+  // - Each strategy provides different visual feedback
+  //
+  // OBSERVER PATTERN: Loading state management
+  // - _loadingSystem.addLoadingListener() for state tracking
+  // - Automatic UI updates based on loading state
+  // =============================================================================
+  
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
     
-    // Show loading with random strategy
+    // Show loading with random strategy (FACTORY + STRATEGY PATTERNS)
     _loadingSystem.showLoading(
       context: context,
       message: 'Signing you in...',
@@ -81,15 +98,15 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       _loadingSystem.hideLoading(context);
       
-      // Show error with specific strategy
+      // ... later for error state, use specific strategy
       final errorStrategy = LoadingStrategyFactory.createPulsatingWave(
-        primaryColor: AppColors.danger,
+        primaryColor: AppColors.danger, // Customized for error state
       );
       
       _loadingSystem.showLoading(
         context: context,
         message: 'Authentication Failed',
-        customStrategy: errorStrategy,
+        customStrategy: errorStrategy, // STRATEGY PATTERN: Different behavior
       );
       
       await Future.delayed(const Duration(milliseconds: 1500));

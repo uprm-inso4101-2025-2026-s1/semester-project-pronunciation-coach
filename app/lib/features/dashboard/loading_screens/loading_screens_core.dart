@@ -4,14 +4,41 @@ import '../../../core/constants/colors.dart';
 import 'loading_screens_widget.dart';
 import 'loading_screens_facts.dart';
 
-/// Strategy Pattern: Loading Behavior Interface
+/// ===========================================================================
+/// STRATEGY PATTERN: Loading Behavior Interface
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Defines a family of interchangeable loading algorithms
+/// - Encapsulates each loading behavior in separate classes
+/// - Makes loading behaviors interchangeable at runtime
+/// 
+/// BENEFITS:
+/// - Open/Closed Principle: Easy to add new strategies without modifying existing code
+/// - Elimination of conditional logic for different loading types
+/// - Runtime flexibility: Can switch strategies dynamically
+/// 
+/// IMPLEMENTATION:
+/// - LoadingStrategy: Abstract interface for all loading behaviors
+/// - Concrete strategies: PulsatingWaveLoader, ProgressStagesLoader, etc.
+/// - Context: LoadingSystem uses strategies interchangeably
+/// ===========================================================================
+
 abstract class LoadingStrategy {
   Widget buildLoadingWidget(BuildContext context, String message);
   Duration get animationDuration;
   String getRandomFact();
 }
 
-/// Concrete Strategy 1: Pulsating Wave Loader
+/// ===========================================================================
+/// CONCRETE STRATEGY 1: Pulsating Wave Loader
+/// 
+/// CHARACTERISTICS:
+/// - Smooth pulsating wave animation with gradient effects
+/// - Circular expansion/contraction patterns
+/// - Medium animation duration (2000ms)
+/// - Ideal for short to medium operations
+/// ===========================================================================
 class PulsatingWaveLoader implements LoadingStrategy {
   final Color primaryColor;
   final Color secondaryColor;
@@ -38,7 +65,15 @@ class PulsatingWaveLoader implements LoadingStrategy {
   String getRandomFact() => PronunciationFacts.getRandomFact();
 }
 
-/// Concrete Strategy 2: Progress Stages Loader
+/// ===========================================================================
+/// CONCRETE STRATEGY 2: Progress Stages Loader
+/// 
+/// CHARACTERISTICS:
+/// - Multi-stage progress indication
+/// - Visual feedback for complex multi-step operations
+/// - Step-by-step progression with active/inactive states
+/// - Medium animation duration (2000ms)
+/// ===========================================================================
 class ProgressStagesLoader implements LoadingStrategy {
   final List<String> stages;
   final Color activeColor;
@@ -71,7 +106,15 @@ class ProgressStagesLoader implements LoadingStrategy {
   String getRandomFact() => PronunciationFacts.getRandomFact();
 }
 
-/// Concrete Strategy 3: Morphing Shape Loader
+/// ===========================================================================
+/// CONCRETE STRATEGY 3: Morphing Shape Loader
+/// 
+/// CHARACTERISTICS:
+/// - Dynamic shape transformation through icon sequences
+/// - Smooth morphing animations between different shapes
+/// - Longer animation duration (3000ms) for visual appeal
+/// - Perfect for pronunciation-related contexts
+/// ===========================================================================
 class MorphingShapeLoader implements LoadingStrategy {
   final Color shapeColor;
   final List<IconData> shapeSequence;
@@ -104,7 +147,15 @@ class MorphingShapeLoader implements LoadingStrategy {
   String getRandomFact() => PronunciationFacts.getRandomFact();
 }
 
-/// Concrete Strategy 4: Text Typing Loader
+/// ===========================================================================
+/// CONCRETE STRATEGY 4: Text Typing Loader
+/// 
+/// CHARACTERISTICS:
+/// - Simulated typing animation with changing messages
+/// - Dynamic text progression for engaging user experience
+/// - Longest animation duration (4000ms) for reading time
+/// - Ideal for operations requiring user patience
+/// ===========================================================================
 class TextTypingLoader implements LoadingStrategy {
   final Color textColor;
   final List<String> messageSequence;
