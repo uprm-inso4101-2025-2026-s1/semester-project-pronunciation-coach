@@ -211,11 +211,35 @@ The application is organized using a feature-based modular architecture that sep
 
 The project is divided into three main sections: core infrastructure, feature modules, and the advanced loading system. The core section contains shared utilities and base components used across the entire application. This includes application constants for consistent styling, reusable widget components, and state management providers.
 
-Feature modules encapsulate specific application functionality. The authentication module handles user login and session management, containing both screen implementations and specialized widgets. The home module manages the main dashboard experience with progress tracking and user interface components.
+*Welcome Screen Architecture Flow:*
 
-The loading system represents a significant architectural enhancement, implementing enterprise design patterns to create engaging user experiences during processing operations. This system is structured around six key design patterns that work together to provide varied, educational loading states.
+The application launch sequence has been transformed from a simple direct structure to a multi-layered, modular system designed for scalability and professional user experience. Previously, the app followed a linear architecture that immediately displayed the MainNavigationScreen after launch, with no authentication, onboarding, or responsive design layers.
+
+The new architecture introduces a sophisticated flow:
+
+* Application launches and executes main.dart wrapped with Sizer for responsive layout
+* Global ChangeNotifierProvider manages state for user sessions and authentication
+* Animated WelcomeScreen displays as the entry point for approximately 4 seconds
+* Automatic navigation transitions to the LoginPage for authentication
+* Upon successful authentication, navigation proceeds to MainNavigationScreen
+
+This architectural evolution represents a significant enhancement from the previous flat tab-based navigation to a hierarchical multi-level system that supports onboarding, authentication flows, and conditional routing based on user session state.
+
+*Component Responsibilities and Data Flow:*
+
+Each architectural layer has defined responsibilities:
+
+* WelcomeScreen: Provides animated branding and sets visual tone before user interaction
+* LoginPage: Handles authentication UI and prepares for backend integration
+* MainNavigationScreen: Manages the core application dashboard with tab-based navigation
+* Sizer Layer: Ensures responsive design across mobile and tablet devices
+* State Management: Coordinates authentication state and user session persistence
+
+The data flow follows a clear sequence from user input through authentication to dashboard access, with each component maintaining separation of concerns while enabling seamless transitions between application states.
 
 *Loading System Implementation Process:*
+
+The loading system represents a significant architectural enhancement, implementing enterprise design patterns to create engaging user experiences during processing operations. This system is structured around six key design patterns that work together to provide varied, educational loading states.
 
 The loading process begins when a user triggers an operation that requires processing time, such as authentication. The system uses a Factory Pattern to create appropriate loading strategies, selecting from four distinct visual approaches: pulsating wave animations, progress stage indicators, morphing shape transformations, and text typing simulations.
 
@@ -225,7 +249,19 @@ A Singleton Pattern manages the global loading state, ensuring consistent behavi
 
 The Decorator Pattern enhances loading presentations with visual features like custom backgrounds and blur effects, creating polished, professional loading experiences. Throughout all loading states, the system displays relevant pronunciation facts from a curated database, turning waiting periods into educational opportunities.
 
-This architectural approach ensures that loading states are not merely functional indicators but integral parts of the educational experience, maintaining user engagement while providing value during inevitable processing delays.
+*Architectural Benefits and Future Readiness:*
+
+This combined architectural approach ensures that both the welcome screen flow and loading system work together to create a polished, professional user experience. The modular design allows independent development and testing of each component while maintaining clear separation of responsibilities.
+
+The architecture lays groundwork for future enhancements including:
+
+* Authentication integration with Firebase Auth or REST APIs
+* Session persistence for returning users
+* Conditional routing based on login state
+* Dynamic theming based on user preferences
+* Scalable user management systems
+
+This architectural foundation transforms the application from a simple prototype into a production-ready system capable of supporting complex user flows while maintaining engaging experiences during all application states, including processing delays.
 
 == 3. Analytic Part
 
