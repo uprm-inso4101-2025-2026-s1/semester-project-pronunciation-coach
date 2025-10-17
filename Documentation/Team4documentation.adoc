@@ -347,3 +347,99 @@ could review without any technical knowledge.
     the App returns a pronunciation score percentage and at least one feedback tip within 2-3 seconds.
     > Given a playback error during audio fetch, 
     the App shows “Playback error-Audio unavailable” and still allows a selection.
+
+####3.2.2 Verification Plan for Quiz:
+
+- Verification confirms that the implementation is correct by proving the quiz behaves as required 
+under normal and abnormal conditions. “Are we doing it right?”
+
+- This plan covers the complete quiz flow, including:
+  > Custom word entry
+  > 4-option IPA questions with audio 
+  > Correctness feedback
+  > Spoken pronunciation step
+  > Results saving and history
+
+- Methods utilized:
+  > Unit Testing
+  > Property-Based Testing
+  > Integration/UI Testing
+  > Contract Testing
+  > Negative/Robustness Testing
+
+- Requirements list:
+  > R1: Options cardinality and correctness (4 options, 1 correct, all different).
+  > R2: Randomized correct option placement across attempts.
+  > R3: Audio playback available with fallback on error.
+  > R4: Microphone permission required before speaking step.
+  > R5: Speaking feedback timing (score + tip <= 3 seconds).
+  > R6: Save results and show history within <= 5 seconds.
+  > R7: Input validation for invalid, duplicate, or OOV words.
+  > R8: Robustness during network or playback failures.
+
+- Verification Cases:
+  > Case 1 – Options Distinctiveness and Single Correct Answer
+    - Requirement(s): R1
+    - Preconditions: word = “software.”
+    - Steps: Generate the options with the word (“software”).
+    - Expected Output: Exactly 4 options; all distinct; one marked as correct.
+    
+  > Case 2 – Randomized Correct Option Position
+    - Requirement(s): R2
+    - Preconditions: word = “computer.”
+    - Steps: Run 100 quiz generations with random values.
+    - Expected Output: Correct option varies across positions; not fixed in one slot.
+
+  > Case 3 – Audio Playback Success
+    - Requirement(s): R3
+    - Preconditions: Audio output enabled.
+    - Steps: Tap each speaker icon.
+    - Expected Output: Audio plays successfully; selection remains enabled.
+
+  > Case 4 – Audio Playback Failure Fallback
+    - Requirement(s): R3, R8
+    - Preconditions: Triggered audio fetch error.
+    - Steps: Tap speaker icon.
+    - Expected Output: “Playback error” displayed; question can still be answered.
+
+  > Case 5 – Microphone Permission Gating
+    - Requirement(s): R4
+    - Preconditions: Mic permission not granted.
+    - Steps: Enter spoken pronunciation step.
+    - Expected Output: App prompts “Enable microphone to continue”; recording disabled until granted.
+
+  > Case 6 – Speaking Feedback Timing
+    - Requirement(s): R5
+    - Preconditions: Mic permission granted.
+    - Steps: Record and submit pronunciation.
+    - Expected Output: Score and feedback tip(s) displayed within 2–3 seconds.
+
+  > Case 7 – Save Results and Idempotence
+    - Requirement(s): R6
+    - Preconditions: Quiz completed; network available.
+    - Steps: Save results twice.
+    - Expected Output: One entry appears in history; no duplicates created.
+
+  > Case 8 – Input Validation (Invalid N)
+    - Requirement(s): R7
+    - Preconditions: N = 0 or non-integer value.
+    - Steps: Attempt to start quiz.
+    - Expected Output: App shows “Please enter a whole number greater or equal to 1.”
+ 
+  > Case 9 – Duplicate or OOV Words
+    - Requirement(s): R7
+    - Preconditions: User enters duplicates or unrecognized words.
+    - Steps: Start quiz.
+    - Expected Output: Duplicates removed; OOV prompts replacement.
+
+  > Case 10 – Network Loss During Audio Fetch
+    - Requirement(s): R8
+    - Preconditions: Network temporarily unavailable.
+    - Steps: Play word audio.
+    - Expected Output: Fallback message displayed; quiz continues normally.
+
+- Performance Checks:
+  > Question generation time <= 3 seconds.
+  > Speaking feedback (score + tip(s)) <= 3 seconds.
+  > Results saved and visible in history <= 5 seconds, 
+  or flagged as “Pending Sync” if offline.
