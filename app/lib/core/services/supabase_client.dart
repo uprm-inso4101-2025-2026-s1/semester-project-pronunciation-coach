@@ -10,7 +10,6 @@ class AppSupabase {
     await Supabase.initialize(
       url: Env.supabaseUrl,
       anonKey: Env.supabaseAnonKey,
-      authFlowType: AuthFlowType.pkce,
     );
     _initialized = true;
   }
