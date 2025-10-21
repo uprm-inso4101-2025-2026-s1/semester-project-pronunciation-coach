@@ -1,6 +1,14 @@
-from application.challenge_service import router as challenge_router
+import sys
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+# Add project root to path
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Now import
+from application.challenge_service import router as challenge_router
 
 app = FastAPI(
     title="Pronunciation Coach API",
