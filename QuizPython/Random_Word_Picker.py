@@ -7,14 +7,16 @@ import random
 nltk.download("brown")
 nltk.download("words")
 
+#Returns a completely random English word
 def Get_Random_English_Word() -> str:
     return random.choice(brown.words())
 
+#Returns a top nth commonly used word (the higher the)
 def Get_Random_Top_nth_Common_Word(n:int) -> str:
     frequency = Counter(w.lower() for w in brown.words() if w.isalpha())
     #word_list = set(words.words())
     common_words = [w for w, c in frequency.most_common(n) if w.isalpha()]
     return random.choice(common_words)
 
-print(Get_Random_English_Word())
-print(Get_Random_Top_nth_Common_Word(1000))
+#print(Get_Random_English_Word())
+#print(Get_Random_Top_nth_Common_Word(1000))
