@@ -8,7 +8,25 @@ import 'features/dashboard/widgets/welcome_screen.dart';
 
 import 'pace selector/pace_selector.dart';
 
-void main() {
+import 'core/services/supabase_client.dart';
+
+Future<void> main() async{ //future<void>main() async is done to make sure 
+  WidgetsFlutterBinding.ensureInitialized();
+  /*to be able to run must use in terminal:
+  flutter run \
+  --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+ */
+  try {
+  await AppSupabase.init();
+} catch (e) {
+  // Just print and exit
+  // ignore: avoid_print
+  print('Supabase init failed: $e');
+  return;
+}
+
+  
   runApp(
     ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
   );

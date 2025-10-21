@@ -2,37 +2,116 @@
 
 A Flutter application for the course semester project.  
 This repo has been initialized as a proper Flutter project so everyone can clone and run it immediately.
-When you open the project in your IDE, make sure to use the cd command to navigate to the "app" folder first.
-This will make sure the project runs correctly and reads all the necessary files. If you have any doubts regarding
-this, contact a Team Leader or Manager.
 
-A few resources to get you started if this is your first Flutter project:
+## 📋 Prerequisites
+
+- Flutter SDK installed
+- Git installed
+- A Supabase account (free at [supabase.com](https://supabase.com))
+
+**New to Flutter?** Check out these resources:
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [Flutter documentation](https://docs.flutter.dev/)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Getting Started
 
-
-## 🔧 Project Structure 
-
-For this project, we will be having a structure to follow for programming. There will be a "core" folder which will 
-include the core files of the project. These files include: widgets to be reused throughout the app, constants, and more. 
-For the features of the app, there will be a folder for each folder. In there, there will be a "widgets", "pages", and "routes" folder in where you will store the routes, widgets, and pages SPECIFICALLY from thagt feature. This will ensure efficiency and code organization. If you have any doubts regarding this, contact a Team Leader or Manager.
-
-
-## 🔧 Verify Your Setup 
+### 1. Verify Your Setup
 
 Run these commands to make sure Flutter is installed correctly:
 
 ```bash
 flutter --version
 flutter doctor
+```
 
-## After everything is running without problems, proceed to clone the repo.
+### 2. Clone the Repository
 
+```bash
 git clone https://github.com/<org-or-username>/semester-project-pronunciation-coach.git
-cd semester-project-pronunciation-coach\app  
+cd semester-project-pronunciation-coach/app
+flutter pub get
+```
+
+### 3. Environment Setup
+
+#### Create your environment file
+
+Copy the example file:
+
+```bash
+cp lib/core/config/env.example.dart lib/core/config/env.dart
+```
+
+#### Get your Supabase credentials
+
+1. Go to [supabase.com/dashboard](https://supabase.com/dashboard)
+2. Select your project → **Settings** → **API**
+3. Copy these two values:
+   - **Project URL** 
+   - **anon public key**
+
+#### Add your credentials
+
+Open `lib/core/config/env.dart` and replace these two lines:
+
+```dart
+defaultValue: 'https://your-project-id.supabase.co',  // ← Paste your Project URL here
+```
+
+```dart
+defaultValue: 'your-anon-key-here',  // ← Paste your anon public key here
+```
+
+Save the file.
+
+### 4. Run the App
+
+```bash
+flutter run
+```
+
+Done! 🎉
+
+> **Important:** The `env.dart` file is gitignored and stays on your machine only. Never commit it.
+
+## 🔧 Project Structure
+
+This project follows a structured organization pattern:
+
+- **`core/`** - Core files used throughout the app
+  - Reusable widgets
+  - Constants
+  - Services (like Supabase client)
+  - Configuration files
+
+- **`features/`** - Individual app features, each containing:
+  - `pages/` - Screen/page files
+  - `widgets/` - Feature-specific widgets
+  - `routes/` - Feature-specific routing
+
+This structure ensures efficiency and code organization.
+
+## 💡 Important Notes
+
+- **Working Directory:** When you open the project in your IDE, make sure to navigate to the `app` folder first using `cd app`. This ensures the project runs correctly and reads all necessary files.
+
+- **Questions?** If you have any doubts about the setup or project structure, contact a Team Leader or Manager.
+
+## 🆘 Troubleshooting
+
+**App won't run / Configuration error:**
+- Make sure you created `env.dart` from `env.example.dart`
+- Verify you replaced the placeholder values with your actual Supabase credentials
+- Check that your Supabase project is not paused in the dashboard
+
+**Flutter command not found:**
+- Make sure Flutter is installed and added to your PATH
+- Run `flutter doctor` to diagnose issues
+
+**Dependency errors:**
+```bash
+flutter clean
 flutter pub get
 flutter run
+```

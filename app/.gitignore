@@ -1,3 +1,9 @@
+# Environment Configuration
+# NEVER EVER EVER commit actual environment variables
+lib/core/config/env.dart
+
+# Keep the example file for reference
+!lib/core/config/env.example.dart
 # Miscellaneous
 *.class
 *.log
