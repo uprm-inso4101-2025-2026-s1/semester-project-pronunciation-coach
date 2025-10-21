@@ -41,10 +41,11 @@ CHALLENGES: List[Challenge] = [
         xp_reward=10,
         expected_pronunciation="BYOO-tih-ful",
     ),
-    # NEW: Multiple choice challenges
+    # Multiple choice challenges
     Challenge(
         id=5,
         content="How do you pronounce 'thorough'?",
+        ipa=None,
         type=ChallengeType.MULTIPLE_CHOICE,
         xp_reward=15,
         options=["THUR-oh", "THOR-uff", "thur-ROW", "THUH-roh"],
@@ -54,6 +55,7 @@ CHALLENGES: List[Challenge] = [
     Challenge(
         id=6,
         content="Which word has a silent 'k'?",
+        ipa=None,
         type=ChallengeType.MULTIPLE_CHOICE,
         xp_reward=10,
         options=["Kite", "Knife", "Kick", "Kind"],
