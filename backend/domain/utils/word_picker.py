@@ -3,22 +3,43 @@ Word Picker Utility
 Original Author: uziellopez7
 Moved from: QuizPython/Random_Word_Picker.py
 Modified for: FastAPI backend integration
-
-This module provides functions to select random English words
-from the Brown corpus with various filtering options.
 """
 
 import random
+import ssl
 from collections import Counter
 
 import nltk
 from nltk.corpus import brown
 
-# Download required NLTK data (run once)
+# SSL workaround for macOS
 try:
-    nltk.data.find("corpora/brown")
-except LookupError:
-    nltk.download("brown", quiet=True)
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+
+# Download required NLTK data (run once)
+def _ensure_brown_corpus():
+    """Ensure Brown corpus is downloaded"""
+    try:
+        nltk.data.find("corpora/brown")
+        return True
+    except LookupError:
+        try:
+            print("Downloading NLTK Brown corpus (first time only)...")
+            nltk.download("brown", quiet=True)
+            return True
+        except Exception as e:
+            print(f"Error downloading Brown corpus: {e}")
+            print("Please run: python3 download_nltk_data.py")
+            return False
+
+
+# Initialize corpus on module import
+_ensure_brown_corpus()
 
 
 def get_random_english_word() -> str:
@@ -28,8 +49,27 @@ def get_random_english_word() -> str:
 
     Original function by: uziellopez7
     """
-    word_list = [w for w in brown.words() if (len(w) > 3) and (w.isalpha())]
-    return random.choice(word_list).lower()
+    try:
+        word_list = [w for w in brown.words() if (len(w) > 3) and (w.isalpha())]
+        if not word_list:
+            raise ValueError("Brown corpus is empty")
+        return random.choice(word_list).lower()
+    except Exception as e:
+        print(f"Error accessing Brown corpus: {e}")
+        # Fallback to basic English words
+        fallback_words = [
+            "hello",
+            "world",
+            "python",
+            "computer",
+            "programming",
+            "developer",
+            "software",
+            "application",
+            "database",
+            "server",
+        ]
+        return random.choice(fallback_words)
 
 
 def get_random_common_word(top_n: int = 1000) -> str:
@@ -44,9 +84,16 @@ def get_random_common_word(top_n: int = 1000) -> str:
 
     Original function by: uziellopez7
     """
-    frequency = Counter(w.lower() for w in brown.words() if w.isalpha())
-    common_words = [w for w, c in frequency.most_common(top_n) if w.isalpha()]
-    return random.choice(common_words)
+    try:
+        frequency = Counter(w.lower() for w in brown.words() if w.isalpha())
+        common_words = [w for w, c in frequency.most_common(top_n) if w.isalpha()]
+        if not common_words:
+            raise ValueError("No common words found")
+        return random.choice(common_words)
+    except Exception as e:
+        print(f"Error getting common words: {e}")
+        # Fallback to basic words
+        return get_random_english_word()
 
 
 def get_word_by_difficulty(difficulty: str) -> str:
