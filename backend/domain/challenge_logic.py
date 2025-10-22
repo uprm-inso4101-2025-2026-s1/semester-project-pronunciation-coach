@@ -1,7 +1,19 @@
+"""
+Challenge Logic - Business Rules
+Uses utilities from QuizPython team (see domain/utils/)
+"""
+
+import random
 from datetime import datetime
 from typing import List
 
 from domain.models import Challenge, ChallengeResult, ChallengeType
+from domain.utils.word_picker import (
+    get_random_common_word,
+    get_random_english_word,
+    get_word_by_difficulty,
+)
+from domain.utils.word_scrambler import generate_multiple_choice_options
 
 # Sample challenges
 CHALLENGES: List[Challenge] = [
@@ -63,6 +75,37 @@ CHALLENGES: List[Challenge] = [
         hint="You use this to cut things",
     ),
 ]
+
+
+def generate_word_challenge(difficulty: str = "medium") -> Challenge:
+    """
+    Dynamically generate a word pronunciation challenge.
+    Uses word selection from uziellopez7's Random_Word_Picker.
+    Uses scrambling algorithm from uziellopez7's Multiple_Choice_Quiz.
+    """
+    # Get word using existing utility
+    word = get_word_by_difficulty(difficulty)
+
+    # Generate options using existing scrambling logic
+    options = generate_multiple_choice_options(word)
+
+    # Find correct answer position
+    correct_index = options.index(word)
+    correct_letter = chr(65 + correct_index)  # A, B, C, or D
+
+    # XP based on difficulty
+    xp_map = {"easy": 5, "medium": 10, "hard": 15}
+    xp_reward = xp_map.get(difficulty, 10)
+
+    return Challenge(
+        id=random.randint(1000, 9999),
+        content=f"Which is the correct spelling of this word?",
+        type=ChallengeType.MULTIPLE_CHOICE,
+        xp_reward=xp_reward,
+        options=options,
+        correct_answer=correct_letter,
+        hint=f"Listen carefully to each option",
+    )
 
 
 def get_daily_challenge() -> Challenge:
