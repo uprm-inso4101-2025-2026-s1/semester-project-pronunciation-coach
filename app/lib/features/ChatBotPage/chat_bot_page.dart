@@ -129,6 +129,10 @@ class _ChatbotPageState extends State<ChatbotPage>
         elevation: 0,
         backgroundColor: Colors.transparent,
         toolbarHeight: 60,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
