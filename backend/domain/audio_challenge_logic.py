@@ -1,0 +1,200 @@
+"""
+Audio Challenge Logic - Business logic for TTS pronunciation challenges
+"""
+
+import base64
+import io
+import random
+from typing import Dict, List, Tuple
+
+from domain.utils.tts_engine import get_tts_engine
+from domain.utils.word_picker import get_word_by_difficulty
+
+
+def create_pronunciation_variants(word: str) -> List[Dict[str, str]]:
+    """
+    Create pronunciation variants for a word
+    Returns list of variants with type and pronunciation pattern
+
+    Args:
+        word: The correct word
+
+    Returns:
+        List of dicts with 'word', 'type', and 'pattern'
+    """
+    variants = []
+
+    # Correct pronunciation
+    variants.append({"word": word, "type": "correct", "pattern": "normal"})
+
+    # Variant 1: Stress on wrong syllable
+    variants.append(
+        {"word": word, "type": "wrong_stress", "pattern": "emphasized_first"}
+    )
+
+    # Variant 2: Different rate (too fast)
+    variants.append({"word": word, "type": "wrong_rate", "pattern": "fast"})
+
+    # Variant 3: Different rate (too slow)
+    variants.append({"word": word, "type": "wrong_rate_slow", "pattern": "slow"})
+
+    # Shuffle and return 4 options
+    random.shuffle(variants)
+    return variants
+
+
+def generate_audio_for_word(
+    word: str, pattern: str = "normal", format: str = "base64"
+) -> str:
+    """
+    Generate audio for a word using TTS
+
+    Args:
+        word: Word to pronounce
+        pattern: Pronunciation pattern (normal, fast, slow, emphasized_first)
+        format: Output format ('base64' or 'bytes')
+
+    Returns:
+        Base64-encoded audio data or bytes
+    """
+    try:
+        import pyttsx3
+
+        # Initialize engine
+        engine = pyttsx3.init()
+
+        # Set properties based on pattern
+        if pattern == "normal":
+            engine.setProperty("rate", 150)
+            engine.setProperty("volume", 1.0)
+            engine.setProperty("pitch", 100)
+        elif pattern == "fast":
+            engine.setProperty("rate", 220)  # Much faster
+            engine.setProperty("volume", 1.0)
+        elif pattern == "slow":
+            engine.setProperty("rate", 100)  # Much slower
+            engine.setProperty("volume", 1.0)
+        elif pattern == "emphasized_first":
+            # Try to emphasize first syllable (limited control with pyttsx3)
+            engine.setProperty("rate", 140)
+            engine.setProperty("volume", 1.2)
+            # Note: pyttsx3 has limited control over stress
+            # In production, use a more advanced TTS
+
+        # Save to bytes
+        temp_file = io.BytesIO()
+        engine.save_to_file(word, temp_file)
+        engine.runAndWait()
+
+        # Get bytes
+        temp_file.seek(0)
+        audio_bytes = temp_file.read()
+
+        if format == "base64":
+            return base64.b64encode(audio_bytes).decode("utf-8")
+        else:
+            return audio_bytes
+
+    except Exception as e:
+        print(f"Error generating audio: {e}")
+        # Return empty audio data
+        return "" if format == "base64" else b""
+
+
+def generate_audio_challenge(difficulty: str) -> Dict:
+    """
+    Generate a complete audio challenge with word and audio options
+
+    Args:
+        difficulty: "easy", "medium", or "hard"
+
+    Returns:
+        Dict with challenge data including audio
+    """
+    # Get random word based on difficulty
+    word = get_word_by_difficulty(difficulty)
+
+    # Generate pronunciation variants
+    variants = create_pronunciation_variants(word)
+
+    # Find correct answer position
+    correct_index = next(i for i, v in enumerate(variants) if v["type"] == "correct")
+    correct_letter = chr(65 + correct_index)  # A, B, C, D
+
+    # Generate challenge ID
+    challenge_id = random.randint(10000, 99999)
+
+    # Generate audio for each variant (placeholder for now)
+    # In production, generate actual audio files
+    options_data = []
+    for i, variant in enumerate(variants):
+        option_letter = chr(65 + i)
+        options_data.append(
+            {
+                "letter": option_letter,
+                "audio_url": f"/api/audio/challenge/{challenge_id}/option/{option_letter}",
+                "pattern": variant["pattern"],
+            }
+        )
+
+    # Cache challenge data
+    from infrastructure.audio_cache import cache_challenge
+
+    cache_challenge(
+        challenge_id,
+        {
+            "id": challenge_id,
+            "word": word,
+            "difficulty": difficulty,
+            "correct_answer": correct_letter,
+            "variants": variants,
+        },
+    )
+
+    # XP reward based on difficulty
+    xp_map = {"easy": 10, "medium": 15, "hard": 20}
+
+    return {
+        "id": challenge_id,
+        "word": word,
+        "difficulty": difficulty,
+        "content": f"Which pronunciation of '{word}' is correct?",
+        "type": "audio_pronunciation",
+        "xp_reward": xp_map[difficulty],
+        "hint": f"Listen carefully to the stress and rhythm",
+        "options": options_data,
+        "correct_answer": correct_letter,
+    }
+
+
+def get_word_info(word: str) -> Dict:
+    """
+    Get pronunciation information for a word
+    Loads from word_data.json if available
+
+    Args:
+        word: Word to look up
+
+    Returns:
+        Dict with syllables and IPA if available
+    """
+    try:
+        import json
+        from pathlib import Path
+
+        # Load word data
+        word_data_path = Path(__file__).parent / "utils" / "word_data.json"
+
+        if word_data_path.exists():
+            with open(word_data_path, "r") as f:
+                word_data = json.load(f)
+
+            if word in word_data:
+                return word_data[word]
+
+        # Return empty if not found
+        return {"Syllables": word, "IPA": f"/{word}/"}
+
+    except Exception as e:
+        print(f"Error loading word info: {e}")
+        return {"Syllables": word, "IPA": f"/{word}/"}
