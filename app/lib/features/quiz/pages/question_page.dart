@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/colors.dart';
-import '../widgets/progress_bar.dart';
-import '../widgets/option_card.dart';
-import 'result_page.dart';
-
-class QuizQuestionPage extends StatefulWidget {
-  final String quizTitle;
-  final int totalQuestions;
-  const QuizQuestionPage({
-import 'package:flutter/material.dart';
-import '../../../core/constants/colors.dart';
 import '../../../core/services/api_service.dart';
 import '../widgets/progress_bar.dart';
 import '../widgets/option_card.dart';
