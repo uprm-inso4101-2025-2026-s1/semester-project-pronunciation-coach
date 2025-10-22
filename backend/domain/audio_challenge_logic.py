@@ -7,8 +7,8 @@ import io
 import random
 from typing import Dict, List, Tuple
 
-from domain.utils.tts_engine import get_tts_engine
 from domain.utils.word_picker import get_word_by_difficulty
+from gtts import gTTS
 
 
 def create_pronunciation_variants(word: str) -> List[Dict[str, str]]:
@@ -44,10 +44,10 @@ def create_pronunciation_variants(word: str) -> List[Dict[str, str]]:
 
 
 def generate_audio_for_word(
-    word: str, pattern: str = "normal", format: str = "base64"
-) -> str:
+    word: str, pattern: str = "normal", format: str = "bytes"
+) -> bytes:
     """
-    Generate audio for a word using TTS
+    Generate audio for a word using Google TTS (gTTS)
 
     Args:
         word: Word to pronounce
@@ -55,40 +55,40 @@ def generate_audio_for_word(
         format: Output format ('base64' or 'bytes')
 
     Returns:
-        Base64-encoded audio data or bytes
+        Audio bytes (MP3 format)
     """
     try:
-        import pyttsx3
+        print(f"    🔊 Generating TTS for word: '{word}', pattern: '{pattern}'")
 
-        # Initialize engine
-        engine = pyttsx3.init()
+        # Determine which word/text to use
+        text_to_speak = word
+        is_slow = False
 
-        # Set properties based on pattern
-        if pattern == "normal":
-            engine.setProperty("rate", 150)
-            engine.setProperty("volume", 1.0)
-            engine.setProperty("pitch", 100)
-        elif pattern == "fast":
-            engine.setProperty("rate", 220)  # Much faster
-            engine.setProperty("volume", 1.0)
-        elif pattern == "slow":
-            engine.setProperty("rate", 100)  # Much slower
-            engine.setProperty("volume", 1.0)
+        if pattern == "slow":
+            is_slow = True
+            print(f"    ⏱️  Using slow speech")
         elif pattern == "emphasized_first":
-            # Try to emphasize first syllable (limited control with pyttsx3)
-            engine.setProperty("rate", 140)
-            engine.setProperty("volume", 1.2)
-            # Note: pyttsx3 has limited control over stress
-            # In production, use a more advanced TTS
+            # Add emphasis by capitalizing
+            text_to_speak = (
+                word[0].upper() + word[1:].lower() if len(word) > 1 else word.upper()
+            )
+            print(f"    💪 Emphasizing: '{text_to_speak}'")
+        elif pattern == "fast":
+            # Normal speed for fast (gTTS limitation)
+            print(f"    ⚡ Using normal speed (fast not directly supported)")
 
-        # Save to bytes
-        temp_file = io.BytesIO()
-        engine.save_to_file(word, temp_file)
-        engine.runAndWait()
+        # Create TTS object
+        tts = gTTS(text=text_to_speak, lang="en", slow=is_slow, lang_check=False)
 
-        # Get bytes
-        temp_file.seek(0)
-        audio_bytes = temp_file.read()
+        # Save to BytesIO
+        audio_fp = io.BytesIO()
+        tts.write_to_fp(audio_fp)
+
+        # Get the bytes
+        audio_fp.seek(0)
+        audio_bytes = audio_fp.read()
+
+        print(f"    ✅ Generated {len(audio_bytes)} bytes of audio")
 
         if format == "base64":
             return base64.b64encode(audio_bytes).decode("utf-8")
@@ -96,9 +96,15 @@ def generate_audio_for_word(
             return audio_bytes
 
     except Exception as e:
-        print(f"Error generating audio: {e}")
+        print(f"    ❌ Error generating audio: {e}")
+        import traceback
+
+        traceback.print_exc()
         # Return empty audio data
-        return "" if format == "base64" else b""
+        if format == "base64":
+            return ""
+        else:
+            return b""
 
 
 def generate_audio_challenge(difficulty: str) -> Dict:
@@ -114,6 +120,10 @@ def generate_audio_challenge(difficulty: str) -> Dict:
     # Get random word based on difficulty
     word = get_word_by_difficulty(difficulty)
 
+    print(
+        f"🎯 Generating audio challenge for word: '{word}' (difficulty: {difficulty})"
+    )
+
     # Generate pronunciation variants
     variants = create_pronunciation_variants(word)
 
@@ -124,22 +134,37 @@ def generate_audio_challenge(difficulty: str) -> Dict:
     # Generate challenge ID
     challenge_id = random.randint(10000, 99999)
 
-    # Generate audio for each variant (placeholder for now)
-    # In production, generate actual audio files
+    # Generate and cache audio for each variant
+    from infrastructure.audio_cache import cache_audio, cache_challenge
+
     options_data = []
     for i, variant in enumerate(variants):
         option_letter = chr(65 + i)
+
+        # Generate audio for this variant
+        print(
+            f"  🎵 Generating audio for option {option_letter} (pattern: {variant['pattern']})"
+        )
+        audio_bytes = generate_audio_for_word(word, variant["pattern"], format="bytes")
+
+        # Debug: Check if audio was generated
+        if audio_bytes:
+            print(f"  ✅ Audio generated successfully: {len(audio_bytes)} bytes")
+        else:
+            print(f"  ⚠️  Warning: No audio data generated!")
+
+        # Cache the audio
+        cache_audio(challenge_id, option_letter, audio_bytes)
+
         options_data.append(
             {
                 "letter": option_letter,
-                "audio_url": f"/api/audio/challenge/{challenge_id}/option/{option_letter}",
+                "audio_url": f"/api/challenge/audio/{challenge_id}/option/{option_letter}",
                 "pattern": variant["pattern"],
             }
         )
 
     # Cache challenge data
-    from infrastructure.audio_cache import cache_challenge
-
     cache_challenge(
         challenge_id,
         {
@@ -153,6 +178,8 @@ def generate_audio_challenge(difficulty: str) -> Dict:
 
     # XP reward based on difficulty
     xp_map = {"easy": 10, "medium": 15, "hard": 20}
+
+    print(f"✅ Challenge {challenge_id} generated successfully!")
 
     return {
         "id": challenge_id,

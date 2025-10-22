@@ -1,99 +1,53 @@
 """
-Audio Cache - In-memory storage for audio challenges
-In production, this would use Redis or database storage
+Audio Cache - Stores generated audio and challenge data in memory
 """
 
-import io
 from typing import Dict, Optional
 
-# In-memory cache for challenges
+# In-memory caches
 _challenge_cache: Dict[int, Dict] = {}
-
-# In-memory cache for audio files
-_audio_cache: Dict[str, bytes] = {}
+_audio_cache: Dict[tuple, bytes] = {}  # (challenge_id, option_letter) -> audio_bytes
 
 
 def cache_challenge(challenge_id: int, challenge_data: Dict) -> None:
-    """
-    Cache a challenge for later retrieval
-
-    Args:
-        challenge_id: Unique challenge ID
-        challenge_data: Challenge data dict
-    """
+    """Cache challenge data"""
     _challenge_cache[challenge_id] = challenge_data
+    print(f"📦 Cached challenge {challenge_id}")
 
 
 def get_cached_challenge(challenge_id: int) -> Optional[Dict]:
-    """
-    Retrieve a cached challenge
-
-    Args:
-        challenge_id: Challenge ID to retrieve
-
-    Returns:
-        Challenge data dict or None if not found
-    """
+    """Retrieve cached challenge data"""
     return _challenge_cache.get(challenge_id)
 
 
-def cache_audio(key: str, audio_data: bytes) -> None:
-    """
-    Cache audio data
-
-    Args:
-        key: Cache key (e.g., "challenge_123_option_A")
-        audio_data: Audio bytes
-    """
-    _audio_cache[key] = audio_data
+def cache_audio(challenge_id: int, option_letter: str, audio_bytes: bytes) -> None:
+    """Cache audio data for a specific option"""
+    key = (challenge_id, option_letter.upper())
+    _audio_cache[key] = audio_bytes
+    print(f"🎵 Cached audio for challenge {challenge_id}, option {option_letter}")
 
 
 def get_cached_audio(challenge_id: int, option_letter: str) -> Optional[bytes]:
-    """
-    Retrieve cached audio data
+    """Retrieve cached audio data"""
+    key = (challenge_id, option_letter.upper())
+    audio = _audio_cache.get(key)
 
-    Args:
-        challenge_id: Challenge ID
-        option_letter: Option letter (A, B, C, D)
+    if audio:
+        print(
+            f"🎵 Retrieved audio for challenge {challenge_id}, option {option_letter}: {len(audio)} bytes"
+        )
+    else:
+        print(f"❌ No audio found for challenge {challenge_id}, option {option_letter}")
+        print(f"   Available keys: {list(_audio_cache.keys())}")
 
-    Returns:
-        Audio bytes or None if not found
-    """
-    key = f"challenge_{challenge_id}_option_{option_letter}"
-
-    if key in _audio_cache:
-        return _audio_cache[key]
-
-    # Generate audio on demand if not cached
-    challenge = get_cached_challenge(challenge_id)
-    if challenge is None:
-        return None
-
-    # Find the variant for this option
-    option_index = ord(option_letter.upper()) - 65  # A=0, B=1, C=2, D=3
-
-    if option_index < 0 or option_index >= len(challenge["variants"]):
-        return None
-
-    variant = challenge["variants"][option_index]
-    word = challenge["word"]
-    pattern = variant["pattern"]
-
-    # Generate audio
-    from domain.audio_challenge_logic import generate_audio_for_word
-
-    audio_bytes = generate_audio_for_word(word, pattern, format="bytes")
-
-    # Cache it
-    cache_audio(key, audio_bytes)
-
-    return audio_bytes
+    return audio
 
 
 def clear_cache() -> None:
-    """Clear all cached data"""
+    """Clear all caches"""
     _challenge_cache.clear()
     _audio_cache.clear()
+    print("🧹 Cache cleared")
 
 
 def get_cache_stats() -> Dict:
@@ -101,6 +55,4 @@ def get_cache_stats() -> Dict:
     return {
         "challenges_cached": len(_challenge_cache),
         "audio_files_cached": len(_audio_cache),
-        "total_audio_size_mb": sum(len(data) for data in _audio_cache.values())
-        / (1024 * 1024),
     }

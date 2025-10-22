@@ -58,11 +58,10 @@ async def generate_audio_quiz(request: CreateAudioChallengeRequest):
 async def get_audio_option(challenge_id: int, option_letter: str):
     """
     Get audio file for a specific option
-    Returns WAV audio file
+    Returns MP3 audio file
     """
     try:
-        # This would retrieve cached audio from storage
-        # For now, we'll generate on demand
+        # Retrieve cached audio from storage
         from infrastructure.audio_cache import get_cached_audio
 
         audio_data = get_cached_audio(challenge_id, option_letter)
@@ -72,12 +71,15 @@ async def get_audio_option(challenge_id: int, option_letter: str):
 
         return Response(
             content=audio_data,
-            media_type="audio/wav",
+            media_type="audio/mpeg",  # Changed from audio/wav to audio/mpeg
             headers={
-                "Content-Disposition": f"inline; filename=option_{option_letter}.wav"
+                "Content-Disposition": f"inline; filename=option_{option_letter}.mp3",
+                "Accept-Ranges": "bytes",
             },
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving audio: {str(e)}")
 

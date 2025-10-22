@@ -41,27 +41,37 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
     });
 
     try {
+      // Stop any currently playing audio
+      await _audioPlayer.stop();
+    
       final audioUrl = widget.challenge.getAudioUrl(optionLetter);
-      
-      // Play from URL
+    
+      print('🎵 Playing audio from: $audioUrl');
+    
+      // Use UrlSource instead of deprecated play method
       await _audioPlayer.play(UrlSource(audioUrl));
-      
+    
       // Wait for completion
       await _audioPlayer.onPlayerComplete.first;
-      
-      setState(() {
-        _playingOption = null;
-      });
-    } catch (e) {
-      setState(() {
-        _playingOption = null;
-      });
-      
+    
       if (mounted) {
+        setState(() {
+          _playingOption = null;
+        });
+      }
+    } catch (e) {
+      print('❌ Audio error: $e');
+    
+      if (mounted) {
+        setState(() {
+          _playingOption = null;
+        });
+      
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error playing audio: $e'),
-            backgroundColor: Colors.red,
+            content: Text('Could not play audio. Please try again.'),
+            backgroundColor: Colors.orange,
+            duration: const Duration(seconds: 2),
           ),
         );
       }
