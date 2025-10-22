@@ -3,6 +3,7 @@ import '../../../core/constants/colors.dart';
 import '../widgets/progress_bar.dart';
 import '../widgets/option_card.dart';
 import 'result_page.dart';
+import '../services/random_work_picker.dart';
 
 class QuizQuestionPage extends StatefulWidget {
   final String quizTitle;
@@ -22,7 +23,9 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
   int? selected;
 
   // placeholder options
-  final List<String> options = const ['Option A', 'Option B', 'Option C', 'Option D'];
+  String test2222 = Get_Random_Word();
+
+  final List<String> options = ['Option A', 'Option B', 'Option C', 'Option D'];
 
   @override
   Widget build(BuildContext context) {
