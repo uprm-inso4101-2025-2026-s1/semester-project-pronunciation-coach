@@ -27,7 +27,16 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   bool _isSubmitting = false;
   String? _feedback;
   bool _hasAnswered = false;
+  bool _isCorrect = false;
   final int _userId = 1;
+  
+  bool _isPlayingAudio = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.setReleaseMode(ReleaseMode.release);
+  }
 
   @override
   void dispose() {
@@ -36,42 +45,59 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   }
 
   Future<void> _playAudio(String optionLetter) async {
+    // Allow switching between audios - stop any currently playing audio first
+    if (_isPlayingAudio && _playingOption != null) {
+      print('🛑 Stopping previous audio: $_playingOption');
+      await _audioPlayer.stop();
+    }
+
     setState(() {
       _playingOption = optionLetter;
+      _isPlayingAudio = true;
     });
 
     try {
       // Stop any currently playing audio
       await _audioPlayer.stop();
-    
+      
       final audioUrl = widget.challenge.getAudioUrl(optionLetter);
-    
+      
       print('🎵 Playing audio from: $audioUrl');
-    
-      // Use UrlSource instead of deprecated play method
+      
+      // Set up completion listener before playing
+      final completer = _audioPlayer.onPlayerComplete.first.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          print('⏱️ Audio playback timed out');
+        },
+      );
+      
+      // Play the audio
       await _audioPlayer.play(UrlSource(audioUrl));
-    
-      // Wait for completion
-      await _audioPlayer.onPlayerComplete.first;
-    
+      
+      // Wait for completion or timeout
+      await completer;
+      
       if (mounted) {
         setState(() {
           _playingOption = null;
+          _isPlayingAudio = false;
         });
       }
     } catch (e) {
       print('❌ Audio error: $e');
-    
+      
       if (mounted) {
         setState(() {
           _playingOption = null;
+          _isPlayingAudio = false;
         });
-      
+        
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Could not play audio. Please try again.'),
             backgroundColor: Colors.orange,
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       }
@@ -226,26 +252,20 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _hasAnswered && _feedback!.contains('Correct')
+                  color: _isCorrect
                       ? Colors.green.withOpacity(0.1)
                       : Colors.red.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: _hasAnswered && _feedback!.contains('Correct')
-                        ? Colors.green
-                        : Colors.red,
+                    color: _isCorrect ? Colors.green : Colors.red,
                     width: 2,
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      _hasAnswered && _feedback!.contains('Correct')
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      color: _hasAnswered && _feedback!.contains('Correct')
-                          ? Colors.green
-                          : Colors.red,
+                      _isCorrect ? Icons.check_circle : Icons.cancel,
+                      color: _isCorrect ? Colors.green : Colors.red,
                       size: 28,
                     ),
                     const SizedBox(width: 12),
@@ -255,9 +275,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: _hasAnswered && _feedback!.contains('Correct')
-                              ? Colors.green[700]
-                              : Colors.red[700],
+                          color: _isCorrect ? Colors.green[700] : Colors.red[700],
                         ),
                       ),
                     ),
@@ -337,6 +355,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
       );
 
       setState(() {
+        _isCorrect = result.isCorrect;
         _feedback = result.feedback;
         if (!result.isCorrect) {
           _feedback = '$_feedback\nCorrect answer: ${result.correctAnswer} - "${result.correctWord}"';

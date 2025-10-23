@@ -56,6 +56,30 @@ async def health_check():
     return {"status": "healthy", "cache_stats": get_cache_stats()}
 
 
+@app.get("/debug/cache")
+async def debug_cache():
+    """Debug endpoint to check cache contents"""
+    from infrastructure.audio_cache import (
+        _audio_cache,
+        _challenge_cache,
+        get_cache_stats,
+    )
+
+    stats = get_cache_stats()
+
+    # Get all cached challenge IDs and audio keys
+    challenge_ids = list(_challenge_cache.keys())
+    audio_keys = list(_audio_cache.keys())
+
+    return {
+        "status": "ok",
+        "stats": stats,
+        "cached_challenges": challenge_ids,
+        "cached_audio_keys": audio_keys,
+        "sample_audio_keys": audio_keys[:10] if audio_keys else [],
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
 

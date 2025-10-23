@@ -13,126 +13,159 @@ from domain.utils.word_picker import get_word_by_difficulty
 from gtts import gTTS
 
 
-def add_syllable_breaks(word: str) -> str:
+def add_wrong_syllable_stress(word: str) -> str:
     """
-    Add spaces between syllables to create mispronunciation
-    Example: "comfortable" -> "com for ta ble"
+    Add incorrect stress by inserting pauses in wrong places
+    Example: "beautiful" -> "beau-TI-ful" (wrong stress on 'ti')
     """
-    # Insert spaces before vowel groups
-    syllabified = re.sub(r"([aeiou]+)", r" \1 ", word)
-    # Clean up extra spaces
-    syllabified = " ".join(syllabified.split())
-    return syllabified
+    if len(word) <= 3:
+        return word.upper()  # Just emphasize short words
+
+    # Split roughly into thirds and capitalize middle
+    third = len(word) // 3
+    return f"{word[:third]} {word[third:third*2].upper()} {word[third*2:]}"
 
 
-def emphasize_silent_letters(word: str) -> str:
+def mispronounce_vowels(word: str) -> str:
     """
-    Pronounce normally silent letters
-    Example: "knife" -> "k-nife", "psychology" -> "p-sigh-kology"
+    Change vowel sounds to create mispronunciation
+    Example: "said" -> "sayed", "women" -> "wo-men"
     """
-    # Common silent letter patterns
-    mispronounced = word
+    mispronounced = word.lower()
 
-    # Silent K before N
-    if word.startswith("kn"):
-        mispronounced = "k-" + word[1:]
+    # Common vowel mispronunciations
+    replacements = [
+        ("ea", "ee-ah"),  # "bread" -> "bree-ahd"
+        ("oo", "oh-oh"),  # "book" -> "boh-ohk"
+        ("ou", "ow"),  # "could" -> "cowld"
+        ("ai", "ay-eye"),  # "said" -> "say-eyed"
+        ("ie", "eye-ee"),  # "friend" -> "fry-eend"
+    ]
 
-    # Silent P before S
-    if word.startswith("ps"):
-        mispronounced = "p-" + word[1:]
+    for old, new in replacements:
+        if old in mispronounced:
+            mispronounced = mispronounced.replace(old, new, 1)
+            return mispronounced
 
-    # Silent G before N
-    if word.startswith("gn"):
-        mispronounced = "g-" + word[1:]
-
-    # Silent W before R
-    if word.startswith("wr"):
-        mispronounced = "w-" + word[1:]
-
-    # Silent B after M
-    if "mb" in word:
-        mispronounced = word.replace("mb", "m-b")
-
-    # Silent GH
-    if "gh" in word and not word.endswith("gh"):
-        mispronounced = word.replace("gh", "g-h")
-
-    return mispronounced
+    # If no replacement made, insert dash in middle
+    mid = len(word) // 2
+    return f"{word[:mid]}-{word[mid:]}"
 
 
-def phonetic_spelling(word: str) -> str:
+def add_extra_syllables(word: str) -> str:
     """
-    Convert word to phonetic spelling for mispronunciation
-    Makes it sound more "spelled out"
+    Add extra syllables or repeat parts
+    Example: "comfortable" -> "com-for-ta-ba-ble"
     """
-    # Common phonetic substitutions for mispronunciation
-    phonetic = word.lower()
+    if len(word) <= 4:
+        # Short words: repeat a syllable
+        return f"{word[:2]}-{word[:2]}-{word[2:]}"
 
-    # Make it sound more literal
-    phonetic = phonetic.replace("tion", "shun")
-    phonetic = phonetic.replace("ture", "chur")
-    phonetic = phonetic.replace("ough", "off")
-    phonetic = phonetic.replace("augh", "aw")
-    phonetic = phonetic.replace("eigh", "ay")
+    # Longer words: add 'uh' sounds between consonant clusters
+    result = []
+    for i, char in enumerate(word):
+        result.append(char)
+        # Add 'uh' after consonants before vowels
+        if i < len(word) - 1:
+            if char not in "aeiou" and word[i + 1] not in "aeiou":
+                result.append("-uh-")
 
-    # Split into syllable-like chunks
-    chunks = []
-    i = 0
-    while i < len(phonetic):
-        if i < len(phonetic) - 1:
-            chunks.append(phonetic[i : i + 2])
-            i += 2
-        else:
-            chunks.append(phonetic[i])
-            i += 1
-
-    return "-".join(chunks)
+    return "".join(result)
 
 
-def reverse_stress_pattern(word: str) -> str:
+def spell_out_phonetically(word: str) -> str:
     """
-    Change stress pattern by repeating different parts
-    Example: "comfortable" -> "com-fort-able" with emphasis on wrong syllable
+    Spell out word letter by letter phonetically
+    Example: "psychology" -> "pee ess why see aych oh ell oh gee why"
     """
-    # If word has multiple syllables, emphasize the wrong one
-    if len(word) > 6:
-        mid = len(word) // 2
-        return word[:mid] + "-" + word[mid:].upper()
-    elif len(word) > 3:
-        # Emphasize first syllable incorrectly
-        return word[:3].upper() + "-" + word[3:]
-    else:
-        # Short word - just repeat it
-        return word + " " + word
+    phonetic_alphabet = {
+        "a": "ay",
+        "b": "bee",
+        "c": "see",
+        "d": "dee",
+        "e": "ee",
+        "f": "eff",
+        "g": "jee",
+        "h": "aych",
+        "i": "eye",
+        "j": "jay",
+        "k": "kay",
+        "l": "ell",
+        "m": "em",
+        "n": "en",
+        "o": "oh",
+        "p": "pee",
+        "q": "cue",
+        "r": "are",
+        "s": "ess",
+        "t": "tee",
+        "u": "you",
+        "v": "vee",
+        "w": "double-you",
+        "x": "ecks",
+        "y": "why",
+        "z": "zee",
+    }
+
+    letters = [
+        phonetic_alphabet.get(c.lower(), c) for c in word[:4]
+    ]  # Only first 4 letters
+    return " ".join(letters)
 
 
 def generate_mispronunciations(word: str) -> List[str]:
     """
-    Generate three different mispronunciations for any word
+    Generate three DISTINCT mispronunciations for any word
 
     Args:
         word: The correct word
 
     Returns:
-        List of 3 mispronounced versions
+        List of 3 unique mispronounced versions
     """
     mispronunciations = []
 
-    # Method 1: Over-syllabify (spell it out too much)
-    mispronunciations.append(add_syllable_breaks(word))
+    # Method 1: Wrong syllable stress
+    misp1 = add_wrong_syllable_stress(word)
+    mispronunciations.append(misp1)
 
-    # Method 2: Pronounce silent letters
-    mispronunciations.append(emphasize_silent_letters(word))
+    # Method 2: Wrong vowel sounds
+    misp2 = mispronounce_vowels(word)
+    # Make sure it's different from first
+    if misp2 == misp1 or misp2 == word:
+        misp2 = add_extra_syllables(word)
+    mispronunciations.append(misp2)
 
-    # Method 3: Phonetic/literal spelling
-    mispronunciations.append(phonetic_spelling(word))
+    # Method 3: Phonetic spelling (only for longer words)
+    if len(word) >= 5:
+        misp3 = spell_out_phonetically(word)
+    else:
+        misp3 = add_extra_syllables(word)
 
-    # If any are the same as original, use reverse stress
-    for i in range(len(mispronunciations)):
-        if mispronunciations[i] == word or mispronunciations[i] == mispronunciations[0]:
-            mispronunciations[i] = reverse_stress_pattern(word)
+    # Ensure uniqueness
+    if misp3 in mispronunciations or misp3 == word:
+        # Fallback: just add dashes
+        misp3 = "-".join([word[i : i + 2] for i in range(0, len(word), 2)])
 
-    return mispronunciations[:3]
+    mispronunciations.append(misp3)
+
+    # Final check: ensure all are unique
+    unique_misps = []
+    for misp in mispronunciations:
+        if misp not in unique_misps and misp != word:
+            unique_misps.append(misp)
+
+    # If we don't have 3 unique ones, create more variations
+    while len(unique_misps) < 3:
+        variation = f"{word[0].upper()}-{word[1:].lower()}"
+        if variation not in unique_misps and variation != word:
+            unique_misps.append(variation)
+        else:
+            # Last resort: add emphasis markers
+            unique_misps.append(f"THE {word.upper()}")
+            break
+
+    return unique_misps[:3]
 
 
 def get_pronunciation_variants(word: str) -> List[Dict[str, str]]:
@@ -146,10 +179,19 @@ def get_pronunciation_variants(word: str) -> List[Dict[str, str]]:
         {"word": word, "spoken_text": word, "type": "correct", "pattern": "correct"}
     )
 
-    # Generate three mispronunciations
+    # Generate three UNIQUE mispronunciations
     mispronunciations = generate_mispronunciations(word)
 
-    for i, misp in enumerate(mispronunciations):
+    # Verify uniqueness
+    seen = {word}
+    unique_misps = []
+    for misp in mispronunciations:
+        if misp not in seen:
+            unique_misps.append(misp)
+            seen.add(misp)
+
+    # Add to variants
+    for i, misp in enumerate(unique_misps[:3]):
         variants.append(
             {
                 "word": word,
@@ -181,8 +223,8 @@ def generate_audio_for_variant(variant: Dict, format: str = "bytes") -> bytes:
 
         print(f"    🔊 Generating TTS: '{spoken_text}' (pattern: {pattern})")
 
-        # Use slow speech for emphasized pronunciations
-        is_slow = "wrong" in pattern and random.random() > 0.5
+        # Use slow speech for emphasized pronunciations (30% chance)
+        is_slow = "wrong" in pattern and random.random() > 0.7
 
         # Create TTS object
         tts = gTTS(text=spoken_text, lang="en", slow=is_slow, lang_check=False)
@@ -235,8 +277,10 @@ def generate_audio_challenge(difficulty: str) -> Dict:
     variants = get_pronunciation_variants(word)
 
     # Show what we generated
+    print(f"\n   📝 Generated variants:")
     for v in variants:
-        print(f"   📝 {v['type']}: '{v['spoken_text']}'")
+        print(f"      {v['type']}: '{v['spoken_text']}'")
+    print()
 
     # Find correct answer position
     correct_index = next(i for i, v in enumerate(variants) if v["type"] == "correct")
@@ -290,7 +334,7 @@ def generate_audio_challenge(difficulty: str) -> Dict:
     # XP reward based on difficulty
     xp_map = {"easy": 10, "medium": 15, "hard": 20}
 
-    print(f"✅ Challenge {challenge_id} generated successfully!")
+    print(f"✅ Challenge {challenge_id} generated successfully!\n")
 
     return {
         "id": challenge_id,
