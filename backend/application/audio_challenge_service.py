@@ -7,11 +7,8 @@ import base64
 import io
 from typing import List, Optional
 
-from domain.audio_challenge_logic import (
-    create_pronunciation_variants,
-    generate_audio_challenge,
-    generate_audio_for_word,
-)
+# Import from the NEW audio_cache.py with mispronunciation logic
+from domain.audio_cache import generate_audio_challenge
 from domain.challenge_logic import calculate_xp_reward, get_feedback_message
 from domain.models import Challenge, ChallengeResult
 from fastapi import APIRouter, HTTPException, Response
@@ -43,12 +40,15 @@ async def generate_audio_quiz(request: CreateAudioChallengeRequest):
                 status_code=400, detail="Difficulty must be 'easy', 'medium', or 'hard'"
             )
 
-        # Generate challenge with audio
+        # Generate challenge with audio (now with mispronunciations!)
         challenge_data = generate_audio_challenge(request.difficulty)
 
         return challenge_data
 
     except Exception as e:
+        import traceback
+
+        traceback.print_exc()
         raise HTTPException(
             status_code=500, detail=f"Error generating audio challenge: {str(e)}"
         )
@@ -71,10 +71,11 @@ async def get_audio_option(challenge_id: int, option_letter: str):
 
         return Response(
             content=audio_data,
-            media_type="audio/mpeg",  # Changed from audio/wav to audio/mpeg
+            media_type="audio/mpeg",
             headers={
                 "Content-Disposition": f"inline; filename=option_{option_letter}.mp3",
                 "Accept-Ranges": "bytes",
+                "Cache-Control": "public, max-age=3600",
             },
         )
 
@@ -134,6 +135,7 @@ async def submit_audio_answer(challenge_id: int, request: SubmitAudioAnswerReque
             "feedback": feedback,
             "correct_answer": challenge["correct_answer"],
             "correct_word": challenge["word"],
+            "explanation": f"The correct pronunciation is option {challenge['correct_answer']}",
         }
 
     except HTTPException:
