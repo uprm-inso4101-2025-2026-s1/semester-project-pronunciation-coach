@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/services/audio_api_service.dart';
 import 'audio_quiz_home_page.dart';
 import 'audio_quiz_question_page.dart';
 
-class AudioQuizResultPage extends StatelessWidget {
+class AudioQuizResultPage extends StatefulWidget {
   final AudioChallengeResult result;
   final Difficulty difficulty;
   final AudioChallenge challenge;
@@ -15,6 +16,81 @@ class AudioQuizResultPage extends StatelessWidget {
     required this.difficulty,
     required this.challenge,
   });
+
+  @override
+  State<AudioQuizResultPage> createState() => _AudioQuizResultPageState();
+}
+
+class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlayingCorrectAudio = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer.setReleaseMode(ReleaseMode.release);
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _playCorrectAudio() async {
+    if (_isPlayingCorrectAudio) {
+      // Stop if already playing
+      await _audioPlayer.stop();
+      setState(() {
+        _isPlayingCorrectAudio = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isPlayingCorrectAudio = true;
+    });
+
+    try {
+      await _audioPlayer.stop();
+      
+      final audioUrl = widget.challenge.getAudioUrl(widget.result.correctAnswer);
+      
+      print('🎵 Playing correct audio: $audioUrl');
+      
+      final completer = _audioPlayer.onPlayerComplete.first.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          print('⏱️ Audio playback timed out');
+        },
+      );
+      
+      await _audioPlayer.play(UrlSource(audioUrl));
+      await completer;
+      
+      if (mounted) {
+        setState(() {
+          _isPlayingCorrectAudio = false;
+        });
+      }
+    } catch (e) {
+      print('❌ Audio error: $e');
+      
+      if (mounted) {
+        setState(() {
+          _isPlayingCorrectAudio = false;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not play audio. Please try again.'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,46 +135,37 @@ class AudioQuizResultPage extends StatelessWidget {
                           width: 100,
                           height: 100,
                           decoration: BoxDecoration(
-                            color: result.isCorrect
+                            color: widget.result.isCorrect
                                 ? Colors.green.withOpacity(0.15)
                                 : Colors.red.withOpacity(0.15),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            result.isCorrect
+                            widget.result.isCorrect
                                 ? Icons.check_circle
                                 : Icons.cancel,
                             size: 60,
-                            color:
-                                result.isCorrect ? Colors.green : Colors.red,
+                            color: widget.result.isCorrect
+                                ? Colors.green
+                                : Colors.red,
                           ),
                         ),
                         const SizedBox(height: 24),
 
                         // Result Title
                         Text(
-                          result.isCorrect ? '🎉 Correct!' : '❌ Incorrect',
+                          widget.result.isCorrect ? '🎉 Correct!' : '❌ Incorrect',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w800,
-                            color:
-                                result.isCorrect ? Colors.green : Colors.red,
+                            color: widget.result.isCorrect
+                                ? Colors.green
+                                : Colors.red,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Feedback
-                        Text(
-                          result.feedback,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[700],
-                          ),
-                          textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 24),
 
-                        // Word Information
+                        // Word Information with Play Button
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -116,17 +183,46 @@ class AudioQuizResultPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                result.correctWord,
+                                widget.result.correctWord,
                                 style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w800,
                                   color: Colors.blue,
                                 ),
                               ),
-                              if (!result.isCorrect) ...[
-                                const SizedBox(height: 8),
+                              const SizedBox(height: 12),
+                              
+                              // Play Correct Audio Button
+                              ElevatedButton.icon(
+                                onPressed: _playCorrectAudio,
+                                icon: Icon(
+                                  _isPlayingCorrectAudio
+                                      ? Icons.stop_circle
+                                      : Icons.play_circle_filled,
+                                  size: 24,
+                                ),
+                                label: Text(
+                                  _isPlayingCorrectAudio
+                                      ? 'Stop Audio'
+                                      : 'Play Correct Pronunciation',
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                              
+                              if (!widget.result.isCorrect) ...[
+                                const SizedBox(height: 12),
                                 Text(
-                                  'Correct answer: ${result.correctAnswer}',
+                                  'Correct answer: Option ${widget.result.correctAnswer}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -164,7 +260,7 @@ class AudioQuizResultPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    result.isCorrect
+                                    widget.result.isCorrect
                                         ? 'XP Earned'
                                         : 'No XP Earned',
                                     style: const TextStyle(
@@ -173,7 +269,7 @@ class AudioQuizResultPage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    '${result.xpEarned} XP',
+                                    '${widget.result.xpEarned} XP',
                                     style: const TextStyle(
                                       fontSize: 28,
                                       fontWeight: FontWeight.w800,
@@ -201,12 +297,12 @@ class AudioQuizResultPage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                difficulty.icon,
+                                widget.difficulty.icon,
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                '${difficulty.name} Level',
+                                '${widget.difficulty.name} Level',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -284,7 +380,7 @@ class AudioQuizResultPage extends StatelessWidget {
   }
 
   Color _getDifficultyColor() {
-    switch (difficulty.id) {
+    switch (widget.difficulty.id) {
       case 'easy':
         return Colors.green;
       case 'medium':
@@ -309,7 +405,7 @@ class AudioQuizResultPage extends StatelessWidget {
     try {
       final apiService = AudioApiService();
       final newChallenge =
-          await apiService.generateAudioChallenge(difficulty.id);
+          await apiService.generateAudioChallenge(widget.difficulty.id);
 
       // Close loading
       if (context.mounted) Navigator.pop(context);
@@ -321,7 +417,7 @@ class AudioQuizResultPage extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => AudioQuizQuestionPage(
               challenge: newChallenge,
-              difficulty: difficulty,
+              difficulty: widget.difficulty,
             ),
           ),
         );

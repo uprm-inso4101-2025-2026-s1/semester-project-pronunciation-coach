@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../core/constants/colors.dart';
@@ -64,19 +65,21 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
       
       print('🎵 Playing audio from: $audioUrl');
       
-      // Set up completion listener before playing
-      final completer = _audioPlayer.onPlayerComplete.first.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          print('⏱️ Audio playback timed out');
-        },
-      );
-      
       // Play the audio
       await _audioPlayer.play(UrlSource(audioUrl));
       
-      // Wait for completion or timeout
-      await completer;
+      // Wait for completion with timeout handling
+      try {
+        await _audioPlayer.onPlayerComplete.first.timeout(
+          const Duration(seconds: 10),
+        );
+      } on TimeoutException {
+        print('⏱️ Audio playback timed out');
+        await _audioPlayer.stop();
+      } catch (e) {
+        print('⏱️ Audio completion error: $e');
+        await _audioPlayer.stop();
+      }
       
       if (mounted) {
         setState(() {
@@ -247,7 +250,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
 
             const SizedBox(height: 16),
 
-            // Feedback
+            // Feedback (only show when answered)
             if (_feedback != null)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -271,7 +274,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        _feedback!,
+                        _isCorrect ? 'Great job!' : 'Try again next time!',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -281,17 +284,6 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                     ),
                   ],
                 ),
-              )
-            else
-              Text(
-                _selectedOption == null
-                    ? '👆 Select an option to continue'
-                    : '✅ Tap Submit to check your answer',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-                textAlign: TextAlign.center,
               ),
 
             const SizedBox(height: 16),
@@ -358,7 +350,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
         _isCorrect = result.isCorrect;
         _feedback = result.feedback;
         if (!result.isCorrect) {
-          _feedback = '$_feedback\nCorrect answer: ${result.correctAnswer} - "${result.correctWord}"';
+          _feedback = 'Correct answer: ${result.correctAnswer} - "${result.correctWord}"';
         }
         _hasAnswered = true;
         _isSubmitting = false;
