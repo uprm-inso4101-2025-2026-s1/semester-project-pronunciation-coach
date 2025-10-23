@@ -83,10 +83,6 @@ class _SigninPageState extends State<SigninPage> {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
 
-      if (_passCtrl.text.length < 4) {
-        throw Exception('Invalid credentials. Please check your email and password.');
-      }
-
       if (!mounted) return;
 
       // Simulate successful login process
@@ -200,6 +196,7 @@ class _SigninPageState extends State<SigninPage> {
                   color: Colors.white.withOpacity(0.9),
                 ),
               ),
+              
               SizedBox(height: 2.h),
 
               Text.rich(
