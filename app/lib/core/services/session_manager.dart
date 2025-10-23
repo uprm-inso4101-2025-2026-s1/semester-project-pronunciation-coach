@@ -2,18 +2,17 @@ import 'dart:async';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'secure_storage_service.dart';
 import 'supabase_client.dart';
+import 'dart:convert';
 
-/// Maneja persistencia de sesión, auto-refresh y logout seguro
 class SessionManager {
   SessionManager._();
   static final SessionManager instance = SessionManager._();
 
   final _storage = SecureStorageService.instance;
-  final _sb = AppSupabase.get client; // tu helper existente
+  final _sb = AppSupabase.client;
   StreamSubscription<AuthState>? _sub;
   Timer? _refreshTimer;
 
-  /// Llamar una vez después de AppSupabase.init()
   Future<void> start() async {
     await _restorePersistedSession();
     _listenAuthChanges();
@@ -24,6 +23,40 @@ class SessionManager {
     await _sub?.cancel();
     _refreshTimer?.cancel();
   }
+
+  // ---------- Persistencia ----------
+
+  Future<void> _restorePersistedSession() async {
+    try {
+      final raw = await _storage.read(key: SecureStorageService.kPersistedSession);
+      if (raw == null) return;
+
+      final res = await _sb.auth.recoverSession(raw);
+      final recovered = res.session;
+      if (recovered != null) {
+        await _persistSession(recovered);
+        _scheduleRefresh(recovered);
+      } else {
+        await _clearPersistedSession();
+      }
+    } catch (_) {
+      await _clearPersistedSession();
+    }
+  }
+
+ Future<void> _persistSession(Session session) async {
+  final raw = jsonEncode(session.toJson());  // <- serialize Session
+  await _storage.write(
+    key: SecureStorageService.kPersistedSession,
+    value: raw,
+  );
+}
+
+  Future<void> _clearPersistedSession() async {
+    await _storage.delete(key: SecureStorageService.kPersistedSession);
+  }
+
+  // ---------- Auto-refresh ----------
 
   void _listenAuthChanges() {
     _sub?.cancel();
@@ -42,34 +75,6 @@ class SessionManager {
         _cancelRefresh();
       }
     });
-  }
-
-  Future<void> _restorePersistedSession() async {
-    final raw = await _storage.read(key: SecureStorageService.kPersistedSession);
-    if (raw == null) return;
-
-    try {
-      final res = await _sb.auth.recoverSession(raw);
-      final recovered = res.session;
-      if (recovered != null) {
-        await _persistSession(recovered);
-      } else {
-        await _clearPersistedSession();
-      }
-    } catch (_) {
-      await _clearPersistedSession();
-    }
-  }
-
-  Future<void> _persistSession(Session session) async {
-    await _storage.write(
-      key: SecureStorageService.kPersistedSession,
-      value: session.persistSessionString,
-    );
-  }
-
-  Future<void> _clearPersistedSession() async {
-    await _storage.delete(key: SecureStorageService.kPersistedSession);
   }
 
   void _cancelRefresh() {
@@ -99,10 +104,9 @@ class SessionManager {
     try {
       final current = _sb.auth.currentSession;
       if (current == null) return;
+
       final refreshed = await _sb.auth.refreshSession();
-      if (refreshed.session != null) {
-        _scheduleRefresh(refreshed.session);
-      }
+      _scheduleRefresh(refreshed.session ?? _sb.auth.currentSession);
     } catch (_) {
       await safeSignOut();
     }

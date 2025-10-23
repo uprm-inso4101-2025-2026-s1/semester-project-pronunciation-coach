@@ -10,8 +10,12 @@ import 'pace selector/pace_selector.dart';
 
 import 'core/services/supabase_client.dart';
 
+import 'core/services/session_manager.dart';
+
 Future<void> main() async{ //future<void>main() async is done to make sure 
   WidgetsFlutterBinding.ensureInitialized();
+  await AppSupabase.init();
+  await SessionManager.instance.start();
   /*to be able to run must use in terminal:
   flutter run \
   --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \

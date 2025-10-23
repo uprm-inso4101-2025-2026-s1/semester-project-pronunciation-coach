@@ -21,11 +21,3 @@ class AppSupabase {
     return Supabase.instance.client;
   }
 }
-
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await AppSupabase.init();
-  await SessionManager.instance.start(); // ← nuevo
-  runApp(const MyApp());
-}
