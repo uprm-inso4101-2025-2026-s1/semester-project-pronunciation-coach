@@ -3,8 +3,8 @@ Audio Challenge Service - TTS-based pronunciation challenges
 Handles audio generation and challenge creation for pronunciation quizzes
 """
 
-# Import from the correct location - domain.audio_cache has the generator
-from domain.audio_cache import generate_audio_challenge
+# Import from the correct location - domain.audio_challenge_logic has the generator
+from domain.audio_challenge_logic import generate_audio_challenge
 from fastapi import APIRouter, HTTPException, Response
 from infrastructure.audio_cache import get_cached_audio, get_cached_challenge
 from infrastructure.data_store import user_progress_store
@@ -41,7 +41,7 @@ async def generate_audio_quiz(request: CreateAudioChallengeRequest):
         )
         print(f"{'='*60}\n")
 
-        # Generate challenge with audio (from domain.audio_cache)
+        # Generate challenge with audio (from domain.audio_challenge_logic)
         challenge_data = generate_audio_challenge(request.difficulty)
 
         print(f"\n✅ API: Challenge generated successfully!")
