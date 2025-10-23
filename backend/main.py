@@ -9,8 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from application.audio_challenge_service import router as audio_router
 
-# Import routers
-from application.challenge_service import router as challenge_router
+# Import routers (Removed the line for challenge_service)
 
 app = FastAPI(
     title="Pronunciation Coach API",
@@ -28,7 +27,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(challenge_router, prefix="/api", tags=["challenges"])
+# Removed the inclusion of challenge_router.
 app.include_router(audio_router, prefix="/api", tags=["audio"])
 
 
@@ -40,10 +39,10 @@ async def root():
         "version": "0.2.0",
         "docs": "/docs",
         "features": [
-            "Text-based challenges",
             "Audio pronunciation challenges",
             "Dynamic word generation",
             "User progress tracking",
+            # Removed "Text-based challenges" as its service was deleted
         ],
     }
 
