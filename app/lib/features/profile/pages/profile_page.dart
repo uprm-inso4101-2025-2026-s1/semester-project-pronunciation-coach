@@ -48,11 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.blue.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(
-                      Icons.menu,
-                      color: Colors.blue,
-                      size: 24,
-                    ),
+                    child: const Icon(Icons.menu, color: Colors.blue, size: 24),
                   ),
                 ),
               ],
@@ -71,108 +67,108 @@ class _ProfilePageState extends State<ProfilePage> {
                     _isMenuExpanded = false;
                   });
                 },
-                child: Container(
-                  color: Colors.black.withOpacity(0.3),
-                ),
+                child: Container(color: Colors.black.withOpacity(0.3)),
               ),
             ),
-          
+
           // Main Content
           SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                  // Profile Header
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: AppColors.cardBackground,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.cardShadow,
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+                // Profile Header
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.cardShadow,
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.blue.withOpacity(0.1),
-                    child: const Icon(
-                      Icons.person,
-                      size: 50,
-                      color: Colors.blue,
-                    ),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.blue.withOpacity(0.1),
+                        child: const Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'John Doe',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const Text(
+                        'Pronunciation Learner',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'John Doe',
+                ),
+                const SizedBox(height: 20),
+
+                // Statistics Section
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    'Your Statistics',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const Text(
-                    'Pronunciation Learner',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Statistics Section
-          Align(
-            alignment: Alignment.centerLeft,
-            child: 
-            const Text(
-              'Your Statistics',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-            // Quick Overview Cards
-            Row(
-              children: [
-                Expanded(
-                  child: _buildOverviewCard(
-                    'Accuracy Rate',
-                    '89%',
-                    Icons.gps_fixed,
-                    AppColors.success,
-                  ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildOverviewCard(
-                    'Words Practiced',
-                    '247',
-                    Icons.record_voice_over,
-                    AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                  // Inline statistics visualization
-                  const ProgressVisualizationWidget(),
+                // Quick Overview Cards
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildOverviewCard(
+                        'Accuracy Rate',
+                        '89%',
+                        Icons.gps_fixed,
+                        AppColors.success,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildOverviewCard(
+                        'Words Practiced',
+                        '247',
+                        Icons.record_voice_over,
+                        AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Inline statistics visualization
+                const ProgressVisualizationWidget(),
+
+                // Achievements Sections
+                const AchievementsSection(),
 
                 // Add bottom padding for tab bar
                 const SizedBox(height: 80),
               ],
             ),
           ),
-          
+
           // Expandable Menu Overlay
           if (_isMenuExpanded)
             Positioned(
@@ -217,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    
+
                     // Menu Options
                     Expanded(
                       child: SingleChildScrollView(
@@ -243,7 +239,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 setState(() {
                                   _isMenuExpanded = false;
                                 });
-                                _showComingSoonDialog(context, 'Help & Support');
+                                _showComingSoonDialog(
+                                  context,
+                                  'Help & Support',
+                                );
                               },
                             ),
                             const Divider(height: 1),
@@ -266,7 +265,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-          
         ],
       ),
     );
