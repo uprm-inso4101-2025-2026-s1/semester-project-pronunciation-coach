@@ -385,7 +385,36 @@ Based on our personas (Section 2.2.2), we identify four primary stakeholder grou
 
 * **Modular Instructor Features**: Keep instructor specific features (dashboards, analytics) in an optional layer to avoid complicating the core user experience.
 
+=== 2.1.8 Human Behavior Facet Analysis
 
+The human behavior facet explores how different types of learners interact with the domain. It identifies behavioral tendencies, emotional responses, and usage patterns that influence learning outcomes and design decisions.
+
+==== Academic Learners
+* **Structured learning mindset:** Academic users tend to follow lessons sequentially and value corrective, detailed feedback that aligns with grading criteria.
+* **Performance anxiety:** High concern for accuracy can lead to overcorrection or discouragement when the AI highlights frequent errors.
+* **Consistency:** They are generally disciplined but may disengage when feedback feels repetitive or lacks measurable progress.
+
+Design implication: Incorporate clear performance metrics and progress reports to sustain engagement and reduce anxiety.
+
+==== Professional Learners
+* **Goal-driven behavior:** Professionals focus on practical pronunciation issues that impact workplace communication.
+* **Time efficiency:** They prefer short, focused exercises and may skip less relevant content.
+* **Selective practice:** Often target problem words related to their needs rather than following a full curriculum.
+
+Design implication: Allow customization and quick feedback modes for targeted, time-efficient learning.
+
+==== Independent Enthusiasts
+- **Motivation variability:** Their engagement depends on personal interest and mood, their interest is based on fun and will drop if progress feels tedious
+- **Playful experimentation:** They like exploring and testing themselves but may avoid difficult exercises.
+- **Positive reinforcement sensitivity:** Encouragement and rewards strongly affect their persistence.
+
+Design implication: Include gamification, achievements, and adaptive difficulty to maintain long-term motivation.
+
+==== Language Instructors (Secondary)
+- **Analytical use:** Some instructors use the system to review learner progress and supplement classroom practice.
+- **Behavioral risk:** They may rely too heavily on automated scores instead of qualitative feedback.
+
+Design implication: Provide clear analytics summaries but include notes reminding users that AI feedback is supplementary.
 
 *Note:* All explored functions are **derived from domain research and observations** and will be formally implemented in subsequent milestones.
 === 2.2 Requirements
