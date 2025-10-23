@@ -95,3 +95,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
+dependencies:
+  flutter_secure_storage: ^9.2.2
