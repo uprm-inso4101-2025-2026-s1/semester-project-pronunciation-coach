@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../core/constants/colors.dart';
@@ -24,6 +25,7 @@ class AudioQuizResultPage extends StatefulWidget {
 class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlayingCorrectAudio = false;
+  StreamSubscription? _playerCompleteSubscription;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
 
   @override
   void dispose() {
+    _playerCompleteSubscription?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -58,21 +61,18 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
       
       print('🎵 Playing correct audio: $audioUrl');
       
-      final completer = _audioPlayer.onPlayerComplete.first.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          print('⏱️ Audio playback timed out');
-        },
-      );
+      // Set up completion listener
+      _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+        if (mounted) {
+          setState(() {
+            _isPlayingCorrectAudio = false;
+          });
+        }
+      });
       
+      // Play the audio
       await _audioPlayer.play(UrlSource(audioUrl));
-      await completer;
       
-      if (mounted) {
-        setState(() {
-          _isPlayingCorrectAudio = false;
-        });
-      }
     } catch (e) {
       print('❌ Audio error: $e');
       
