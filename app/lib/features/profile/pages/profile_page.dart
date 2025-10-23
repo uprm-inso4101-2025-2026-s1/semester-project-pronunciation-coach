@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/colors.dart';
 import '../../dashboard/widgets/progress_visualization_widget.dart';
+import '../widgets/achievements_xp.dart';
 
 /// -------------------------------
 ///  PROFILE PAGE
