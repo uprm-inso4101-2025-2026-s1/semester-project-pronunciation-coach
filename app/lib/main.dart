@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'features/dashboard/pages/user_progress_dashboard.dart';
 import 'package:sizer/sizer.dart';
-import 'features/dashboard/pages/login_page.dart';
+import 'features/log_in/pages/login_page.dart';
 import 'features/dashboard/widgets/welcome_screen.dart';
 
 import 'pace selector/pace_selector.dart';

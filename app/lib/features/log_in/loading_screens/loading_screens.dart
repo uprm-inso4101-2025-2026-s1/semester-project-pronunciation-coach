@@ -41,7 +41,7 @@ class LoadingSystem {
   /// Show loading overlay with specified strategy
   void showLoading({
     required BuildContext context,
-    required LoadingStrategy strategy,
+     required LoadingStrategy strategy,
     required String message,
     String contextType = 'general',
   }) {

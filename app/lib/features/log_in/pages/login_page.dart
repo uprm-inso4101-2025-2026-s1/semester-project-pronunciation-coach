@@ -1,4 +1,6 @@
+import 'package:app/features/log_in/pages/signin_page.dart';
 import 'package:app/features/dashboard/pages/user_progress_dashboard.dart';
+import 'package:app/features/log_in/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/constants/colors.dart';
@@ -151,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(5.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Header Section
               SizedBox(height: 8.h),
@@ -163,15 +165,61 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.white,
                 ),
               ),
+
+              SizedBox(height: 4.h),
+
+              Text.rich(
+                TextSpan(
+                  text: 'Log In ', // Default style for this part
+                  style: AppTextStyles.welcomeSubtitle.copyWith(
+                    fontSize: 15.sp,
+                    color: Colors.white.withOpacity(0.9),
+                    fontWeight: FontWeight.bold
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'to continue your pronunciation journey', // This part will be bold
+                      style: AppTextStyles.welcomeSubtitle.copyWith(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                    ),
+                    ]
+                  ),
+                ),
+
               SizedBox(height: 2.h),
-              Text(
-                'Sign in to continue your pronunciation journey',
-                style: AppTextStyles.welcomeSubtitle.copyWith(
-                  fontSize: 14.sp,
-                  color: Colors.white.withOpacity(0.9),
+
+              Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(
+                    text: 'If you do not have an account, ',
+                    style: AppTextStyles.welcomeSubtitle.copyWith(
+                        fontSize: 15.sp,
+                        color: Colors.white.withOpacity(0.9),
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Create New Account ',
+                        style: AppTextStyles.welcomeSubtitle.copyWith(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'to begin your pronunciation journey', // This part will be bold
+                        style: AppTextStyles.welcomeSubtitle.copyWith(
+                          fontSize: 15.sp,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                    ]
                 ),
               ),
-              SizedBox(height: 10.h),
+
+              SizedBox(height: 6.h),
 
               // Login Form Section
               Container(
@@ -194,102 +242,35 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Email Field
-                      TextFormField(
-                        controller: _emailCtrl,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(fontSize: 14.sp, color: AppColors.textPrimary),
-                        decoration: InputDecoration(
+                      myTextField(
+                          controller: _emailCtrl,
                           labelText: 'Email Address',
-                          labelStyle: AppTextStyles.bodyMedium.copyWith(
-                            fontSize: 14.sp,
-                            color: AppColors.textMuted,
-                          ),
                           hintText: 'your@email.com',
-                          hintStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppColors.textMuted.withOpacity(0.6),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.primary, width: 2),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.danger),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.danger, width: 2),
-                          ),
-                          prefixIcon: Icon(
+                          icon: Icon(
                             Icons.email_outlined,
                             color: AppColors.textMuted,
                             size: 20.sp,
                           ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
-                        ),
-                        validator: _validateEmail,
+                          validator: _validateEmail
                       ),
 
                       SizedBox(height: 4.h),
 
                       // Password Field
-                      TextFormField(
+                      myTextField(
                         controller: _passCtrl,
-                        obscureText: true,
-                        style: TextStyle(fontSize: 14.sp, color: AppColors.textPrimary),
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: AppTextStyles.bodyMedium.copyWith(
-                            fontSize: 14.sp,
-                            color: AppColors.textMuted,
-                          ),
-                          hintText: 'Enter your password',
-                          hintStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppColors.textMuted.withOpacity(0.6),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.primary, width: 2),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.danger),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(3.w),
-                            borderSide: BorderSide(color: AppColors.danger, width: 2),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.lock_outlined,
-                            color: AppColors.textMuted,
-                            size: 20.sp,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey.shade50,
+                        isPass: true,
+                        labelText: 'Password',
+                        hintText: 'Enter your password',
+                        icon: Icon(
+                          Icons.lock_outlined,
+                          color: AppColors.textMuted,
+                          size: 20.sp,
                         ),
-                        validator: _validatePass,
+                        validator: _validatePass ,
                       ),
 
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 1.h),
 
                       // Remember Me & Forgot Password
                       Row(
@@ -309,7 +290,7 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 'Remember me',
                                 style: AppTextStyles.bodySmall.copyWith(
-                                  fontSize: 12.sp,
+                                  fontSize: 14.sp,
                                   color: AppColors.textSecondary,
                                 ),
                               ),
@@ -327,14 +308,14 @@ class _LoginPageState extends State<LoginPage> {
                               style: AppTextStyles.bodySmall.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w600,
-                                fontSize: 12.sp,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ),
                         ],
                       ),
 
-                      SizedBox(height: 6.h),
+                      SizedBox(height: 4.h),
 
                       // Main Sign In Button
                       SizedBox(
@@ -385,7 +366,11 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 8.h,
                         child: ElevatedButton(
-                          onPressed: _onCreateAccount,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => const SigninPage()),
+                              );
+                            },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.success,
                             foregroundColor: Colors.white,
@@ -427,7 +412,7 @@ class _LoginPageState extends State<LoginPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             child: Text(
-                              'or continue with',
+                              'or, continue as guest',
                               style: AppTextStyles.bodySmall.copyWith(
                                 color: AppColors.textMuted,
                                 fontSize: 12.sp,
@@ -485,46 +470,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-
-                      SizedBox(height: 4.h),
-
-                      // Testing Phase Notice
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(3.w),
-                        decoration: BoxDecoration(
-                          color: AppColors.warning.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(2.w),
-                          border: Border.all(
-                            color: AppColors.warning.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.info_outline, 
-                                color: AppColors.warning, size: 14.sp),
-                            SizedBox(width: 2.w),
-                            Expanded(
-                              child: Text(
-                                "App in testing phase - Use any email & password (min 4 chars)",
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: AppColors.warning,
-                                  fontSize: 10.sp,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      SizedBox(height: 2.h),
                     ],
                   ),
                 ),
               ),
 
               // Bottom Spacing
-              SizedBox(height: 8.h),
+              SizedBox(height: 5.h),
 
               // App Info Footer
               Container(
@@ -545,7 +498,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Master English pronunciation with interactive lessons',
                       style: AppTextStyles.bodySmall.copyWith(
                         color: Colors.white.withOpacity(0.8),
-                        fontSize: 10.sp,
+                        fontSize: 12.5.sp,
                       ),
                       textAlign: TextAlign.center,
                     ),
