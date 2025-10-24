@@ -7,8 +7,8 @@
 :pdf-theme: docs/pdf-theme.yml
 
 [.legend]
-*[.changed]*:: Sections previously created that have been updated for this milestone
-*[.added]*:: New sections created for this documentation
+*[.changed]*:: Sections previously created that have been updated for this milestone(green)
+*[.added]*:: New sections created for this documentation(yellow)
 
 == 1. Informative Part
 === 1.1 Teams
