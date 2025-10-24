@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
-import '../loading_screens/loading_screens_factory.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../loading_screens/loading_screens_manager.dart';
+import 'package:app/core/services/supabase_client.dart'; // adjust path if your project structure differs
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -44,18 +45,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showSnack(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-      backgroundColor: AppColors.primary,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.h)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: AppColors.primary,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.h)),
+      ),
+    );
   }
 
   // =============================================================================
   // DEMONSTRATING DESIGN PATTERNS IN USAGE:
   // =============================================================================
-  // 
+  //
   // FACTORY PATTERN: Creating loading strategy
   // - LoadingStrategyFactory.createRandomStrategy() for normal loading
   // - LoadingStrategyFactory.createPulsatingWave() for error state
@@ -68,11 +71,10 @@ class _LoginPageState extends State<LoginPage> {
   // - _loadingSystem.addLoadingListener() for state tracking
   // - Automatic UI updates based on loading state
   // =============================================================================
-  
+
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
-    
-    // Show loading with random strategy (FACTORY + STRATEGY PATTERNS)
+
     _loadingSystem.showLoading(
       context: context,
       message: 'Signing you in...',
@@ -80,43 +82,28 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     try {
-      await Future.delayed(const Duration(milliseconds: 800));
-      
-      if (_passCtrl.text.length < 4) {
-        throw Exception('Invalid credentials. Please check your email and password.');
-      }
-      
+      final email = _emailCtrl.text.trim();
+      final password = _passCtrl.text;
+
+      // 1) Sign in with Supabase
+      await AppSupabase.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      // After an await, guard context usage
       if (!mounted) return;
-      
-      // Simulate successful login process
-      await Future.delayed(const Duration(milliseconds: 1200));
-      
       _loadingSystem.hideLoading(context);
-      
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
-      
+    } on AuthException catch (e) {
+      if (mounted) _loadingSystem.hideLoading(context);
+      _showSnack(e.message);
     } catch (e) {
-      _loadingSystem.hideLoading(context);
-      
-      // ... later for error state, use specific strategy
-      final errorStrategy = LoadingStrategyFactory.createPulsatingWave(
-        primaryColor: AppColors.danger, // Customized for error state
-      );
-      
-      _loadingSystem.showLoading(
-        context: context,
-        message: 'Authentication Failed',
-        customStrategy: errorStrategy, // STRATEGY PATTERN: Different behavior
-      );
-      
-      await Future.delayed(const Duration(milliseconds: 1500));
-      
-      _loadingSystem.hideLoading(context);
-      
-      _showSnack(e.toString().replaceFirst('Exception: ', ''));
-      
+      if (mounted) _loadingSystem.hideLoading(context);
+      _showSnack('Unexpected error. Please try again.');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -135,10 +122,6 @@ class _LoginPageState extends State<LoginPage> {
     if (value.isEmpty) return 'Please enter your password';
     if (value.length < 4) return 'Password must be at least 4 characters';
     return null;
-  }
-
-  void _onCreateAccount() {
-    _showSnack('Account creation feature coming soon!');
   }
 
   void _onForgotPassword() {
@@ -173,49 +156,51 @@ class _LoginPageState extends State<LoginPage> {
                   text: 'Log In ', // Default style for this part
                   style: AppTextStyles.welcomeSubtitle.copyWith(
                     fontSize: 15.sp,
-                    color: Colors.white.withOpacity(0.9),
-                    fontWeight: FontWeight.bold
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontWeight: FontWeight.bold,
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'to continue your pronunciation journey', // This part will be bold
+                      text:
+                          'to continue your pronunciation journey', // This part will be bold
                       style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.normal,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
-                    ]
-                  ),
+                  ],
                 ),
+              ),
 
               SizedBox(height: 2.h),
 
               Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
-                    text: 'If you do not have an account, ',
-                    style: AppTextStyles.welcomeSubtitle.copyWith(
+                  text: 'If you do not have an account, ',
+                  style: AppTextStyles.welcomeSubtitle.copyWith(
+                    fontSize: 15.sp,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Create New Account ',
+                      style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
-                        color: Colors.white.withOpacity(0.9),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Create New Account ',
-                        style: AppTextStyles.welcomeSubtitle.copyWith(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
+                    TextSpan(
+                      text:
+                          'to begin your pronunciation journey', // This part will be bold
+                      style: AppTextStyles.welcomeSubtitle.copyWith(
+                        fontSize: 15.sp,
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
-                      TextSpan(
-                        text: 'to begin your pronunciation journey', // This part will be bold
-                        style: AppTextStyles.welcomeSubtitle.copyWith(
-                          fontSize: 15.sp,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
-                    ]
+                    ),
+                  ],
                 ),
               ),
 
@@ -243,15 +228,15 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       // Email Field
                       myTextField(
-                          controller: _emailCtrl,
-                          labelText: 'Email Address',
-                          hintText: 'your@email.com',
-                          icon: Icon(
-                            Icons.email_outlined,
-                            color: AppColors.textMuted,
-                            size: 20.sp,
-                          ),
-                          validator: _validateEmail
+                        controller: _emailCtrl,
+                        labelText: 'Email Address',
+                        hintText: 'your@email.com',
+                        icon: Icon(
+                          Icons.email_outlined,
+                          color: AppColors.textMuted,
+                          size: 20.sp,
+                        ),
+                        validator: _validateEmail,
                       ),
 
                       SizedBox(height: 4.h),
@@ -267,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: AppColors.textMuted,
                           size: 20.sp,
                         ),
-                        validator: _validatePass ,
+                        validator: _validatePass,
                       ),
 
                       SizedBox(height: 1.h),
@@ -296,12 +281,15 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ],
                           ),
-                          
+
                           // Forgot Password
                           TextButton(
                             onPressed: _onForgotPassword,
                             style: TextButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 3.w,
+                                vertical: 1.h,
+                              ),
                             ),
                             child: Text(
                               'Forgot Password?',
@@ -366,11 +354,13 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 8.h,
                         child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => const SigninPage()),
-                              );
-                            },
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SigninPage(),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.success,
                             foregroundColor: Colors.white,
@@ -438,7 +428,8 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => const MainNavigationScreen(),
+                                builder: (context) =>
+                                    const MainNavigationScreen(),
                               ),
                             );
                           },
@@ -455,8 +446,11 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.rocket_launch, 
-                                  color: AppColors.primary, size: 16.sp),
+                              Icon(
+                                Icons.rocket_launch,
+                                color: AppColors.primary,
+                                size: 16.sp,
+                              ),
                               SizedBox(width: 3.w),
                               Text(
                                 'Explore App Features',
