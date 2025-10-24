@@ -1,4 +1,4 @@
-= Pronunciation Coach App
+= Pronounciation Coach App
 :author: Fabian Velez Ocasio, Jaydiemar Vazquez, Abdiel Velazquez, Diego Hernandez
 :revdate: Updated: October 24, 2025 
 :toc:
