@@ -6,6 +6,10 @@
 :title-page:
 :pdf-theme: docs/pdf-theme.yml
 
+[.legend]
+[.changed]:: Sections previously created that have been updated for this milestone
+[.added]:: New sections created for this documentation
+
 == 1. Informative Part
 === 1.1 Teams
 
