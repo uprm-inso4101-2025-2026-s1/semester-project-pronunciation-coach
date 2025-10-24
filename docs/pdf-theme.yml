@@ -1,18 +1,17 @@
 extends: default
 
-# Role styles for marking changed text
 role:
   changed:
-    border-width: [0, 0, 0, 2]     # left border line
-    border-color: #CC0000          # red bar for changes
-    padding: [2, 6, 2, 10]         # spacing so text doesn’t touch the bar
+    border-width: [0, 0, 0, 2]
+    border-color: #CC0000
+    padding: [2, 6, 2, 10]
 
   added:
     border-width: [0, 0, 0, 2]
-    border-color: #1B8E00          # green bar for new additions
+    border-color: #1B8E00
     padding: [2, 6, 2, 10]
 
   removed:
     border-width: [0, 0, 0, 2]
-    border-color: #8E0000          # dark red bar for removed/deprecated content
+    border-color: #8E0000
     padding: [2, 6, 2, 10]
