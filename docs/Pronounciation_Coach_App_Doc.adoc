@@ -315,7 +315,9 @@ The project follows an agile methodology with structured sprints to ensure conti
 
 [.changed]
 *Sprint Duration*: Two-week sprints with clear planning, execution, and review phases
+
 *Product Backlog*: Prioritized list of user-facing features including:
+
 - Authentication system with educational loading states
 - Pronunciation analysis with phoneme-level feedback
 - Gamified progress tracking and streak systems
@@ -323,6 +325,7 @@ The project follows an agile methodology with structured sprints to ensure conti
 
 [.changed]
 *Sprint Backlogs*: Feature-oriented increments focused on delivering working functionality:
+
 - Sprint 1: User authentication flow with educational loading patterns
 - Sprint 2: Core pronunciation recording and analysis capabilities
 - Sprint 3: Progress tracking and gamification systems
@@ -333,12 +336,14 @@ The project follows an agile methodology with structured sprints to ensure conti
 
 [.changed]
 *Feature-Oriented Approach*: All backlog items expressed as user value rather than technical tasks:
+
 - "As a Spanish-speaking professional, I want specific feedback on my 'th' pronunciation so clients understand 'three' instead of 'tree'"
 - "As an impatient user, I want to learn pronunciation tips during authentication delays so waiting time becomes educational"
 - "As a learner without constant internet, I want offline recording and progress tracking so I can practice during my commute"
 
 [.changed]
 *Prioritization Criteria*: Features prioritized based on:
+
 - User value and learning impact for Spanish-speaking adults
 - Technical dependencies and architectural foundation requirements
 - Risk assessment and complexity of pronunciation analysis algorithms
@@ -348,6 +353,7 @@ The project follows an agile methodology with structured sprints to ensure conti
 
 [.changed]
 *Definition of Done*: Each feature must satisfy:
+
 - Code review and adherence to clean architecture principles
 - Comprehensive testing (unit, widget, integration)
 - Documentation updates including domain impact analysis
@@ -355,6 +361,7 @@ The project follows an agile methodology with structured sprints to ensure conti
 
 [.changed]
 *Sprint Reviews*: Conducted to demonstrate completed features and validate they address the specific pronunciation challenges identified in user research
+
 *Sprint Planning*: Collaborative feature selection based on completed dependencies, user value, and technical risk assessment
 
 ==== 1.6.4 Sprint Execution and Artifacts
@@ -408,18 +415,21 @@ This section defines key terminology used throughout the Pronunciation Coach pro
 
 [.changed]
 *Domain Terminology*:
+
 * **Phoneme**: The smallest distinct unit of sound in a language; derived from observations of Spanish speakers struggling with specific English sounds like /θ/
 * **Pronunciation Attempt**: A learner's recorded effort to produce specific English phonemes; concept emerged from Maria's repeated practice with "thought, through, theater"
 * **Educational Loading**: Display of pronunciation facts during processing delays; concept originated from user frustration with 2-3 second authentication waits
 
 [.changed]
 *Technical Terminology*:
+
 * **MFCC (Mel-Frequency Cepstral Coefficients)**: Audio feature extraction technique used for pronunciation analysis; enables phoneme-level accuracy measurement
 * **Factory Pattern**: Software design pattern for creating context-appropriate loading strategies; addresses need for educational content during delays
 * **SharedPreferences**: Local storage mechanism in Flutter; supports offline capability requirement for practice anywhere
 
 [.changed]
 *Pedagogical Terminology*:
+
 * **Learning Streak**: Consecutive days of practice completion; concept derived from Carlos's consistent 7 AM routine and motivation patterns
 * **Adaptive Difficulty**: System that adjusts challenge level based on performance; addresses varying skill levels among Spanish-speaking learners
 * **Gamification**: Use of game elements like points and badges; supports motivation maintenance identified as critical need
