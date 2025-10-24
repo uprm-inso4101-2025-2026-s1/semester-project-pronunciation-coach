@@ -4,7 +4,7 @@
 :toc:
 :toclevels: 3
 :title-page:
-link:example$pdf-converter-change-bars.rb[role=include]
+:pdf-theme: docs/pdf-theme.yml
 
 == 1. Informative Part
 
