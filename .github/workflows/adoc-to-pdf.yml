@@ -35,7 +35,10 @@ jobs:
         run: |
           mkdir -p build
           find docs -name "*.adoc" -print0 \
-            | xargs -0 -I{} asciidoctor-pdf -r asciidoctor-diagram -D build {}
+            | xargs -0 -I{} asciidoctor-pdf \
+              -a pdf-theme=docs/pdf-theme.yml \
+              -r asciidoctor-diagram \
+              -D build {}
 
       - name: Place PDFs in docs/pdf/
         run: |
