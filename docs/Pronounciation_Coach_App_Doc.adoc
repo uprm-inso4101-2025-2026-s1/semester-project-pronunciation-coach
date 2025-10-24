@@ -138,7 +138,7 @@
 
 | Jan Davey
 | Real-time Feedback & Research Specialist
-| Researched real-time pronunciation feedback using MFCC and Integral Approximation; implemented confirmation page for learning pace selection; added glossary section.
+| Researched real-time pronunciation feedback using MFCC and Integral Approximation; implemented confirmation page for learning pace selection; added glossary section
 
 
 | Bruno Vergara
