@@ -1,17 +1,26 @@
 extends: default
 
 role:
-  changed:
-    border-width: [0, 0, 0, 2]
-    border-color: #CC0000
-    padding: [2, 6, 2, 10]
-
   added:
-    border-width: [0, 0, 0, 2]
-    border-color: #1B8E00
-    padding: [2, 6, 2, 10]
+    background_color: F0FFF0
+    font_color: 006400
+    border_color: C8E6C9
+    border_width: [0, 0, 0, 4]
+    padding: [4, 8, 4, 8]
+    border_radius: 3
+
+  changed:
+    background_color: FFF8E1
+    font_color: 8A4B00
+    border_color: FFECB3
+    border_width: [0, 0, 0, 4]
+    padding: [4, 8, 4, 8]
+    border_radius: 3
 
   removed:
-    border-width: [0, 0, 0, 2]
-    border-color: #8E0000
-    padding: [2, 6, 2, 10]
+    background_color: FFF0F0
+    font_color: 8B0000
+    border_color: FFD6D6
+    border_width: [0, 0, 0, 4]
+    padding: [4, 8, 4, 8]
+    border_radius: 3
