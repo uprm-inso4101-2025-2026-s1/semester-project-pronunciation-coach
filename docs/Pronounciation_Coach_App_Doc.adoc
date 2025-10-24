@@ -6,8 +6,6 @@
 :title-page:
 :pdf-theme: docs/pdf-theme.yml
 
-[.legend]
-
 [.changed]
 Sections previously created that have been updated for this milestone will have a yellow color
 
