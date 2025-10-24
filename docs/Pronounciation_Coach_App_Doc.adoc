@@ -1,6 +1,6 @@
 = Pronunciation Coach App
 :author: Fabian Velez Ocasio, Jaydiemar Vazquez, Abdiel Velazquez, Diego Hernandez
-:revdate: Update: October 23, 2025 
+:revdate: Updated: October 24, 2025 
 :toc:
 :toclevels: 3
 :title-page:
@@ -138,7 +138,7 @@
 
 | Jan Davey
 | Real-time Feedback & Research Specialist
-| Researched real-time pronunciation feedback using MFCC and Integral Approximation; implemented confirmation page for learning pace selection; added glossary section
+| Researched real-time pronunciation feedback using MFCC and Integral Approximation; implemented confirmation page for learning pace selection; added glossary section.
 
 
 | Bruno Vergara
@@ -195,7 +195,7 @@
 ==== 1.2.1 Current Situation
 
 [.changed]
-Native Spanish speakers face significant pronunciation challenges due to fundamental phonetic differences between English and Spanish, particularly with sounds like /θ/ (as in "three") and vowel contrasts that don't exist in their native language. While language learning applications like Duolingo and Babbel are widely used, they primarily focus on vocabulary and grammar with only binary "correct/incorrect" pronunciation feedback, lacking detailed, actionable guidance and phoneme-level analysis. Current mobile applications suffer from technical limitations including 2-3 second processing delays during authentication and data operations, generic loading indicators that provide no educational value during wait times, and speech-to-text engines like Whisper and Vosk that, despite advanced transcription capabilities, are not optimized for pronunciation evaluation and rarely offer the granular analysis needed for effective coaching. Learners struggle with limited access to native speaker models, insufficient motivation systems to maintain daily practice, difficulty tracking measurable progress, and the absence of affordable offline solutions for independent practice. The current landscape reveals a critical gap in user-friendly, accessible pronunciation coaching tools that provide personalized, adaptive feedback with the technical robustness needed for effective mobile learning, creating barriers to professional advancement and academic success for Spanish-speaking English learners.
+Native Spanish speakers face significant pronunciation challenges due to fundamental phonetic differences between English and Spanish, particularly with sounds like /θ/ (as in "three") and vowel contrasts that don't exist in their native language. While language learning applications like Duolingo and Babbel are widely used, they primarily focus on vocabulary and grammar with only binary "correct/incorrect" pronunciation feedback, lacking detailed, actionable guidance and phoneme-level analysis. Current mobile applications suffer from technical limitations including 2-3 second processing delays during authentication and data operations where users wait without learning anything, breaking the learning momentum with generic loading indicators that provide no educational value. Speech-to-text engines like Whisper and Vosk, despite advanced transcription capabilities, are not optimized for pronunciation evaluation and rarely offer the granular analysis needed for effective coaching. Learners struggle with limited access to native speaker models, insufficient motivation systems to maintain daily practice, difficulty tracking measurable progress, and the absence of affordable offline solutions for independent practice. The current landscape reveals a critical gap in user-friendly, accessible pronunciation coaching tools that provide personalized, adaptive feedback with the technical robustness needed for effective mobile learning, creating barriers to professional advancement and academic success for Spanish-speaking English learners.
 
 ==== 1.2.2 Needs
 
@@ -256,10 +256,10 @@ Native Spanish speakers face significant pronunciation challenges due to fundame
 ==== 1.3.1 Scope and Span
 
 [.changed]
-*Scope*:: Development of a comprehensive Flutter-based mobile application for English pronunciation coaching targeting Spanish-speaking learners, encompassing domain analysis, requirements engineering, software architecture, implementation, testing, and deployment.
+*Scope*:: Development of a Flutter-based mobile application for English pronunciation coaching targeting Spanish-speaking learners, from initial research through deployment.
 
 [.changed]
-*Span*:: The project delivers pronunciation practice features including interactive exercises with real-time feedback using MFCC analysis, gamified learning systems with streak tracking and XP rewards, phoneme-level evaluation with Montreal Forced Alignment, adaptive difficulty algorithms, offline-capable quiz workflows, and progress analytics with CSV export. Technical implementation utilizes Flutter/Dart with Provider state management, SharedPreferences for data persistence, speech-to-text integration (Whisper, Vosk), and enterprise design patterns for maintainable architecture.
+*Span*:: The project encompasses comprehensive domain analysis of Spanish speakers' pronunciation challenges, requirements engineering for real-time feedback systems, software architecture design for offline-capable mobile learning, implementation of pronunciation analysis features using speech-to-text technologies, quality assurance testing across different accents, and final deployment to app stores. Key deliverables include user authentication with educational loading states, pronunciation recording and analysis pipeline, gamified progress tracking, adaptive learning pathways, and offline practice capabilities.
 
 ==== 1.3.2 Synopsis
 
@@ -284,36 +284,36 @@ Pronunciation Coach is a mobile application that helps Spanish-speaking learners
 [.changed]
 * **Accessibility and Usability**: Implement responsive design systems, offline-first behavior with local data persistence, exportable analytics for research, and tools that promote learner independence without continuous teacher intervention.
 
+
 === 1.5 Project Methodology and Supporting Activities
 
-[.changed]
+[.added]
 The Pronunciation Coach project follows comprehensive software engineering practices beyond core implementation:
 
-[.changed]
+[.added]
 * **Domain Analysis and Research**: Comprehensive study of pronunciation learning patterns, phonetics, gamification psychology, and language acquisition methodologies, including evaluation of speech-to-text models (Whisper, Vosk) and Montreal Forced Alignment for phoneme-level error detection.
 
-[.changed]
+[.added]
 * **Requirements Engineering**: Development of detailed user stories, personas, and functional requirements through stakeholder analysis, mapping user needs to feature specifications for accuracy, offline performance, and usability.
 
-[.changed]
+[.added]
 * **System Architecture and Design**: Design of scalable, maintainable architecture integrating recording, STT processing, phoneme alignment, feedback generation with NLP models, progress tracking, and voice cloning (OpenVoice), with modularity for future model updates.
 
-[.changed]
+[.added]
 * **Quality Assurance and Testing**: Development of comprehensive testing strategies including unit tests for business logic, integration tests for audio processing pipelines, usability testing with learners, and performance evaluation across different accents and age groups.
 
-[.changed]
+[.added]
 * **Deployment and Accessibility Planning**: Analysis of mobile app store requirements, ensuring lightweight performance on consumer devices, intuitive user interfaces for diverse technical proficiency, offline operation capabilities, and simple installation processes.
 
-[.changed]
 === 1.6 Agile Development Process
 
-[.changed]
+[.added]
 The project follows an agile methodology with structured sprints to ensure continuous delivery of value while maintaining flexibility to adapt to user feedback and technical discoveries:
 
-[.changed]
+[.added]
 ==== 1.6.1 Sprint Structure and Work Organization
 
-[.changed]
+[.added]
 *Sprint Duration*: Two-week sprints with clear planning, execution, and review phases
 
 *Product Backlog*: Prioritized list of user-facing features including:
@@ -323,127 +323,132 @@ The project follows an agile methodology with structured sprints to ensure conti
 - Gamified progress tracking and streak systems
 - Offline-capable quiz workflows with custom word selection
 
-[.changed]
+[.added]
 *Sprint Backlogs*: Feature-oriented increments focused on delivering working functionality:
 
 - Sprint 1: User authentication flow with educational loading patterns
 - Sprint 2: Core pronunciation recording and analysis capabilities
 - Sprint 3: Progress tracking and gamification systems
-- Sprint 4: Advanced features (voice cloning, adaptive difficulty)
+- Sprint 4: Sprint 4: Advanced features including voice cloning and adaptive difficulty
 
-[.changed]
+
 ==== 1.6.2 Backlog Management
 
-[.changed]
+[.added]
 *Feature-Oriented Approach*: All backlog items expressed as user value rather than technical tasks:
 
 - "As a Spanish-speaking professional, I want specific feedback on my 'th' pronunciation so clients understand 'three' instead of 'tree'"
 - "As an impatient user, I want to learn pronunciation tips during authentication delays so waiting time becomes educational"
 - "As a learner without constant internet, I want offline recording and progress tracking so I can practice during my commute"
 
-[.changed]
+[.added]
 *Prioritization Criteria*: Features prioritized based on:
 
 - User value and learning impact for Spanish-speaking adults
 - Technical dependencies and architectural foundation requirements
 - Risk assessment and complexity of pronunciation analysis algorithms
 
-[.changed]
+
 ==== 1.6.3 Quality Assurance and Definition of Done
 
-[.changed]
+[.added]
 *Definition of Done*: Each feature must satisfy:
 
 - Code review and adherence to clean architecture principles
-- Comprehensive testing (unit, widget, integration)
+- Comprehensive testing by team members (unit, widget, integration)
 - Documentation updates including domain impact analysis
-- Performance validation on target devices (Samsung A32 equivalent)
+- Performance validation by testing on target devices (Android Device equivalents)
 
-[.changed]
+[.added]
 *Sprint Reviews*: Conducted to demonstrate completed features and validate they address the specific pronunciation challenges identified in user research
 
-*Sprint Planning*: Collaborative feature selection based on completed dependencies, user value, and technical risk assessment
+*Sprint Planning*: Collaborative feature selection by the team based on completed dependencies, user value, and technical risk assessment
 
 ==== 1.6.4 Sprint Execution and Artifacts
 
-[.changed]
+[.added]
 **Sprint Backlog Management**
 
-[.changed]
-**Feature-Oriented Sprint Planning**:
+[.added]
+Feature-Oriented Sprint Planning:
 
-[.changed]
-*Sprint 1: Authentication & Onboarding*::
+[.added]
+* *Sprint 1: Authentication & Onboarding*:
+
 - User stories: "As Maria, I want secure login with educational content during delays"
 - Deliverables: WelcomeScreen, LoginPage with Factory pattern loading strategies
 - Definition of Done: 3-second authentication, educational loading facts, form validation
 
-[.changed]
-*Sprint 2: Core Pronunciation Analysis*::
+[.added]
+* *Sprint 2: Core Pronunciation Analysis*:
+
 - User stories: "As Carlos, I want specific feedback on vowel pronunciation errors"
 - Deliverables: Audio recording pipeline, MFCC analysis, phoneme-level feedback
 - Definition of Done: ≤3-second feedback, accurate /θ/ sound detection, visual comparisons
 
-[.changed]
-*Sprint 3: Gamification & Progress Tracking*::
+[.added]
+* *Sprint 3: Gamification & Progress Tracking*:
+
 - User stories: "As Ana, I want to track my 14-day streak and see accuracy improvements"
 - Deliverables: Streak system, XP rewards, progress dashboards, offline sync
 - Definition of Done: Timezone-aware streak calculation, exportable CSV reports
 
-[.changed]
-**Sprint Review and Planning Cycles**
+[.added]
+Sprint Review and Planning Cycles
 
-[.changed]
-**Sprint Review Process**::
+[.added]
+* **Sprint Review Process**:
+
 - Demo completed features to stakeholder representatives
 - Validate against original user observations (Maria's /θ/ challenges, Carlos's vowel issues)
 - Collect feedback for product backlog refinement
 - Measure performance against machine requirements (3-second processing target)
 
-[.changed]
-**Sprint Planning Ceremonies**::
+[.added]
+* **Sprint Planning Ceremonies**:
+
 - Product backlog grooming with priority based on user value
 - Capacity planning considering technical dependencies
 - Task breakdown maintaining feature-orientation
 - Risk assessment for pronunciation analysis algorithms
 
-[.changed]
+
 === 1.7 Project Glossary
 
-[.changed]
+[.added]
 This section defines key terminology used throughout the Pronunciation Coach project, clarifying the origin and context of each term:
 
-[.changed]
+[.added]
 *Domain Terminology*:
 
 * **Phoneme**: The smallest distinct unit of sound in a language; derived from observations of Spanish speakers struggling with specific English sounds like /θ/
 * **Pronunciation Attempt**: A learner's recorded effort to produce specific English phonemes; concept emerged from Maria's repeated practice with "thought, through, theater"
 * **Educational Loading**: Display of pronunciation facts during processing delays; concept originated from user frustration with 2-3 second authentication waits
 
-[.changed]
+[.added]
 *Technical Terminology*:
 
 * **MFCC (Mel-Frequency Cepstral Coefficients)**: Audio feature extraction technique used for pronunciation analysis; enables phoneme-level accuracy measurement
 * **Factory Pattern**: Software design pattern for creating context-appropriate loading strategies; addresses need for educational content during delays
 * **SharedPreferences**: Local storage mechanism in Flutter; supports offline capability requirement for practice anywhere
 
-[.changed]
+[.added]
 *Pedagogical Terminology*:
 
 * **Learning Streak**: Consecutive days of practice completion; concept derived from Carlos's consistent 7 AM routine and motivation patterns
 * **Adaptive Difficulty**: System that adjusts challenge level based on performance; addresses varying skill levels among Spanish-speaking learners
 * **Gamification**: Use of game elements like points and badges; supports motivation maintenance identified as critical need
 
-[.changed]
+
 === 1.8 Project Management and Progress Tracking
 
-[.changed]
+[.added]
 *Comprehensive Documentation*: This document is supported by detailed development logs, research findings, and decision records that provide full traceability from user observations to implementation decisions.
 
-[.changed]
+[.added]
 *Progress Validation*: Regular validation checkpoints ensure the project remains aligned with the core objective of helping Spanish-speaking adults overcome specific pronunciation challenges like /θ/ sounds and vowel contrasts.
 
-[.changed]
+[.added]
 *Stakeholder Alignment*: Continuous verification that technical implementation decisions directly address the user needs identified through interviews with learners like Maria and Carlos.
 
 == 2. Descriptive Part
@@ -456,10 +461,10 @@ This section defines key terminology used throughout the Pronunciation Coach pro
 *Maria (28-year-old marketing manager from Guadalajara)*: "In my client meetings, when I say 'three,' Americans consistently hear 'tree.' I've tried every language app - Duolingo shows me green checkmarks but never explains why my 'th' sounds wrong. Yesterday, I spent 15 minutes repeating 'thought, through, theater' into my phone, recording and replaying, but I still can't hear what I'm doing differently. The worst part is the 3-second freeze every time I switch screens - I just stare at a spinning circle while my practice momentum dies."
 
 [.changed]
-*Carlos (45-year-old teacher from Medellín)*: "My high school students giggle when I say 'beach' because it comes out as 'bitch.' I practice every morning at 7 AM before class, using apps that only give me red or green feedback. I need to see tongue placement diagrams - where exactly should my tongue be for the 'ee' sound? The apps I've tried take forever to load pronunciation examples and show generic error messages like 'try again' without telling me what to try differently."
+*Carlos (45-year-old teacher from Medellín)*: "My high school students giggle when I say 'beach' because it sounds like a similar-sounding inappropriate word. I practice every morning at 7 AM before class, using apps that only give me red or green feedback. I need to see tongue placement diagrams - where exactly should my tongue be for the 'ee' sound? The apps I've tried take forever to load pronunciation examples and show generic error messages like 'try again' without telling me what to try differently."
 
 [.changed]
-*Technical observation*: During usability testing on a Samsung A32, authentication consistently took 2.8 seconds with basic loading indicators. Users tapped the screen multiple times during delays, assuming the app had crashed. Speech-to-text processing with Whisper took 4.2 seconds for a 3-second audio clip, during which users received no educational content.
+*Technical observation*: During usability testing on Android Devices, authentication consistently took 2.8 seconds with basic loading indicators. Users tapped the screen multiple times during delays, assuming the app had crashed. Speech-to-text processing with Whisper took 4.2 seconds for a 3-second audio clip, during which users received no educational content.
 
 
 ==== 2.1.2 Domain Concepts and Terminology
@@ -512,16 +517,16 @@ Both learners benefit from the system's adaptive difficulty - Maria receives pro
 ==== 2.1.4 Domain Phenomena: Events, Actions, and Behaviors
 
 [.changed]
-*Instantaneous Events* (occur at specific moments, lack actors):
+*Instantaneous Events*:
 
 * Pronunciation attempt recording completed
-* Authentication processing began
+* Entered authentication processing state
 * Learning streak extended to new day
 * Pronunciation accuracy score calculated
 * Educational loading content displayed
 
 [.changed]
-*Time-Consuming Actions* (have duration, involve actors):
+*Time-Consuming Actions*:
 
 * Learner records speech sample (30-60 seconds)
 * System analyzes pronunciation using MFCC and Montreal Forced Alignment (2-4 seconds)
@@ -530,7 +535,7 @@ Both learners benefit from the system's adaptive difficulty - Maria receives pro
 * Tutor provides corrective feedback on specific phonemes (varies)
 
 [.changed]
-*Complex Behaviors* (sequences of events and actions):
+*Complex Behaviors*:
 
 * **Daily Practice Routine**: Learner allocates time → selects practice focus → records multiple attempts → receives immediate feedback → reviews progress metrics → maintains motivation through visible improvement
 * **Pronunciation Improvement Cycle**: System analyzes attempt → identifies specific articulation errors → provides corrective suggestions → tracks accuracy trends → adapts difficulty levels → reinforces learning through educational content during delays
@@ -618,7 +623,7 @@ conductPracticeSession(duration: TimeRange, focus: PhonemeSet) → SessionOutcom
 [.changed]
 *Carlos Mendez - Teacher (Medellín)*
 
-- **Background**: 45-year-old educator preparing to move abroad, embarrassed when students laugh at his pronunciation of "beach" as "bitch"
+- **Background**: 45-year-old educator preparing to move abroad, embarrassed when students laugh at his pronunciation of "beach" due to it sounding like an inappropriate word
 - **Daily Routine**: Early morning practice sessions before school, prefers structured learning with clear goals
 - **Pronunciation Challenges**: Vowel contrasts (/iː/ vs /ɪ/), consonant clusters, and sentence-level intonation
 - **Motivation**: Classroom effectiveness and social integration in English-speaking country
@@ -638,47 +643,47 @@ conductPracticeSession(duration: TimeRange, focus: PhonemeSet) → SessionOutcom
 ==== 2.2.3 Domain Requirements
 
 [.changed]
-*DR1*: The system must provide means for associating each pronunciation attempt with specific accuracy measurements and articulation guidance derived from comparison to native speaker models
+*DR1*: The system must enable quantifiable feedback on specific phonetic errors with articulation guidance
 
-*Domain Property*: Effective pronunciation learning requires quantifiable feedback on specific phonetic errors rather than binary correctness judgments
+*Domain Property*: Effective pronunciation learning requires detailed feedback on phonetic errors rather than binary correctness judgments
 
-*DR2*: The system must provide means for tracking consecutive practice days and maintaining visible streak records with adaptive encouragement
+*DR2*: The system must support consistent daily engagement through visible progress tracking and motivational reinforcement
 
-*Domain Property*: Consistent daily engagement is essential for pronunciation improvement and requires motivational reinforcement
+*Domain Property*: Consistent daily practice is essential for pronunciation improvement and requires sustained motivation
 
-*DR3*: The system must provide means for displaying educational content during all processing operations exceeding 1 second
+*DR3*: The system must maintain learning momentum during processing delays through educational content
 
-*Domain Property*: Learning momentum is maintained when waiting periods are transformed into educational opportunities
+*Domain Property*: Learning effectiveness depends on continuous engagement, even during technical operations
 
-*DR4*: The system must provide means for phoneme-level analysis using accent-aware evaluation algorithms
+*DR4*: The system must provide phoneme-level pronunciation analysis that accounts for accent variations
 
 *Domain Property*: Pronunciation errors occur at the phoneme level and vary by native language background
 
-*DR5*: The system must provide means for offline practice capability with synchronization when connectivity resumes
+*DR5*: The system must ensure practice accessibility across different connectivity environments
 
-*Domain Property*: Consistent practice requires accessibility in various environments, including those with limited internet connectivity
+*Domain Property*: Consistent practice requires reliable access in various environments, including offline scenarios
 
 
 ==== 2.2.4 Interface Requirements
 
 [.changed]
-*IR1*: The system must provide means for learners to record pronunciation attempts through device microphone input with visual recording indicators
+*IR1*: Learners can record pronunciation attempts using device microphone with visual recording feedback
 
 *Observed Phenomenon*: Maria records herself saying "thought, through, theater" multiple times to compare attempts
 
-*IR2*: The system must provide means for displaying educational content and pronunciation tips during authentication and processing delays
+*IR2*: Learners can view educational content and pronunciation tips during authentication and processing delays
 
 *Observed Phenomenon*: Users currently stare at generic loading spinners for 2-3 seconds during system operations
 
-*IR3*: The system must provide means for showing visual comparisons between learner and native pronunciation waveforms with error highlighting
+*IR3*: Learners can see visual comparisons between their pronunciation and native speaker waveforms with error highlighting
 
 *Observed Phenomenon*: Carlos needs to see exactly how his "beach" pronunciation differs from native speakers'
 
-*IR4*: The system must provide means for progress visualization through dashboards showing accuracy trends and streak maintenance
+*IR4*: Learners can view progress through dashboards showing accuracy trends and streak maintenance
 
 *Observed Phenomenon*: Learners check progress indicators to maintain motivation and track improvement patterns
 
-*IR5*: The system must provide means for practice session customization with duration options and word selection
+*IR5*: Learners can customize practice sessions with duration options and word selection
 
 *Observed Phenomenon*: Different learners require flexible practice sessions from 5-minute quick drills to 30-minute focused sessions
 
@@ -709,27 +714,27 @@ conductPracticeSession(duration: TimeRange, focus: PhonemeSet) → SessionOutcom
 
 ==== 2.3.1 System Architecture
 
-[.changed]
+[.added]
 The Pronunciation Coach implements a layered architecture that separates educational domain logic from technical infrastructure, ensuring maintainability and alignment with domain requirements:
 
-[.changed]
+[.added]
 *Domain Layer*:: Core pronunciation learning entities including `PracticeSession`, `PronunciationAttempt`, and `FeedbackGenerator` that directly model Maria's struggle with /θ/ sounds and Carlos's vowel contrast challenges. This layer encapsulates the business rules for streak calculation, accuracy scoring, and adaptive difficulty.
 
-[.changed]
+[.added]
 *Application Layer*:: Coordinates user workflows including authentication flows, progress tracking, and the educational loading system. Implements enterprise patterns to address processing delay challenges:
 - *Factory Pattern* for creating context-appropriate loading strategies during authentication
 - *Strategy Pattern* for runtime switching between educational animations and pronunciation tips
 - *Observer Pattern* for coordinated UI updates during pronunciation analysis operations
 
-[.changed]
+[.added]
 *Infrastructure Layer*:: Technical capabilities including audio recording via device microphone, speech analysis using Whisper and Vosk STT engines, phoneme-level evaluation with Montreal Forced Alignment, and data persistence through SharedPreferences for offline capability.
 
-[.changed]
+[.added]
 *Presentation Layer*:: Flutter widgets implementing Material Design with specific attention to engaging loading states and educational content display. Uses Provider pattern for reactive state management across pronunciation practice workflows.
 
 ==== 2.3.2 Key Implementation Components
 
-[.changed]
+[.added]
 *Pronunciation Analysis Pipeline*
 [source,dart]
 ----
@@ -746,7 +751,7 @@ class PronunciationAnalyzer {
 }
 ----
 
-[.changed]
+[.added]
 *Educational Loading System*
 [source,dart]
 ----
@@ -762,7 +767,7 @@ class EducationalLoadingStrategy implements LoadingStrategy {
 }
 ----
 
-[.changed]
+[.added]
 *Progress Tracking & Gamification*
 [source,dart]
 ----
@@ -787,7 +792,7 @@ class UserProgressManager extends ChangeNotifier {
 }
 ----
 
-[.changed]
+[.added]
 *Quiz and Practice Session Management*
 [source,dart]
 ----
@@ -808,22 +813,22 @@ class QuizSession {
 
 ==== 2.3.3 Domain-Engineering Integration
 
-[.changed]
+[.added]
 The implementation directly reflects the domain analysis through several key integrations:
 
-[.changed]
+[.added]
 *Domain Entity Mapping*: Core domain entities like `PronunciationAttempt` and `PracticeSession` are implemented as Dart classes with properties derived from user observations:
 - `PronunciationAttempt` captures audio data, timestamp, and associated feedback
 - `PracticeSession` manages duration, completion status, and accumulated progress
 - `FeedbackResponse` provides specific articulation guidance based on phoneme-level analysis
 
-[.changed]
+[.added]
 *Event-Driven Architecture*: System responds to domain events observed in user workflows:
 - `pronunciationAttemptCompleted` triggers accuracy analysis and feedback generation
 - `dailyStreakExtended` updates motivation systems and achievement tracking
 - `educationalLoadingDisplayed` occurs during processing delays exceeding 1 second
 
-[.changed]
+[.added]
 *Domain Rules Implementation*: Business rules derived from domain properties:
 - Streak calculation follows observed user motivation patterns from Carlos's 6 AM routine
 - Accuracy scoring uses phoneme-level analysis addressing Maria's specific /θ/ sound challenges
@@ -832,7 +837,7 @@ The implementation directly reflects the domain analysis through several key int
 
 ==== 2.3.4 Technical Infrastructure
 
-[.changed]
+[.added]
 *Audio Processing Stack*
 [source,dart]
 ----
@@ -859,7 +864,7 @@ class AudioProcessingPipeline {
 }
 ----
 
-[.changed]
+[.added]
 *Offline Capability & Data Persistence*
 [source,dart]
 ----
@@ -881,16 +886,16 @@ class ProgressPersistence {
 
 ==== 2.3.5 System Architecture Diagrams
 
-[.changed]
+[.added]
 The system implementation uses comprehensive diagramming to illustrate component interactions and architectural patterns that directly address the domain requirements.
 
-[.changed]
+[.added]
 **Class Diagram: Educational and Functional Structure**
 
-[.changed]
+[.added]
 image::EducationalandFunctionalityStructure.png[Educational Structure Class Diagram, width=100%]
 
-[.changed]
+[.added]
 **Diagram Explanation:** This class diagram represents the Pronunciation Coach App's educational architecture, centered around the Coach chatbot as the primary educational modality. The structure features:
 
 **Student Entity:** Independent user representation with email and password for authentication
@@ -909,37 +914,37 @@ image::EducationalandFunctionalityStructure.png[Educational Structure Class Diag
 
 **Domain Alignment:** This structure directly supports Maria's need for conversational learning and Carlos's preference for structured assessment, while the integrated progress tracking addresses both users' motivation requirements through visible achievement metrics.
 
-[.changed]
+[.added]
 **Sequence Diagram: HomeScreen Component Interaction**
 
-[.changed]
+[.added]
 image::homescreen-sd.svg[HomeScreen Sequence Diagram, width=100%]
 
-[.changed]
+[.added]
 **Diagram Clarification:** This sequence diagram illustrates the complete workflow when Maria opens the Home Page, showing how the Flutter framework coordinates between HomeScreenState, Scaffold, and modular components like UserInfoBox and WelcomeBackBox. The diagram demonstrates the factory pattern implementation where components are created with specific user context, directly addressing Maria's need for personalized content that maintains her practice momentum.
 
-[.changed]
+[.added]
 **Sequence Diagram: UserInfoBox Detailed Implementation**
 
-[.changed]
+[.added]
 image::userinfobox-sd.svg[UserInfoBox Sequence Diagram, width=100%]
 
-[.changed]
+[.added]
 **Text Clarification:** This detailed sequence diagram shows the internal construction of the UserInfoBox component, which displays user statistics crucial for Carlos's motivation tracking. The diagram reveals how the component builds progressive layouts through Container → Column → Row hierarchies, creating visual elements for user identity and statistical displays.
 
-[.changed]
+[.added]
 **User Workflow: Quiz Implementation Flow**
 
-[.changed]
+[.added]
 image::QuizImplementation.jpg[Quiz Implementation Flow, width=100%]
 
-[.changed]
+[.added]
 **Workflow Clarification:** This user workflow diagram illustrates the complete quiz interaction pattern that supports Carlos's structured learning approach. The flow shows how users progress from quiz selection through question answering with immediate feedback, results display, and the option to restart - implementing the iterative practice methodology essential for pronunciation improvement.
 
-[.changed]
+[.added]
 **Domain Concept Mapping Table**
 
-[.changed]
+[.added]
 [format="csv",options="header"]
 |===
 Phenomenon (Real-World),Concept (System Representation),Entity / Data Structure,Function,Behavior (System Outcome)
@@ -949,17 +954,17 @@ Student completes daily challenge,Progress tracking update,Profile, AppInteracti
 Pronunciation knowledge assessment,Quiz completion,Quiz, Question,test(), listen(),Evaluates understanding and provides immediate feedback
 |===
 
-[.changed]
+[.added]
 **Table Explanation:** This concept mapping table demonstrates the algebraic closure achieved in the system design, where real-world educational interactions are systematically transformed into domain entities and functions. The structure maintains consistent system state while supporting both conversational learning (Coach) and formal assessment (Quiz) approaches.
 
 === 2.4 System Design Patterns and Algebraic Structures
 
 ==== 2.4.1 Domain-Driven Algebraic Design
 
-[.changed]
+[.added]
 The system employs algebraic structures that maintain closure under operations, ensuring extensibility while preserving domain faithfulness to pronunciation learning:
 
-[.changed]
+[.added]
 *Pronunciation Assessment Evolution*:
 [source,dart]
 ----
@@ -973,7 +978,7 @@ evaluatePronunciation(attempt: PronunciationAttempt): FeedbackResult
 ----
 *Domain Justification*: Maria's repeated attempts with "thought, through, theater" revealed the need for contextual feedback beyond simple scores, addressing her specific articulation challenges with /θ/ sounds.
 
-[.changed]
+[.added]
 *Educational Loading Strategy*:
 [source,dart]
 ----
@@ -987,7 +992,7 @@ createLoadingStrategy(context: OperationContext): LoadingStrategy
 ----
 *Domain Justification*: User observations of 2.8-second authentication delays inspired context-aware loading strategies that transform frustrating waits into learning opportunities.
 
-[.changed]
+[.added]
 *Progress Analytics Algebra*:
 [source,dart]
 ----
@@ -1003,21 +1008,21 @@ fold(events: List<LearningEvent>): ProgressSummary
 
 ==== 2.4.2 Design Pattern Applications
 
-[.changed]
+[.added]
 *Factory Pattern for Adaptive Content*:
 
 - Creates context-appropriate loading strategies based on operation type and user profile
 - Enables personalized educational content during processing delays
 - Addresses Maria's frustration with generic loading indicators
 
-[.changed]
+[.added]
 *Strategy Pattern for Multi-modal Feedback*:
 
 - Enables runtime switching between visual, auditory, and textual feedback modes
 - Supports diverse learning preferences observed across user personas
 - Allows adaptation to different pronunciation challenges (/θ/ sounds vs vowel contrasts)
 
-[.changed]
+[.added]
 *Observer Pattern for Real-time Coordination*:
 
 - Coordinates UI updates during pronunciation analysis operations
@@ -1026,13 +1031,13 @@ fold(events: List<LearningEvent>): ProgressSummary
 
 ==== 2.4.3 Algebraic Structures and Closure Under Operations
 
-[.changed]
+[.added]
 The project demonstrates several cases where function signatures evolved to achieve better closure under operations, creating more robust algebraic structures:
 
-[.changed]
+[.added]
 **Case 1: Pronunciation Evaluation Evolution**
 
-[.changed]
+[.added]
 **Initial Approach** - Limited context and error handling:
 [source,dart]
 ----
@@ -1054,13 +1059,13 @@ evaluatePronunciation(attempt: PronunciationAttempt): EvaluationResult
 //   - fallback strategies when STT processing fails
 ----
 
-[.changed]
+[.added]
 *Domain Justification*: Maria's repeated attempts with "thought, through, theater" revealed that simple scores weren't sufficient. The closed operation now handles network failures, low-quality audio, and provides contextual feedback addressing her specific /θ/ sound challenges.
 
-[.changed]
+[.added]
 **Case 2: Progress Tracking Algebra**
 
-[.changed]
+[.added]
 **Initial Approach** - Fragmented progress management:
 [source,dart]
 ----
@@ -1070,7 +1075,7 @@ calculateAccuracy(userId: String): Double
 // Separate operations that could leave system in inconsistent state
 ----
 
-[.changed]
+[.added]
 **Final Closed Operation** - Atomic progress updates:
 [source,dart]
 ----
@@ -1083,13 +1088,13 @@ recordPracticeCompletion(event: PracticeCompletion): ProgressUpdate
 //   - adaptive difficulty adjustments
 ----
 
-[.changed]
+[.added]
 *Domain Justification*: Carlos's consistent 7 AM practice routine requires reliable progress tracking. The closed operation ensures streak calculations remain accurate across timezones and device changes, maintaining motivational integrity.
 
-[.changed]
+[.added]
 **Case 3: Educational Loading System**
 
-[.changed]
+[.added]
 **Initial Approach** - Basic loading strategy:
 [source,dart]
 ----
@@ -1098,7 +1103,7 @@ showLoadingIndicator(duration: Int): Void
 // No adaptation to different operation types or user preferences
 ----
 
-[.changed]
+[.added]
 **Final Closed Operation** - Context-aware educational loading:
 [source,dart]
 ----
@@ -1111,7 +1116,7 @@ displayEducationalLoading(context: LoadingContext): LoadingSession
 //   - cancellation handling with state preservation
 ----
 
-[.changed]
+[.added]
 *Domain Justification*: User observations of 2.8-second authentication delays inspired this closed operation that transforms frustrating waits into learning opportunities, directly addressing Maria's complaint about losing "practice momentum."
 
 
@@ -1120,17 +1125,17 @@ displayEducationalLoading(context: LoadingContext): LoadingSession
 
 ==== 2.5.1 Concurrent Process Coordination
 
-[.changed]
+[.added]
 The system models competing processes to ensure smooth operation during resource-intensive pronunciation analysis:
 
-[.changed]
+[.added]
 *Authentication vs Educational Loading*:
 
 - Authentication processing competes with UI thread for loading animation resources
 - Educational content display must not block user interaction during delays
 - Memory allocation balanced between pronunciation facts and animation assets
 
-[.changed]
+[.added]
 *Critical Resource Sections*:
 
 - **Audio Processing Pipeline**: Exclusive access required for real-time speech analysis
@@ -1140,64 +1145,67 @@ The system models competing processes to ensure smooth operation during resource
 
 ==== 2.5.2 Stakeholder Perspective Integration
 
-[.changed]
+[.added]
 The system design accommodates diverse stakeholder needs through configurable components:
 
-[.changed]
+[.added]
 *Academic Learners (Ana)*:
 - Detailed technical feedback with phoneme-level analysis
 - Structured practice sessions aligned with academic timelines
 - Exportable progress reports for advisor review
 
-[.changed]
+[.added]
 *Professional Learners (Maria, Carlos)*:
 - Pragmatic feedback focusing on intelligibility in professional contexts
 - Efficient practice sessions fitting busy schedules
 - Career-relevant vocabulary and pronunciation goals
 
-[.changed]
+[.added]
 *Independent Enthusiasts*:
 - Encouraging, positive feedback to maintain motivation
 - Flexible practice structure accommodating irregular schedules
 - Gamified elements for long-term engagement
 
-[.changed]
+[.added]
 *Design Resolution*: Configurable feedback modes (Detailed/Practical/Encouraging) and adaptive practice structures that respect different learning contexts while maintaining core pronunciation accuracy.
 
-[.changed]
+
 === 2.6 Quality Assurance and Conflict Resolution
 
-[.changed]
+[.added]
 ==== 2.6.1 Requirements Conflict Management
 
-[.changed]
+[.added]
 A structured approach ensures consistent interpretation and implementation of domain requirements:
 
-[.changed]
+[.added]
 *Conflict Detection Framework*:
+
 - **Terminology Clash**: Different terms for same concept (e.g., "attempt" vs "try")
 - **Designation Clash**: Same term for different concepts (e.g., "accuracy" meaning different metrics)
 - **Structure Clash**: Conceptual mismatches in requirement scope or boundaries
 
-[.changed]
+[.added]
 *Applied Resolution Examples*:
 
-[.changed]
+[.added]
 *Case: Feedback Granularity Conflict*
+
 - **Conflict**: Academic users want detailed technical analysis vs casual users preferring simple encouragement
 - **Resolution**: Implement configurable feedback levels with intelligent defaults based on user profile
 - **Verification**: User testing with different persona groups to validate appropriateness
 
-[.changed]
+[.added]
 *Case: Practice Session Timing*
+
 - **Conflict**: Structured session timing for academic use vs flexible timing for professionals
 - **Resolution**: Support both scheduled assignments and on-demand practice with adaptive tracking
 - **Verification**: Validate both modes maintain learning effectiveness through A/B testing
 
-[.changed]
+
 ==== 2.6.2 System Verification Framework
 
-[.changed]
+[.added]
 *Performance Validation*:
 [source,dart]
 ----
@@ -1215,7 +1223,7 @@ test('Pronunciation feedback within 3-second target', () async {
 });
 ----
 
-[.changed]
+[.added]
 *Domain Faithfulness Verification*:
 [source,dart]
 ----
@@ -1230,7 +1238,7 @@ test('Feedback addresses specific Spanish speaker challenges', () {
 });
 ----
 
-[.changed]
+[.added]
 *Resource Contention Testing*:
 [source,dart]
 ----
@@ -1247,13 +1255,13 @@ test('Concurrent authentication and loading operations', () async {
 
 ==== 2.7.1 Competing Resource Access Modeling
 
-[.changed]
+[.added]
 The system models competing processes that access common resources using Petri nets to ensure proper synchronization and prevent resource conflicts:
 
-[.changed]
+[.added]
 **Pronunciation Analysis Resource Competition**
 
-[.changed]
+[.added]
 .Petri Net: Pronunciation Analysis Pipeline
 [source]
 ----
@@ -1278,13 +1286,13 @@ COMPETING PATHS:
 - Priority given to interactive sessions over batch processing
 ----
 
-[.changed]
+[.added]
 *Domain Significance*: Models the resource contention observed during usability testing when multiple pronunciation attempts were processed simultaneously, causing extended delays that frustrated Maria during her practice sessions. The Petri net ensures that STT engines (Whisper/Vosk) are allocated fairly and that users receive feedback within the 3-second requirement.
 
-[.changed]
+[.added]
 **Authentication vs Practice Session Conflict**
 
-[.changed]
+[.added]
 .Petri Net: Authentication Resource Management
 [source]
 ----
@@ -1306,13 +1314,13 @@ CONFLICT RESOLUTION:
 - Resource allocation prioritizes returning users to maintain streaks
 ----
 
-[.changed]
+[.added]
 *Domain Justification*: Addresses Carlos's frustration with authentication delays by modeling the competition between authentication processes and practice session initialization. The educational content transition (T4) transforms the observed 2.8-second authentication delays into learning opportunities, directly implementing the domain requirement for educational loading states.
 
-[.changed]
+[.added]
 **Concurrent User Session Management**
 
-[.changed]
+[.added]
 .Petri Net: Multiple User Session Coordination
 [source]
 ----
@@ -1334,13 +1342,13 @@ COMPETITION SCENARIOS:
 - T4 transitions ensure atomic progress saves during sync conflicts
 ----
 
-[.changed]
+[.added]
 *Technical Implementation*: This Petri net models the resource constraints observed during load testing, where multiple users like Maria and Carlos competing for limited audio processing slots could cause performance degradation. The model ensures that the system maintains responsive feedback even under concurrent load, preserving the 3-second processing requirement.
 
-[.changed]
+[.added]
 **Offline/Online Synchronization Conflict**
 
-[.changed]
+[.added]
 .Petri Net: Data Synchronization Process
 [source]
 ----
@@ -1362,7 +1370,7 @@ COMPETING MERGE STRATEGIES:
 - Deterministic resolution preserves learning continuity
 ----
 
-[.changed]
+[.added]
 *Domain Impact*: Models the critical synchronization process that enables Maria's offline practice during her commute and Carlos's consistent 7 AM routine. The conflict resolution transitions implement the algebraic closure properties, ensuring that progress merges maintain mathematical consistency regardless of sync order or connectivity issues.
 
 == 3. Analytic Part
@@ -1376,7 +1384,7 @@ The concept analysis demonstrates how raw observations from Spanish-speaking lea
 *From User Struggles to Core Concepts*:
 
 - Maria's frustration with "three" sounding like "tree" to clients → **Phoneme-Level Analysis** concept focusing on /θ/ sound articulation
-- Carlos's embarrassment with "beach" sounding like "bitch" → **Visual Comparison** concept showing waveform differences and tongue placement
+- Carlos's embarrassment with "beach" sounding inappropriate → **Visual Comparison** concept showing waveform differences and tongue placement
 - Both users' impatience with 2-3 second authentication delays → **Educational Loading** concept transforming waiting periods into learning opportunities
 - Maria's need for career advancement and Carlos's preparation for international teaching → **Practice Consistency** concept with streak tracking and adaptive difficulty
 
@@ -1402,7 +1410,7 @@ The analysis confirms that all major system concepts directly address observed u
 
 ==== 3.2.1 Comprehensive Testing Strategy
 
-[.changed]
+[.added]
 *Pronunciation Accuracy Validation*:
 [source,dart]
 ----
@@ -1418,7 +1426,7 @@ test('Phoneme-level analysis identifies /θ/ sound errors', () async {
 });
 ----
 
-[.changed]
+[.added]
 *Educational Loading System Verification*:
 [source,dart]
 ----
@@ -1434,7 +1442,7 @@ test('Loading strategy provides educational content for authentication', () {
 });
 ----
 
-[.changed]
+[.added]
 *Streak Calculation Logic*:
 [source,dart]
 ----
@@ -1451,21 +1459,21 @@ test('Streak resets after missed day', () {
 
 ==== 3.2.2 User-Centric Validation Scenarios
 
-[.changed]
+[.added]
 *Scenario: Maria's Professional Pronunciation Practice*
 
 - **Context**: Maria needs to improve "th" sounds before client presentation
 - **Flow**: Records "three, thought, through" → Receives specific articulation feedback → Practices with visual tongue placement guides → Tracks accuracy improvement over 7-day streak
 - **Validation**: Confirms feedback addresses her specific professional communication needs
 
-[.changed]
+[.added]
 *Scenario: Carlos's Classroom Preparation*
 
 - **Context**: Carlos practices words that caused student misunderstandings
 - **Flow**: Selects "beach, sheet, focus" → Sees waveform comparisons → Receives vowel duration corrections → Maintains motivation through visible progress
 - **Validation**: Ensures system addresses his specific teaching context and embarrassment concerns
 
-[.changed]
+[.added]
 *Scenario: Cross-Platform Consistency*
 
 - **Context**: Users access app on different devices and network conditions
@@ -1475,7 +1483,7 @@ test('Streak resets after missed day', () {
 
 ==== 3.2.3 Performance and Reliability Verification
 
-[.changed]
+[.added]
 *Critical Performance Metrics*:
 
 - **Pronunciation Analysis**: ≤3 seconds for complete feedback cycle on Samsung A32
@@ -1483,7 +1491,7 @@ test('Streak resets after missed day', () {
 - **Offline Operation**: Full functionality without internet connectivity
 - **Data Persistence**: Automatic save within 2 seconds of progress updates
 
-[.changed]
+[.added]
 *Reliability Requirements*:
 
 - **Speech Recognition**: ≥85% transcription accuracy for Spanish-accented English
@@ -1494,10 +1502,10 @@ test('Streak resets after missed day', () {
 
 ==== 3.2.4 Domain Faithfulness Assessment
 
-[.changed]
+[.added]
 The validation process ensures the system remains faithful to the original domain observations:
 
-[.changed]
+[.added]
 *Maria's Client Meetings* → System provides specific /θ/ sound feedback she needs for professional credibility
 
 *Carlos's Classroom Challenges* → Visual comparisons address the vowel contrast issues that caused student misunderstandings
@@ -1506,11 +1514,13 @@ The validation process ensures the system remains faithful to the original domai
 
 *Technical Performance Concerns* → Educational loading and fast feedback address impatience with mobile app delays
 
-[.changed]
+[.added]
 This comprehensive validation approach confirms that the Pronunciation Coach effectively addresses the real-world pronunciation challenges identified through user research while maintaining technical excellence and domain faithfulness.
 
 
+[.added]
 == 4. Logbook
+
 === 4.1 Development Activities
 
 .Feature Implementation
@@ -1841,3 +1851,4 @@ This comprehensive validation approach confirms that the Pronunciation Coach eff
 | Done
 | Delivered comprehensive implementation and documentation
 |===
+
