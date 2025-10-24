@@ -7,7 +7,6 @@
 :pdf-theme: docs/pdf-theme.yml
 
 == 1. Informative Part
-[role="added"]#This text was added for testing#
 === 1.1 Teams
 
 ==== 1.1.1 Team 1 
@@ -1852,11 +1851,4 @@ This comprehensive validation approach confirms that the Pronunciation Coach eff
 | Delivered comprehensive implementation and documentation
 |===
 
-[#changebar-test]
-== Change Bar Visual Test
 
-[.changed]
-This paragraph should show a red vertical bar to its left.
-
-[.added]
-This paragraph should show a green bar to its left.
