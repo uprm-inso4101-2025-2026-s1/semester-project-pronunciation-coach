@@ -1,3 +1,5 @@
+:pdf-theme: docs/pdf-theme.yml
+
 = Pronounciation Coach App
 :author: Fabian Velez Ocasio, Jaydiemar Vazquez, Abdiel Velazquez, Diego Hernandez
 :revdate: Updated: October 24, 2025 
@@ -1852,3 +1854,11 @@ This comprehensive validation approach confirms that the Pronunciation Coach eff
 | Delivered comprehensive implementation and documentation
 |===
 
+[#changebar-test]
+== Change Bar Visual Test
+
+[.changed]
+This paragraph should show a red vertical bar to its left.
+
+[.added]
+This paragraph should show a green bar to its left.
