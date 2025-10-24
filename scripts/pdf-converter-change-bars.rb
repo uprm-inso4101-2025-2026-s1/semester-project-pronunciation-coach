@@ -2,50 +2,46 @@
 require 'asciidoctor'
 require 'asciidoctor-pdf'
 
-# Guard against double load
+# Guard so if CI accidentally requires the file twice, we don't re-define
 unless defined?(ChangeBarPdfConverter)
+  # IMPORTANT: inherit from Asciidoctor::PDF::Converter so `pdf`, `cursor`, `bounds` exist
   class ChangeBarPdfConverter < Asciidoctor::PDF::Converter
     register_for 'pdf'
 
-    def convert_paragraph node
-      draw_change_bar(node) if mark?(node)
-      super
-    end
+    # Minimal logging so we can see in CI that this actually loaded once
+    warn "change-bar: ChangeBarPdfConverter loaded"
 
-    def convert_table node
-      draw_change_bar(node) if mark?(node)
-      super
-    end
-
-    def convert_section node
-      draw_change_bar(node) if mark?(node)
-      super
-    end
-
-    def convert_ulist node
-      draw_change_bar(node) if mark?(node)
-      super
-    end
-
-    def convert_olist node
-      draw_change_bar(node) if mark?(node)
-      super
-    end
+    def convert_paragraph node; draw(node); super; end
+    def convert_table     node; draw(node); super; end
+    def convert_section   node; draw(node); super; end
+    def convert_ulist     node; draw(node); super; end
+    def convert_olist     node; draw(node); super; end
 
     private
 
-    def mark?(node)
-      node.role?('changed') || node.role?('change') || node.role?('added') || node.role?('removed')
+    def mark?(n)
+      n.role?('changed') || n.role?('change') || n.role?('added') || n.role?('removed')
     end
 
-    def draw_change_bar node
+    def draw node
+      return unless mark?(node)
+
       color =
         if node.role?('added')   then '1B8E00'
         elsif node.role?('removed') then '8E0000'
         else 'CC0000'
         end
 
-      height = estimate_height(node)
+      height =
+        case node.context
+        when :paragraph then [ (node.lines&.size || 1) * 15, 20 ].max
+        when :table     then [ (node.rows&.body&.size || 1) * 18, 40 ].max
+        when :section   then 28
+        when :ulist, :olist
+          [ (node.items&.size || 1) * 16, 24 ].max
+        else 24
+        end
+
       x = bounds.left - 12
       top = cursor
       bottom = cursor - height
@@ -58,24 +54,5 @@ unless defined?(ChangeBarPdfConverter)
     rescue => e
       warn "change-bar: skipped (#{e.class}: #{e.message})"
     end
-
-    def estimate_height node
-      case node.context
-      when :paragraph
-        lines = node.lines ? node.lines.size : 1
-        [lines * 15, 20].max
-      when :table
-        rows = node.rows && node.rows.body ? node.rows.body.size : 1
-        [rows * 18, 40].max
-      when :section
-        28
-      when :ulist, :olist
-        items = node.items ? node.items.size : 1
-        [items * 16, 24].max
-      else
-        24
-      end
-    end
   end
 end
-
