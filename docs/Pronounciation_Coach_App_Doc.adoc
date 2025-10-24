@@ -1,5 +1,3 @@
-:pdf-theme: docs/pdf-theme.yml
-
 = Pronounciation Coach App
 :author: Fabian Velez Ocasio, Jaydiemar Vazquez, Abdiel Velazquez, Diego Hernandez
 :revdate: Updated: October 24, 2025 
