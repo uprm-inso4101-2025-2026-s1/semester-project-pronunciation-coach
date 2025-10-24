@@ -948,10 +948,10 @@ image::QuizImplementation.jpg[Quiz Implementation Flow, width=100%]
 [format="csv",options="header"]
 |===
 Phenomenon (Real-World),Concept (System Representation),Entity / Data Structure,Function,Behavior (System Outcome)
-User speaks a phrase into the microphone,Audio input captured as a digital recording,Attempt, Recording,onRecordStart(), onRecordEnd(),Stores audio file and initializes analysis pipeline
-User interacts with educational chatbot,Coach communication session,Coach, ChatSession,communicate(), educate(),Provides personalized pronunciation guidance
-Student completes daily challenge,Progress tracking update,Profile, AppInteraction,updateStreak(), completedChallenge(),Maintains engagement through visible achievements
-Pronunciation knowledge assessment,Quiz completion,Quiz, Question,test(), listen(),Evaluates understanding and provides immediate feedback
+User speaks a phrase into the microphone,Audio input captured as a digital recording,Attempt,"onRecordStart(), onRecordEnd()","Stores audio file and initializes analysis pipeline"
+User interacts with educational chatbot,Coach communication session,"Coach, ChatSession","communicate(), educate()","Provides personalized pronunciation guidance"
+Student completes daily challenge,Progress tracking update,"Profile, AppInteraction","updateStreak(), completedChallenge()","Maintains engagement through visible achievements"
+Pronunciation knowledge assessment,Quiz completion,"Quiz, Question","test(), listen()","Evaluates understanding and provides immediate feedback"
 |===
 
 [.added]
