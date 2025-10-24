@@ -7,8 +7,12 @@
 :pdf-theme: docs/pdf-theme.yml
 
 [.legend]
-*[.changed]*:: Sections previously created that have been updated for this milestone
-*[.added]*:: New sections created for this documentation
+
+[.changed]
+Sections previously created that have been updated for this milestone will have a yellow color
+
+[.added]
+New sections created for this documentation will be in the green color
 
 == 1. Informative Part
 === 1.1 Teams
@@ -202,19 +206,17 @@ Native Spanish speakers face significant pronunciation challenges due to fundame
 
 ==== 1.2.2 Needs
 
-*[.changed]*
-* **Immediate, Actionable Feedback**: Learners require real-time pronunciation assessment (within 2-3 seconds) with specific, understandable guidance beyond binary correct/incorrect judgments, including phoneme-level analysis and visual reinforcement of problem areas.
 
-*[.changed]*
-* **Accessible Practice Environment**: Need for affordable, offline-capable tools that enable independent pronunciation practice outside classroom settings, without requiring constant teacher supervision or continuous internet connectivity.
+* **Immediate, Actionable Feedback**: [.changed] Learners require real-time pronunciation assessment (within 2-3 seconds) with specific, understandable guidance beyond binary correct/incorrect judgments, including phoneme-level analysis and visual reinforcement of problem areas.
 
-*[.changed]*
-* **Personalized Learning Pathways**: Structured progression through phonetically challenging sounds with adaptive difficulty that accommodates different accents, skill levels, and available practice time (5-30 minute sessions).
+* **Accessible Practice Environment**: [.changed] Need for affordable, offline-capable tools that enable independent pronunciation practice outside classroom settings, without requiring constant teacher supervision or continuous internet connectivity.
+
+* **Personalized Learning Pathways**: [.changed] Structured progression through phonetically challenging sounds with adaptive difficulty that accommodates different accents, skill levels, and available practice time (5-30 minute sessions).
 
 *[.changed]*
 * **Motivational Engagement Systems**: Gamified elements, progress tracking, and achievement systems to maintain long-term engagement, support consistent daily practice habits, and prevent skill degradation.
 
-*[.changed]*
+[.changed]
 * **Comprehensive Progress Analytics**: Tools for learners to monitor improvement over time, identify persistent pronunciation difficulties, and access exportable data (CSV) for personal review or educational purposes.
 
 [.changed]
