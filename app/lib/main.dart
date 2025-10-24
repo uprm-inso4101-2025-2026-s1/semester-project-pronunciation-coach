@@ -9,6 +9,7 @@ import 'features/dashboard/widgets/welcome_screen.dart';
 import 'pace selector/pace_selector.dart';
 
 import 'core/services/supabase_client.dart';
+import 'core/services/session_manager.dart';
 
 Future<void> main() async{ //future<void>main() async is done to make sure 
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ Future<void> main() async{ //future<void>main() async is done to make sure
   --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
   --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
  */
+
   try {
   await AppSupabase.init();
 } catch (e) {
@@ -25,6 +27,8 @@ Future<void> main() async{ //future<void>main() async is done to make sure
   print('Supabase init failed: $e');
   return;
 }
+
+await SessionManager.instance.start();
 
   
   runApp(
