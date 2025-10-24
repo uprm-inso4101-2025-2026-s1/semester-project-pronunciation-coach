@@ -202,7 +202,7 @@ Native Spanish speakers face significant pronunciation challenges due to fundame
 
 ==== 1.2.2 Needs
 
-*[.changed]*
+[.changed]
 * **Immediate, Actionable Feedback**: Learners require real-time pronunciation assessment (within 2-3 seconds) with specific, understandable guidance beyond binary correct/incorrect judgments, including phoneme-level analysis and visual reinforcement of problem areas.
 
 *[.changed]*
