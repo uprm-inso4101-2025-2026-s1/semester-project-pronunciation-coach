@@ -36,7 +36,7 @@ jobs:
           mkdir -p build
           find docs -name "*.adoc" -print0 \
             | xargs -0 -I{} asciidoctor-pdf \
-              -a pdf-theme=docs/pdf-theme.yml \
+              -r ./scripts/pdf-converter-change-bars.rb \
               -r asciidoctor-diagram \
               -D build {}
 
