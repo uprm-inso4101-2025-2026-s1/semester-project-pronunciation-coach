@@ -239,16 +239,16 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   Widget _buildSelectedPace(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    String paceText = '⚪ Not selected ⚪';
+    String paceText = 'âšª Not selected âšª';
     switch (appState.selectedPace) {
       case LearningPace.casual:
-        paceText = '🟡 Casual 🟡';
+        paceText = 'ðŸŸ¡ Casual ðŸŸ¡';
         break;
       case LearningPace.standard:
-        paceText = '🟠 Standard 🟠';
+        paceText = 'ðŸŸ  Standard ðŸŸ ';
         break;
       case LearningPace.intensive:
-        paceText = '🔴 Intensive 🔴';
+        paceText = 'ðŸ”´ Intensive ðŸ”´';
         break;
     }
 

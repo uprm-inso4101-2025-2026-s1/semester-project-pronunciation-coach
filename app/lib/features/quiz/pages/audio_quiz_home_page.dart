@@ -54,6 +54,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -140,7 +141,6 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
   }
 
   Future<void> _startQuiz(Difficulty difficulty) async {
-    // Show loading
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -150,15 +150,13 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
     );
 
     try {
-      // Generate challenge
       final challenge = await _apiService.generateAudioChallenge(difficulty.id);
 
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Navigate to quiz
       if (mounted) {
-        Navigator.push(
+        // Navigate to question page and wait for result
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => AudioQuizQuestionPage(
@@ -169,10 +167,8 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
         );
       }
     } catch (e) {
-      // Close loading
       if (mounted) Navigator.pop(context);
 
-      // Show error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

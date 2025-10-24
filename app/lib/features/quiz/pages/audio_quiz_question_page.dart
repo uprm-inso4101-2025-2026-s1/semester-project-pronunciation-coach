@@ -46,9 +46,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   }
 
   Future<void> _playAudio(String optionLetter) async {
-    // Allow switching between audios - stop any currently playing audio first
+    // Stop any currently playing audio
     if (_isPlayingAudio && _playingOption != null) {
-      print('🛑 Stopping previous audio: $_playingOption');
       await _audioPlayer.stop();
     }
 
@@ -58,26 +57,20 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
     });
 
     try {
-      // Stop any currently playing audio
       await _audioPlayer.stop();
       
       final audioUrl = widget.challenge.getAudioUrl(optionLetter);
       
-      print('🎵 Playing audio from: $audioUrl');
-      
-      // Play the audio
       await _audioPlayer.play(UrlSource(audioUrl));
       
-      // Wait for completion with timeout handling
+      // Wait for completion with timeout
       try {
         await _audioPlayer.onPlayerComplete.first.timeout(
           const Duration(seconds: 10),
         );
       } on TimeoutException {
-        print('⏱️ Audio playback timed out');
         await _audioPlayer.stop();
       } catch (e) {
-        print('⏱️ Audio completion error: $e');
         await _audioPlayer.stop();
       }
       
@@ -88,8 +81,6 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
         });
       }
     } catch (e) {
-      print('❌ Audio error: $e');
-      
       if (mounted) {
         setState(() {
           _playingOption = null;
@@ -125,7 +116,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Challenge Card
+            // Challenge information card
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -208,9 +199,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
             ),
             const SizedBox(height: 24),
 
-            // Instructions
             Text(
-              'Tap 🔊 to hear each pronunciation:',
+              'Tap to hear each pronunciation:',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -219,7 +209,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
             ),
             const SizedBox(height: 16),
 
-            // Audio Options
+            // Audio option cards
             Expanded(
               child: ListView.separated(
                 itemCount: widget.challenge.options.length,
@@ -250,7 +240,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
 
             const SizedBox(height: 16),
 
-            // Feedback (only show when answered)
+            // Feedback message after answering
             if (_feedback != null)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -288,7 +278,6 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
 
             const SizedBox(height: 16),
 
-            // Submit Button
             SizedBox(
               height: 54,
               child: ElevatedButton(
@@ -379,7 +368,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
     );
 
     if (mounted) {
-      Navigator.pushReplacement(
+      // Use push instead of pushReplacement so user can go back
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => AudioQuizResultPage(
@@ -428,7 +418,7 @@ class _AudioOptionCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Option Letter
+              // Option letter indicator
               Container(
                 width: 40,
                 height: 40,
@@ -451,7 +441,6 @@ class _AudioOptionCard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
 
-              // Play Button
               IconButton(
                 onPressed: onPlay,
                 icon: Icon(
@@ -463,7 +452,6 @@ class _AudioOptionCard extends StatelessWidget {
 
               const Expanded(child: SizedBox()),
 
-              // Selection Indicator
               if (isSelected)
                 const Icon(
                   Icons.check_circle,

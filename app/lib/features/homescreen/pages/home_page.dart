@@ -4,6 +4,7 @@ import 'package:app/features/homescreen/widgets/welcome_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/features/homescreen/widgets/home_sections.dart';
+import 'package:app/features/ChatBotPage/chat_bot_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,6 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
            ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.chat),
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatbotPage()),
+            );
+        },
+      )
     );
   }
 }

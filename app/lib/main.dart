@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
+import 'features/log_in/pages/login_page.dart';
 import 'features/dashboard/pages/user_progress_dashboard.dart';
-import 'features/dashboard/pages/login_page.dart';
 import 'features/dashboard/widgets/welcome_screen.dart';
 import 'features/quiz/pages/audio_quiz_home_page.dart';
 import 'pace selector/pace_selector.dart';
 import 'core/services/supabase_client.dart';
+import 'core/services/session_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  /*to be able to run must use in terminal:
+  flutter run \
+  --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+  */
+
   try {
     await AppSupabase.init();
   } catch (e) {
+    // Just print and exit
+    // ignore: avoid_print
     print('Supabase init failed: $e');
     return;
   }
+
+  await SessionManager.instance.start();
 
   runApp(
     ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
@@ -46,7 +56,7 @@ class MyApp extends StatelessWidget {
               '/login': (context) => const LoginPage(),
               '/dashboard': (context) => const MainNavigationScreen(),
               '/audio-quiz': (context) => const AudioQuizHomePage(),
-              '/quiz': (context) => const AudioQuizHomePage(), // Make /quiz point to audio quiz
+              '/quiz': (context) => const AudioQuizHomePage(),
             },
           ),
         );

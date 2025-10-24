@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/services/audio_api_service.dart';
-import 'audio_quiz_home_page.dart';
+import 'audio_quiz_home_page.dart'; // Import for navigation
 import 'audio_quiz_question_page.dart';
+
+// Note: Ensure AudioChallengeResult, Difficulty, and AudioChallenge are correctly defined in their respective files.
 
 class AudioQuizResultPage extends StatefulWidget {
   final AudioChallengeResult result;
@@ -40,9 +42,9 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     super.dispose();
   }
 
+  // Plays the correct word's audio or stops if already playing.
   Future<void> _playCorrectAudio() async {
     if (_isPlayingCorrectAudio) {
-      // Stop if already playing
       await _audioPlayer.stop();
       setState(() {
         _isPlayingCorrectAudio = false;
@@ -59,9 +61,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
       
       final audioUrl = widget.challenge.getAudioUrl(widget.result.correctAnswer);
       
-      print('🎵 Playing correct audio: $audioUrl');
-      
-      // Set up completion listener
+      // Set up completion listener to stop playing state
       _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
         if (mounted) {
           setState(() {
@@ -70,12 +70,10 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
         }
       });
       
-      // Play the audio
       await _audioPlayer.play(UrlSource(audioUrl));
       
     } catch (e) {
-      print('❌ Audio error: $e');
-      
+      // Handle audio playback error
       if (mounted) {
         setState(() {
           _isPlayingCorrectAudio = false;
@@ -92,6 +90,82 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     }
   }
 
+  // Navigates back to the main quiz home screen and shows the nav bar.
+  void _goToQuizHome(BuildContext context) {
+    // Pop all routes until the AudioQuizHomePage route is reached.
+    // This assumes AudioQuizHomePage is the route where the main nav bar is visible.
+    Navigator.popUntil(context, (route) {
+      // Check if the route is a MaterialPageRoute and its builder creates an AudioQuizHomePage
+      // This is a common pattern to stop at a known route type if named routes aren't used.
+      if (route is MaterialPageRoute && route.builder(context) is AudioQuizHomePage) {
+        return true;
+      }
+      // Fallback: If AudioQuizHomePage is the first route in this stack, this will return to it.
+      // If it's not the first route of the entire app, you might need a named route reference.
+      return route.isFirst;
+    });
+  }
+
+  // Retries the quiz with a new challenge for the same difficulty.
+  Future<void> _retryQuiz(BuildContext context) async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      final apiService = AudioApiService();
+      final newChallenge =
+          await apiService.generateAudioChallenge(widget.difficulty.id);
+
+      // Close loading indicator
+      if (context.mounted) Navigator.pop(context);
+
+      // Navigate to new quiz and replace the current result screen
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AudioQuizQuestionPage(
+              challenge: newChallenge,
+              difficulty: widget.difficulty,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      // Close loading indicator
+      if (context.mounted) Navigator.pop(context);
+
+      // Show error message
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error generating new quiz: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Color _getDifficultyColor() {
+    switch (widget.difficulty.id) {
+      case 'easy':
+        return Colors.green;
+      case 'medium':
+        return Colors.orange;
+      case 'hard':
+        return Colors.red;
+      default:
+        return Colors.blue;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +178,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
+        // Hide the default back button since we control navigation with the 'Home' button.
         automaticallyImplyLeading: false,
       ),
       body: Padding(
@@ -130,7 +205,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Result Icon
+                        // Result icon
                         Container(
                           width: 100,
                           height: 100,
@@ -152,9 +227,10 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Result Title
+                        // Result title text
                         Text(
-                          widget.result.isCorrect ? '🎉 Correct!' : '❌ Incorrect',
+                          // Removed emoji from text
+                          widget.result.isCorrect ? 'Correct!' : 'Incorrect',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w800,
@@ -165,7 +241,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                         ),
                         const SizedBox(height: 24),
 
-                        // Word Information with Play Button
+                        // Word and play button section
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -235,7 +311,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                         ),
                         const SizedBox(height: 24),
 
-                        // XP Earned
+                        // XP display section
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -325,15 +401,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AudioQuizHomePage(),
-                        ),
-                        (route) => false,
-                      );
-                    },
+                    onPressed: () => _goToQuizHome(context), // Use the new function
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       side: BorderSide(color: Colors.grey[400]!),
@@ -377,64 +445,5 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
         ),
       ),
     );
-  }
-
-  Color _getDifficultyColor() {
-    switch (widget.difficulty.id) {
-      case 'easy':
-        return Colors.green;
-      case 'medium':
-        return Colors.orange;
-      case 'hard':
-        return Colors.red;
-      default:
-        return Colors.blue;
-    }
-  }
-
-  Future<void> _retryQuiz(BuildContext context) async {
-    // Show loading
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    try {
-      final apiService = AudioApiService();
-      final newChallenge =
-          await apiService.generateAudioChallenge(widget.difficulty.id);
-
-      // Close loading
-      if (context.mounted) Navigator.pop(context);
-
-      // Navigate to new quiz
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AudioQuizQuestionPage(
-              challenge: newChallenge,
-              difficulty: widget.difficulty,
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      // Close loading
-      if (context.mounted) Navigator.pop(context);
-
-      // Show error
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error generating new quiz: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
   }
 }
