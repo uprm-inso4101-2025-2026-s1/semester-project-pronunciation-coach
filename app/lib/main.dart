@@ -11,7 +11,8 @@ import 'pace selector/pace_selector.dart';
 import 'core/services/supabase_client.dart';
 import 'core/services/session_manager.dart';
 
-Future<void> main() async{ //future<void>main() async is done to make sure 
+Future<void> main() async {
+  //future<void>main() async is done to make sure
   WidgetsFlutterBinding.ensureInitialized();
   /*to be able to run must use in terminal:
   flutter run \
@@ -20,17 +21,16 @@ Future<void> main() async{ //future<void>main() async is done to make sure
  */
 
   try {
-  await AppSupabase.init();
-} catch (e) {
-  // Just print and exit
-  // ignore: avoid_print
-  print('Supabase init failed: $e');
-  return;
-}
+    await AppSupabase.init();
+  } catch (e) {
+    // Just print and exit
+    // ignore: avoid_print
+    print('Supabase init failed: $e');
+    return;
+  }
 
-await SessionManager.instance.start();
+  await SessionManager.instance.start();
 
-  
   runApp(
     ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
   );
@@ -43,22 +43,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return ChangeNotifierProvider(
-          create: (_) => MyAppState(),
-          child: MaterialApp(
-            title: 'Pronunciation Coach',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              fontFamily: 'SF Pro Display',
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: const WelcomeScreen(),
-            routes: {
-              '/login': (context) => const LoginPage(),
-              '/dashboard': (context) => const MainNavigationScreen(),
-            },
+        return MaterialApp(
+          title: 'Pronunciation Coach',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: 'SF Pro Display',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          home: const WelcomeScreen(),
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/dashboard': (context) => const MainNavigationScreen(),
+          },
         );
       },
     );
