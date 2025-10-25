@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
-import '../../quiz/pages/quiz_page.dart';
+import '../../quiz/pages/audio_quiz_home_page.dart'; // CHANGED: Import audio quiz instead
 import '../widgets/daily_challenge.dart';
 import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
@@ -57,7 +57,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const HomeScreen(),
       const UserProgressDashboard(),
       const DailyChallengePage(),
-      const QuizHomePage(),
+      const AudioQuizHomePage(), // CHANGED: Use AudioQuizHomePage instead of QuizHomePage
       const ProfilePage(),
     ];
   }
@@ -115,8 +115,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: 'Challenge',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.quiz_outlined),
-              activeIcon: Icon(Icons.quiz),
+              icon: Icon(Icons.headphones_outlined), // CHANGED: Better icon for audio quiz
+              activeIcon: Icon(Icons.headphones),
               label: 'Quiz',
             ),
             BottomNavigationBarItem(
@@ -178,7 +178,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        automaticallyImplyLeading: false, // Remove back button
+        automaticallyImplyLeading: false,
         actions: [
           TextButton(
             onPressed: () {
@@ -203,8 +203,8 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             children: [
               // Daily Challenge Widget
               DailyChallengeWidget(
-                currentStreak: 5, // TODO: Get from user progress
-                totalXp: 1250, // TODO: Get from user progress
+                currentStreak: 5,
+                totalXp: 1250,
               ),
               const SizedBox(height: 20),
 
@@ -239,16 +239,16 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   Widget _buildSelectedPace(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    String paceText = '⚪ Not selected ⚪';
+    String paceText = 'âšª Not selected âšª';
     switch (appState.selectedPace) {
       case LearningPace.casual:
-        paceText = '🟡 Casual 🟡';
+        paceText = 'ðŸŸ¡ Casual ðŸŸ¡';
         break;
       case LearningPace.standard:
-        paceText = '🟠 Standard 🟠';
+        paceText = 'ðŸŸ  Standard ðŸŸ ';
         break;
       case LearningPace.intensive:
-        paceText = '🔴 Intensive 🔴';
+        paceText = 'ðŸ”´ Intensive ðŸ”´';
         break;
     }
 
@@ -461,7 +461,7 @@ class ProfilePagePlaceholder extends StatelessWidget {
         title: const Text('Profile'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        automaticallyImplyLeading: false, // Remove back button
+        automaticallyImplyLeading: false,
       ),
       body: const Center(
         child: Column(
@@ -516,9 +516,3 @@ class ProfilePagePlaceholder extends StatelessWidget {
     );
   }
 }
-
-/// SE ELIMINO LA LOGICA DE DAILY CHALLENGE PARA SIMPLICAR ESTE FILE 
-/// SE CREO OTRO FILE LLAMADO STREAK_XP.DART PARA QUE SE VEA MAS LINDO Y ORGANIZADO EL CODIGO/FILE
-
-  
-
