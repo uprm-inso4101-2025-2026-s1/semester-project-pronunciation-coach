@@ -1,9 +1,9 @@
-# import json
-# import os
+import json
+import os
 import random
 from User_input_for_quiz import *
 from Random_Word_Picker import *
-from I_want_to_finish_this_shit import *
+from QuizPython.TTS import *
 #import nltk
 #nltk.download('cmudict')
 #from nltk.corpus import cmudict
@@ -11,42 +11,44 @@ from I_want_to_finish_this_shit import *
 #Initializes
 #cmu_dict = cmudict.dict()
 
-# #Finds the file where the dictionary is with all the English words with its corresponding IPAs
-# project_dir = os.path.dirname(os.path.realpath('__file__')) #Finds the project's directory
-# #print(file_dir)
+#Finds the file where the dictionary is with all the English words with its corresponding IPAs
+#project_dir = os.path.dirname(os.path.realpath('__file__')) #Finds the project's directory
+#print(file_dir)
 
-# file_dir = os.path.join(project_dir, 'QuizPython\\test.json') #Grabs the file from the projects directory as a reference
-# #print(file_name)
+#file_dir = os.path.join(project_dir, 'QuizPython\\test.json') #Grabs the file from the projects directory as a reference
+#print(file_name)
 
-# with open(file_dir, "r")as f:
-#     data = json.load(f)
+#with open(file_dir, "r")as f:
+    #data = json.load(f)
 
 #Functions
 
-def Get_List_Words_Practice() -> list: #Deprecated
-    return ["destiny","defenestration","thou","coke","bass"]
+#def Get_List_Words_Practice() -> list: #Deprecated
+    #return ["destiny","defenestration","thou","coke","bass"]
 
 #A function that randomly selects a word to be used for the problem and removes it from the roster
-def Select_Word(word_list:list) -> str:
-    random_num = random.randrange(0,len(word_list))
-    selected_word = word_list[random_num]
-    word_list.pop(random_num)
+#def Select_Word(word_list:list) -> str: #Deprecated
+    #random_num = random.randrange(0,len(word_list))
+    #selected_word = word_list[random_num]
+    #word_list.pop(random_num)
 
-    return selected_word
+    #return selected_word
 
 #Grabs the IPA of the selected word via a database (can be from a JSON, equivalent, or an outsourced platform)
-# Modified: Grabs the IPA of the selected word from the local word bank.
-def Get_Word_IPA(selected_word) -> str:
-    return wb.get_ipa(selected_word)
+#def Get_Word_IPA(selected_word) -> str: #Deprecated
+    #Currently it's programmed to grab the selected word's IPA from a JSON for testing.
+    #This function can be modified to grab the IPA from a different source.
+    #return data[selected_word]["IPA"]
 
 #Grabs the selected word's syllables via a database (can be from a JSON, equivalent, or an outsourced platform)
-# Modified: Grabs the selected word's syllables from the local word bank.
-def Get_Word_Syllables(selected_word:str) -> str:
-    return wb.get_syllables(selected_word) or []
+#def Get_Word_Syllables(seletected_word:str) -> str: #Deprecated
+    #Currently it's programmed to grab the selected word's syllables from a JSON for testing.
+    #This function can be modified to grab the IPA from a different source.
+    #return data[seletected_word]["Syllables"]
 
 #Function where it generates wrong answers for the problem by randomizing each syllable position and characters
 def Generate_Evil_Words(word:str) -> list:
-    print(word)
+    #print(word)
     
     wrong_answers = [] #List where it carries the wrong answers after they've been horribly disfigured
     wrong_answers.append([word])
@@ -54,46 +56,41 @@ def Generate_Evil_Words(word:str) -> list:
     #Primary loop, where the magic happens! Three times to generate 3 erroneous words
     for i in range(3):
         #print(i)
-        word_temp = word[1:-1] #Copies the IPA_word into a temp variable in other to modify the IPA word without affecting the original one
+        word_temp = word[1:-1] #Stores a version of the word without its first and last letters
 
-        word_temp = list(word_temp)
-        random.shuffle(word_temp)
-        word_temp = "".join(word_temp)
+        word_temp = list(word_temp) #The string is converted to a list for shuffling the letters around
+        random.shuffle(word_temp) #Shuffle shuffle shuffle shuffle
+        word_temp = "".join(word_temp) #The shuffled word is converted back to a string
 
-        word_temp = word[0] + word_temp + word[-1]
+        word_temp = word[0] + word_temp + word[-1] #The word is given its first and last letters
         
-        print(word_temp)
-        wrong_answers.append([word_temp])
-        print(wrong_answers)
+        #print(word_temp)
+        wrong_answers.append([word_temp]) #Appends the word as a list with 1 element so that the TTS is able to read it
+        #The TTS will read what's in here. If you want the TTS to say something, this is the code that gives it what to say
+        #print(wrong_answers)
 
     return wrong_answers
 
 #------Start------
 def main():
     #Sets up the initial values for the quiz
-    #words = Words_for_Quiz() #Place where the user inputs the amount and which words they'd like to practice
-    #Code from issue #90 (User input for quiz)
     num_quizes = 0 #Tracks how many quizes the user's taken
     num_incorrect = 0 #How many quizes the user got incorrect
-    continue_quiz = True
-    is_correct = True
+    continue_quiz = True #Used to check if the user wants to continue taking the quiz
+    is_correct = True #Used to verify if the user selected the correct answer
 
-    #print(Get_Random_English_Word())
-    #print(Get_Random_Top_nth_Common_Word(1000))
-
-    #The quiz will continue until all the words inputted are used
+    #The quiz will continue until the user explicitly confirms they do not wish to keep going
     while (continue_quiz):
         num_quizes += 1
+        
+        if is_correct: #Checks whether the answer is correct.
+            #If true, it will load up the next word
+            #If false, it will not load up the next word
 
-        #Checks whether the answer is correct.
-        #If true, it will go into the next word of the list.
-        #If false, it will not go into the next word in the list, as it will continue asking the user the same word until it's correct
-        if is_correct:
-            word = Get_Random_English_Word()
+            word = Get_Random_English_Word() #The name of the function says it -_-
         
         options = Generate_Evil_Words(word)
-        #Shuffles the answers around
-        random.shuffle(options)
+        random.shuffle(options)  #Shuffles the answers around
 
         #Actual quiz stuff
         print("Select the correct pronunciation for " + word)
@@ -102,10 +99,8 @@ def main():
         print("3. " + options[2][0])
         print("4. " + options[3][0])
 
-        TTS_Speak(options[0])
-        TTS_Speak(options[1])
-        TTS_Speak(options[2])
-        TTS_Speak(options[3])
+        for i in range(4): #The Text to Speech reads out each option
+            TTS_Speak(options[i])
 
         #Prompts the user to select a valid answer
         while True:
@@ -152,7 +147,6 @@ def main():
     print("Number of Correct Answers: " + str(num_quizes-num_incorrect) + "/" + str(num_quizes))
 
 #Note: The code can be modified to fit in UI and interactive elements later down the line.
-#Note: This quiz only works if the user inputs: "destiny","defenestration","thou","coke", or "bass"
 #This can changed in the future once a database or a word bank is properly implemented/added (which should contain, at least, English words with their IPAs)
 
 main()
