@@ -1,5 +1,5 @@
-import json
-import os
+# import json
+# import os
 import random
 from User_input_for_quiz import *
 from Random_Word_Picker import *
@@ -11,15 +11,15 @@ from I_want_to_finish_this_shit import *
 #Initializes
 #cmu_dict = cmudict.dict()
 
-#Finds the file where the dictionary is with all the English words with its corresponding IPAs
-project_dir = os.path.dirname(os.path.realpath('__file__')) #Finds the project's directory
-#print(file_dir)
+# #Finds the file where the dictionary is with all the English words with its corresponding IPAs
+# project_dir = os.path.dirname(os.path.realpath('__file__')) #Finds the project's directory
+# #print(file_dir)
 
-file_dir = os.path.join(project_dir, 'QuizPython\\test.json') #Grabs the file from the projects directory as a reference
-#print(file_name)
+# file_dir = os.path.join(project_dir, 'QuizPython\\test.json') #Grabs the file from the projects directory as a reference
+# #print(file_name)
 
-with open(file_dir, "r")as f:
-    data = json.load(f)
+# with open(file_dir, "r")as f:
+#     data = json.load(f)
 
 #Functions
 
@@ -35,16 +35,14 @@ def Select_Word(word_list:list) -> str:
     return selected_word
 
 #Grabs the IPA of the selected word via a database (can be from a JSON, equivalent, or an outsourced platform)
+# Modified: Grabs the IPA of the selected word from the local word bank.
 def Get_Word_IPA(selected_word) -> str:
-    #Currently it's programmed to grab the selected word's IPA from a JSON for testing.
-    #This function can be modified to grab the IPA from a different source.
-    return data[selected_word]["IPA"]
+    return wb.get_ipa(selected_word)
 
 #Grabs the selected word's syllables via a database (can be from a JSON, equivalent, or an outsourced platform)
-def Get_Word_Syllables(seletected_word:str) -> str:
-    #Currently it's programmed to grab the selected word's syllables from a JSON for testing.
-    #This function can be modified to grab the IPA from a different source.
-    return data[seletected_word]["Syllables"]
+# Modified: Grabs the selected word's syllables from the local word bank.
+def Get_Word_Syllables(selected_word:str) -> str:
+    return wb.get_syllables(selected_word) or []
 
 #Function where it generates wrong answers for the problem by randomizing each syllable position and characters
 def Generate_Evil_Words(word:str) -> list:

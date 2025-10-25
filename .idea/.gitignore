@@ -1,3 +1,6 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+tools/.cache_freedict/
+__pycache__/
+*.pyc

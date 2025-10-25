@@ -1,5 +1,6 @@
 import nltk
 nltk.download('cmudict')
+import data_access as wb
 from nltk.corpus import cmudict
 
 cmu_dict = cmudict.dict()
@@ -11,7 +12,7 @@ def Words_for_Quiz() -> list:
 #nltk.download('cmudict', quiet=True)
 
 # Loads the CMU Pronouncing Dictionary
-    cmu_dict = cmudict.dict()
+#    cmu_dict = cmudict.dict()
 
 
 
@@ -49,7 +50,7 @@ def Words_for_Quiz() -> list:
         word = input("Enter word: ")
 
     # Makes all of the user's entries lowercase and removes whitespaces to avoid errors.
-        normalized = word.lower().strip()
+        normalized = wb.normalize(word)
 
         if (Word_Checker(normalized)==False) or (normalized in wordList):
             print("Please enter a valid word.")
