@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
-import '../loading_screens/loading_screens_factory.dart';
+// import '../loading_screens/loading_screens_factory.dart';
 import '../loading_screens/loading_screens_manager.dart';
+import 'package:app/core/services/supabase_client.dart';
+
+import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -22,6 +25,8 @@ class _SigninPageState extends State<SigninPage> {
   final _passCtrl = TextEditingController();
   final _confirmPassCtrl = TextEditingController();
 
+  late final void Function(bool) _loadingListener;
+
   bool _loading = false;
   final LoadingSystem _loadingSystem = LoadingSystem();
 
@@ -29,28 +34,35 @@ class _SigninPageState extends State<SigninPage> {
   void initState() {
     super.initState();
     // Optional: Add listener for loading state changes
-    _loadingSystem.addLoadingListener((isLoading) {
+    _loadingListener = (isLoading) {
       if (mounted) {
         setState(() {
           _loading = isLoading;
         });
       }
-    });
+    };
+    _loadingSystem.addLoadingListener(_loadingListener);
   }
 
   @override
   void dispose() {
-    _loadingSystem.removeLoadingListener((isLoading) {});
+    _loadingSystem.removeLoadingListener(_loadingListener);
+    _nameCtrl.dispose();
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    _confirmPassCtrl.dispose();
     super.dispose();
   }
 
   void _showSnack(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg),
-      backgroundColor: AppColors.primary,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.h)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: AppColors.primary,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.h)),
+      ),
+    );
   }
 
   // =============================================================================
@@ -71,49 +83,63 @@ class _SigninPageState extends State<SigninPage> {
   // =============================================================================
 
   Future<void> _onSignIn() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
-    // Show loading with random strategy (FACTORY + STRATEGY PATTERNS)
     _loadingSystem.showLoading(
       context: context,
-      message: 'Signing you in...',
+      message: 'Creating your account...',
       contextType: 'authentication',
     );
 
     try {
-      await Future.delayed(const Duration(milliseconds: 800));
+      final name = _nameCtrl.text.trim();
+      final email = _emailCtrl.text.trim();
+      final password = _passCtrl.text;
+
+      // 1) Create auth user in Supabase
+      final res = await AppSupabase.client.auth.signUp(
+        email: email,
+        password: password,
+        data: {'full_name': name}, // stored in user_metadata
+      );
+
+      // 2) If we already have a session (depends on your email-confirmation setting),
+      //    create/update the row in `profiles`.
+      if (res.user != null && res.session != null) {
+        await AppSupabase.client.from('profiles').upsert({
+          'id': res.user!.id, // auth uid
+          'email': email,
+          'full_name': name,
+          'updated_at': DateTime.now().toIso8601String(),
+        });
+      }
 
       if (!mounted) return;
-
-      // Simulate successful login process
-      await Future.delayed(const Duration(milliseconds: 1200));
-
       _loadingSystem.hideLoading(context);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-      );
-
+      if (res.session != null) {
+        // Email confirmation OFF → we have a session; go to app
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+        );
+      } else {
+        // Email confirmation ON → no session yet
+        _showSnack(
+          "We've sent a confirmation link to $email. Tap it to finish creating your account.",
+        );
+        // You can optionally pop back to login here if you prefer:
+        // Navigator.of(context).pop();
+      }
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      _loadingSystem.hideLoading(context);
+      _showSnack(e.message);
     } catch (e) {
+      if (!mounted) return;
       _loadingSystem.hideLoading(context);
-
-      // ... later for error state, use specific strategy
-      final errorStrategy = LoadingStrategyFactory.createPulsatingWave(
-        primaryColor: AppColors.danger, // Customized for error state
-      );
-
-      _loadingSystem.showLoading(
-        context: context,
-        message: 'Authentication Failed',
-        customStrategy: errorStrategy, // STRATEGY PATTERN: Different behavior
-      );
-
-      await Future.delayed(const Duration(milliseconds: 1500));
-
-      _loadingSystem.hideLoading(context);
-
-      _showSnack(e.toString().replaceFirst('Exception: ', ''));
-
+      _showSnack('Unexpected error. Please try again.');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -130,7 +156,9 @@ class _SigninPageState extends State<SigninPage> {
       unicode: true,
       caseSensitive: false,
     );
-    if (!nameReg.hasMatch(value)) return 'Please enter a valid name';
+    if (!nameReg.hasMatch(value)) {
+      return 'Please enter a valid name';
+    }
     return null;
   }
 
@@ -138,31 +166,31 @@ class _SigninPageState extends State<SigninPage> {
     final value = v?.trim() ?? '';
     if (value.isEmpty) return 'Please enter your email';
     final emailReg = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-    if (!emailReg.hasMatch(value)) return 'Please enter a valid email address';
+    if (!emailReg.hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
     return null;
   }
 
   String? _validatePass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';
-    final RegExp passReg = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&*$%#])[A-Za-z\d&*$%#]{8,}$');
-    if (!passReg.hasMatch(value)) return 'Password must include: \n1. Lower case letters, \n2. At least 1 special character (& * % #), \n3. At least 1 Upper case letter.';
+    final RegExp passReg = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&*$%#])[A-Za-z\d&*$%#]{8,}$',
+    );
+    if (!passReg.hasMatch(value)) {
+      return 'Password must include: \n1. Lower case letters, \n2. At least 1 special character (& * % #), \n3. At least 1 Upper case letter.';
+    }
     return null;
   }
 
-  String? _validateConfPass(String? v){
+  String? _validateConfPass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please confirm your password';
-    if (value != _passCtrl.text) return 'Passwords do not match';
+    if (value != _passCtrl.text) {
+      return 'Passwords do not match';
+    }
     return null;
-  }
-
-  void _onCreateAccount() {
-    _showSnack('Account creation feature coming soon!');
-  }
-
-  void _onForgotPassword() {
-    _showSnack('Password reset feature coming soon!');
   }
 
   @override
@@ -187,50 +215,54 @@ class _SigninPageState extends State<SigninPage> {
               ),
 
               SizedBox(height: 2.h),
-              
+
               Text(
-                  "Create your account.",
+                "Create your account.",
                 style: AppTextStyles.welcomeSubtitle.copyWith(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.normal,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
-              
+
               SizedBox(height: 2.h),
 
               Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
-                    text: 'Already have an account? ', // Default style for this part
-                    style: AppTextStyles.welcomeSubtitle.copyWith(
+                  text:
+                      'Already have an account? ', // Default style for this part
+                  style: AppTextStyles.welcomeSubtitle.copyWith(
+                    fontSize: 15.sp,
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Click here',
+                      style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
-                        color: Colors.white.withOpacity(0.9),
-                        fontWeight: FontWeight.normal
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white.withValues(alpha: 0.9),
+                        decorationThickness: 0.15.h,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pop();
+                        },
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Click here',
-                        style: AppTextStyles.welcomeSubtitle.copyWith(
-                            fontSize: 15.sp,
-                            color: Colors.white.withOpacity(0.9),
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          decorationColor: Colors.white.withOpacity(0.9),
-                          decorationThickness: 0.15.h
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () { Navigator.of(context).pop(); },
+                    TextSpan(
+                      text:
+                          ' to continue your pronunciation journey', // This part will be bold
+                      style: AppTextStyles.welcomeSubtitle.copyWith(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
-                      TextSpan(
-                        text: ' to continue your pronunciation journey', // This part will be bold
-                        style: AppTextStyles.welcomeSubtitle.copyWith(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
-                    ]
+                    ),
+                  ],
                 ),
               ),
 
@@ -245,7 +277,7 @@ class _SigninPageState extends State<SigninPage> {
                   borderRadius: BorderRadius.circular(4.w),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.cardShadow.withOpacity(0.3),
+                      color: AppColors.cardShadow.withValues(alpha: 0.3),
                       blurRadius: 6.w,
                       offset: const Offset(0, 15),
                     ),
@@ -256,7 +288,6 @@ class _SigninPageState extends State<SigninPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      
                       // Full name
                       myTextField(
                         controller: _nameCtrl,
@@ -332,32 +363,34 @@ class _SigninPageState extends State<SigninPage> {
                               borderRadius: BorderRadius.circular(3.w),
                             ),
                             elevation: 4,
-                            shadowColor: AppColors.success.withOpacity(0.3),
+                            shadowColor: AppColors.success.withValues(
+                              alpha: 0.3,
+                            ),
                           ),
                           child: _loading
                               ? SizedBox(
-                            width: 6.w,
-                            height: 6.w,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
+                                  width: 6.w,
+                                  height: 6.w,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
                               : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.person_add, size: 18.sp),
-                              SizedBox(width: 3.w),
-                              Text(
-                                'Create New Account',
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.person_add, size: 18.sp),
+                                    SizedBox(width: 3.w),
+                                    Text(
+                                      'Create New Account',
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
 
@@ -388,7 +421,7 @@ class _SigninPageState extends State<SigninPage> {
                     Text(
                       'Master English pronunciation with interactive lessons',
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 11.sp,
                       ),
                       textAlign: TextAlign.center,

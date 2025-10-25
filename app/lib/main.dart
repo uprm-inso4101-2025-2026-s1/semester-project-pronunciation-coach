@@ -12,17 +12,14 @@ import 'core/services/session_manager.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  /*to be able to run must use in terminal:
-  flutter run \
-  --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
-  */
+  // Terminal command to run with environment variables:
+  // flutter run \
+  // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
+  // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
 
   try {
     await AppSupabase.init();
   } catch (e) {
-    // Just print and exit
-    // ignore: avoid_print
     print('Supabase init failed: $e');
     return;
   }
@@ -41,24 +38,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return ChangeNotifierProvider(
-          create: (_) => MyAppState(),
-          child: MaterialApp(
-            title: 'Pronunciation Coach',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              fontFamily: 'SF Pro Display',
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: const WelcomeScreen(),
-            routes: {
-              '/login': (context) => const LoginPage(),
-              '/dashboard': (context) => const MainNavigationScreen(),
-              '/audio-quiz': (context) => const AudioQuizHomePage(),
-              '/quiz': (context) => const AudioQuizHomePage(),
-            },
+        return MaterialApp(
+          title: 'Pronunciation Coach',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: 'SF Pro Display',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          home: const WelcomeScreen(),
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/dashboard': (context) => const MainNavigationScreen(),
+            '/audio-quiz': (context) => const AudioQuizHomePage(),
+            '/quiz': (context) => const AudioQuizHomePage(),
+          },
         );
       },
     );
