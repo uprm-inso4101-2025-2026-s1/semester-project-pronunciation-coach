@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'features/dashboard/pages/user_progress_dashboard.dart';
 import 'package:sizer/sizer.dart';
-import 'features/dashboard/pages/login_page.dart';
+import 'features/log_in/pages/login_page.dart';
+import 'features/dashboard/pages/user_progress_dashboard.dart';
 import 'features/dashboard/widgets/welcome_screen.dart';
-
+import 'features/quiz/pages/audio_quiz_home_page.dart';
 import 'pace selector/pace_selector.dart';
+import 'core/services/supabase_client.dart';
+import 'core/services/session_manager.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Terminal command to run with environment variables:
+  // flutter run \
+  // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
+  // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+
+  try {
+    await AppSupabase.init();
+  } catch (e) {
+    print('Supabase init failed: $e');
+    return;
+  }
+
+  await SessionManager.instance.start();
+
   runApp(
     ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
   );
@@ -21,110 +38,104 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return ChangeNotifierProvider(
-          create: (_) => MyAppState(),
-          child: MaterialApp(
-            title: 'Pronunciation Coach',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              fontFamily: 'SF Pro Display',
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: const WelcomeScreen(),
-            routes: {
-              '/login': (context) => const LoginPage(),
-              '/dashboard': (context) => const MainNavigationScreen(),
-            },
+        return MaterialApp(
+          title: 'Pronunciation Coach',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: 'SF Pro Display',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          home: const WelcomeScreen(),
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/dashboard': (context) => const MainNavigationScreen(),
+            '/audio-quiz': (context) => const AudioQuizHomePage(),
+            '/quiz': (context) => const AudioQuizHomePage(),
+          },
         );
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  final List<Widget> _pages = [
+    const UserProgressDashboard(),
+    const AudioQuizHomePage(),
+    const ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.headphones),
+            label: 'Quiz',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Profile'),
+        backgroundColor: Colors.blue,
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+          children: [
+            const Icon(Icons.person, size: 80, color: Colors.blue),
+            const SizedBox(height: 16),
+            const Text(
+              'Profile Page',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Coming soon...',
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

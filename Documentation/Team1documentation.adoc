@@ -1,269 +1,706 @@
 = Pronunciation Coach – First Milestone
-:author: Fabian L. Velez Ocasio; Team 1
-:revdate: 19 September 2025
-:sectnums:
+:author: Team 1: Alondra Arce, Fabian Velez, Julian A. Toro, Aryam Z. Diaz, Kevin Lara, Kevin Ruiz
+:revdate: Update: October 24, 2025 (In Progress)
 :toc:
 :toclevels: 3
 :title-page:
+
 
 == 1. Informative Part
 
 === 1.1 Teams
 
-[cols="1,3,3"]
+[cols="1,1,3",options="header"]
 |===
-| **Team** | **Member Name** | **Role & Key Contributions**
+| Name | Role | Key Contributions
 
-
-| 1
 | Alondra Arce
-| Team Leader & Architecture Specialist. Project coordination, architecture design, routing and state management.
+| Team Lead for Team 1
+| Led project coordination and architecture design; researched phenomena and concepts methodology for domain analysis; implemented account creation page with visual consistency and form validation features
 
-| 1
 | Fabian Velez
-| Researcher & Documentation Lead. Domain research, UI/UX component system design, requirements analysis.
+| Documentation Lead for Team 1
+| Implemented complete authentication flow (WelcomeScreen → LoginPage); designed advanced loading system with Factory, Strategy, Observer patterns; documented architecture transitions
 
-| 1
 | Julian A. Toro
-| Security & Research. Research on secure authentication methods and pipeline design.
+| Developer for Team 1
+| Built HomeScreen with UserInfoBox and WelcomeBackBox components; implemented user profile display and home navigation structure
 
-| 1
-| Aryam Z. Diaz
-| Research & Quality Assurance. Research on login UI structure, input validation, and CI/CD/performance strategies.
+| Aryam Diaz
+| Developer for Team 1
+| Established authentication specifications with DoR/DoD criteria; implemented login validation and error handling in LoginPage
 
-| 1
-| Jaydiemar Vazquez
-| Architecture & Design. Research on clean architecture, state management, and home screen visual design.
-
-| 1
 | Kevin Lara
-| Backend Research. Research on backend-as-a-service solutions (Firebase vs. Supabase).
+| Developer for Team 1
+| Developed requirements quality framework; implemented SharedPreferences persistence for user data in dashboard
 
-| 1
 | Kevin Ruiz
-| Data & Offline Strategy. Research on data fetching, caching, and offline strategies for the Home Page.
+| Developer for Team 1
+| Created HomeScreen activity sections and modular widgets; implemented responsive UI components and navigation flows
 |===
 
-=== 1.2 Current Situation, Needs, Ideas
+== 1.2 Current Situation, Needs, Ideas
 
-==== 1.2.1 Current Situation
+=== 1.2.1 Current Situation
+For native Spanish speakers, learning and pronouncing English words and phrases presents a significant challenge due to fundamental differences between the two languages. Mobile applications often suffer from processing delays during authentication and data operations, leading to user frustration. (added) Existing applications typically use generic loading indicators that provide no educational value during wait times.
 
-For native Spanish speakers, learning and pronouncing English words and phrases presents a significant challenge
-due to fundamental differences between the two languages. English, with its influences from Latin, Germanic, and Nordic 
-languages, features complex and often inconsistent rules, which can be daunting for learners. The primary difficulties are 
-rooted in pronunciation, where specific phonetic elements in English simply do not exist in Spanish. These challenges, 
-while not always a complete barrier to being understood, can hinder professional integration and career advancement 
-for ambitious non-native speakers.  
+Source: "Why is English pronunciation difficult for a Spanish speaker?", London Speech Workshop, https://londonspeechworkshop.com/why-is-english-pronunciation-difficult-spanish-speaker/
 
-_Source: "Why is English pronunciation difficult for a Spanish speaker?",  
- London Speech Workshop, https://londonspeechworkshop.com/why-is-english-pronunciation-difficult-spanish-speaker/_
-
-==== 1.2.2 Needs
-
+=== 1.2.2 Needs
 * Need for accessible pronunciation practice outside classroom settings
-* Requirement for immediate, objective feedback on pronunciation attempts
+* Requirement for immediate, objective feedback on pronunciation attempts  
 * Need for structured progression through phonetically challenging sounds
-* Demand for visual reinforcement to complement auditory learning
+* (added) **Need for engaging visual feedback during application processing delays**
+* (added) **Requirement for educational content utilization during loading periods**
 * Need for tracking personal progress and identifying persistent difficulties
 * Requirement for motivational systems to maintain consistent practice habits
 
-==== 1.2.3 Ideas
-
+=== 1.2.3 Ideas
 * Interactive pronunciation exercises with instant feedback mechanism
 * Phoneme-focused practice modules targeting specific sound challenges
 * Visual comparison interface between learner and native speaker pronunciation
 * Progressive difficulty system that adapts to user improvement
+* (added) **Advanced loading system with multiple visual strategies and pronunciation facts**
+* (added) **Enterprise design patterns for maintainable loading component architecture**
 * Achievement system to encourage regular practice and milestone completion
 * Personalized practice recommendations based on performance analytics
 
-=== 1.3 Scope, Span, and Synopsis
+== 1.3 Scope, Span, and Synopsis
 
-==== 1.3.1 Scope and Span
+=== 1.3.1 Scope and Span
+*Scope*:: Mobile-based language learning application specializing in pronunciation improvement. The project focuses on building the front-end visual and architectural foundation, **(added) including an advanced loading component system using enterprise design patterns.**
 
-*Scope:* Mobile-based language learning application specializing in pronunciation improvement.  
-The first milestone focuses exclusively on building the front-end visual and architectural foundation.
+*Span*:: **(changed) The specific implementation covers English pronunciation training for Spanish-speaking adults, developing the application shell with authentication flows, dashboard navigation, reusable UI components, (added) and an enterprise-grade loading system implementing Factory, Strategy, Singleton, Observer, Decorator, and Template Method patterns. Technical implementation uses Flutter/Dart with Provider state management and SharedPreferences for local persistence.**
 
-*Span:* English pronunciation training for Spanish-speaking adults.  
-This initial phase spans the development of the application's shell, including login and home screens,  
-a reusable component library, and core app infrastructure (routing, state management).  
+=== 1.3.2 Synopsis
+(changed) **Pronunciation Coach is a Flutter mobile application helping Spanish-speaking adults improve English pronunciation. The project develops a robust frontend architecture with authentication flows, dashboard navigation, (added) and an advanced loading system using multiple design patterns. The solution provides engaging pronunciation practice with (added) educational content during processing delays through reusable component architecture.**
 
-The project encompasses mobile development with Flutter, initial architecture setup, and UI/UX design.
+== 1.4 Derived Goals
+* Development of a reusable Flutter component library for educational applications
+* Establishment of a scalable codebase using clean architecture principles
+* Creation of a robust authentication flow for secure backend integration
+* (added) **Implementation of an advanced loading system using Factory, Strategy, Singleton, Observer, Decorator, and Template Method patterns**
+* Implementation of a responsive and accessible design system
 
-==== 1.3.2 Synopsis
+== 1.5 Agile Development Process
 
-Pronunciation Coach is a Flutter-based mobile application designed to help Spanish-speaking adults improve their English pronunciation through targeted exercises and AI-driven feedback. The project involves developing a robust architecture for handling authentication flows, creating a comprehensive component system for consistent UI/UX, implementing speech analysis functionality, and designing an engaging activity-based learning progression.  
+=== 1.5.1 Sprint Structure and Work Organization
 
-The solution aims to make pronunciation practice accessible, effective, and engaging through technology-enabled learning tools.
+The project follows an agile methodology with structured sprints to manage development activities:
 
-=== 1.4 Other Activities (Beyond Coding)
+*Sprint Duration*: Two-week sprints with clear planning, execution, and review phases
+*Product Backlog*: Maintained as a prioritized list of features and user stories, including:
 
-* Domain Engineering: Research on English phonetics and common Spanish speaker challenges.
-* Requirements Analysis: User needs assessment and feature prioritization for the UI/UX.
-* Architecture Design: Design of application routing structure, state management, and project organization following clean architecture principles.
-* Research: Comprehensive analysis of secure authentication, backend solutions, data caching, CI/CD, and visual design.
-* Documentation: Management of project plans, research findings, and technical specifications.
+- Authentication system implementation
+- Home screen and dashboard development  
+- Advanced loading system with design patterns
+- User progress tracking and gamification
 
-=== 1.5 Derived Goals
+*Sprint Backlogs*: Feature-oriented selections from the product backlog, focused on delivering working increments:
 
-* Development of a reusable Flutter component library for educational applications.
-* Establishment of a scalable and maintainable codebase using clean architecture principles.
-* Creation of a robust authentication flow that can be integrated with a secure backend.
-* Implementation of a responsive and accessible design system.
+- Sprint 1: User authentication flow and welcome screens
+- Sprint 2: Home screen components and navigation structure
+- Sprint 3: Loading system implementation and performance optimization
+
+=== 1.5.2 Backlog Management
+
+*Feature-Oriented Backlogs*: All backlog items are expressed as user-facing features rather than technical tasks:
+
+- "As a user, I want to log in securely so I can access my personalized content"
+- "As a user, I want to see engaging loading animations so waiting times feel productive"
+- "As a user, I want to track my pronunciation progress so I can see improvement over time"
+- "As a new user, I want to create an account with proper validation so I can start using the application securely"**
+- "As a user, I want clear error messages when form validation fails so I can correct my input quickly"**
+
+*Prioritization*: Features are prioritized based on user value and architectural dependencies, with authentication and core navigation as foundation elements.
+
+=== 1.5.3 Sprint Review and Planning
+
+*Sprint Reviews*: Conducted at the end of each sprint to demonstrate completed features and gather feedback
+*Sprint Planning*: Team collaboratively selects features for the next sprint based on:
+- Completed dependencies from previous sprints
+- User value and learning impact
+- Technical complexity and risk assessment
+- Resource availability and team capacity
+
+*Definition of Done*: Each feature must pass specific criteria including code review, testing, documentation, and integration before considered complete.
+
+This agile approach ensures continuous delivery of value to users while maintaining flexibility to adapt to new insights and requirements throughout the project lifecycle.
 
 == 2. Descriptive Part
 
 === 2.1 Domain Description
 
 ==== 2.1.1 Domain Rough Sketch
+(changed) *Interview with Maria (28-year-old marketing manager from Guadalajara):* "When I say 'three' in meetings, my American clients often hear 'tree'. I've tried language apps but they just show red or green - no explanation. Yesterday I spent 15 minutes repeating 'thought, through, theater' into my phone, but I still can't hear the difference. The app freezes for 3 seconds every time I log in - I just stare at a spinning circle."
 
-_(This section is a preliminary sketch based on the research made by team 1)_
+*Observation at language center:* Carlos (45-year-old teacher from Medellín) practices daily at 7 AM. He struggles with vowel contrasts: "My students laugh when I say 'beach' because it sounds like 'bitch'. I need to see where my tongue should be. The apps I use take forever to load and show generic error messages."
 
-* User: Spanish-speaking adult, motivated to learn, may be frustrated with current tools.
-* Goal: Improve English pronunciation.
-* Activity: Logs into app, sees progress, selects a practice module, records their voice, receives feedback, tracks improvement.
-* System: Mobile app, requires login, has home dashboard, practice sections, profile.
-* Data: User account, authentication tokens, progress data, practice history.
+*Technical testing note:* Authentication with basic loading indicators takes 2.8 seconds on Samsung A32. Users frequently tap multiple times during delays, thinking the app crashed.
 
 ==== 2.1.2 Terminology
 
-* Phoneme: The smallest unit of sound in a language that can distinguish words (e.g., /θ/ in "think" vs. /s/ in "sink").
-* Authentication: The process of verifying a user's identity (e.g., via email and password).
-* JWT (JSON Web Token): A compact, URL-safe means of representing claims to be transferred between two parties, used for securing authentication.
-* State Management: The handling of the state of the application (e.g., whether a user is logged in or not) in a predictable way.
-* Component Library: A collection of reusable UI elements (buttons, input fields, cards) that ensure design consistency.
-* Routing/Navigation: The mechanism for moving between different screens in the application.
+* **Language Learner**: A person practicing English pronunciation, facing specific sound challenges based on their native language
+* **Pronunciation Attempt**: A learner's spoken effort to produce specific English phonemes or words, recorded for analysis
+* **Practice Session**: A time-bounded period of pronunciation exercises with defined learning objectives
+* **Feedback Response**: Information provided about pronunciation accuracy, including specific guidance on articulation improvements
+* **Learning Streak**: Consecutive days of completed practice sessions, serving as motivation indicator
+* **Phoneme**: The smallest unit of sound that distinguishes words (e.g., Spanish speakers often replace English /θ/ with /t/ or /s/)
+* **Processing Delay**: Period when system performs operations and user waits for response
+* **Educational Loading**: Display of pronunciation facts and engaging animations during processing operations
 
-==== 2.1.3 Domain Terminology vs Rough Sketch
+==== 2.1.3 Domain Concepts and Narrative
+(changed) Language learners like Maria and Carlos engage in daily pronunciation practice to overcome specific sound challenges. Maria, a marketing manager, struggles with the /θ/ sound in words like "three" and "thought" - her clients frequently misunderstand her. Carlos, a teacher preparing to move abroad, faces vowel contrast issues where "beach" sounds like "bitch" to his students.
 
-The terminology was derived from analyzing the needs of the domain (language learning) and the technical solution (a Flutter app).  
-Terms like *Phoneme* and *Progress* come from the educational domain, while *JWT*, *State Management*, and *Routing* are technical concepts required to build a secure and functional application shell.
+When learners practice, they record pronunciation attempts and receive feedback responses that highlight specific articulation issues. The system tracks their progress through learning streaks and accuracy measurements. During the 2-3 second authentication and processing delays that occur in mobile applications, learners currently experience unproductive waiting periods where they simply stare at generic loading indicators.
 
-==== 2.1.4 Narrative
+The domain involves consistent daily engagement, where learners maintain motivation through visible progress tracking and specific, actionable feedback on their most challenging phonemes. The educational value extends even to processing delays, where pronunciation facts can reinforce learning objectives.
 
-A user, Maria, wants to improve her English pronunciation.  
-She downloads the Pronunciation Coach app. Upon opening it, she is presented with a clean login screen. She enters her credentials and is securely authenticated. She arrives at her home page, which welcomes her and shows her current learning streak, recent progress, and suggests a new sound to practice. The app is intuitive, responsive, and makes her feel confident to start her practice session.
+==== 2.1.4 Domain Functions and Behaviors
+*Functions:*
 
-==== 2.1.5 Events, Actions, Behaviors
+- `evaluatePronunciation(attempt: AudioRecording, target: PhonemeSequence) → FeedbackResponse` - Compares learner's speech to native pronunciation model
+- `trackProgress(learner: LanguageLearner, session: PracticeSession) → ProgressUpdate` - Records practice activity and updates learning metrics
+- `maintainMotivation(streak: LearningStreak, accuracy: ImprovementRate) → EngagementLevel` - Determines appropriate encouragement and challenge levels
 
-* Event: User presses the "Login" button.
-* Action: The system validates the input fields and sends credentials to the authentication service.
-* Behavior: If authentication is successful, the application's state changes to "authenticated," and the user is navigated to the Home screen.
+*Events:*
 
-==== 2.1.6 Function Signatures
+- Pronunciation attempt completed (instantaneous)
+- Practice session started (instantaneous) 
+- Learning streak extended (instantaneous)
+- Processing operation began (instantaneous)
 
-(High-level domain operations, not final code)
+*Actions:*
 
-* `authenticateUser(credentials: Credentials): AuthenticationResult` - Validates user credentials.
-* `navigateTo(screen: ScreenName)` - Changes the current view of the application.
-* `getUserProfile(userId: UserID): UserProfile` - Retrieves the user's data for display on the home screen.
+- Learner records speech sample (takes time, has actor)
+- System analyzes pronunciation accuracy (takes time)
+- User navigates between practice modules (takes time, has actor)
+
+*Behaviors:*
+
+- Learner conducts daily practice: allocates time → reviews pronunciation models → attempts reproduction → incorporates feedback → updates progress
+- System provides progressive feedback: analyzes attempt → identifies specific errors → suggests improvements → tracks accuracy trends
+- Loading system maintains engagement: detects processing operation → selects strategy → displays animation with facts → transitions to result
 
 === 2.2 Requirements
 
-==== 2.2.1 User Stories, Epics, Features
+==== 2.2.1 User Stories and Epics
+*Epic: Pronunciation Improvement*
 
-*Epic: User Authentication*
-* As a new user, I want to log in with my email and password so that I can access my personalized learning content.
-* As a user, I want to see clear error messages if my login fails so that I can correct my information.
-* As a user, I want my session to be managed securely so that my account remains protected.
+- As a Spanish-speaking professional, I want specific feedback on my 'th' pronunciation so that clients understand "three" instead of "tree"
+- As a visual learner, I want to see tongue placement diagrams for difficult sounds so that I can physically reproduce correct articulation
+- As a consistent student, I want to track my accuracy improvements over time so that I stay motivated to practice daily
 
-*Epic: Application Foundation*
-* As a developer, I want a well-organized project structure following clean architecture so that the codebase is maintainable and scalable.
-* As a developer, I want a central state management solution so that the user's authentication state can be shared across the app.
-* As a developer, I want a library of reusable UI components so that we can ensure design consistency and speed up development.
+*Epic: Engaging Application Experience*
 
-*Epic: Home Dashboard*
-* As a user, I want to see a welcoming home screen after logging in so that I can understand my current progress and see what to do next.
-* As a user, I want the app to work offline and show my cached data so that I can still see my progress without an internet connection.
+- As an impatient user, I want to learn pronunciation tips during authentication delays so that waiting time becomes educational
+- As a frequent app user, I want varied visual feedback during processing so that the experience remains fresh and engaging
+- As a learner, I want consistent application performance so that I can focus on pronunciation rather than technical issues
 
-==== 2.2.2 Personas
+*Epic: Secure Authentication Experience*
 
-* *Maria, the Motivated Learner*: A 28-year-old professional from Mexico. She uses English at work but is self-conscious about her accent. She is tech-savvy and uses her phone for most tasks. She needs structured, feedback-driven practice she can fit into her busy schedule.
-* *Carlos, the Consistent Student*: A 45-year-old teacher from Colombia preparing to move to an English-speaking country. He is dedicated but has limited time. He needs clear goals, progress tracking, and motivation to practice daily.
+- As a new user, I want to create an account with visual consistency and proper navigation so I can start learning quickly
+- As a user, I want immediate feedback on form validation errors so I can correct mistakes before submission
+- As a security-conscious user, I want strong password requirements and clear error messages so my account remains protected*
 
 ==== 2.2.3 Domain Requirements
+*DR1*: The system must provide means for associating each pronunciation attempt with specific accuracy measurements derived from comparison to native speaker models
 
-1. The system must restrict access to user-specific data until identity is verified (authentication).
-2. The system must provide a clear and intuitive path for the user to begin their learning activities.
-3. The system must present information (progress, goals) in a motivating and visually clear way.
+*Justification*: Maria needs quantifiable feedback to understand why "three" sounds like "tree" to her clients
+
+*DR2*: The system must provide means for tracking consecutive practice days and maintaining visible streak records  
+
+*Justification*: Carlos relies on consistent progress indicators to maintain his 6 AM practice routine
+
+*DR3*: The system must provide means for displaying educational content during all processing operations exceeding 1 second
+
+*Justification*: Both Maria and Carlos currently experience 2-3 second delays where they receive no learning value
 
 ==== 2.2.4 Interface Requirements
+*IR1*: The system must provide means for learners to record pronunciation attempts through device microphone input
 
-* The login screen shall have input fields for email and password.
-* The login screen shall have a button with the label "Login".
-* The home screen shall display a welcome message containing the user's name.
-* The application shall transition from the login screen to the home screen upon successful authentication.
+*Observed Phenomenon*: Maria records herself saying "thought, through, theater" for evaluation
+
+*IR2*: The system must provide means for displaying educational content and animations during authentication processing
+
+*Observed Phenomenon*: User views loading animation with "'th' requires tongue between teeth" tip during 2.8-second delay
+
+*IR3*: The system must provide means for showing visual comparisons between learner and native pronunciation waveforms
+
+*Observed Phenomenon*: Carlos sees overlay highlighting differences in his "beach" pronunciation
+
+*IR4*: The system must provide means for consistent visual theming across authentication screens including signup forms*
+
+*Observed Phenomenon*: Users expect visual consistency between login and account creation flows
+
+*IR5*: The system must provide means for real-time form validation with clear error messaging*
+
+*Observed Phenomenon*: Users need immediate feedback when entering invalid email formats or weak passwords*
 
 ==== 2.2.5 Machine Requirements
 
-* The application shall render correctly on iOS and Android devices.
-* The initial app startup time shall be under 400ms on a mid-range device.
-* The UI shall respond to user input (e.g., button presses) within 16ms for a smooth 60fps experience.
+*MR1*: The system shall process pronunciation evaluation and provide feedback within 3 seconds on mid-range mobile devices
+
+*MR2*: The system shall maintain 60fps animation performance during loading states across target devices
+
+*MR3*: The system shall support offline practice session tracking with cloud synchronization when connectivity resumes
+
+*MR4*: The system shall handle authentication operations within 3 seconds while displaying educational content
 
 === 2.3 Implementation
 
-==== 2.3.1 Selected Fragments of Implementation
+==== 2.3.1 Selected Implementation Architecture
+The application implements a clear separation between educational domain logic and technical infrastructure:
 
+*Domain Layer*: Manages core pronunciation learning concepts including PracticeSession, PronunciationAttempt, and FeedbackGenerator that directly represent Maria and Carlos's real-world learning activities
+
+*Application Layer*: Coordinates authentication flows, progress tracking, and loading system management using enterprise design patterns to address processing delay challenges
+
+*Infrastructure Layer*: Provides audio recording, speech analysis, and data persistence capabilities
+
+*Presentation Layer*: Implements Flutter widgets for user interface with specific attention to engaging loading states
+
+The loading system addresses observed user frustration with processing delays by implementing:
+
+- *Factory Pattern* for creating context-appropriate loading strategies
+- *Strategy Pattern* for runtime switching between educational animations  
+- *Observer Pattern* for coordinated UI updates during loading states
+- *Template Method Pattern* for consistent pronunciation fact display
+
+This architecture ensures that Maria's specific struggle with /θ/ sounds and Carlos's vowel contrast challenges remain the central focus, while technical implementation addresses the observed issues with processing delays and generic loading indicators.
+
+=== 2.4 Algebras and Closure Under Operations
+
+==== 2.4.1 Loading Strategy Creation
+
+*Initial Approach*:
+createLoadingStrategy(type: String): LoadingStrategy
+
+*Closed Operation*:
+createLoadingStrategy(context: OperationContext): LoadingStrategy
+
+
+*Improvement*: The function evolved from taking a simple string type to accepting an `OperationContext` object that encapsulates all relevant parameters (operation type, duration, user preferences, error state). This closure allows the function to handle all loading strategy creation scenarios without modification, including error states, authentication flows, and data processing operations. The `OperationContext` can be extended with new properties without changing the function signature.
+
+==== 2.4.2 User Authentication Flow
+
+*Initial Approach*:
+authenticateUser(email: String, password: String): Boolean
+
+
+*Closed Operation*:
+authenticateUser(credentials: AuthCredentials): AuthenticationResult
+
+
+*Improvement*: The function now returns an `AuthenticationResult` that can represent success, failure, or partial states (like requiring additional verification). The `AuthCredentials` object can be extended to support multiple authentication methods (OAuth, biometrics, etc.) without modifying the core authentication logic. This closure ensures all possible authentication outcomes are handled within the same algebraic structure.
+
+==== 2.4.3 Pronunciation Assessment
+
+*Initial Approach*:
+evaluatePronunciation(audio: AudioRecording, target: String): Float
+
+*Closed Operation*:
+evaluatePronunciation(attempt: PronunciationAttempt): FeedbackResult
+
+
+*Improvement*: The function now takes a `PronunciationAttempt` that encapsulates audio data, metadata, and context, and returns a `FeedbackResult` that can contain multiple types of feedback (accuracy scores, specific error highlights, improvement suggestions). This closure allows the system to handle various assessment scenarios - from simple word pronunciation to complex sentence intonation - using the same algebraic structure, while providing room for future extensions like visual feedback or comparative analysis.
+
+==== 2.4.4 Design Benefits
+
+The application of closure under operations provides several key benefits:
+
+*Extensibility*: Each operation can accommodate new scenarios without signature changes
+
+*Composability*: Closed operations can be combined to form more complex behaviors
+
+*Maintainability*: The algebraic structure ensures consistent error handling and state management
+
+*Domain Faithfulness*: The operations better represent real-world language learning phenomena where outcomes are often complex and multi-faceted
+
+These closed operations form an algebra that accurately models the pronunciation learning domain while providing a robust foundation for future feature development.
+
+=== 2.5 Petri Nets for Competing Processes
+
+==== 2.5.1 Authentication and Loading System Competition
+
+The application models competing processes using Petri nets to handle resource contention during user authentication and loading operations:
+
+[plantuml, auth-loading-petri, png]
 ----
-lib/
+@startuml
+!pragma layout smetana
 
-├── core/
+title Authentication and Loading System Petri Net
 
-│   ├── constants/
+state "User Input Ready" as P1
+state "Authentication Service Available" as P2
+state "Loading System Available" as P3
+state "UI Thread Available" as P4
+state "Authentication Processing" as P5
+state "Loading Animation Active" as P6
+state "Authentication Complete" as P7
 
-│   ├── widgets/ (reusable components)
+P1 --> T1 : Submit Credentials
+T1 --> P5
+P2 --> T1
+T1 --> P2
 
-│   └── providers/ (state management e.g., SessionController)
+P5 --> T2 : Auth Success
+T2 --> P7
+P5 --> T3 : Auth Processing
+T3 --> P6
 
-├── features/
+P3 --> T4 : Start Loading
+T4 --> P6
+P4 --> T4
+T4 --> P4
 
-│   ├── auth/
+P6 --> T5 : Operation Complete
+T5 --> P3
+T5 --> P1
 
-│   │   ├── screens/
-
-│   │   │   └── login_screen.dart
-
-│   │   └── widgets/
-
-│   └── home/
-
-│       ├── screens/
-
-│       │   └── home_screen.dart
-
-│       └── widgets/
-
-└── main.dart
+@enduml
 ----
 
-Screen Sketches:
+==== 2.5.2 Competing Resource Access
 
-* *Login Screen*: Based on Research #45 and #50. Features a centered card with a header, email field, password field (with toggle), a prominent "Login" button, and secondary links ("Forgot Password?", "Sign Up").
-* *Home Screen*: Based on Research #42 and #48. Features a welcome message, a "Progress Card" displaying a streak, a "Daily Challenge" card with a CTA button, and a bottom navigation bar.
+*UI Thread Competition*: The authentication process and loading animation compete for the main UI thread resources
+
+*Network Resource Contention*: Multiple authentication attempts may compete for limited network bandwidth
+
+*Memory Resource Sharing*: Loading strategies and pronunciation facts compete for memory allocation during transitions
+
+==== 2.5.3 Critical Sections and Synchronization
+
+The Petri net identifies critical sections where processes compete for shared resources:
+
+- *Authentication Token Validation*: Exclusive access required for security
+- *Loading Strategy Selection*: Factory pattern operations require exclusive resource access
+- *User Session Management*: Concurrent session updates must be synchronized
+
+This modeling helps identify potential deadlocks and ensures proper resource management in the pronunciation coaching application.
+
+==== 2.5.4 UI Component Sequence Flows
+
+The application's UI components follow structured sequence flows to manage widget creation and rendering. The following sequence diagrams illustrate the interaction patterns for key home screen components:
+
+===== HomeScreen Component Sequence
+
+The main home screen orchestrates multiple widget components in a hierarchical build process:
+
+.HomeScreen Build Sequence
+image::homescreen-sd.svg[HomeScreen Sequence Diagram, scaledwidth=95%]
+
+
+*Sequence Flow*: User → HomeScreenState → Scaffold → AppBar → Column → [UserInfoBox, WelcomeBackBox, HomeSections] → ActivityCard components
+
+*Key Interactions*: 
+
+- Scaffold builds the overall page structure with AppBar and body Column
+- Column sequentially builds UserInfoBox, WelcomeBackBox, and HomeSections
+- HomeSections creates multiple ActivityCard widgets for Lessons, Daily Practice, and Weekly Goals
+- Each component returns built widgets up the hierarchy for final rendering
+
+===== UserInfoBox Component Sequence
+
+The user profile component manages user information display with statistical data:
+
+.UserInfoBox Component Sequence
+image::userinfobox-sd.svg[UserInfoBox Sequence Diagram, scaledwidth=95%]
+
+*Component Hierarchy*: UserInfoBox → Container → Column → Row → [CircleAvatar, Text, LayoutBuilder]
+
+*Data Flow*: 
+
+- Receives user data (name, avatarURL, proficiencyLevel) from parent
+- Builds avatar section with CircleAvatar and user name Text
+- Creates statistical displays using LayoutBuilder for responsive stat boxes
+- Returns complete user profile widget with activity metrics
+
+===== WelcomeBackBox Component Sequence
+
+.WelcomeBackBox Component Sequence
+image::welcomebackbox-sd.svg[WelcomeBackBox Sequence Diagram, scaledwidth=95%]
+
+*Interactive Elements*: 
+
+- Displays personalized greeting message with user name
+- Creates button Row with ElevatedButton (Continue Lesson) and OutlinedButton (Fast Practice)
+- Handles button press events for navigation to practice flows
+- Maintains consistent styling through BoxDecoration and theme properties
+
+===== Resource Coordination in UI Flows
+
+The sequence diagrams reveal several resource coordination points:
+
+*Build Process Synchronization*: Widget trees are built depth-first, requiring coordinated state management
+*Layout Calculation Contention*: Multiple components compete for layout calculation resources during build phases
+*Event Handling Coordination*: Button press events must be synchronized with navigation state changes
+*Memory Management*: Image loading (avatars) competes with layout calculation for memory resources
+
+This structured approach ensures predictable rendering performance and prevents race conditions in the UI component hierarchy.
+
+=== 2.6 Requirements Conflict Resolution Framework
+
+This section implements a structured playbook for detecting, classifying, and resolving requirements conflicts to eliminate ambiguity early and protect downstream design and testing.
+
+==== 2.6.1 Conflict Taxonomy and Classification
+
+*Terminology Clash*:: Different words for same concept (e.g., "attempt" vs "try")
+*Designation Clash*:: Same word for different concepts (e.g., "User" meaning student vs staff)
+*Structure Clash*:: Same concept with different structure (e.g., point vs interval timing)
+*Weak Conflict*:: Unsatisfiable under boundary conditions but resolvable by adjustment
+*Strong Conflict*:: Intrinsically contradictory and cannot be simultaneously satisfied
+
+==== 2.6.2 Resolution Workflow
+
+The team follows a 5-step process for conflict resolution:
+
+. *Find Overlaps*: Cluster statements touching same phenomena, actors, or data
+. *Detect & Classify*: Identify clash type(s) and strength; document boundary conditions
+. *Document*: Open Conflict Log entry with ID, statements, type, and boundary
+. *Generate Candidates*: Apply resolution tactics to create ≥3 candidate solutions
+. *Evaluate & Select*: Choose option preserving maximum value and NFRs
+. *Propagate*: Update glossary/requirements; add verification hooks and link evidence
+
+==== 2.6.3 Resolution Tactics
+
+*Specialize*:: Split ambiguous terms (User → StudentUser/StaffUser)
+*Restore*:: Clarify sequence and structure ("Submit within 5 minutes, then feedback for 15 minutes")
+*Weaken*:: Add exception clauses ("unless accommodation applies")
+*Avoid*:: Prevent boundary conditions through UI/UX design
+*Drop*:: Remove redundant or low-value conflicting requirements
+
+==== 2.6.4 Applied Examples
+
+*Case: User Role Ambiguity*
+* Conflict: "User can view quiz feedback" vs "User can manage grading rubrics"
+* Resolution: Specialize → StudentUser (read-only feedback) vs StaffUser (rubric management)
+* Verification: Role-based tests for permission boundaries
+
+*Case: Timing Structure Conflict*  
+* Conflict: "Submit within 5 minutes" (interval) vs "Feedback until 12:05" (point)
+* Resolution: Restore → "Submit within 5 minutes; feedback available for 15 minutes after submission"
+* Verification: Boundary tests at time limits
+
+==== 2.6.5 Conflict Log Template
+
+[source,markdown]
+----
+# Conflict Log
+## CF-<ID>: <Short Title>
+**Statements**: <Requirement IDs or quotes>
+**Clash Type**: Terminology | Designation | Structure  
+**Strength**: Weak (boundary: <condition>) | Strong
+**Candidates**: 
+1. <tactic + summary>
+2. <tactic + summary> 
+3. <tactic + summary>
+**Decision**: <chosen option + rationale>
+**Impacted Artifacts**: <req IDs, glossary, tests>
+**Verification**: <test names / manual steps>
+**Links**: <issue, PRs, documentation>
+----
+
+==== 2.6.6 Traceability and Verification
+
+* Each conflict receives unique CF-ID referenced in PRs and commits
+* Conflict Log maintained in repository with complete decision history
+* Every resolution includes verification hooks (unit tests, widget tests, or manual checks)
+* PR evidence includes before/after snippets of requirements and glossary updates
 
 == 3. Analytic Part
 
 === 3.1 Concept Analysis
+(changed) The domain analysis revealed that Spanish-speaking learners like Maria and Carlos face specific pronunciation challenges with English phonemes like /θ/ and vowel contrasts. These real-world phenomena translated into core domain concepts: **Pronunciation Attempt**, **Feedback Response**, and **Practice Session**. The observation that users frequently encounter 2-3 second processing delays led to the concept of **Educational Loading States** - turning unproductive waiting periods into learning opportunities.
 
-The rough sketch identified key domain entities: User, Practice, and Progress.  
-These abstractions led to the terminology that defines both the problem space (phoneme, feedback) and the solution space (authentication, routing, state).  
+The implementation introduced technical concepts through enterprise design patterns: **Factory Pattern** for creating loading strategies, **Strategy Pattern** for interchangeable animations, and **Observer Pattern** for state coordination. These patterns emerged directly from user frustration with generic loading indicators observed during authentication testing.
 
-The narrative connects these concepts into a coherent user journey, validating that the initial implementation focus (authentication and home screen) correctly establishes the foundation for the user's interaction with the app.  
-
-The technical research (auth security, architecture) ensures the solution space concepts are implemented robustly.
+The narrative connects Maria's specific struggle with "th" sounds to the system's ability to provide targeted feedback, while the loading system addresses her impatience during authentication. This validates that both educational content and technical performance are essential concepts in the pronunciation coaching domain.
 
 === 3.2 Validation and Verification
 
-*Testing Plans:* As per Research #14 and #19, testing will include:
+*Testing Plans:*
 
-** Unit Tests: For the SessionController state changes (login/logout logic).
-** Widget Tests: For Login Screen input validation and button enabling/disabling.
-** Integration Tests: For the complete flow from Login to Home navigation.
+** Unit Tests: For authentication logic in SessionController (changed) and LoadingStrategyFactory to verify correct strategy selection based on operation context
+** Widget Tests: For LoginPage input validation (changed) and PulsatingWaveWidget animation rendering with pronunciation facts
+** Integration Tests: For complete authentication flow (changed) including loading state transitions and educational content display
 
-*Walkthroughs:* The team will conduct peer code reviews on all pull requests to verify architecture adherence and code quality.
+*Walkthroughs:* The team conducts peer code reviews on all pull requests (changed) with specific focus on loading system design pattern implementation and pronunciation fact integration
 
 *Scenarios used for validation:*
 
-1. Happy Path: Enter valid credentials -> Login button enables -> Press button -> Navigates to Home.
-2. Validation Error: Enter invalid email format -> Error message appears under field -> Login button remains disabled.
-3. Authentication Error: Enter incorrect credentials -> SnackBar with generic error message appears.
-4. Offline Scenario: With no internet, the Home screen should still render any cached data.
+1. Happy Path: Enter valid credentials -> Login button enables -> Press button -> (changed) Pulsating wave animation displays with "The 'th' sound requires tongue between teeth" -> Navigates to Home
+2. Validation Error: Enter "user@invalid" format -> "Invalid email format" appears under field -> Login button remains disabled
+3. Authentication Error: Enter incorrect credentials -> (changed) Error-specific loading strategy with red pulsating animation displays -> SnackBar shows "Invalid credentials" message
+4. Performance Testing: (added) Verify loading animations maintain 60fps on mid-range devices during 3-second authentication process
+5. Educational Content: (added) Confirm pronunciation facts display correctly across different loading strategies and provide domain-relevant language learning tips
+6. Account Creation Flow: Navigate to signup -> Verify visual consistency with login screen -> Test form validation for name, email, password fields -> Confirm navigation back to login works*
+7. Form Validation: Test invalid email formats -> Verify password strength requirements -> Confirm submit button disabled until all validations pass -> Check error message display
+
+== 4. Logbook
+
+=== Development Activities
+
+.Feature Implementation
+[cols="1,2,3", options="header"]
+|===
+| Pull Request | Description | Github Link
+
+| #108
+| Addition and Changes for Login Page UI + Welcome Screen + Sign In Button Functional
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/pull/108
+
+| #125
+| Home Page UI + Implementation to AppBar
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/pull/125
+
+| #191
+| Adding Loading Screen Function
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/pull/191
+
+
+| #231
+| Sign In page implementation and user validation
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/pull/231
+
+| #235
+| Implement session persistence and token refresh management
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/pull/235
+|===
+
+.Lecture Topic Tasks
+[cols="1,2,3,4", options="header"]
+|===
+| Issue | Description | Github Link | Documentation Section
+
+| #118
+| [Lecture Topic Task]: Draft of the Architecture Flow for Documentation
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/118
+| 2.3.1 Selected Implementation Architecture
+
+| #155
+| [Lecture Topic Task]: Definition of Ready/Done & Acceptance Criteria for Authentication (Agile)
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/155
+| 1.6 Agile Development Process
+
+| #157
+| [Lecture Topic Task]: Applying Phenomena and Concepts research
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/157
+| 2.1 Domain Description
+
+| #159
+| [Lecture Topic Task]: Quality & Traceability Checklist
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/159
+| 2.2 Requirements
+
+| #166
+| [Lecture Topic Task]: Sequence diagrams of the homepage and its methods using PlantUML
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/166
+| 2.5.4 UI Component Sequence Flows
+
+| #183
+| [Lecture Topic Task]: Update 2.3.1 Section with Software Design Patterns of Loading Screens
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/183
+| 2.3.1 Selected Implementation Architecture
+
+| #225
+| [Lecture Topic Task]: Resolving Requirements Conflicts with a Structured Playbook
+| https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/225
+| 2.6 Requirements Conflict Resolution Framework
+
+|===
+
+.Lecture Topic Application Results
+[cols="2,3", options="header"]
+|===
+| Expected Benefits | Achieved Benefits
+
+| *Domain Engineering & Concept Analysis (#157)*
+| 
+
+| Clear mapping between real-world pronunciation learning and software concepts
+| Successful identification of core domain entities (Pronunciation Attempt, Feedback Response) enabling focused feature development
+
+| Better understanding of user needs through phenomena analysis
+| Specific user challenges identified (Maria's "th" sound issues, Carlos's vowel contrasts)
+
+| Improved domain terminology consistency
+| Established clear definitions separating domain concepts from implementation concerns
+
+| *Software Design Patterns (#183)*
+| 
+
+| Maintainable, extensible loading system architecture
+| Factory and Strategy patterns allowed easy addition of new loading animations without modifying existing code
+
+| Reduced code duplication through pattern reuse
+| Single loading interface with multiple interchangeable strategies
+
+| Improved system coordination
+| Observer pattern enabled real-time UI updates across components during loading states
+
+| *Requirements Conflict Resolution (#225)*
+| 
+
+| Early detection of inconsistent requirements
+| Systematic approach to identifying terminology, designation, and structure clashes before implementation
+
+| Structured resolution process
+| 5-step workflow with multiple candidate solutions ensures deliberate decision-making
+
+| Reduced ambiguity in specifications
+| Clear classification and resolution tactics eliminate contradictory requirements
+
+| Improved traceability
+| Conflict Log provides audit trail for requirement decisions and verification evidence
+
+| *Agile Processes & Quality Assurance (#155)*
+| 
+
+| Clear development criteria through DoR/DoD
+| Reduced rework through upfront acceptance criteria definition
+
+| Improved team coordination and planning
+| Structured sprint planning with feature-oriented backlogs
+
+| Consistent quality standards
+| Established validation processes for authentication flows and user stories
+
+| *Requirements Engineering (#159)*
+| 
+
+| Higher quality requirements through systematic validation
+| Reduced ambiguity in feature specifications and interface requirements
+
+| Better traceability from needs to implementation
+| Clear mapping between domain requirements and technical implementation
+
+| Measurable success criteria
+| Established concrete machine requirements for performance and reliability
+
+| *Software Architecture (#118)*
+| 
+
+| Scalable, maintainable application structure
+| Successful implementation of layered architecture supporting feature modularity
+
+| Clear separation of concerns
+| Domain logic separated from technical infrastructure in implementation
+
+| Future-proof design
+| Architecture supports easy integration of new pronunciation features and backend services
+
+| *System Modeling & Design (#166)*
+| 
+
+| Clear understanding of system behavior
+| Identified potential performance bottlenecks in authentication flow
+
+| Visual representation of competing processes
+| Petri net modeling revealed resource contention in loading system
+
+| Improved system design decisions
+| Sequence diagrams informed component interaction patterns
+
+|===
