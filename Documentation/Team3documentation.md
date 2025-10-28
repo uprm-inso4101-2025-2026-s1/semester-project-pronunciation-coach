@@ -369,6 +369,18 @@ Classification of the Domain Entities in section 2.1.4 as atomic or composed:
 
 ---
 
+#### 2.1.9 Domain Constraints
+
+| ID    | Constraint (one sentence)                                                                                                                                           | Domain Rationale                                                                                                                  |
+|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| DC-01 | Voice recordings are personal/biometric data and must not be used beyond coaching (e.g., analytics/model training) without explicit, revocable consent from the user. | Privacy/consent is a legal constraint (e.g., data-protection regimes) independent of implementation choices.                     |
+| DC-02 | Recording or storing a minor’s voice requires documented parental/guardian consent; without it, only ephemeral processing is allowed and nothing is retained.         | Youth privacy/consent obligations arise from the real-world legal domain, not software design.                                   |
+| DC-03 | The app cannot diagnose or treat speech/voice disorders and must not present itself as a medical device; it provides coaching feedback only.                         | Health-regulatory boundary: coaching vs. clinical diagnosis is a domain line that must always hold.                               |
+| DC-04 | A pronunciation variant recognized as correct within the selected dialect/variety may not be marked incorrect; feedback must align with accepted phonetic standards for that variety. | Linguistic norms constrain what counts as “correct” in the real world for each dialect.                                          |
+| DC-05 | Automated assessments are invalid under inadequate acoustic conditions (e.g., low signal-to-noise or absent mic calibration) and must be blocked or caveated until conditions meet a minimum quality threshold. | Measurement validity: you cannot reliably judge articulation without sufficient acoustic quality.                                 |
+| DC-06 | Coaching sessions must include rest intervals and avoid excessive vocal load, particularly for children and users reporting strain or illness.                        | Human physiological limits: overuse risks exist irrespective of how the software is implemented.                                  |
+| DC-07 | Distributed practice materials (texts, audio, images) must be public-domain, user-provided, or properly licensed; unlicensed redistribution is prohibited.           | Copyright/licensing constraints exist in the content domain that govern redistribution regardless of software implementation.     |
+
 ### 2.2 Requirements
 
 #### 2.2.1 User Stories and Epics
