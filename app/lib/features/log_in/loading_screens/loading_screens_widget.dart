@@ -1,19 +1,19 @@
-// loading_system/loading_screens_widget.dart
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
+import '../../../core/constants/sound_service.dart';  // ✅ From constants folder
 import 'loading_screens_facts.dart';
 
 /// ===========================================================================
 /// TEMPLATE METHOD PATTERN: Base Loading Widget
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Defines the skeleton of loading widgets in base class
 /// - Lets subclasses override specific steps without changing structure
 /// - Provides common functionality (facts display, layout) to all loaders
-/// 
+///
 /// TEMPLATE METHODS:
 /// - build(): Defines overall widget structure (template)
 /// - buildLoadingContent(): Abstract method for subclasses to implement (hook)
@@ -24,29 +24,32 @@ abstract class BaseLoadingWidget extends StatefulWidget {
   final String message;
   final String? fact;
 
-  const BaseLoadingWidget({
-    Key? key,
-    required this.message,
-    this.fact,
-  }) : super(key: key);
+  const BaseLoadingWidget({Key? key, required this.message, this.fact})
+    : super(key: key);
 
-   /// =========================================================================
+  /// =========================================================================
   /// TEMPLATE METHOD: Abstract hook for subclasses
   /// Subclasses must implement this to provide their specific loading content
   /// =========================================================================
   Widget buildLoadingContent(BuildContext context);
-  
+
   @override
   BaseLoadingWidgetState createState();
 }
 
-abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget> extends State<T> {
+abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget>
+    extends State<T> {
   String? currentFact;
 
   @override
   void initState() {
     super.initState();
     currentFact = widget.fact ?? PronunciationFacts.getRandomFact();
+
+    // SOUND EFFECT: Play fact reveal sound when fact is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SoundService().playFactReveal();
+    });
   }
 
   // Abstract method that subclasses must implement
@@ -89,9 +92,11 @@ abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget> extends State
         children: [
           Row(
             children: [
-              Icon(Icons.lightbulb_outline, 
-                   color: AppColors.primary, 
-                   size: 16.sp),
+              Icon(
+                Icons.lightbulb_outline,
+                color: AppColors.primary,
+                size: 16.sp,
+              ),
               SizedBox(width: 2.w),
               Text(
                 'Pronunciation Tip',
@@ -140,7 +145,8 @@ class PulsatingWaveWidget extends BaseLoadingWidget {
   }
 }
 
-class PulsatingWaveWidgetState extends BaseLoadingWidgetState<PulsatingWaveWidget> 
+class PulsatingWaveWidgetState
+    extends BaseLoadingWidgetState<PulsatingWaveWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -148,14 +154,18 @@ class PulsatingWaveWidgetState extends BaseLoadingWidgetState<PulsatingWaveWidge
   @override
   void initState() {
     super.initState();
+    // SOUND EFFECT: Play strategy change sound when this loader starts
+    SoundService().playStrategyChange();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..repeat(reverse: true);
-    
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -195,10 +205,10 @@ class PulsatingWaveWidgetState extends BaseLoadingWidgetState<PulsatingWaveWidge
                           border: Border.all(
                             color: widget.primaryColor.withOpacity(
                               0.4 * (1 - (_animation.value * (index + 1) / 5)),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     );
                   }),
                   Center(
@@ -253,13 +263,17 @@ class ProgressStagesWidget extends BaseLoadingWidget {
   }
 }
 
-class ProgressStagesWidgetState extends BaseLoadingWidgetState<ProgressStagesWidget> 
+class ProgressStagesWidgetState
+    extends BaseLoadingWidgetState<ProgressStagesWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    // SOUND EFFECT: Play strategy change sound when this loader starts
+    SoundService().playStrategyChange();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -295,7 +309,7 @@ class ProgressStagesWidgetState extends BaseLoadingWidgetState<ProgressStagesWid
           ),
         ),
         SizedBox(height: 3.h),
-        
+
         // Progress stages
         Column(
           children: widget.stages.asMap().entries.map((entry) {
@@ -312,7 +326,9 @@ class ProgressStagesWidgetState extends BaseLoadingWidgetState<ProgressStagesWid
                     width: 3.w,
                     height: 3.w,
                     decoration: BoxDecoration(
-                      color: isActive ? widget.activeColor : widget.inactiveColor,
+                      color: isActive
+                          ? widget.activeColor
+                          : widget.inactiveColor,
                       shape: BoxShape.circle,
                     ),
                     child: isCurrent
@@ -332,9 +348,13 @@ class ProgressStagesWidgetState extends BaseLoadingWidgetState<ProgressStagesWid
                     child: Text(
                       stage,
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: isActive ? widget.activeColor : widget.inactiveColor,
+                        color: isActive
+                            ? widget.activeColor
+                            : widget.inactiveColor,
                         fontSize: 11.sp,
-                        fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                        fontWeight: isActive
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                     ),
                   ),
@@ -385,23 +405,25 @@ class MorphingShapeWidget extends BaseLoadingWidget {
   }
 }
 
-class MorphingShapeWidgetState extends BaseLoadingWidgetState<MorphingShapeWidget> 
+class MorphingShapeWidgetState
+    extends BaseLoadingWidgetState<MorphingShapeWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  int _lastShapeIndex = -1;
 
   @override
   void initState() {
     super.initState();
+    // SOUND EFFECT: Play strategy change sound when this loader starts
+    SoundService().playStrategyChange();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 3000),
       vsync: this,
     )..repeat();
-    
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
+
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
   }
 
   @override
@@ -417,9 +439,20 @@ class MorphingShapeWidgetState extends BaseLoadingWidgetState<MorphingShapeWidge
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
-            final shapeIndex = (_animation.value * widget.shapeSequence.length).floor() % 
+            final shapeIndex =
+                (_animation.value * widget.shapeSequence.length).floor() %
                 widget.shapeSequence.length;
-            final progress = (_animation.value * widget.shapeSequence.length) % 1;
+            final progress =
+                (_animation.value * widget.shapeSequence.length) % 1;
+
+            // SOUND EFFECT: Play subtle sound on major shape changes
+            if (shapeIndex != _lastShapeIndex) {
+              _lastShapeIndex = shapeIndex;
+              // Play a very subtle sound for shape transitions
+              if (SoundService().areSoundsEnabled) {
+                SoundService().playStrategyChange();
+              }
+            }
 
             return Container(
               width: 20.w,
@@ -481,7 +514,7 @@ class TextTypingWidget extends BaseLoadingWidget {
   }
 }
 
-class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget> 
+class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<int> _textAnimation;
@@ -490,17 +523,20 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
   @override
   void initState() {
     super.initState();
+    // SOUND EFFECT: Play strategy change sound when this loader starts
+    SoundService().playStrategyChange();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 4000),
       vsync: this,
     )..repeat();
-    
+
     _updateTextAnimation();
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
-          _currentMessageIndex = 
+          _currentMessageIndex =
               (_currentMessageIndex + 1) % widget.messageSequence.length;
         });
         _updateTextAnimation();
@@ -511,15 +547,16 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
   }
 
   void _updateTextAnimation() {
-    _textAnimation = IntTween(
-      begin: 0,
-      end: widget.messageSequence[_currentMessageIndex].length,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.7, curve: Curves.easeInOut),
-      ),
-    );
+    _textAnimation =
+        IntTween(
+          begin: 0,
+          end: widget.messageSequence[_currentMessageIndex].length,
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.7, curve: Curves.easeInOut),
+          ),
+        );
   }
 
   @override
@@ -562,7 +599,7 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
           builder: (context, child) {
             final currentText = widget.messageSequence[_currentMessageIndex]
                 .substring(0, _textAnimation.value);
-            
+
             return Column(
               children: [
                 Text(

@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'loading_screens_core.dart';
 import 'loading_screens_factory.dart';
 import '../../../core/constants/colors.dart';
+import '../../../core/constants/sound_service.dart';
 
 /// ===========================================================================
 /// SINGLETON PATTERN + OBSERVER PATTERN + DECORATOR PATTERN
@@ -76,6 +77,9 @@ class LoadingSystem {
     // DECORATOR PATTERN: Enhance the configuration
     final config = _createEnhancedConfiguration(strategy, contextType);
     
+    // SOUND EFFECT: Play loading start sound
+    SoundService().playLoadingStart();
+    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -92,6 +96,9 @@ class LoadingSystem {
 
   /// Hide loading overlay
   void hideLoading(BuildContext context) {
+    // SOUND EFFECT: Play loading success sound
+    SoundService().playLoadingSuccess();
+    
     Navigator.of(context, rootNavigator: true).pop();
     _notifyLoadingListeners(false);
   }
