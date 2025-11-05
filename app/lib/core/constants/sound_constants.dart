@@ -2,17 +2,17 @@
 /// Sound effect asset paths and configuration constants
 class SoundConstants {
   // Asset paths
-  static const String loadingStart = 'core/sounds/loading/start.mp3';
-  static const String loadingSuccess = 'core/sounds/loading/sucess.mp3';
-  static const String strategyChange = 'core/sounds/loading/strategy_change.mp3';
-  static const String factReveal = 'core/sounds/loading/fact_reveal.mp3';
-  static const String buttonClick = 'core/sounds/UI/button_click.mp3';
-  static const String transition = 'core/sounds/UI/transition.mp3';
+  static const String loadingStart = 'sounds/loading/start.mp3';
+  static const String loadingSuccess = 'sounds/loading/sucess.mp3'; 
+  static const String strategyChange = 'sounds/loading/strategy_change.mp3';
+  static const String factReveal = 'sounds/loading/fact_reveal.mp3';
+  static const String buttonClick = 'sounds/UI/button_click.mp3';
+  static const String transition = 'sounds/UI/transition.mp3';
   
   // Volume levels
-  static const double defaultVolume = 100;
-  static const double lowVolume = 0;
-  static const double highVolume = 100;
+  static const double defaultVolume = 1.0;
+  static const double lowVolume = 0.5;
+  static const double highVolume = 1.0;
   
   // Sound categories
   static const List<String> loadingSounds = [
