@@ -154,8 +154,6 @@ class PulsatingWaveWidgetState
   @override
   void initState() {
     super.initState();
-    // SOUND EFFECT: Play strategy change sound when this loader starts
-    SoundService().playStrategyChange();
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
@@ -271,8 +269,6 @@ class ProgressStagesWidgetState
   @override
   void initState() {
     super.initState();
-    // SOUND EFFECT: Play strategy change sound when this loader starts
-    SoundService().playStrategyChange();
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -415,8 +411,6 @@ class MorphingShapeWidgetState
   @override
   void initState() {
     super.initState();
-    // SOUND EFFECT: Play strategy change sound when this loader starts
-    SoundService().playStrategyChange();
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 3000),
@@ -444,15 +438,6 @@ class MorphingShapeWidgetState
                 widget.shapeSequence.length;
             final progress =
                 (_animation.value * widget.shapeSequence.length) % 1;
-
-            // SOUND EFFECT: Play subtle sound on major shape changes
-            if (shapeIndex != _lastShapeIndex) {
-              _lastShapeIndex = shapeIndex;
-              // Play a very subtle sound for shape transitions
-              if (SoundService().areSoundsEnabled) {
-                SoundService().playStrategyChange();
-              }
-            }
 
             return Container(
               width: 20.w,
@@ -523,8 +508,6 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
   @override
   void initState() {
     super.initState();
-    // SOUND EFFECT: Play strategy change sound when this loader starts
-    SoundService().playStrategyChange();
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 4000),

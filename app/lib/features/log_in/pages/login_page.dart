@@ -73,41 +73,49 @@ class _LoginPageState extends State<LoginPage> {
   // =============================================================================
 
   Future<void> _onSignIn() async {
-    if (!_formKey.currentState!.validate()) return;
+  if (!_formKey.currentState!.validate()) return;
 
-    _loadingSystem.showLoading(
-      context: context,
-      message: 'Signing you in...',
-      contextType: 'authentication',
+  _loadingSystem.showLoading(
+    context: context,
+    message: 'Signing you in...',
+    contextType: 'authentication',
+  );
+
+  try {
+    final email = _emailCtrl.text.trim();
+    final password = _passCtrl.text;
+
+    // 1) Sign in with Supabase
+    await AppSupabase.client.auth.signInWithPassword(
+      email: email,
+      password: password,
     );
 
-    try {
-      final email = _emailCtrl.text.trim();
-      final password = _passCtrl.text;
+    // After an await, guard context usage
+    if (!mounted) return;
+    
+    // For successful login: Use delayed hide with success sound
+    await _loadingSystem.hideLoadingWithSuccess(context);
 
-      // 1) Sign in with Supabase
-      await AppSupabase.client.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
-
-      // After an await, guard context usage
-      if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+    );
+  } on AuthException catch (e) {
+    if (mounted) {
+      // For failed login: Hide immediately without success sound
       _loadingSystem.hideLoading(context);
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-      );
-    } on AuthException catch (e) {
-      if (mounted) _loadingSystem.hideLoading(context);
-      _showSnack(e.message);
-    } catch (e) {
-      if (mounted) _loadingSystem.hideLoading(context);
-      _showSnack('Unexpected error. Please try again.');
-    } finally {
-      if (mounted) setState(() => _loading = false);
     }
+    _showSnack(e.message);
+  } catch (e) {
+    if (mounted) {
+      // For failed login: Hide immediately without success sound
+      _loadingSystem.hideLoading(context);
+    }
+    _showSnack('Unexpected error. Please try again.');
+  } finally {
+    if (mounted) setState(() => _loading = false);
   }
+}
 
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';

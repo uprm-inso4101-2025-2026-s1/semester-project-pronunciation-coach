@@ -10,8 +10,9 @@ import '../../quiz/pages/audio_quiz_home_page.dart'; // CHANGED: Import audio qu
 import '../widgets/daily_challenge.dart';
 import '../widgets/progress_visualization_widget.dart';
 import '../widgets/recent_activity_timeline.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/features/profile/pages/profile_page.dart';
+import '../../../core/constants/sound_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,12 +58,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       const HomeScreen(),
       const UserProgressDashboard(),
       const DailyChallengePage(),
-      const AudioQuizHomePage(), // CHANGED: Use AudioQuizHomePage instead of QuizHomePage
+      const AudioQuizHomePage(),
       const ProfilePage(),
     ];
   }
 
   void _onTabTapped(int index) {
+    // Play transition sound when changing tabs
+    SoundService().playTransition();
+
     setState(() {
       _currentIndex = index;
     });
@@ -115,7 +119,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: 'Challenge',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.headphones_outlined), // CHANGED: Better icon for audio quiz
+              icon: Icon(Icons.headphones_outlined),
               activeIcon: Icon(Icons.headphones),
               label: 'Quiz',
             ),
@@ -202,10 +206,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Daily Challenge Widget
-              DailyChallengeWidget(
-                currentStreak: 5,
-                totalXp: 1250,
-              ),
+              DailyChallengeWidget(currentStreak: 5, totalXp: 1250),
               const SizedBox(height: 20),
 
               // Display Selected Pace

@@ -63,7 +63,5 @@ class _myTextFieldState extends State<myTextField> {
       ),
       validator: widget.validator,
     );
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }

@@ -83,65 +83,65 @@ class _SigninPageState extends State<SigninPage> {
   // =============================================================================
 
   Future<void> _onSignIn() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  if (!_formKey.currentState!.validate()) {
+    return;
+  }
 
-    _loadingSystem.showLoading(
-      context: context,
-      message: 'Creating your account...',
-      contextType: 'authentication',
+  _loadingSystem.showLoading(
+    context: context,
+    message: 'Creating your account...',
+    contextType: 'authentication',
+  );
+
+  try {
+    final name = _nameCtrl.text.trim();
+    final email = _emailCtrl.text.trim();
+    final password = _passCtrl.text;
+
+    // 1) Create auth user in Supabase
+    final res = await AppSupabase.client.auth.signUp(
+      email: email,
+      password: password,
+      data: {'full_name': name}, // stored in user_metadata
     );
 
-    try {
-      final name = _nameCtrl.text.trim();
-      final email = _emailCtrl.text.trim();
-      final password = _passCtrl.text;
+    // 2) If we already have a session (depends on your email-confirmation setting),
+    //    create/update the row in `profiles`.
+    if (res.user != null && res.session != null) {
+      await AppSupabase.client.from('profiles').upsert({
+        'id': res.user!.id, // auth uid
+        'email': email,
+        'full_name': name,
+        'updated_at': DateTime.now().toIso8601String(),
+      });
+    }
 
-      // 1) Create auth user in Supabase
-      final res = await AppSupabase.client.auth.signUp(
-        email: email,
-        password: password,
-        data: {'full_name': name}, // stored in user_metadata
+    if (!mounted) return;
+    
+    // For account creation: Hide immediately (only fact reveal plays)
+    _loadingSystem.hideLoading(context);
+
+    if (res.session != null) {
+      // Email confirmation OFF → we have a session; go to app
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
-
-      // 2) If we already have a session (depends on your email-confirmation setting),
-      //    create/update the row in `profiles`.
-      if (res.user != null && res.session != null) {
-        await AppSupabase.client.from('profiles').upsert({
-          'id': res.user!.id, // auth uid
-          'email': email,
-          'full_name': name,
-          'updated_at': DateTime.now().toIso8601String(),
-        });
-      }
-
-      if (!mounted) return;
-      _loadingSystem.hideLoading(context);
-
-      if (res.session != null) {
-        // Email confirmation OFF → we have a session; go to app
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-        );
-      } else {
-        // Email confirmation ON → no session yet
-        _showSnack(
-          "We've sent a confirmation link to $email. Tap it to finish creating your account.",
-        );
-        // You can optionally pop back to login here if you prefer:
-        // Navigator.of(context).pop();
-      }
-    } on AuthException catch (e) {
-      if (!mounted) return;
-      _loadingSystem.hideLoading(context);
-      _showSnack(e.message);
-    } catch (e) {
-      if (!mounted) return;
-      _loadingSystem.hideLoading(context);
-      _showSnack('Unexpected error. Please try again.');
-    } finally {
-      if (mounted) setState(() => _loading = false);
+    } else {
+      // Email confirmation ON → no session yet
+      _showSnack(
+        "We've sent a confirmation link to $email. Tap it to finish creating your account.",
+      );
+    }
+  } on AuthException catch (e) {
+    if (!mounted) return;
+    _loadingSystem.hideLoading(context);
+    _showSnack(e.message);
+  } catch (e) {
+    if (!mounted) return;
+    _loadingSystem.hideLoading(context);
+    _showSnack('Unexpected error. Please try again.');
+  } finally {
+    if (mounted) setState(() => _loading = false);
     }
   }
 

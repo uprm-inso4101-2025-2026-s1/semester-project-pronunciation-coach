@@ -98,13 +98,12 @@ class MyAppState extends ChangeNotifier {
   }
 
   void setPace(LearningPace pace) async {
-    //The algebra operation: replacing one value with another from the carrier set
     _selectedPace = pace;
     notifyListeners();
     _savePace(pace);
   }
 
-  //Operation: increment the pacce
+  //Operation: increment the pace
   void incrementPace(){
     setPace(_selectedPace.next());
   }
@@ -162,7 +161,9 @@ class PaceSelector extends StatelessWidget {
                   foregroundColor: Colors.black,
                   side: const BorderSide(color: Colors.black, width: 1),
                 ),
-                onPressed: () => appState.decrementPace(),
+                onPressed: () {
+                  appState.decrementPace();
+                },
                 icon: const Icon(Icons.remove),
                 label: const Text("Slower"),
               ),
@@ -173,7 +174,9 @@ class PaceSelector extends StatelessWidget {
                   foregroundColor: Colors.black,
                   side: const BorderSide(color: Colors.black, width: 1),
                 ),
-                onPressed: () => appState.incrementPace(),
+                onPressed: () {
+                  appState.incrementPace();
+                },
                 icon: const Icon(Icons.add),
                 label: const Text("Faster"),
               ),
@@ -186,9 +189,6 @@ class PaceSelector extends StatelessWidget {
               selected: appState.selectedPace == pace,
             ),
           const SizedBox(height: 30),
-
-          //Algebraic increment/drecrement controls
-          
         ],
       ),
     );

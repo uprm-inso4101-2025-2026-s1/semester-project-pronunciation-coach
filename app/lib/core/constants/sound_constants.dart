@@ -10,8 +10,8 @@ class SoundConstants {
   static const String transition = 'sounds/UI/transition.mp3';
   
   // Volume levels
-  static const double defaultVolume = 1.0;
-  static const double lowVolume = 0.5;
+  static const double defaultVolume = 0.7;
+  static const double lowVolume = 0.3;
   static const double highVolume = 1.0;
   
   // Sound categories
@@ -28,7 +28,7 @@ class SoundConstants {
   ];
   
   // Sound durations (if known - for timing purposes)
-  static const Duration loadingStartDuration = Duration(seconds: 3);
+  static const Duration loadingStartDuration = Duration(seconds: 1);
   static const Duration loadingSuccessDuration = Duration(seconds: 3);
-  static const Duration strategyChangeDuration = Duration(seconds: 3);
+  static const Duration strategyChangeDuration = Duration(seconds: 2);
 }
