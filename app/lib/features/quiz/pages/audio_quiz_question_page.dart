@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/services/audio_api_service.dart';
 import 'audio_quiz_result_page.dart';
@@ -22,15 +23,24 @@ class AudioQuizQuestionPage extends StatefulWidget {
 class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   final AudioApiService _apiService = AudioApiService();
   final AudioPlayer _audioPlayer = AudioPlayer();
-  
+
   String? _selectedOption;
   String? _playingOption;
   bool _isSubmitting = false;
   String? _feedback;
   bool _hasAnswered = false;
   bool _isCorrect = false;
-  final int _userId = 1;
-  
+
+  int get _userId {
+    final user = Supabase.instance.client.auth.currentSession?.user;
+    if (user != null) {
+      // Convert Supabase UUID to int for backend compatibility
+      return user.id.hashCode.abs();
+    }
+    // Fallback for guest users
+    return 1;
+  }
+
   bool _isPlayingAudio = false;
 
   @override
@@ -58,11 +68,11 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
 
     try {
       await _audioPlayer.stop();
-      
+
       final audioUrl = widget.challenge.getAudioUrl(optionLetter);
-      
+
       await _audioPlayer.play(UrlSource(audioUrl));
-      
+
       // Wait for completion with timeout
       try {
         await _audioPlayer.onPlayerComplete.first.timeout(
@@ -73,7 +83,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
       } catch (e) {
         await _audioPlayer.stop();
       }
-      
+
       if (mounted) {
         setState(() {
           _playingOption = null;
@@ -86,7 +96,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
           _playingOption = null;
           _isPlayingAudio = false;
         });
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Could not play audio. Please try again.'),
@@ -268,7 +278,9 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: _isCorrect ? Colors.green[700] : Colors.red[700],
+                          color: _isCorrect
+                              ? Colors.green[700]
+                              : Colors.red[700],
                         ),
                       ),
                     ),
@@ -285,8 +297,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                   backgroundColor: _selectedOption == null
                       ? Colors.grey[400]
                       : _hasAnswered
-                          ? Colors.blue[400]
-                          : Colors.green[400],
+                      ? Colors.blue[400]
+                      : Colors.green[400],
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -295,8 +307,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                 onPressed: _selectedOption == null || _isSubmitting
                     ? null
                     : _hasAnswered
-                        ? _goToResults
-                        : _submitAnswer,
+                    ? _goToResults
+                    : _submitAnswer,
                 child: _isSubmitting
                     ? const SizedBox(
                         width: 24,
@@ -339,7 +351,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
         _isCorrect = result.isCorrect;
         _feedback = result.feedback;
         if (!result.isCorrect) {
-          _feedback = 'Correct answer: ${result.correctAnswer} - "${result.correctWord}"';
+          _feedback =
+              'Correct answer: ${result.correctAnswer} - "${result.correctWord}"';
         }
         _hasAnswered = true;
         _isSubmitting = false;
