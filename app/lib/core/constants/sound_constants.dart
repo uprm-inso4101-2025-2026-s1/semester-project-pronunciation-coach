@@ -4,10 +4,13 @@ class SoundConstants {
   // Asset paths
   static const String loadingStart = 'sounds/loading/start.mp3';
   static const String loadingSuccess = 'sounds/loading/sucess.mp3'; 
-  static const String strategyChange = 'sounds/loading/strategy_change.mp3';
+  static const String strategyChange = 'sounds/UI/strategy_change.mp3';
   static const String factReveal = 'sounds/loading/fact_reveal.mp3';
   static const String buttonClick = 'sounds/UI/button_click.mp3';
   static const String transition = 'sounds/UI/transition.mp3';
+  static const String correctAnswer = 'sounds/Quiz_Sounds/Correct.mp3';
+  static const String wrongAnswer = 'sounds/Quiz_Sounds/Wrong.mp3';
+
   
   // Volume levels
   static const double defaultVolume = 0.7;

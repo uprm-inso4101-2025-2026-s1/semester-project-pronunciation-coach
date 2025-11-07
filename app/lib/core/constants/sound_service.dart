@@ -1,4 +1,3 @@
-
 import 'package:audioplayers/audioplayers.dart';
 import 'sound_constants.dart';
 
@@ -22,11 +21,6 @@ class SoundService {
     await _playSound(SoundConstants.loadingSuccess);
   }
 
-  Future<void> playStrategyChange() async {
-    if (!_soundsEnabled) return;
-    await _playSound(SoundConstants.strategyChange);
-  }
-
   Future<void> playFactReveal() async {
     if (!_soundsEnabled) return;
     await _playSound(SoundConstants.factReveal);
@@ -41,6 +35,22 @@ class SoundService {
   Future<void> playTransition() async {
     if (!_soundsEnabled) return;
     await _playSound(SoundConstants.transition);
+  }
+
+  Future<void> playStrategyChange() async {
+    if (!_soundsEnabled) return;
+    await _playSound(SoundConstants.strategyChange);
+  }
+
+  //Quiz Sounds
+  Future<void> playCorrectAnswer() async {
+    if (!_soundsEnabled) return;
+    await _playSound(SoundConstants.correctAnswer);
+  }
+
+  Future<void> playWrongAnswer() async {
+    if (!_soundsEnabled) return;
+    await _playSound(SoundConstants.wrongAnswer);
   }
 
   Future<void> _playSound(String assetPath) async {
