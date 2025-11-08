@@ -483,12 +483,20 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.all(4.w),
                 child: Column(
                   children: [
-                    Text(
-                      'Pronunciation Coach',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.sp,
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.8,
+                      ),
+                      child: Text(
+                        'Pronunciation Coach',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14.sp,
+                        ),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
                     SizedBox(height: 1.h),
@@ -499,6 +507,8 @@ class _LoginPageState extends State<LoginPage> {
                         fontSize: 12.5.sp,
                       ),
                       textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

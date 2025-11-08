@@ -11,6 +11,7 @@ class UserProgressStats {
   final int sessionsCount;
   final String avgScore;
   final int improvedCount;
+  final int highestStreak;
   final double accuracyImprovement;
   final double wordsImprovement;
 
@@ -24,6 +25,7 @@ class UserProgressStats {
     required this.sessionsCount,
     required this.avgScore,
     required this.improvedCount,
+    required this.highestStreak,
     required this.accuracyImprovement,
     required this.wordsImprovement,
   });
@@ -39,6 +41,7 @@ class UserProgressStats {
       sessionsCount: 0,
       avgScore: "0%",
       improvedCount: 0,
+      highestStreak: 0,
       accuracyImprovement: 0.0,
       wordsImprovement: 0.0,
     );
@@ -123,6 +126,26 @@ class UserProgressStats {
         .where((a) => a.isCorrect)
         .length;
 
+    // Calculate highest streak this week
+    int highestStreak = 0;
+    if (thisWeekAttempts.isNotEmpty) {
+      // Sort attempts by date for streak calculation
+      final sortedAttempts = thisWeekAttempts
+        ..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+      int currentStreak = 0;
+      for (final attempt in sortedAttempts) {
+        if (attempt.isCorrect) {
+          currentStreak++;
+          highestStreak = currentStreak > highestStreak
+              ? currentStreak
+              : highestStreak;
+        } else {
+          currentStreak = 0;
+        }
+      }
+    }
+
     return UserProgressStats(
       userId: progress.userId,
       totalXp: progress.totalXp,
@@ -133,6 +156,7 @@ class UserProgressStats {
       sessionsCount: sessionsCount,
       avgScore: "${weeklyAccuracy.toStringAsFixed(1)}%",
       improvedCount: recentCorrectCount,
+      highestStreak: highestStreak,
       accuracyImprovement: accuracyImprovement,
       wordsImprovement: wordsImprovement,
     );

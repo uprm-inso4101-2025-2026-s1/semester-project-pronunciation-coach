@@ -20,17 +20,14 @@ class ProgressService {
           .from('user_progress')
           .select('*')
           .eq('user_id', _userId)
-          .single();
+          .maybeSingle();
 
-      if (response.isEmpty) return null;
+      if (response == null) return null;
 
       return UserProgress.fromJson(response);
     } catch (e) {
-      // If no record exists, return null
-      if (e.toString().contains('No rows found')) {
-        return null;
-      }
-      rethrow;
+      // If no record exists or any other error, return null
+      return null;
     }
   }
 

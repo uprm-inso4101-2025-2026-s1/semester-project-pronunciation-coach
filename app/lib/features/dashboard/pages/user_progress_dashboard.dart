@@ -346,7 +346,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       children: [
         Expanded(
           child: _buildOverviewCard(
-            'Accuracy Rate',
+            'Overall Accuracy',
             '${_userProgress!.accuracyRate.toInt()}%',
             Icons.gps_fixed,
             AppColors.success,
@@ -356,7 +356,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         const SizedBox(width: 12),
         Expanded(
           child: _buildOverviewCard(
-            'Words Practiced',
+            'Words Attempted',
             '${_userProgress!.wordsPracticed}',
             Icons.record_voice_over,
             AppColors.primary,
@@ -492,25 +492,25 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             children: [
               Expanded(
                 child: _buildStatItem(
-                  'Sessions',
+                  'Practice Days',
                   '${_userProgress!.sessionsCount}',
-                  Icons.mic,
+                  Icons.calendar_today,
                   AppColors.primary,
                 ),
               ),
               Expanded(
                 child: _buildStatItem(
-                  'Avg Score',
+                  'Recent Accuracy',
                   _userProgress!.avgScore,
-                  Icons.grade,
+                  Icons.gps_fixed,
                   AppColors.success,
                 ),
               ),
               Expanded(
                 child: _buildStatItem(
-                  'Improved',
-                  '${_userProgress!.improvedCount}',
-                  Icons.trending_up,
+                  'Highest Streak',
+                  '${_userProgress!.highestStreak}',
+                  Icons.local_fire_department,
                   AppColors.warning,
                 ),
               ),

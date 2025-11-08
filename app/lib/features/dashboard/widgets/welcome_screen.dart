@@ -169,24 +169,55 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                   SizedBox(height: 8.h),
 
-                  // Fade-in Title
+                  // Fade-in Title - Two lines stacked
                   FadeTransition(
                     opacity: _fadeAnimation,
-                    child: Text(
-                      'Pronunciation Coach',
-                      style: AppTextStyles.welcomeTitle.copyWith(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 10.0,
-                            color: Colors.black.withValues(alpha: 0.3),
-                            offset: const Offset(2.0, 2.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'Pronunciation',
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                            style: AppTextStyles.welcomeTitle.copyWith(
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  offset: const Offset(2.0, 2.0),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                        ),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'Coach',
+                            maxLines: 1,
+                            overflow: TextOverflow.visible,
+                            style: AppTextStyles.welcomeTitle.copyWith(
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  offset: const Offset(2.0, 2.0),
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
