@@ -175,6 +175,39 @@ class ProgressService {
     }
   }
 
+  /// Get days with practice activity for the current month
+  /// Returns set of day numbers (1-31) that have quiz attempts
+  Future<Set<int>> getPracticeDaysForCurrentMonth() async {
+    if (_isGuest) {
+      return {}; // Guests have no practice days
+    }
+
+    try {
+      final now = DateTime.now();
+      final startOfMonth = DateTime(now.year, now.month, 1);
+      final endOfMonth = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+
+      final response = await _supabase
+          .from('quiz_attempts')
+          .select('created_at')
+          .eq('user_id', _userId!)
+          .gte('created_at', startOfMonth.toIso8601String())
+          .lte('created_at', endOfMonth.toIso8601String());
+
+      final attempts = response as List;
+      final practiceDays = <int>{};
+
+      for (final attempt in attempts) {
+        final createdAt = DateTime.parse(attempt['created_at'] as String);
+        practiceDays.add(createdAt.day);
+      }
+
+      return practiceDays;
+    } catch (e) {
+      return {};
+    }
+  }
+
   /// Clear any cached guest data (call this when user logs in/out)
   Future<void> clearGuestData() async {
     // This method can be used to explicitly clear any in-memory cached data

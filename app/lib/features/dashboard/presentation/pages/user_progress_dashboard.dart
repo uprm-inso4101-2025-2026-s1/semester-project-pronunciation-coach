@@ -9,7 +9,7 @@ import '../../../../core/common/user_progress_stats.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../quiz/presentation/pages/audio_quiz_home_page.dart';
 import '../../../authentication/presentation/pages/login_page.dart';
-import '../widgets/recent_activity_timeline.dart';
+import '../widgets/monthly_practice_calendar.dart';
 import 'package:app/features/profile/presentation/pages/profile_page.dart';
 
 void main() {
@@ -154,6 +154,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   String? _error;
   bool _isGuest = false;
 
+  // Calendar data
+  Set<int> _practiceDays = {};
+
   @override
   void initState() {
     super.initState();
@@ -192,10 +195,13 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       // Only load progress if NOT a guest
       if (!isGuest) {
         final userProgress = await progressService.getProgressStats();
+        final practiceDays = await progressService
+            .getPracticeDaysForCurrentMonth();
 
         if (mounted) {
           setState(() {
             _userProgress = userProgress;
+            _practiceDays = practiceDays;
             _isLoading = false;
           });
         }
@@ -204,6 +210,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         if (mounted) {
           setState(() {
             _userProgress = null;
+            _practiceDays = {};
             _isLoading = false;
           });
         }
@@ -310,7 +317,10 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             const SizedBox(height: 20),
 
             // Recent Practice Sessions
-            const RecentActivityTimeline(),
+            MonthlyPracticeCalendar(
+              practiceDays: _practiceDays,
+              isLoading: false,
+            ),
           ],
 
           // Add bottom padding for tab bar
