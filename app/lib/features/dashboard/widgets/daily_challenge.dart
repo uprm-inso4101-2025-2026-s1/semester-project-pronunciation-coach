@@ -78,7 +78,7 @@ class DailyChallengeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final challenge = _getRandomChallenge();
-    
+
     return GestureDetector(
       onTap: () => _navigateToChallenge(context, challenge),
       child: Container(
@@ -88,15 +88,15 @@ class DailyChallengeWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.primary.withOpacity(0.1),
-              AppColors.primary.withOpacity(0.05),
+              AppColors.primary.withValues(alpha: 0.1),
+              AppColors.primary.withValues(alpha: 0.05),
             ],
           ),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.primary, width: 2),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.2),
+              color: AppColors.primary.withValues(alpha: 0.2),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -110,11 +110,17 @@ class DailyChallengeWidget extends StatelessWidget {
               // Header
               Row(
                 children: [
-                  Icon(Icons.local_fire_department, color: AppColors.primary, size: 24),
+                  Icon(
+                    Icons.local_fire_department,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Daily Challenge',
-                    style: AppTextStyles.heading3.copyWith(color: AppColors.primary),
+                    style: AppTextStyles.heading3.copyWith(
+                      color: AppColors.primary,
+                    ),
                   ),
                 ],
               ),
@@ -123,7 +129,9 @@ class DailyChallengeWidget extends StatelessWidget {
               // Challenge content
               Text(
                 challenge.content,
-                style: AppTextStyles.heading2.copyWith(color: AppColors.textPrimary),
+                style: AppTextStyles.heading2.copyWith(
+                  color: AppColors.textPrimary,
+                ),
               ),
               if (challenge.ipa != null) ...[
                 const SizedBox(height: 4),
@@ -137,8 +145,12 @@ class DailyChallengeWidget extends StatelessWidget {
               ],
               const SizedBox(height: 8),
               Text(
-                challenge.type == ChallengeType.name ? 'Name Challenge' : 'Word Challenge',
-                style: AppTextStyles.bodySmall.copyWith(color: AppColors.textMuted),
+                challenge.type == ChallengeType.name
+                    ? 'Name Challenge'
+                    : 'Word Challenge',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.textMuted,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -149,9 +161,12 @@ class DailyChallengeWidget extends StatelessWidget {
                 children: [
                   // XP Chip
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppColors.amber.withOpacity(0.2),
+                      color: AppColors.amber.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: AppColors.amber, width: 1),
                     ),
@@ -174,16 +189,23 @@ class DailyChallengeWidget extends StatelessWidget {
 
                   // Streak indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppColors.danger.withOpacity(0.2),
+                      color: AppColors.danger.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: AppColors.danger, width: 1),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.local_fire_department, color: AppColors.danger, size: 16),
+                        Icon(
+                          Icons.local_fire_department,
+                          color: AppColors.danger,
+                          size: 16,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '$currentStreak day${currentStreak != 1 ? 's' : ''}',
@@ -247,7 +269,10 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Daily Challenge', style: TextStyle(fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Daily Challenge',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         backgroundColor: AppColors.cardBackground,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
@@ -267,10 +292,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             const SizedBox(height: 24),
 
             // Result (if submitted)
-            if (_hasSubmitted) ...[
-              _buildResult(),
-              const SizedBox(height: 24),
-            ],
+            if (_hasSubmitted) ...[_buildResult(), const SizedBox(height: 24)],
 
             // Action buttons
             _buildActionButtons(),
@@ -288,8 +310,8 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primary.withOpacity(0.1),
-            AppColors.primary.withOpacity(0.05),
+            AppColors.primary.withValues(alpha: 0.1),
+            AppColors.primary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -302,35 +324,58 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.challenge.type == ChallengeType.name ? 'Name Challenge' : 'Word Challenge',
-                style: AppTextStyles.heading2.copyWith(color: AppColors.primary),
+                widget.challenge.type == ChallengeType.name
+                    ? 'Name Challenge'
+                    : 'Word Challenge',
+                style: AppTextStyles.heading2.copyWith(
+                  color: AppColors.primary,
+                ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   '+${widget.challenge.xpReward} XP',
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Text(
-            widget.challenge.type == ChallengeType.name 
-                ? 'Pronounce the name correctly' 
+            widget.challenge.type == ChallengeType.name
+                ? 'Pronounce the name correctly'
                 : 'Pronounce the word correctly',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMuted),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textMuted,
+            ),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildStatChip(Icons.star, 'Total XP', '${widget.totalXp}', AppColors.amber),
+              _buildStatChip(
+                Icons.star,
+                'Total XP',
+                '${widget.totalXp}',
+                AppColors.amber,
+              ),
               const SizedBox(width: 12),
-              _buildStatChip(Icons.local_fire_department, 'Streak', '${widget.currentStreak} days', AppColors.danger),
+              _buildStatChip(
+                Icons.local_fire_department,
+                'Streak',
+                '${widget.currentStreak} days',
+                AppColors.danger,
+              ),
             ],
           ),
         ],
@@ -338,13 +383,18 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
     );
   }
 
-  Widget _buildStatChip(IconData icon, String label, String value, Color color) {
+  Widget _buildStatChip(
+    IconData icon,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -355,8 +405,21 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(value, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold)),
-              Text(label, style: TextStyle(color: color.withOpacity(0.7), fontSize: 10)),
+              Text(
+                value,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color.withValues(alpha: 0.7),
+                  fontSize: 10,
+                ),
+              ),
             ],
           ),
         ],
@@ -370,28 +433,42 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: AppColors.cardShadow, blurRadius: 10, offset: const Offset(0, 2))],
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Pronounce this:',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMuted),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textMuted,
+            ),
           ),
           const SizedBox(height: 12),
           Text(
             widget.challenge.content,
-            style: AppTextStyles.heading1.copyWith(fontSize: 32, color: AppColors.textPrimary),
+            style: AppTextStyles.heading1.copyWith(
+              fontSize: 32,
+              color: AppColors.textPrimary,
+            ),
           ),
           if (widget.challenge.ipa != null) ...[
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  width: 1,
+                ),
               ),
               child: Text(
                 widget.challenge.ipa!,
@@ -410,7 +487,13 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Material(
                 color: AppColors.primary,
@@ -421,7 +504,11 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                   child: SizedBox(
                     width: 60,
                     height: 60,
-                    child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+                    child: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 32,
+                    ),
                   ),
                 ),
               ),
@@ -433,18 +520,27 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.warning.withOpacity(0.1),
+                color: AppColors.warning.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.warning.withOpacity(0.3), width: 1),
+                border: Border.all(
+                  color: AppColors.warning.withValues(alpha: 0.3),
+                  width: 1,
+                ),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.lightbulb_outline, color: AppColors.warning, size: 20),
+                  Icon(
+                    Icons.lightbulb_outline,
+                    color: AppColors.warning,
+                    size: 20,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       widget.challenge.hint!,
-                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.warning),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.warning,
+                      ),
                     ),
                   ),
                 ],
@@ -464,11 +560,20 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: _isSuccess
-              ? [AppColors.success.withOpacity(0.1), AppColors.success.withOpacity(0.05)]
-              : [AppColors.danger.withOpacity(0.1), AppColors.danger.withOpacity(0.05)],
+              ? [
+                  AppColors.success.withValues(alpha: 0.1),
+                  AppColors.success.withValues(alpha: 0.05),
+                ]
+              : [
+                  AppColors.danger.withValues(alpha: 0.1),
+                  AppColors.danger.withValues(alpha: 0.05),
+                ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _isSuccess ? AppColors.success : AppColors.danger, width: 2),
+        border: Border.all(
+          color: _isSuccess ? AppColors.success : AppColors.danger,
+          width: 2,
+        ),
       ),
       child: Column(
         children: [
@@ -482,11 +587,19 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(_isSuccess ? Icons.check_circle : Icons.cancel, color: Colors.white, size: 24),
+                Icon(
+                  _isSuccess ? Icons.check_circle : Icons.cancel,
+                  color: Colors.white,
+                  size: 24,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   _isSuccess ? 'SUCCESS!' : 'TRY AGAIN',
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -498,7 +611,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: AppColors.amber.withOpacity(0.2),
+                color: AppColors.amber.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.amber, width: 1),
               ),
@@ -509,7 +622,11 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                   const SizedBox(width: 8),
                   Text(
                     '+$_xpEarned XP Earned!',
-                    style: TextStyle(color: AppColors.amber, fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: AppColors.amber,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -521,18 +638,26 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.danger.withOpacity(0.2),
+              color: AppColors.danger.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.danger, width: 1),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.local_fire_department, color: AppColors.danger, size: 20),
+                Icon(
+                  Icons.local_fire_department,
+                  color: AppColors.danger,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Streak: ${widget.currentStreak + (_isSuccess ? 1 : 0)} day${widget.currentStreak + (_isSuccess ? 1 : 0) != 1 ? 's' : ''}',
-                  style: const TextStyle(color: AppColors.danger, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: AppColors.danger,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -550,15 +675,28 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
           width: double.infinity,
           height: 56,
           child: ElevatedButton.icon(
-            onPressed: _hasSubmitted ? null : (_isRecording ? _stopRecording : _startRecording),
-            icon: Icon(_isRecording ? Icons.stop : Icons.mic, color: Colors.white),
+            onPressed: _hasSubmitted
+                ? null
+                : (_isRecording ? _stopRecording : _startRecording),
+            icon: Icon(
+              _isRecording ? Icons.stop : Icons.mic,
+              color: Colors.white,
+            ),
             label: Text(
               _isRecording ? 'Stop Recording' : 'Record Your Voice',
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: _isRecording ? AppColors.danger : AppColors.success,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              backgroundColor: _isRecording
+                  ? AppColors.danger
+                  : AppColors.success,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: _isRecording ? 0 : 2,
             ),
           ),
@@ -574,11 +712,17 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
             icon: const Icon(Icons.send, color: Colors.white),
             label: const Text(
               'Submit Challenge',
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 2,
             ),
           ),
@@ -597,7 +741,9 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
           ),
@@ -609,7 +755,10 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
   void _playAudio() {
     HapticFeedback.lightImpact();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('🔊 Playing audio...'), duration: Duration(seconds: 1)),
+      const SnackBar(
+        content: Text('🔊 Playing audio...'),
+        duration: Duration(seconds: 1),
+      ),
     );
   }
 

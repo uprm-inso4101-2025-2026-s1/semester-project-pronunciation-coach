@@ -187,6 +187,43 @@ curl http://localhost:8000/api/challenges
 curl http://localhost:8000/api/progress/1
 ```
 
+### 5.5. Supabase Database Setup
+
+The backend now uses Supabase PostgreSQL for persistent data storage.
+
+#### Create Database Tables
+
+1. Go to your Supabase project dashboard
+2. Navigate to **SQL Editor**
+3. Copy and run the contents of `backend/database_setup.sql`
+
+This creates the required tables:
+
+- `user_progress` - Stores user XP, streaks, and completion stats
+- `quiz_attempts` - Records individual quiz attempts with results
+
+#### Configure Environment Variables
+
+1. Copy the environment template:
+
+```bash
+cp .env.example .env
+```
+
+2. Get your Supabase credentials:
+
+   - Go to **Settings** → **API** in your Supabase dashboard
+   - Copy **Project URL** and **anon public key**
+
+3. Edit `.env` and add:
+
+```bash
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+**Important:** Never commit the `.env` file to git.
+
 ### 7. Connect Flutter App to Backend
 
 In your Flutter app, the API base URL should be:
@@ -403,4 +440,3 @@ flutter run
 3. Test thoroughly (both Flutter and backend if applicable)
 4. Submit a pull request
 5. Tag appropriate reviewers
-

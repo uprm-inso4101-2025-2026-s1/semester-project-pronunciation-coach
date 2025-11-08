@@ -47,14 +47,11 @@ class AppTextStyles {
 
   // Special text styles
   static TextStyle welcomeSubtitle = TextStyle(
-    color: Colors.white.withOpacity(0.9),
+    color: Colors.white.withValues(alpha: 0.9),
     fontSize: 16,
   );
 
-  static TextStyle caption = TextStyle(
-    fontSize: 12,
-    color: Colors.grey[600],
-  );
+  static TextStyle caption = TextStyle(fontSize: 12, color: Colors.grey[600]);
 
   static const TextStyle progressValue = TextStyle(
     fontSize: 24,

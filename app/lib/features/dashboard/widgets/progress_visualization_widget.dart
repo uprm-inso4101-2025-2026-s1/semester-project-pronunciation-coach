@@ -6,28 +6,20 @@ import '../models/course_progress.dart';
 class ProgressVisualizationWidget extends StatefulWidget {
   final List<CourseProgress>? courses;
 
-  const ProgressVisualizationWidget({
-    super.key,
-    this.courses,
-  });
+  const ProgressVisualizationWidget({super.key, this.courses});
 
   @override
-  State<ProgressVisualizationWidget> createState() => _ProgressVisualizationWidgetState();
+  State<ProgressVisualizationWidget> createState() =>
+      _ProgressVisualizationWidgetState();
 }
 
-class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidget>
+class _ProgressVisualizationWidgetState
+    extends State<ProgressVisualizationWidget>
     with TickerProviderStateMixin {
   late AnimationController _progressAnimationController;
   late Animation<double> _progressAnimation;
 
-  // Mock data - replace with widget.courses when available
-  List<CourseProgress> get courses => widget.courses ?? [
-    const CourseProgress('Vowel Sounds', 0.92, AppColors.success),
-    const CourseProgress('Consonant Clusters', 0.78, AppColors.primary),
-    const CourseProgress('Word Stress', 0.65, AppColors.warning),
-    const CourseProgress('Intonation Patterns', 0.45, AppColors.purple),
-    const CourseProgress('Connected Speech', 0.30, Color(0xFFEF4444)),
-  ];
+  List<CourseProgress> get courses => widget.courses ?? [];
 
   @override
   void initState() {
@@ -37,7 +29,10 @@ class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidge
       vsync: this,
     );
     _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _progressAnimationController, curve: Curves.easeInOut),
+      CurvedAnimation(
+        parent: _progressAnimationController,
+        curve: Curves.easeInOut,
+      ),
     );
     _progressAnimationController.forward();
   }
@@ -66,10 +61,7 @@ class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidge
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Pronunciation Skills',
-            style: AppTextStyles.heading2,
-          ),
+          const Text('Pronunciation Skills', style: AppTextStyles.heading2),
           const SizedBox(height: 20),
           ...courses.map((course) => _buildProgressBar(course)),
         ],
@@ -86,10 +78,7 @@ class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidge
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                course.name,
-                style: AppTextStyles.bodyLarge,
-              ),
+              Text(course.name, style: AppTextStyles.bodyLarge),
               Text(
                 '${(course.progress * 100).toInt()}%',
                 style: TextStyle(
@@ -116,7 +105,10 @@ class _ProgressVisualizationWidgetState extends State<ProgressVisualizationWidge
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [course.color, course.color.withOpacity(0.7)],
+                        colors: [
+                          course.color,
+                          course.color.withValues(alpha: 0.7),
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(4),
                     ),

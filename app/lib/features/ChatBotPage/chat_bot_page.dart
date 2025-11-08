@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ChatbotPage extends StatefulWidget {
-  const ChatbotPage({Key? key}) : super(key: key);
+  const ChatbotPage({super.key});
 
   @override
   State<ChatbotPage> createState() => _ChatbotPageState();
@@ -230,13 +230,13 @@ class _ChatbotPageState extends State<ChatbotPage>
 }
 
 class TypingIndicator extends StatefulWidget {
-  const TypingIndicator({Key? key}) : super(key: key);
+  const TypingIndicator({super.key});
 
   @override
-  _TypingIndicatorState createState() => _TypingIndicatorState();
+  TypingIndicatorState createState() => TypingIndicatorState();
 }
 
-class _TypingIndicatorState extends State<TypingIndicator>
+class TypingIndicatorState extends State<TypingIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

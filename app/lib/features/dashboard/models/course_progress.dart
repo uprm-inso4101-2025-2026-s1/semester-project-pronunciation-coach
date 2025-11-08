@@ -17,10 +17,6 @@ class CourseProgress {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'progress': progress,
-      'color': color.value,
-    };
+    return {'name': name, 'progress': progress, 'color': color.toARGB32()};
   }
 }

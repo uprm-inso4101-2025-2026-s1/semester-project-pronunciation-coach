@@ -11,7 +11,7 @@ import 'core/services/session_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Terminal command to run with environment variables:
   // flutter run \
   // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
@@ -20,7 +20,6 @@ Future<void> main() async {
   try {
     await AppSupabase.init();
   } catch (e) {
-    print('Supabase init failed: $e');
     return;
   }
 
@@ -87,18 +86,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.headphones),
-            label: 'Quiz',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.headphones), label: 'Quiz'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/colors.dart';
-import '../../dashboard/widgets/progress_visualization_widget.dart';
 import '../widgets/achievements_xp.dart';
 
-/// -------------------------------
-///  PROFILE PAGE
-/// -------------------------------
+// Profile page
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -45,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Colors.blue.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(Icons.menu, color: Colors.blue, size: 24),
@@ -67,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     _isMenuExpanded = false;
                   });
                 },
-                child: Container(color: Colors.black.withOpacity(0.3)),
+                child: Container(color: Colors.black.withValues(alpha: 0.3)),
               ),
             ),
 
@@ -94,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundColor: Colors.blue.withOpacity(0.1),
+                        backgroundColor: Colors.blue.withValues(alpha: 0.1),
                         child: const Icon(
                           Icons.person,
                           size: 50,
@@ -119,47 +116,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Statistics Section
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Your Statistics',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Quick Overview Cards
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildOverviewCard(
-                        'Accuracy Rate',
-                        '89%',
-                        Icons.gps_fixed,
-                        AppColors.success,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildOverviewCard(
-                        'Words Practiced',
-                        '247',
-                        Icons.record_voice_over,
-                        AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Inline statistics visualization
-                const ProgressVisualizationWidget(),
-
                 // Achievements Sections
                 const AchievementsSection(),
 
@@ -182,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: AppColors.cardBackground,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 10,
                       offset: const Offset(-2, 0),
                     ),
@@ -194,10 +150,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         border: Border(
                           bottom: BorderSide(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Colors.grey.withValues(alpha: 0.2),
                             width: 1,
                           ),
                         ),
@@ -280,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.1),
+          color: Colors.blue.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: Colors.blue),
@@ -298,116 +254,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,
-    );
-  }
-
-  Widget _buildOverviewCard(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(icon, color: color, size: 24),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '+5%',
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[700],
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileOption({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: Colors.blue),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(color: Colors.grey[600], fontSize: 12),
-        ),
-        trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-        onTap: onTap,
-      ),
     );
   }
 

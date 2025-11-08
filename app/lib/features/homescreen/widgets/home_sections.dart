@@ -67,8 +67,8 @@ class ActivityCard extends StatelessWidget {
         onTap: () {
           debugPrint('$title tapped!');
         },
-        splashColor: Colors.blueAccent.withOpacity(0.2),
-        highlightColor: Colors.blueAccent.withOpacity(0.05),
+        splashColor: Colors.blueAccent.withValues(alpha: 0.2),
+        highlightColor: Colors.blueAccent.withValues(alpha: 0.05),
         child: ListTile(
           leading: Icon(icon, size: 30, color: Colors.blueAccent),
           title: Text(

@@ -1,24 +1,31 @@
 import 'dart:core';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
 
-class myTextField extends StatefulWidget {
-  const myTextField({super.key, required this.controller, required this.labelText, required this.hintText, required this.icon, this.validator, this.isPass});
+class MyTextField extends StatefulWidget {
+  const MyTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.hintText,
+    required this.icon,
+    this.validator,
+    this.isPass,
+  });
   final TextEditingController controller;
   final String labelText;
   final String hintText;
   final Icon icon;
-  final String?Function(String?)? validator;
+  final String? Function(String?)? validator;
   final bool? isPass;
 
   @override
-  State<myTextField> createState() => _myTextFieldState();
+  State<MyTextField> createState() => _MyTextFieldState();
 }
 
-class _myTextFieldState extends State<myTextField> {
+class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -35,7 +42,7 @@ class _myTextFieldState extends State<myTextField> {
         hintText: widget.hintText,
         hintStyle: TextStyle(
           fontSize: 14.sp,
-          color: AppColors.textMuted.withOpacity(0.6),
+          color: AppColors.textMuted.withValues(alpha: 0.6),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(3.w),
@@ -63,7 +70,5 @@ class _myTextFieldState extends State<myTextField> {
       ),
       validator: widget.validator,
     );
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }

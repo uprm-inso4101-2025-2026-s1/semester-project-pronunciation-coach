@@ -8,17 +8,17 @@ import '../../../core/constants/colors.dart';
 /// ===========================================================================
 /// SINGLETON PATTERN + OBSERVER PATTERN + DECORATOR PATTERN
 /// ===========================================================================
-/// 
+///
 /// SINGLETON PATTERN:
 /// - Ensures single instance of LoadingSystem across the app
 /// - Global access point for loading functionality
 /// - Consistent loading behavior throughout the application
-/// 
+///
 /// OBSERVER PATTERN:
 /// - Allows components to listen to loading state changes
 /// - Decouples loading state management from UI components
 /// - Supports multiple listeners for loading state
-/// 
+///
 /// DECORATOR PATTERN:
 /// - Enhances loading configuration with additional features
 /// - Adds blur effects, custom backgrounds, and context-specific styling
@@ -34,14 +34,17 @@ class LoadingSystem {
 
   // OBSERVER PATTERN: Loading state listeners
   final List<Function(bool)> _loadingListeners = [];
-  
+
   /// DECORATOR PATTERN: Enhanced loading configuration
   /// Adds additional features (blur, custom background) to base loading strategy
-  LoadingConfiguration _createEnhancedConfiguration(LoadingStrategy strategy, String context) {
+  LoadingConfiguration _createEnhancedConfiguration(
+    LoadingStrategy strategy,
+    String context,
+  ) {
     return LoadingConfiguration(
       strategy: strategy,
       context: context,
-      backgroundColor: AppColors.cardBackground.withOpacity(0.98),
+      backgroundColor: AppColors.cardBackground.withValues(alpha: 0.98),
       blurEffect: true, // Enhanced feature
     );
   }
@@ -71,21 +74,20 @@ class LoadingSystem {
     LoadingStrategy? customStrategy,
   }) {
     // FACTORY PATTERN: Create strategy (random or custom)
-    final strategy = customStrategy ?? LoadingStrategyFactory.createRandomStrategy();
-    
+    final strategy =
+        customStrategy ?? LoadingStrategyFactory.createRandomStrategy();
+
     // DECORATOR PATTERN: Enhance the configuration
     final config = _createEnhancedConfiguration(strategy, contextType);
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.7),
-      builder: (context) => LoadingOverlay(
-        configuration: config,
-        message: message,
-      ),
+      barrierColor: Colors.black.withValues(alpha: 0.7),
+      builder: (context) =>
+          LoadingOverlay(configuration: config, message: message),
     );
-    
+
     // OBSERVER PATTERN: Notify listeners
     _notifyLoadingListeners(true);
   }
@@ -100,12 +102,12 @@ class LoadingSystem {
 /// ===========================================================================
 /// DECORATOR PATTERN: Enhanced Loading Configuration
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Wraps base loading strategy with additional features and styling
 /// - Adds visual enhancements without modifying strategy implementations
 /// - Provides context-specific customization options
-/// 
+///
 /// ENHANCEMENTS:
 /// - Custom background colors with opacity
 /// - Blur effects for modern UI
@@ -127,7 +129,7 @@ class LoadingConfiguration {
 
 /// ===========================================================================
 /// Loading Overlay Widget
-/// 
+///
 /// IMPLEMENTS:
 /// - DECORATOR PATTERN: Applies enhanced configuration (blur, background)
 /// - STRATEGY PATTERN: Delegates widget building to current strategy
@@ -137,10 +139,10 @@ class LoadingOverlay extends StatelessWidget {
   final String message;
 
   const LoadingOverlay({
-    Key? key,
+    super.key,
     required this.configuration,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +174,7 @@ class LoadingOverlay extends StatelessWidget {
             borderRadius: BorderRadius.circular(3.h),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 4.h,
                 offset: const Offset(0, 10),
               ),

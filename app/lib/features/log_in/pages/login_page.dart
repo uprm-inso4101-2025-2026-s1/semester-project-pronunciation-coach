@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(4.w),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.cardShadow.withOpacity(0.3),
+                      color: AppColors.cardShadow.withValues(alpha: 0.3),
                       blurRadius: 6.w,
                       offset: const Offset(0, 15),
                     ),
@@ -227,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Email Field
-                      myTextField(
+                      MyTextField(
                         controller: _emailCtrl,
                         labelText: 'Email Address',
                         hintText: 'your@email.com',
@@ -242,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 4.h),
 
                       // Password Field
-                      myTextField(
+                      MyTextField(
                         controller: _passCtrl,
                         isPass: true,
                         labelText: 'Password',
@@ -318,7 +318,9 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(3.w),
                             ),
                             elevation: 4,
-                            shadowColor: AppColors.primary.withOpacity(0.3),
+                            shadowColor: AppColors.primary.withValues(
+                              alpha: 0.3,
+                            ),
                           ),
                           child: _loading
                               ? SizedBox(
@@ -368,7 +370,9 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(3.w),
                             ),
                             elevation: 4,
-                            shadowColor: AppColors.success.withOpacity(0.3),
+                            shadowColor: AppColors.success.withValues(
+                              alpha: 0.3,
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -491,7 +495,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       'Master English pronunciation with interactive lessons',
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 12.5.sp,
                       ),
                       textAlign: TextAlign.center,

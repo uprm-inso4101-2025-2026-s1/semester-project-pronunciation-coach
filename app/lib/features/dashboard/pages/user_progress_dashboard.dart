@@ -1,16 +1,14 @@
-import 'package:app/features/dashboard/widgets/streak_xp.dart';
 import 'package:app/features/homescreen/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
-import '../../quiz/pages/audio_quiz_home_page.dart'; // CHANGED: Import audio quiz instead
-import '../widgets/daily_challenge.dart';
-import '../widgets/progress_visualization_widget.dart';
+import '../../../core/services/audio_api_service.dart';
+import '../../quiz/pages/audio_quiz_home_page.dart';
 import '../widgets/recent_activity_timeline.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/features/profile/pages/profile_page.dart';
 
 void main() {
@@ -35,9 +33,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// -------------------------------
-///  MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
-/// -------------------------------
+// Main navigation screen with bottom tab bar
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -56,8 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _screens = [
       const HomeScreen(),
       const UserProgressDashboard(),
-      const DailyChallengePage(),
-      const AudioQuizHomePage(), // CHANGED: Use AudioQuizHomePage instead of QuizHomePage
+      const AudioQuizHomePage(),
       const ProfilePage(),
     ];
   }
@@ -76,7 +71,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -110,12 +105,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.local_fire_department_outlined),
-              activeIcon: Icon(Icons.local_fire_department),
-              label: 'Challenge',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.headphones_outlined), // CHANGED: Better icon for audio quiz
+              icon: Icon(
+                Icons.headphones_outlined,
+              ), // CHANGED: Better icon for audio quiz
               activeIcon: Icon(Icons.headphones),
               label: 'Quiz',
             ),
@@ -131,11 +123,22 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 }
 
-/// -------------------------------
-///  USER PROGRESS DASHBOARD (UPDATED - NO DRAWER)
-/// -------------------------------
+// User progress dashboard
 class UserProgressDashboard extends StatefulWidget {
-  const UserProgressDashboard({super.key});
+  final double? accuracyRate;
+  final int? wordsPracticed;
+  final int? sessionsCount;
+  final String? avgScore;
+  final int? improvedCount;
+
+  const UserProgressDashboard({
+    super.key,
+    this.accuracyRate,
+    this.wordsPracticed,
+    this.sessionsCount,
+    this.avgScore,
+    this.improvedCount,
+  });
 
   @override
   State<UserProgressDashboard> createState() => _UserProgressDashboardState();
@@ -145,6 +148,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  // Real data from backend
+  UserProgress? _userProgress;
+  bool _isLoading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -157,12 +165,43 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
     _animationController.forward();
+
+    // Load real user data
+    _loadUserProgress();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  int get _userId {
+    final user = Supabase.instance.client.auth.currentSession?.user;
+    if (user == null) return 1; // Fallback for testing
+    // Convert Supabase UUID to int for backend compatibility
+    return user.id.hashCode.abs();
+  }
+
+  Future<void> _loadUserProgress() async {
+    try {
+      final apiService = AudioApiService();
+      final userProgress = await apiService.getUserProgress(_userId);
+
+      if (mounted) {
+        setState(() {
+          _userProgress = userProgress;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -201,13 +240,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Daily Challenge Widget
-              DailyChallengeWidget(
-                currentStreak: 5,
-                totalXp: 1250,
-              ),
-              const SizedBox(height: 20),
-
               // Display Selected Pace
               _buildSelectedPace(context),
               const SizedBox(height: 20),
@@ -216,12 +248,20 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               _buildProgressOverview(),
               const SizedBox(height: 20),
 
-              // Pronunciation Skills Progress
-              const ProgressVisualizationWidget(),
-              const SizedBox(height: 20),
-
               // Practice Statistics
               _buildPracticeStatistics(),
+              const SizedBox(height: 20),
+
+              // Loading/Error states
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator())
+              else if (_error != null)
+                Center(
+                  child: Text(
+                    'Error loading data: $_error',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
               const SizedBox(height: 20),
 
               // Recent Practice Sessions
@@ -278,23 +318,58 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   }
 
   Widget _buildProgressOverview() {
+    if (_userProgress == null) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.bar_chart, size: 48, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Progress data will be displayed here',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Row(
       children: [
         Expanded(
           child: _buildOverviewCard(
             'Accuracy Rate',
-            '89%',
+            '${_userProgress!.accuracyRate.toInt()}%',
             Icons.gps_fixed,
             AppColors.success,
+            _userProgress!.accuracyImprovement,
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: _buildOverviewCard(
             'Words Practiced',
-            '247',
+            '${_userProgress!.wordsPracticed}',
             Icons.record_voice_over,
             AppColors.primary,
+            _userProgress!.wordsImprovement,
           ),
         ),
       ],
@@ -306,7 +381,17 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     String value,
     IconData icon,
     Color color,
+    double improvement,
   ) {
+    String improvementText;
+    if (improvement > 0) {
+      improvementText = '+${improvement.toStringAsFixed(1)}%';
+    } else if (improvement < 0) {
+      improvementText = '${improvement.toStringAsFixed(1)}%';
+    } else {
+      improvementText = '0%';
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -330,11 +415,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '+5%',
+                  improvementText,
                   style: TextStyle(
                     color: color,
                     fontSize: 12,
@@ -354,6 +439,39 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   }
 
   Widget _buildPracticeStatistics() {
+    if (_userProgress == null) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Column(
+          children: [
+            Icon(Icons.show_chart, size: 48, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Statistics will be displayed here',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -384,7 +502,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               Expanded(
                 child: _buildStatItem(
                   'Sessions',
-                  '14',
+                  '${_userProgress!.sessionsCount}',
                   Icons.mic,
                   AppColors.primary,
                 ),
@@ -392,7 +510,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               Expanded(
                 child: _buildStatItem(
                   'Avg Score',
-                  '87%',
+                  _userProgress!.avgScore,
                   Icons.grade,
                   AppColors.success,
                 ),
@@ -400,7 +518,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               Expanded(
                 child: _buildStatItem(
                   'Improved',
-                  '23',
+                  '${_userProgress!.improvedCount}',
                   Icons.trending_up,
                   AppColors.warning,
                 ),
@@ -423,7 +541,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color, size: 24),
@@ -443,76 +561,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           textAlign: TextAlign.center,
         ),
       ],
-    );
-  }
-}
-
-/// -------------------------------
-///  PROFILE PAGE - PLACEHOLDER
-/// -------------------------------
-class ProfilePagePlaceholder extends StatelessWidget {
-  const ProfilePagePlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.blue,
-              child: Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Profile Page',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Placeholder - Ready for Development',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            SizedBox(height: 30),
-            Card(
-              margin: EdgeInsets.all(20),
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Coming Soon!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'User profile management, settings, statistics, achievements, and account preferences will be implemented here.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

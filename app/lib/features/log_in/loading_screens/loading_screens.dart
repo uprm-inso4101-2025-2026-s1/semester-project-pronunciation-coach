@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'loading_screens_core.dart';
 import '../../../core/constants/colors.dart';
 
-
-
 /// Main Loading System using Decorator and Observer Patterns
 class LoadingSystem {
   static final LoadingSystem _instance = LoadingSystem._internal();
@@ -13,13 +11,16 @@ class LoadingSystem {
 
   // Observer pattern for loading state changes
   final List<Function(bool)> _loadingListeners = [];
-  
+
   /// Decorator Pattern: Enhanced loading configuration
-  LoadingConfiguration _createEnhancedConfiguration(LoadingStrategy strategy, String context) {
+  LoadingConfiguration _createEnhancedConfiguration(
+    LoadingStrategy strategy,
+    String context,
+  ) {
     return LoadingConfiguration(
       strategy: strategy,
       context: context,
-      backgroundColor: AppColors.cardBackground.withOpacity(0.95),
+      backgroundColor: AppColors.cardBackground.withValues(alpha: 0.95),
       blurEffect: true,
     );
   }
@@ -41,22 +42,20 @@ class LoadingSystem {
   /// Show loading overlay with specified strategy
   void showLoading({
     required BuildContext context,
-     required LoadingStrategy strategy,
+    required LoadingStrategy strategy,
     required String message,
     String contextType = 'general',
   }) {
     final config = _createEnhancedConfiguration(strategy, contextType);
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.6),
-      builder: (context) => _LoadingOverlay(
-        configuration: config,
-        message: message,
-      ),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      builder: (context) =>
+          _LoadingOverlay(configuration: config, message: message),
     );
-    
+
     _notifyLoadingListeners(true);
   }
 
@@ -87,10 +86,7 @@ class _LoadingOverlay extends StatelessWidget {
   final LoadingConfiguration configuration;
   final String message;
 
-  const _LoadingOverlay({
-    required this.configuration,
-    required this.message,
-  });
+  const _LoadingOverlay({required this.configuration, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +117,7 @@ class _LoadingOverlay extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -132,4 +128,3 @@ class _LoadingOverlay extends StatelessWidget {
     );
   }
 }
-

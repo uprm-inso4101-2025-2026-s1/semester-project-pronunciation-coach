@@ -6,8 +6,6 @@ import '../../../core/services/audio_api_service.dart';
 import 'audio_quiz_home_page.dart'; // Import for navigation
 import 'audio_quiz_question_page.dart';
 
-// Note: Ensure AudioChallengeResult, Difficulty, and AudioChallenge are correctly defined in their respective files.
-
 class AudioQuizResultPage extends StatefulWidget {
   final AudioChallengeResult result;
   final Difficulty difficulty;
@@ -58,9 +56,11 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
 
     try {
       await _audioPlayer.stop();
-      
-      final audioUrl = widget.challenge.getAudioUrl(widget.result.correctAnswer);
-      
+
+      final audioUrl = widget.challenge.getAudioUrl(
+        widget.result.correctAnswer,
+      );
+
       // Set up completion listener to stop playing state
       _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
         if (mounted) {
@@ -69,16 +69,15 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
           });
         }
       });
-      
+
       await _audioPlayer.play(UrlSource(audioUrl));
-      
     } catch (e) {
       // Handle audio playback error
       if (mounted) {
         setState(() {
           _isPlayingCorrectAudio = false;
         });
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Could not play audio. Please try again.'),
@@ -97,7 +96,8 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     Navigator.popUntil(context, (route) {
       // Check if the route is a MaterialPageRoute and its builder creates an AudioQuizHomePage
       // This is a common pattern to stop at a known route type if named routes aren't used.
-      if (route is MaterialPageRoute && route.builder(context) is AudioQuizHomePage) {
+      if (route is MaterialPageRoute &&
+          route.builder(context) is AudioQuizHomePage) {
         return true;
       }
       // Fallback: If AudioQuizHomePage is the first route in this stack, this will return to it.
@@ -112,15 +112,14 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
 
     try {
       final apiService = AudioApiService();
-      final newChallenge =
-          await apiService.generateAudioChallenge(widget.difficulty.id);
+      final newChallenge = await apiService.generateAudioChallenge(
+        widget.difficulty.id,
+      );
 
       // Close loading indicator
       if (context.mounted) Navigator.pop(context);
@@ -196,7 +195,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 4),
                         ),
@@ -211,8 +210,8 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                           height: 100,
                           decoration: BoxDecoration(
                             color: widget.result.isCorrect
-                                ? Colors.green.withOpacity(0.15)
-                                : Colors.red.withOpacity(0.15),
+                                ? Colors.green.withValues(alpha: 0.15)
+                                : Colors.red.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -245,7 +244,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.blue.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -267,7 +266,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              
+
                               // Play Correct Audio Button
                               ElevatedButton.icon(
                                 onPressed: _playCorrectAudio,
@@ -294,7 +293,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                                   ),
                                 ),
                               ),
-                              
+
                               if (!widget.result.isCorrect) ...[
                                 const SizedBox(height: 12),
                                 Text(
@@ -317,8 +316,8 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.amber.withOpacity(0.3),
-                                Colors.orange.withOpacity(0.3),
+                                Colors.amber.withValues(alpha: 0.3),
+                                Colors.orange.withValues(alpha: 0.3),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12),
@@ -366,7 +365,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: _getDifficultyColor().withOpacity(0.2),
+                            color: _getDifficultyColor().withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -401,7 +400,8 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => _goToQuizHome(context), // Use the new function
+                    onPressed: () =>
+                        _goToQuizHome(context), // Use the new function
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       side: BorderSide(color: Colors.grey[400]!),

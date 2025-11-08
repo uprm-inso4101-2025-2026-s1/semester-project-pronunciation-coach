@@ -289,7 +289,7 @@ class _SigninPageState extends State<SigninPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Full name
-                      myTextField(
+                      MyTextField(
                         controller: _nameCtrl,
                         labelText: 'First and Last Name',
                         hintText: 'John Doe, María García-López',
@@ -304,7 +304,7 @@ class _SigninPageState extends State<SigninPage> {
                       SizedBox(height: 4.h),
 
                       // Email Address Field
-                      myTextField(
+                      MyTextField(
                         controller: _emailCtrl,
                         labelText: 'Email Address',
                         hintText: 'your@email.com',
@@ -319,7 +319,7 @@ class _SigninPageState extends State<SigninPage> {
                       SizedBox(height: 4.h),
 
                       // Password Field
-                      myTextField(
+                      MyTextField(
                         controller: _passCtrl,
                         isPass: true,
                         labelText: 'Password',
@@ -335,7 +335,7 @@ class _SigninPageState extends State<SigninPage> {
                       SizedBox(height: 4.h),
 
                       // Confirm password
-                      myTextField(
+                      MyTextField(
                         controller: _confirmPassCtrl,
                         isPass: true,
                         labelText: 'Confirm Password',

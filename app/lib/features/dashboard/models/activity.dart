@@ -32,7 +32,7 @@ class Activity {
       'subtitle': subtitle,
       'time': time,
       'iconCode': icon.codePoint,
-      'color': color.value,
+      'color': color.toARGB32(),
     };
   }
 }

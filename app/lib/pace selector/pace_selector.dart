@@ -3,15 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum LearningPace {
-  casual, 
-  standard, 
+  casual,
+  standard,
   intensive;
 
   static LearningPace get defaultPace => LearningPace.casual;
 
   //Operation: get next pace
-  LearningPace next(){
-    switch (this){
+  LearningPace next() {
+    switch (this) {
       case LearningPace.casual:
         return LearningPace.standard;
       case LearningPace.standard:
@@ -20,20 +20,22 @@ enum LearningPace {
         return LearningPace.intensive;
     }
   }
+
   //Operation: get previous pace
-  LearningPace previous(){
-  switch (this){
-    case LearningPace.casual:
-      return LearningPace.casual;
-    case LearningPace.standard:
-      return LearningPace.casual;
-    case LearningPace.intensive:
-      return LearningPace.standard;
+  LearningPace previous() {
+    switch (this) {
+      case LearningPace.casual:
+        return LearningPace.casual;
+      case LearningPace.standard:
+        return LearningPace.casual;
+      case LearningPace.intensive:
+        return LearningPace.standard;
     }
   }
+
   //Operation: get minutes for pace
-  int get minutes{
-    switch(this){
+  int get minutes {
+    switch (this) {
       case LearningPace.casual:
         return 5;
       case LearningPace.standard:
@@ -42,9 +44,10 @@ enum LearningPace {
         return 30;
     }
   }
+
   //Helper: display name
-  String get displayName{
-    switch(this){
+  String get displayName {
+    switch (this) {
       case LearningPace.casual:
         return "Casual";
       case LearningPace.standard:
@@ -53,12 +56,13 @@ enum LearningPace {
         return "Intensive";
     }
   }
+
   //Helper: subtitle
   String get subtitle => "$minutes minutes/day";
 
   //Helper: icon
-  IconData get icon{
-    switch(this){
+  IconData get icon {
+    switch (this) {
       case LearningPace.casual:
         return Icons.coffee;
       case LearningPace.standard:
@@ -68,7 +72,6 @@ enum LearningPace {
     }
   }
 }
-
 
 class ChallengesPage extends StatelessWidget {
   const ChallengesPage({super.key});
@@ -105,12 +108,12 @@ class MyAppState extends ChangeNotifier {
   }
 
   //Operation: increment the pacce
-  void incrementPace(){
+  void incrementPace() {
     setPace(_selectedPace.next());
   }
 
   //Operation: decrement the pace
-  void decrementPace(){
+  void decrementPace() {
     setPace(_selectedPace.previous());
   }
 
@@ -124,9 +127,9 @@ class MyAppState extends ChangeNotifier {
     final paceString = prefs.getString("selectedPace");
 
     if (paceString != null) {
-      try{
+      try {
         _selectedPace = LearningPace.values.byName(paceString);
-      } catch(e){
+      } catch (e) {
         _selectedPace = LearningPace.defaultPace;
       }
       notifyListeners();
@@ -188,7 +191,6 @@ class PaceSelector extends StatelessWidget {
           const SizedBox(height: 30),
 
           //Algebraic increment/drecrement controls
-          
         ],
       ),
     );
@@ -199,7 +201,6 @@ class PaceSelector extends StatelessWidget {
     required LearningPace pace,
     required bool selected,
   }) {
-
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -213,7 +214,7 @@ class PaceSelector extends StatelessWidget {
         boxShadow: [
           if (selected)
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 10,
               spreadRadius: 1,
             ),
@@ -222,12 +223,13 @@ class PaceSelector extends StatelessWidget {
       child: ListTile(
         leading: Icon(pace.icon, color: Colors.black),
         title: Text(
-          pace.displayName, 
-          style: const TextStyle(fontWeight: FontWeight.bold)
-          ),
+          pace.displayName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Text(pace.subtitle),
-        trailing:
-            selected ? Icon(Icons.check_circle, color: Colors.black) : null,
+        trailing: selected
+            ? Icon(Icons.check_circle, color: Colors.black)
+            : null,
         onTap: null,
       ),
     );

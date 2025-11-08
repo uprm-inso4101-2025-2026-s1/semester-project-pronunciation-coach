@@ -134,7 +134,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                   ),
                 ],
@@ -166,7 +166,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Colors.blue.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -223,7 +223,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
             Expanded(
               child: ListView.separated(
                 itemCount: widget.challenge.options.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (_, index) {
                   final option = widget.challenge.options[index];
                   final isSelected = _selectedOption == option.letter;
@@ -256,8 +256,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: _isCorrect
-                      ? Colors.green.withOpacity(0.1)
-                      : Colors.red.withOpacity(0.1),
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: _isCorrect ? Colors.green : Colors.red,
@@ -438,7 +438,7 @@ class _AudioOptionCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primary
-                      : Colors.grey.withOpacity(0.2),
+                      : Colors.grey.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Center(

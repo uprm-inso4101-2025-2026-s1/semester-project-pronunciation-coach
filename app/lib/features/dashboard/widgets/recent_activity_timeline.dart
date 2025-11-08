@@ -6,49 +6,9 @@ import '../models/activity.dart';
 class RecentActivityTimeline extends StatelessWidget {
   final List<Activity>? activities;
 
-  const RecentActivityTimeline({
-    super.key,
-    this.activities,
-  });
+  const RecentActivityTimeline({super.key, this.activities});
 
-  // Mock data - replace with widget.activities when available
-  List<Activity> get activityList => activities ?? const [
-    Activity(
-      title: 'Mastered "Thought" pronunciation',
-      subtitle: 'Consonant Clusters • Score: 95%',
-      time: '2 hours ago',
-      icon: Icons.check_circle,
-      color: AppColors.success,
-    ),
-    Activity(
-      title: 'Practiced word stress patterns',
-      subtitle: 'Word Stress • 15 words completed',
-      time: '4 hours ago',
-      icon: Icons.mic,
-      color: AppColors.primary,
-    ),
-    Activity(
-      title: 'Improved vowel sounds',
-      subtitle: 'Vowel Sounds • /æ/ sound practiced',
-      time: '1 day ago',
-      icon: Icons.trending_up,
-      color: AppColors.warning,
-    ),
-    Activity(
-      title: 'Daily goal achieved',
-      subtitle: '10/10 words completed',
-      time: '1 day ago',
-      icon: Icons.emoji_events,
-      color: AppColors.amber,
-    ),
-    Activity(
-      title: 'Started intonation practice',
-      subtitle: 'Intonation Patterns • Question patterns',
-      time: '2 days ago',
-      icon: Icons.play_circle,
-      color: AppColors.purple,
-    ),
-  ];
+  List<Activity> get activityList => activities ?? [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +28,7 @@ class RecentActivityTimeline extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Recent Practice',
-            style: AppTextStyles.heading2,
-          ),
+          const Text('Recent Practice', style: AppTextStyles.heading2),
           const SizedBox(height: 16),
           ListView.separated(
             shrinkWrap: true,
@@ -94,14 +51,10 @@ class RecentActivityTimeline extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: activity.color.withOpacity(0.1),
+            color: activity.color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            activity.icon,
-            color: activity.color,
-            size: 20,
-          ),
+          child: Icon(activity.icon, color: activity.color, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -119,20 +72,14 @@ class RecentActivityTimeline extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 activity.subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
           ),
         ),
         Text(
           activity.time,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[500],
-          ),
+          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
         ),
       ],
     );

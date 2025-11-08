@@ -9,16 +9,16 @@ class AppColors {
   static const Color purple = Color(0xFF8B5CF6);
   static const Color orange = Colors.orange;
   static const Color amber = Colors.amber;
-  
+
   // Background colors
   static const Color background = Color(0xFFF8FAFC);
   static const Color cardBackground = Colors.white;
-  
+
   // Text colors
   static const Color textPrimary = Color(0xFF1E293B);
   static const Color textSecondary = Color(0xFF374151);
   static const Color textMuted = Color(0xFF6B7280);
-  
+
   // Shadow
-  static Color cardShadow = Colors.black.withOpacity(0.05);
+  static Color cardShadow = Colors.black.withValues(alpha: 0.05);
 }

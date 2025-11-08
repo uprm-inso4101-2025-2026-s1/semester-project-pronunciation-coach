@@ -20,7 +20,7 @@ def cache_audio(challenge_id: int, option_letter: str, audio_bytes: bytes) -> No
     """
     cache_key = f"{challenge_id}_{option_letter}"
     _audio_cache[cache_key] = audio_bytes
-    print(f"  💾 Cached audio for {cache_key} ({len(audio_bytes)} bytes)")
+    print(f"Cached audio for {cache_key} ({len(audio_bytes)} bytes)")
 
 
 def cache_challenge(challenge_id: int, data: Dict) -> None:
@@ -32,7 +32,7 @@ def cache_challenge(challenge_id: int, data: Dict) -> None:
         data: Challenge data dictionary
     """
     _challenge_cache[challenge_id] = data
-    print(f"  💾 Cached challenge {challenge_id}")
+    print(f"Cached challenge {challenge_id}")
 
 
 def get_cached_audio(challenge_id: int, option_letter: str) -> Optional[bytes]:
@@ -50,9 +50,9 @@ def get_cached_audio(challenge_id: int, option_letter: str) -> Optional[bytes]:
     audio_data = _audio_cache.get(cache_key)
 
     if audio_data:
-        print(f"  ✅ Retrieved cached audio for {cache_key}")
+        print(f"Retrieved cached audio for {cache_key}")
     else:
-        print(f"  ❌ No cached audio found for {cache_key}")
+        print(f"No cached audio found for {cache_key}")
 
     return audio_data
 
@@ -70,9 +70,9 @@ def get_cached_challenge(challenge_id: int) -> Optional[Dict]:
     challenge_data = _challenge_cache.get(challenge_id)
 
     if challenge_data:
-        print(f"  ✅ Retrieved cached challenge {challenge_id}")
+        print(f"Retrieved cached challenge {challenge_id}")
     else:
-        print(f"  ❌ No cached challenge found for {challenge_id}")
+        print(f"No cached challenge found for {challenge_id}")
 
     return challenge_data
 
@@ -82,7 +82,7 @@ def clear_audio_cache() -> None:
     Clear all cached audio data
     """
     _audio_cache.clear()
-    print("  🗑️  Cleared audio cache")
+    print("Cleared audio cache")
 
 
 def clear_challenge_cache() -> None:
@@ -90,7 +90,7 @@ def clear_challenge_cache() -> None:
     Clear all cached challenge data
     """
     _challenge_cache.clear()
-    print("  🗑️  Cleared challenge cache")
+    print("Cleared challenge cache")
 
 
 def clear_all_caches() -> None:
@@ -99,7 +99,7 @@ def clear_all_caches() -> None:
     """
     clear_audio_cache()
     clear_challenge_cache()
-    print("  🗑️  Cleared all caches")
+    print("Cleared all caches")
 
 
 def get_cache_stats() -> Dict:

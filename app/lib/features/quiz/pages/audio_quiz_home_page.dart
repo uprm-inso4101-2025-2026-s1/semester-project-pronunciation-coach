@@ -65,10 +65,10 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? _buildErrorView()
-              : _difficulties == null || _difficulties!.isEmpty
-                  ? const Center(child: Text('No difficulties available'))
-                  : _buildDifficultyList(),
+          ? _buildErrorView()
+          : _difficulties == null || _difficulties!.isEmpty
+          ? const Center(child: Text('No difficulties available'))
+          : _buildDifficultyList(),
     );
   }
 
@@ -123,19 +123,18 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
         const SizedBox(height: 8),
         Text(
           'Listen to audio pronunciations and pick the correct one!',
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-          ),
+          style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 24),
-        ..._difficulties!.map((difficulty) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _DifficultyCard(
-                difficulty: difficulty,
-                onTap: () => _startQuiz(difficulty),
-              ),
-            )),
+        ..._difficulties!.map(
+          (difficulty) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: _DifficultyCard(
+              difficulty: difficulty,
+              onTap: () => _startQuiz(difficulty),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -144,9 +143,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
 
     try {
@@ -185,10 +182,7 @@ class _DifficultyCard extends StatelessWidget {
   final Difficulty difficulty;
   final VoidCallback onTap;
 
-  const _DifficultyCard({
-    required this.difficulty,
-    required this.onTap,
-  });
+  const _DifficultyCard({required this.difficulty, required this.onTap});
 
   Color get _color {
     switch (difficulty.id) {
@@ -200,6 +194,19 @@ class _DifficultyCard extends StatelessWidget {
         return Colors.red;
       default:
         return Colors.blue;
+    }
+  }
+
+  IconData get _icon {
+    switch (difficulty.id) {
+      case 'easy':
+        return Icons.sentiment_satisfied;
+      case 'medium':
+        return Icons.sentiment_neutral;
+      case 'hard':
+        return Icons.sentiment_dissatisfied;
+      default:
+        return Icons.help_outline;
     }
   }
 
@@ -220,15 +227,10 @@ class _DifficultyCard extends StatelessWidget {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: _color.withOpacity(0.15),
+                  color: _color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Center(
-                  child: Text(
-                    difficulty.icon,
-                    style: const TextStyle(fontSize: 32),
-                  ),
-                ),
+                child: Center(child: Icon(_icon, size: 32, color: _color)),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -245,10 +247,7 @@ class _DifficultyCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       difficulty.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -268,11 +267,7 @@ class _DifficultyCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: _color,
-                size: 20,
-              ),
+              Icon(Icons.arrow_forward_ios, color: _color, size: 20),
             ],
           ),
         ),

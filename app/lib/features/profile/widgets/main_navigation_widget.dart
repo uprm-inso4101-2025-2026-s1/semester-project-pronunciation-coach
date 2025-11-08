@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app/features/dashboard/pages/user_progress_dashboard.dart';
 import 'package:app/features/profile/pages/profile_page.dart';
 
-/// -------------------------------
-///  DAILY CHALLENGE PLACEHOLDER
-/// -------------------------------
+// Daily challenge placeholder
 class DailyChallengePage extends StatelessWidget {
   const DailyChallengePage({super.key});
 
@@ -69,9 +67,7 @@ class DailyChallengePage extends StatelessWidget {
   }
 }
 
-/// -------------------------------
-///  MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
-/// -------------------------------
+// Main navigation screen with bottom tab bar
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -108,7 +104,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),

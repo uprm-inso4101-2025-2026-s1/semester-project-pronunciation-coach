@@ -55,7 +55,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
     // Color animation for background gradient
     _colorAnimation = ColorTween(
-      begin: AppColors.primary.withOpacity(0.3),
+      begin: AppColors.primary.withValues(alpha: 0.3),
       end: AppColors.primary,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
@@ -134,12 +134,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Colors.white, Colors.white.withOpacity(0.8)],
+                          colors: [
+                            Colors.white,
+                            Colors.white.withValues(alpha: 0.8),
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(8.w),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.cardShadow.withOpacity(0.5),
+                            color: AppColors.cardShadow.withValues(alpha: 0.5),
                             blurRadius: 4.w,
                             offset: const Offset(0, 10),
                           ),
@@ -178,7 +181,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         shadows: [
                           Shadow(
                             blurRadius: 10.0,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.black.withValues(alpha: 0.3),
                             offset: const Offset(2.0, 2.0),
                           ),
                         ],
@@ -241,7 +244,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.primary.withOpacity(0.3 * (1 - value)),
+                  color: AppColors.primary.withValues(alpha: 0.3 * (1 - value)),
                   width: 2.0,
                 ),
               ),
@@ -260,7 +263,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppColors.primary.withOpacity(0.5 * (1 - value)),
+                  color: AppColors.primary.withValues(alpha: 0.5 * (1 - value)),
                   width: 1.5,
                 ),
               ),
