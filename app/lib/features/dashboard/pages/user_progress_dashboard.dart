@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:app/pace%20selector/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
-import '../../../core/services/audio_api_service.dart';
+import '../../../core/data/models/user_progress_stats.dart';
+import '../../../core/services/progress_service.dart';
 import '../../quiz/pages/audio_quiz_home_page.dart';
 import '../widgets/recent_activity_timeline.dart';
 import 'package:app/features/profile/pages/profile_page.dart';
@@ -105,10 +105,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.headphones_outlined,
-              ), // CHANGED: Better icon for audio quiz
-              activeIcon: Icon(Icons.headphones),
+              icon: Icon(Icons.question_mark_outlined),
+              activeIcon: Icon(Icons.question_mark),
               label: 'Quiz',
             ),
             BottomNavigationBarItem(
@@ -149,8 +147,8 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
-  // Real data from backend
-  UserProgress? _userProgress;
+  // Real data from ProgressService
+  UserProgressStats? _userProgress;
   bool _isLoading = true;
   String? _error;
 
@@ -176,17 +174,10 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     super.dispose();
   }
 
-  int get _userId {
-    final user = Supabase.instance.client.auth.currentSession?.user;
-    if (user == null) return 1; // Fallback for testing
-    // Convert Supabase UUID to int for backend compatibility
-    return user.id.hashCode.abs();
-  }
-
   Future<void> _loadUserProgress() async {
     try {
-      final apiService = AudioApiService();
-      final userProgress = await apiService.getUserProgress(_userId);
+      final progressService = ProgressService();
+      final userProgress = await progressService.getProgressStats();
 
       if (mounted) {
         setState(() {

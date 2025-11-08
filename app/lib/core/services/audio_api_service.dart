@@ -67,23 +67,6 @@ class AudioApiService {
     }
   }
 
-  /// Get user progress and statistics
-  Future<UserProgress> getUserProgress(int userId) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/user/$userId/progress'),
-      );
-
-      if (response.statusCode == 200) {
-        return UserProgress.fromJson(json.decode(response.body));
-      } else {
-        throw Exception('Failed to load user progress: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error fetching user progress: $e');
-    }
-  }
-
   /// Get audio URL for specific option
   String getAudioUrl(int challengeId, String optionLetter) {
     return '$baseUrl/challenge/audio/$challengeId/option/$optionLetter';
@@ -211,51 +194,6 @@ class AudioChallengeResult {
       feedback: json['feedback'],
       correctAnswer: json['correct_answer'],
       correctWord: json['correct_word'],
-    );
-  }
-}
-
-class UserProgress {
-  final int userId;
-  final int totalXp;
-  final int currentStreak;
-  final int challengesCompleted;
-  final double accuracyRate;
-  final int wordsPracticed;
-  final int sessionsCount;
-  final String avgScore;
-  final int improvedCount;
-  final double accuracyImprovement;
-  final double wordsImprovement;
-
-  UserProgress({
-    required this.userId,
-    required this.totalXp,
-    required this.currentStreak,
-    required this.challengesCompleted,
-    required this.accuracyRate,
-    required this.wordsPracticed,
-    required this.sessionsCount,
-    required this.avgScore,
-    required this.improvedCount,
-    required this.accuracyImprovement,
-    required this.wordsImprovement,
-  });
-
-  factory UserProgress.fromJson(Map<String, dynamic> json) {
-    return UserProgress(
-      userId: json['user_id'],
-      totalXp: json['total_xp'],
-      currentStreak: json['current_streak'],
-      challengesCompleted: json['challenges_completed'],
-      accuracyRate: (json['accuracy_rate'] as num).toDouble(),
-      wordsPracticed: json['words_practiced'],
-      sessionsCount: json['sessions_count'],
-      avgScore: json['avg_score'],
-      improvedCount: json['improved_count'],
-      accuracyImprovement:
-          (json['accuracy_improvement'] as num?)?.toDouble() ?? 0.0,
-      wordsImprovement: (json['words_improvement'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

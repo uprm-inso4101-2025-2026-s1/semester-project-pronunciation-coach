@@ -1,9 +1,12 @@
 import 'dart:async';
+// ignore_for_file: prefer_conditional_assignment
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/services/audio_api_service.dart';
+import '../../../core/services/progress_service.dart';
+import '../../../core/data/models/quiz_attempt.dart';
 import 'audio_quiz_result_page.dart';
 
 class AudioQuizQuestionPage extends StatefulWidget {
@@ -341,19 +344,56 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
     });
 
     try {
+      // Get result from backend (validation and audio logic)
       final result = await _apiService.submitAudioAnswer(
         widget.challenge.id,
         _selectedOption!,
         _userId,
       );
 
+      // Calculate XP based on difficulty
+      final xpMap = {"easy": 10, "medium": 15, "hard": 20};
+      final baseXp = xpMap[widget.difficulty.id.toLowerCase()] ?? 15;
+      final xpEarned = result.isCorrect ? baseXp : 0;
+
+      // Save progress data directly to Supabase
+      final progressService = ProgressService();
+
+      // Get or initialize user progress
+      var progress = await progressService.getUserProgress();
+      if (progress == null) {
+        progress = await progressService.initializeUserProgress();
+      }
+
+      // Update progress based on result
+      final updatedProgress = progress.copyWith(
+        totalXp: progress.totalXp + xpEarned,
+        challengesCompleted: progress.challengesCompleted + 1,
+        currentStreak: result.isCorrect ? progress.currentStreak + 1 : 0,
+        lastChallengeDate: DateTime.now().toIso8601String().split('T')[0],
+      );
+
+      await progressService.saveUserProgress(updatedProgress);
+
+      // Save quiz attempt
+      final attempt = QuizAttempt(
+        userId: _userId,
+        challengeId: widget.challenge.id,
+        difficulty: widget.difficulty.id.toLowerCase(),
+        userAnswer: _selectedOption!,
+        correctAnswer: result.correctAnswer,
+        isCorrect: result.isCorrect,
+        xpEarned: xpEarned,
+        createdAt: DateTime.now(),
+      );
+
+      await progressService.createQuizAttempt(attempt);
+
       setState(() {
         _isCorrect = result.isCorrect;
-        _feedback = result.feedback;
-        if (!result.isCorrect) {
-          _feedback =
-              'Correct answer: ${result.correctAnswer} - "${result.correctWord}"';
-        }
+        _feedback = !result.isCorrect
+            ? 'Correct answer: ${result.correctAnswer} - "${result.correctWord}"'
+            : result.feedback;
         _hasAnswered = true;
         _isSubmitting = false;
       });

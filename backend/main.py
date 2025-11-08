@@ -8,17 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 sys.path.insert(0, str(Path(__file__).parent))
 
 from application.audio_challenge_service import router as audio_router
-from infrastructure.supabase_client import init_supabase_client
 
-# Import routers (Removed the line for challenge_service)
-
-# Initialize Supabase client
-try:
-    init_supabase_client()
-    print("Supabase client initialized successfully")
-except Exception as e:
-    print(f"Failed to initialize Supabase client: {e}")
-    print("Backend will continue without database connectivity")
+# Note: Supabase client removed - all data operations now handled by frontend
 
 app = FastAPI(
     title="Pronunciation Coach API",

@@ -200,11 +200,11 @@ class _DifficultyCard extends StatelessWidget {
   IconData get _icon {
     switch (difficulty.id) {
       case 'easy':
-        return Icons.sentiment_satisfied;
+        return Icons.sentiment_very_satisfied;
       case 'medium':
         return Icons.sentiment_neutral;
       case 'hard':
-        return Icons.sentiment_dissatisfied;
+        return Icons.sentiment_very_dissatisfied;
       default:
         return Icons.help_outline;
     }
