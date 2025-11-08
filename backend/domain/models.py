@@ -1,16 +1,24 @@
+"""
+Domain models for the Pronunciation Coach application.
+
+Defines data structures for challenges, results, and user progress.
+"""
+
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
 
 
 class ChallengeType(Enum):
+    """Enumeration of different challenge types."""
     NAME = "name"
     WORD = "word"
     MULTIPLE_CHOICE = "multiple_choice"
 
 
 @dataclass
-class Challenge:
+class Challenge:  # pylint: disable=too-many-instance-attributes
+    """Represents a pronunciation challenge."""
     id: int
     content: str
     type: ChallengeType
@@ -26,6 +34,7 @@ class Challenge:
 
 @dataclass
 class ChallengeResult:
+    """Represents the result of a challenge attempt."""
     challenge_id: int
     user_id: int
     is_correct: bool
@@ -36,6 +45,7 @@ class ChallengeResult:
 
 @dataclass
 class UserProgress:
+    """Represents a user's overall progress in the application."""
     user_id: int
     total_xp: int
     current_streak: int

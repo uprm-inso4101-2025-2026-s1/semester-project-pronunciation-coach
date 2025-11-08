@@ -26,4 +26,3 @@ typing_extensions==4.15.0
 uvicorn==0.38.0
 gTTS==2.5.3
 supabase==2.10.0
-python-dotenv==1.0.0

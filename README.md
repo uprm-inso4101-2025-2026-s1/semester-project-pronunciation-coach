@@ -258,27 +258,40 @@ deactivate
 
 ### Flutter App (`app/`)
 
-- **`core/`** - Core files used throughout the app
-  - Reusable widgets
-  - Constants
-  - Services (like Supabase client)
-  - Configuration files
-- **`features/`** - Individual app features, each containing:
-  - `pages/` - Screen/page files
-  - `widgets/` - Feature-specific widgets
-  - `routes/` - Feature-specific routing
+The Flutter app follows **Clean Architecture** principles with **Feature-First** organization:
+
+- **`core/`** - Shared application logic
+
+  - `common/` - Shared utilities, models, constants, and configurations
+  - `di/` - Dependency injection setup
+  - `network/` - API services and external communications
+  - `storage/` - Local storage services
+
+- **`features/`** - Feature-based modules (each following Clean Architecture)
+  - `authentication/` - User login/signup functionality
+  - `dashboard/` - Main dashboard and progress visualization
+  - `quiz/` - Audio pronunciation quiz feature
+  - `progress/` - User progress tracking
+  - `profile/` - User profile management
+
+Each feature follows this structure:
+
+- `presentation/` - UI layer (pages, widgets, blocs/cubits)
+- `domain/` - Business logic layer (entities, use cases, repositories)
+- `data/` - Data access layer (data sources, repository implementations)
 
 ### Backend (`backend/`)
 
-- **`main.py`** - FastAPI application entry point
-- **`application/`** - API endpoints and request handling
-  - `challenge_service.py` - Quiz and challenge endpoints
-- **`domain/`** - Business logic (no external dependencies)
-  - `challenge_logic.py` - Quiz logic, XP calculation
-  - `models.py` - Data models
-  - `utils/` - Reusable utilities (word generation, scrambling)
-- **`infrastructure/`** - External services and data storage
-  - `data_store.py` - In-memory storage (will be replaced with Supabase)
+The Python backend follows **Layered Architecture**:
+
+- **`api/`** - API layer (FastAPI routes and controllers)
+  - `audio_challenge_service.py` - Audio quiz endpoints
+- **`domain/`** - Domain layer (business logic)
+  - `audio_challenge_logic.py` - Quiz generation and validation logic
+  - `models.py` - Domain models
+  - `utils/` - Domain utilities (word generation, TTS)
+- **`infrastructure/`** - Infrastructure layer (external services)
+  - `audio_cache.py` - Audio file caching
 
 ---
 

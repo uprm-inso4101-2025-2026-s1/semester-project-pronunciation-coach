@@ -8,8 +8,9 @@ import io
 import random
 from typing import Dict, List
 
-from domain.utils.word_picker import get_word_by_difficulty
 from gtts import gTTS
+from domain.utils.word_picker import get_word_by_difficulty
+from infrastructure.audio_cache import cache_audio, cache_challenge
 
 # Vowel-focused Mispronunciation Techniques
 
@@ -176,7 +177,7 @@ def create_pronunciation_variants(word: str) -> List[Dict[str, str]]:
     return variants[:4]  # Return exactly 4
 
 
-def generate_audio_for_variant(variant: Dict, format: str = "bytes") -> bytes:
+def generate_audio_for_variant(variant: Dict, output_format: str = "bytes") -> bytes:
     """
     Generate audio for a pronunciation variant using Google TTS.
     """
@@ -197,17 +198,15 @@ def generate_audio_for_variant(variant: Dict, format: str = "bytes") -> bytes:
         audio_fp.seek(0)
         audio_bytes = audio_fp.read()
 
-        if format == "base64":
+        if output_format == "base64":
             return base64.b64encode(audio_bytes).decode("utf-8")
-        else:
-            return audio_bytes
+        return audio_bytes
 
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         # Return empty audio data on failure
-        if format == "base64":
+        if output_format == "base64":
             return ""
-        else:
-            return b""
+        return b""
 
 
 def generate_audio_challenge(difficulty: str) -> Dict:
@@ -228,14 +227,12 @@ def generate_audio_challenge(difficulty: str) -> Dict:
     challenge_id = random.randint(10000, 99999)
 
     # Generate and cache audio for each variant
-    from infrastructure.audio_cache import cache_audio, cache_challenge
-
     options_data = []
     for i, variant in enumerate(variants):
         option_letter = chr(65 + i)
 
         # Generate audio
-        audio_bytes = generate_audio_for_variant(variant, format="bytes")
+        audio_bytes = generate_audio_for_variant(variant, output_format="bytes")
 
         # Cache the audio
         cache_audio(challenge_id, option_letter, audio_bytes)
@@ -270,7 +267,7 @@ def generate_audio_challenge(difficulty: str) -> Dict:
         "content": f"Which pronunciation of '{word}' is correct?",
         "type": "audio_pronunciation",
         "xp_reward": xp_map[difficulty],
-        "hint": f"Listen carefully to the vowel sounds.",
+        "hint": "Listen carefully to the vowel sounds.",
         "options": options_data,
         "correct_answer": correct_letter,
     }

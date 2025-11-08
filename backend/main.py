@@ -1,13 +1,27 @@
+"""
+Pronunciation Coach Backend API.
+
+FastAPI application serving audio challenges and progress tracking
+for the Pronunciation Coach mobile app.
+"""
+
 import sys
 from pathlib import Path
 
+# Third-party imports
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# First-party imports
+from api.audio_challenge_service import router as audio_router
+from infrastructure.audio_cache import (
+    _audio_cache,
+    _challenge_cache,
+    get_cache_stats,
+)
+
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
-
-from application.audio_challenge_service import router as audio_router
 
 # Note: Supabase client removed - all data operations now handled by frontend
 
@@ -33,6 +47,7 @@ app.include_router(audio_router, prefix="/api", tags=["audio"])
 
 @app.get("/")
 async def root():
+    """Root endpoint returning API information."""
     return {
         "message": "Pronunciation Coach API - Audio Challenges",
         "status": "running",
@@ -49,21 +64,13 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
-    from infrastructure.audio_cache import get_cache_stats
-
+    """Health check endpoint."""
     return {"status": "healthy", "cache_stats": get_cache_stats()}
 
 
 @app.get("/debug/cache")
 async def debug_cache():
-    """Debug endpoint to check cache contents"""
-    from infrastructure.audio_cache import (
-        _audio_cache,
-        _challenge_cache,
-        get_cache_stats,
-    )
-
+    """Debug endpoint to check cache contents."""
     stats = get_cache_stats()
 
     # Get all cached challenge IDs and audio keys

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../../../core/constants/colors.dart';
+import '../../../../core/common/colors.dart';
 
 class Achievement {
   final String id;

@@ -10,7 +10,7 @@ Provides text-to-speech functionality using pyttsx3 (offline, cross-platform).
 import importlib
 import subprocess
 import sys
-from typing import List, Optional
+from typing import List
 
 
 def _ensure_package(pkg_name: str) -> bool:
@@ -111,12 +111,12 @@ def speak_word_list(words: List[str], engine=None, boost: int = 1) -> None:
             for _ in range(max(1, boost)):
                 engine.say(word)
             engine.runAndWait()
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         pass
 
 
 # Keep original function name for compatibility
-def TTS_Speak(words: List[str], engine=None) -> None:
+def tts_speak(words: List[str], engine=None) -> None:
     """
     Original function signature from TTS.py.
 
