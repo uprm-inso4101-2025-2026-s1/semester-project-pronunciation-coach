@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../../../core/constants/colors.dart';
-import '../../dashboard/widgets/streak_xp.dart';
+import '../../../../core/common/colors.dart';
 
 class Achievement {
   final String id;
@@ -87,12 +86,11 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       achievements = _defaultAchievements();
     }
 
-    // Load shared progress from Daily Challenge
-    final userProgress = await UserProgress.load();
-    totalXP = userProgress.points;
-    currentStreak = userProgress.streak;
+    // Set default progress values since daily challenge is removed
+    totalXP = 4200; // Default XP
+    currentStreak = 3; // Default streak
 
-    // Update achievement progress according to shared values
+    // Update achievement progress according to default values
     for (var a in achievements) {
       if (a.groupId == 'xp') {
         a.currentProgress = totalXP;
@@ -390,7 +388,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                     child: Container(
                       height: 12,
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.withValues(alpha: 0.2),
                         borderRadius: const BorderRadius.vertical(
                           bottom: Radius.circular(12),
                         ),
@@ -508,7 +506,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
+        color: Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.greenAccent),
       ),

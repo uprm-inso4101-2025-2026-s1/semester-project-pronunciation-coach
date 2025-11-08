@@ -187,6 +187,43 @@ curl http://localhost:8000/api/challenges
 curl http://localhost:8000/api/progress/1
 ```
 
+### 5.5. Supabase Database Setup
+
+The backend now uses Supabase PostgreSQL for persistent data storage.
+
+#### Create Database Tables
+
+1. Go to your Supabase project dashboard
+2. Navigate to **SQL Editor**
+3. Copy and run the contents of `backend/database_setup.sql`
+
+This creates the required tables:
+
+- `user_progress` - Stores user XP, streaks, and completion stats
+- `quiz_attempts` - Records individual quiz attempts with results
+
+#### Configure Environment Variables
+
+1. Copy the environment template:
+
+```bash
+cp .env.example .env
+```
+
+2. Get your Supabase credentials:
+
+   - Go to **Settings** → **API** in your Supabase dashboard
+   - Copy **Project URL** and **anon public key**
+
+3. Edit `.env` and add:
+
+```bash
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+**Important:** Never commit the `.env` file to git.
+
 ### 7. Connect Flutter App to Backend
 
 In your Flutter app, the API base URL should be:
@@ -221,27 +258,40 @@ deactivate
 
 ### Flutter App (`app/`)
 
-- **`core/`** - Core files used throughout the app
-  - Reusable widgets
-  - Constants
-  - Services (like Supabase client)
-  - Configuration files
-- **`features/`** - Individual app features, each containing:
-  - `pages/` - Screen/page files
-  - `widgets/` - Feature-specific widgets
-  - `routes/` - Feature-specific routing
+The Flutter app follows **Clean Architecture** principles with **Feature-First** organization:
+
+- **`core/`** - Shared application logic
+
+  - `common/` - Shared utilities, models, constants, and configurations
+  - `di/` - Dependency injection setup
+  - `network/` - API services and external communications
+  - `storage/` - Local storage services
+
+- **`features/`** - Feature-based modules (each following Clean Architecture)
+  - `authentication/` - User login/signup functionality
+  - `dashboard/` - Main dashboard and progress visualization
+  - `quiz/` - Audio pronunciation quiz feature
+  - `progress/` - User progress tracking
+  - `profile/` - User profile management
+
+Each feature follows this structure:
+
+- `presentation/` - UI layer (pages, widgets, blocs/cubits)
+- `domain/` - Business logic layer (entities, use cases, repositories)
+- `data/` - Data access layer (data sources, repository implementations)
 
 ### Backend (`backend/`)
 
-- **`main.py`** - FastAPI application entry point
-- **`application/`** - API endpoints and request handling
-  - `challenge_service.py` - Quiz and challenge endpoints
-- **`domain/`** - Business logic (no external dependencies)
-  - `challenge_logic.py` - Quiz logic, XP calculation
-  - `models.py` - Data models
-  - `utils/` - Reusable utilities (word generation, scrambling)
-- **`infrastructure/`** - External services and data storage
-  - `data_store.py` - In-memory storage (will be replaced with Supabase)
+The Python backend follows **Layered Architecture**:
+
+- **`api/`** - API layer (FastAPI routes and controllers)
+  - `audio_challenge_service.py` - Audio quiz endpoints
+- **`domain/`** - Domain layer (business logic)
+  - `audio_challenge_logic.py` - Quiz generation and validation logic
+  - `models.py` - Domain models
+  - `utils/` - Domain utilities (word generation, TTS)
+- **`infrastructure/`** - Infrastructure layer (external services)
+  - `audio_cache.py` - Audio file caching
 
 ---
 
@@ -403,4 +453,3 @@ flutter run
 3. Test thoroughly (both Flutter and backend if applicable)
 4. Submit a pull request
 5. Tag appropriate reviewers
-

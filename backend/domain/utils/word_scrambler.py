@@ -84,7 +84,7 @@ def generate_multiple_choice_options(correct_word: str) -> List[str]:
 
 
 # Keep original function name for backwards compatibility
-def Generate_Evil_Words(word: str) -> List[List[str]]:
+def generate_evil_words(word: str) -> List[List[str]]:
     """
     Original function signature from Multiple_Choice_Quiz.py
     Kept for backwards compatibility.

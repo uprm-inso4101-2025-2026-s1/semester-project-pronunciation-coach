@@ -90,7 +90,7 @@ def get_random_common_word(top_n: int = 1000) -> str:
         if not common_words:
             raise ValueError("No common words found")
         return random.choice(common_words)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error getting common words: {e}")
         # Fallback to basic words
         return get_random_english_word()
@@ -112,4 +112,3 @@ def get_word_by_difficulty(difficulty: str) -> str:
 
     top_n = ranges.get(difficulty, 1000)
     return get_random_common_word(top_n)
-
