@@ -8,6 +8,7 @@ import '../../../core/constants/text_styles.dart';
 import '../../../core/data/models/user_progress_stats.dart';
 import '../../../core/services/progress_service.dart';
 import '../../quiz/pages/audio_quiz_home_page.dart';
+import '../../log_in/pages/login_page.dart';
 import '../widgets/recent_activity_timeline.dart';
 import 'package:app/features/profile/pages/profile_page.dart';
 
@@ -151,6 +152,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   UserProgressStats? _userProgress;
   bool _isLoading = true;
   String? _error;
+  bool _isGuest = false;
 
   @override
   void initState() {
@@ -177,13 +179,34 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   Future<void> _loadUserProgress() async {
     try {
       final progressService = ProgressService();
-      final userProgress = await progressService.getProgressStats();
+
+      // First check if user is a guest
+      final isGuest = progressService.isGuest;
 
       if (mounted) {
         setState(() {
-          _userProgress = userProgress;
-          _isLoading = false;
+          _isGuest = isGuest;
         });
+      }
+
+      // Only load progress if NOT a guest
+      if (!isGuest) {
+        final userProgress = await progressService.getProgressStats();
+
+        if (mounted) {
+          setState(() {
+            _userProgress = userProgress;
+            _isLoading = false;
+          });
+        }
+      } else {
+        // Guest user - no data to load
+        if (mounted) {
+          setState(() {
+            _userProgress = null;
+            _isLoading = false;
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -209,60 +232,90 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChallengesPage()),
-              );
-            },
-            child: const Text(
-              "Select Pace",
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
+        actions: _isGuest
+            ? null // Hide actions for guests
+            : [
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChallengesPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Select Pace",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Display Selected Pace
-              _buildSelectedPace(context),
-              const SizedBox(height: 20),
+        child: _isGuest
+            ? _buildGuestView() // Show ONLY guest view for guests
+            : _buildAuthenticatedView(), // Show full dashboard for authenticated users
+      ),
+    );
+  }
 
-              // Progress Overview Cards (Portrait Layout)
-              _buildProgressOverview(),
-              const SizedBox(height: 20),
+  Widget _buildAuthenticatedView() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Display Selected Pace
+          _buildSelectedPace(context),
+          const SizedBox(height: 20),
 
-              // Practice Statistics
-              _buildPracticeStatistics(),
-              const SizedBox(height: 20),
-
-              // Loading/Error states
-              if (_isLoading)
-                const Center(child: CircularProgressIndicator())
-              else if (_error != null)
-                Center(
-                  child: Text(
-                    'Error loading data: $_error',
-                    style: const TextStyle(color: Colors.red),
+          // Loading/Error states
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (_error != null)
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error loading data',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              const SizedBox(height: 20),
+                  const SizedBox(height: 8),
+                  Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )
+          else ...[
+            // Progress Overview Cards (Portrait Layout)
+            _buildProgressOverview(),
+            const SizedBox(height: 20),
 
-              // Recent Practice Sessions
-              const RecentActivityTimeline(),
+            // Practice Statistics
+            _buildPracticeStatistics(),
+            const SizedBox(height: 20),
 
-              // Add bottom padding for tab bar
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+            // Recent Practice Sessions
+            const RecentActivityTimeline(),
+          ],
+
+          // Add bottom padding for tab bar
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
@@ -279,7 +332,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         paceText = 'ðŸŸ  Standard ðŸŸ ';
         break;
       case LearningPace.intensive:
-        paceText = 'ðŸ”´ Intensive ðŸ”´';
+        paceText = 'ðŸ"´ Intensive ðŸ"´';
         break;
     }
 
@@ -518,6 +571,105 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGuestView() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 500),
+          padding: const EdgeInsets.all(40),
+          decoration: BoxDecoration(
+            color: AppColors.cardBackground,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.cardShadow,
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.lock_outline, size: 64, color: AppColors.primary),
+              const SizedBox(height: 24),
+              const Text(
+                'Login Required',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Create an account or sign in to:',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              _buildFeatureItem(Icons.show_chart, 'Track your progress'),
+              const SizedBox(height: 12),
+              _buildFeatureItem(Icons.analytics, 'View detailed statistics'),
+              const SizedBox(height: 12),
+              _buildFeatureItem(Icons.history, 'See your practice history'),
+              const SizedBox(height: 12),
+              _buildFeatureItem(Icons.trending_up, 'Monitor improvements'),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                },
+                icon: const Icon(Icons.login),
+                label: const Text('Sign In / Create Account'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Your progress and data are secure and private',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureItem(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, color: AppColors.primary, size: 20),
+        const SizedBox(width: 12),
+        Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
+      ],
     );
   }
 

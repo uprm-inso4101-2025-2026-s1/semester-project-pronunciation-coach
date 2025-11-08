@@ -7,7 +7,7 @@ import '../../../core/constants/colors.dart';
 import '../../../core/constants/text_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../loading_screens/loading_screens_manager.dart';
-import 'package:app/core/services/supabase_client.dart'; // adjust path if your project structure differs
+import 'package:app/core/services/supabase_client.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _loadingSystem.removeLoadingListener((isLoading) {});
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
     super.dispose();
   }
 
@@ -55,23 +57,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // =============================================================================
-  // DEMONSTRATING DESIGN PATTERNS IN USAGE:
-  // =============================================================================
-  //
-  // FACTORY PATTERN: Creating loading strategy
-  // - LoadingStrategyFactory.createRandomStrategy() for normal loading
-  // - LoadingStrategyFactory.createPulsatingWave() for error state
-  //
-  // STRATEGY PATTERN: Interchangeable loading behaviors
-  // - Different strategies can be swapped at runtime
-  // - Each strategy provides different visual feedback
-  //
-  // OBSERVER PATTERN: Loading state management
-  // - _loadingSystem.addLoadingListener() for state tracking
-  // - Automatic UI updates based on loading state
-  // =============================================================================
-
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -85,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
-      // 1) Sign in with Supabase
+      // Sign in with Supabase
       await AppSupabase.client.auth.signInWithPassword(
         email: email,
         password: password,
@@ -107,6 +92,25 @@ class _LoginPageState extends State<LoginPage> {
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  Future<void> _onContinueAsGuest() async {
+    // Ensure user is signed out before continuing as guest
+    try {
+      await AppSupabase.client.auth.signOut();
+    } catch (e) {
+      // Ignore sign out errors for guests
+    }
+
+    if (!mounted) return;
+
+    // Show a brief message
+    _showSnack('Continuing as guest - progress will not be saved');
+
+    // Navigate to app
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+    );
   }
 
   String? _validateEmail(String? v) {
@@ -424,19 +428,12 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Continue to App Button
+                      // Continue as Guest Button - FIXED
                       SizedBox(
                         width: double.infinity,
                         height: 7.h,
                         child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const MainNavigationScreen(),
-                              ),
-                            );
-                          },
+                          onPressed: _onContinueAsGuest,
                           style: OutlinedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3.w),
@@ -451,13 +448,13 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.rocket_launch,
+                                Icons.person_off_outlined,
                                 color: AppColors.primary,
                                 size: 16.sp,
                               ),
                               SizedBox(width: 3.w),
                               Text(
-                                'Explore App Features',
+                                'Continue as Guest',
                                 style: AppTextStyles.bodyMedium.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w600,
@@ -467,6 +464,16 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
+                      ),
+                      SizedBox(height: 1.h),
+                      Text(
+                        'Note: Progress will not be saved',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: Colors.orange[700],
+                          fontSize: 11.sp,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 2.h),
                     ],
