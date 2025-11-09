@@ -713,6 +713,75 @@ By grounding the backend in domain engineering principles, the architecture will
 
 **Cross-Platform Validation**: Tested current implementation across iOS simulator and Android emulator to verify consistent behavior and appearance across target platforms.
 
+=== 3.3 Risk Analysis
+
+==== 3.3.1 Risk Analysis and Mitigation Strategies
+
+### **Purpose**
+
+The purpose of this section is to identify, evaluate, and plan strategies to manage potential risks that may impact the development, quality, or delivery of the *Pronunciation Coach* application.
+Through structured risk analysis, the team can anticipate technical, operational, and user-related issues, minimizing disruptions and ensuring consistent project progress.
+
+---
+
+### **Approach**
+
+The risk analysis follows three essential stages:
+
+1. **Identification** – Recognize possible risks that could affect project success.
+2. **Evaluation** – Assess each risk based on its probability and impact.
+3. **Mitigation** – Define actions to prevent or reduce negative outcomes.
+
+All risks are grouped into four categories:
+
+* **Technical risks:** Issues related to the system’s functionality and reliability.
+* **Operational risks:** Problems that may affect system performance or data flow.
+* **User-related risks:** Risks associated with user experience and engagement.
+* **Management risks:** Risks in team coordination or project timeline.
+
+---
+
+### **Risk Identification and Evaluation**
+
+| **ID** | **Category**  | **Description**                                                                                 | **Probability** | **Impact** | **Level** | **Mitigation Strategy**                                                         |
+| ------ | ------------- | ----------------------------------------------------------------------------------------------- | --------------- | ---------- | --------- | ------------------------------------------------------------------------------- |
+| R1     | Technical     | Speech recognition system misinterprets user input due to background noise or accent variation. | Medium          | High       | High      | Implement better noise filtering and adaptive accent recognition.               |
+| R2     | Technical     | Data loss caused by unexpected app crash or interruption during progress saving.                | Low             | High       | Medium    | Enable automatic data persistence and backup upon each progress update.         |
+| R3     | User-Related  | Users feel demotivated if feedback is unclear or overly negative.                               | Medium          | Medium     | Medium    | Provide positive reinforcement messages and visual progress indicators.         |
+| R4     | Management    | Code integration conflicts between different developers during merges.                          | Medium          | High       | High      | Adopt structured version control workflow and mandatory code reviews.           |
+| R5     | Operational   | Delay in loading or assessing pronunciation results on slower devices.                          | Medium          | Medium     | Medium    | Optimize algorithms and limit background processes during recording.            |
+| R6     | Security      | Unauthorized access to user recordings or personal progress data.                               | Low             | High       | Medium    | Use data encryption and secure authentication for stored information.           |
+| R7     | Accessibility | Users with disabilities encounter difficulties using app features.                              | Medium          | Medium     | Medium    | Follow WCAG 2.2 standards and ensure all UI elements have accessibility labels. |
+
+---
+
+### **Risk Impact Matrix**
+
+| **Impact / Probability** | **Low Probability** | **Medium Probability** | **High Probability** |
+| ------------------------ | ------------------- | ---------------------- | -------------------- |
+| **Low Impact**           | -                   | -                      | -                    |
+| **Medium Impact**        | R5, R7              | R3                     | -                    |
+| **High Impact**          | R2, R6              | R1, R4                 | -                    |
+
+This matrix highlights that **R1 (Speech Recognition Accuracy)** and **R4 (Code Integration Conflicts)** are the most critical risks, requiring consistent monitoring throughout development.
+
+---
+
+### **Mitigation and Monitoring Plan**
+
+* Conduct **regular team code reviews** to minimize integration risks.
+* Use **automated backup and data recovery** tools to prevent data loss.
+* Perform **device testing** across multiple platforms to reduce performance issues.
+* Incorporate **positive and adaptive feedback** mechanisms to maintain user motivation.
+* Apply **accessibility testing** for inclusive usability.
+
+---
+
+### **Conclusion**
+
+The *Risk Analysis* section establishes a proactive framework for identifying and managing potential issues in the *Pronunciation Coach* project.
+By anticipating risks related to technical reliability, user experience, data protection, and team coordination, the project can maintain stable performance and user satisfaction throughout development.
+
 ---
 
 _Last Updated: November 8, 2025_  
