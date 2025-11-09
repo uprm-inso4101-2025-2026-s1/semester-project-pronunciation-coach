@@ -717,14 +717,13 @@ By grounding the backend in domain engineering principles, the architecture will
 
 ==== 3.3.1 Risk Analysis and Mitigation Strategies
 
-### **Purpose**
+**Purpose**
 
 The purpose of this section is to identify, evaluate, and plan strategies to manage potential risks that may impact the development, quality, or delivery of the *Pronunciation Coach* application.
 Through structured risk analysis, the team can anticipate technical, operational, and user-related issues, minimizing disruptions and ensuring consistent project progress.
 
----
 
-### **Approach**
+**Approach**
 
 The risk analysis follows three essential stages:
 
@@ -739,9 +738,8 @@ All risks are grouped into four categories:
 * **User-related risks:** Risks associated with user experience and engagement.
 * **Management risks:** Risks in team coordination or project timeline.
 
----
 
-### **Risk Identification and Evaluation**
+**Risk Identification and Evaluation**
 
 | **ID** | **Category**  | **Description**                                                                                 | **Probability** | **Impact** | **Level** | **Mitigation Strategy**                                                         |
 | ------ | ------------- | ----------------------------------------------------------------------------------------------- | --------------- | ---------- | --------- | ------------------------------------------------------------------------------- |
@@ -753,9 +751,8 @@ All risks are grouped into four categories:
 | R6     | Security      | Unauthorized access to user recordings or personal progress data.                               | Low             | High       | Medium    | Use data encryption and secure authentication for stored information.           |
 | R7     | Accessibility | Users with disabilities encounter difficulties using app features.                              | Medium          | Medium     | Medium    | Follow WCAG 2.2 standards and ensure all UI elements have accessibility labels. |
 
----
 
-### **Risk Impact Matrix**
+**Risk Impact Matrix**
 
 | **Impact / Probability** | **Low Probability** | **Medium Probability** | **High Probability** |
 | ------------------------ | ------------------- | ---------------------- | -------------------- |
@@ -765,9 +762,8 @@ All risks are grouped into four categories:
 
 This matrix highlights that **R1 (Speech Recognition Accuracy)** and **R4 (Code Integration Conflicts)** are the most critical risks, requiring consistent monitoring throughout development.
 
----
 
-### **Mitigation and Monitoring Plan**
+**Mitigation and Monitoring Plan**
 
 * Conduct **regular team code reviews** to minimize integration risks.
 * Use **automated backup and data recovery** tools to prevent data loss.
@@ -775,7 +771,6 @@ This matrix highlights that **R1 (Speech Recognition Accuracy)** and **R4 (Code 
 * Incorporate **positive and adaptive feedback** mechanisms to maintain user motivation.
 * Apply **accessibility testing** for inclusive usability.
 
----
 
 ### **Conclusion**
 
