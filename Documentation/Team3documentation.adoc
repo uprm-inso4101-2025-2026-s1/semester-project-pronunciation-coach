@@ -771,6 +771,118 @@ This matrix highlights that **R1 (Speech Recognition Accuracy)** and **R4 (Code 
 * Incorporate **positive and adaptive feedback** mechanisms to maintain user motivation.
 * Apply **accessibility testing** for inclusive usability.
 
+==== 3.3.2 Audio Processing Module - Fault Tree Analysis
+
+**Purpose**: This subsection provides detailed technical risk analysis of the pronunciation feedback system using fault tree analysis methodology to identify critical failure modes and their interdependencies.
+
+**Approach**: Fault tree analysis examines the audio processing pipeline by modeling failure propagation from leaf nodes (individual component failures) through intermediate events to the root failure (inaccurate pronunciation feedback). This approach reveals minimal cut sets—combinations of failures that guarantee system malfunction.
+
+---
+
+**Risk Tree Overview**
+
+**Root Risk:** Inaccurate Pronunciation Feedback Provided
+
+**Critical Finding:** The system requires ALL three components to function correctly:
+1. Clean audio capture
+2. Accurate MFCC analysis  
+3. Valid native pronunciation models
+
+Failure in ANY component causes system failure (AND logic gate), making this a series reliability configuration.
+
+---
+
+**Identified Leaf Nodes (11 Technical Failures)**
+
+**Audio Capture Issues:**
+- Background noise interference (bus, cafeteria environments) - Likelihood: HIGH
+- Poor microphone hardware quality - Likelihood: MEDIUM
+- Incorrect audio format/codec processing - Likelihood: LOW
+- Microphone permission denied by user - Likelihood: MEDIUM
+
+**MFCC Analysis Issues:**
+- Incorrect algorithm parameters (window size, hop length) - Likelihood: MEDIUM
+- Cross-platform implementation inconsistency (iOS vs Android) - Likelihood: MEDIUM
+- flutter_sound library defects or API changes - Likelihood: LOW
+- Insufficient device computational resources - Likelihood: LOW
+
+**Native Pronunciation Model Issues:**
+- Native audio model missing for target phrase - Likelihood: LOW
+- Low quality native speaker recording - Likelihood: MEDIUM
+- Pronunciation model language/dialect mismatch - Likelihood: LOW
+
+---
+
+**Cut Set Analysis Results**
+
+Four critical failure combinations identified that will cause inaccurate feedback:
+
+1. **Cut Set 1**: Background noise + Wrong MFCC parameters + Missing native model
+2. **Cut Set 2**: Poor microphone quality + Cross-platform inconsistency + Low quality native recording
+3. **Cut Set 3**: Background noise + MFCC parameter issues + Model language mismatch
+4. **Cut Set 4**: Microphone permission denied + Insufficient resources + Native model quality issues
+
+**Priority Findings:**
+- Background noise detection affects 3 of 4 cut sets (75% coverage)
+- MFCC parameter validation affects 3 of 4 cut sets (75% coverage)
+- Native model quality assurance affects 2 of 4 cut sets (50% coverage)
+
+---
+
+**Mitigation Strategy and Implementation Priority**
+
+Based on fault tree analysis, the following countermeasures are prioritized:
+
+**Priority 1 - High Impact Mitigations:**
+
+1. **Noise Detection System** (addresses Cut Sets 1, 2, 3)
+   - Implement pre-recording audio quality check
+   - Display "Quiet environment recommended" warning when ambient noise exceeds threshold
+   - Provide visual indicator of recording quality during capture
+   - *Relation to R1 in Section 3.3.1*: Directly improves speech recognition accuracy
+
+2. **MFCC Parameter Standardization** (addresses Cut Sets 1, 2, 4)
+   - Document and validate MFCC configuration across iOS and Android platforms
+   - Create unit tests verifying consistent feature extraction results
+   - Implement automated parameter validation before pronunciation comparison
+   - *Relation to R5 in Section 3.3.1*: Improves processing consistency on slower devices
+
+**Priority 2 - Medium Impact Mitigations:**
+
+3. **Native Model Validation Pipeline** (addresses Cut Sets 1, 2, 4)
+   - Establish quality criteria for native speaker recordings (SNR > 20dB, no clipping)
+   - Implement automated quality checks during content ingestion
+   - Create metadata validation ensuring language/dialect consistency
+   - *Relation to R1 in Section 3.3.1*: Ensures reliable reference pronunciation models
+
+4. **Permission and Resource Management** (addresses Cut Set 4)
+   - Implement graceful degradation when microphone permission denied
+   - Provide clear explanation and recovery path for permission issues
+   - Add device capability detection before attempting audio processing
+   - *Relation to R2 in Section 3.3.1*: Prevents data loss from incomplete recordings
+
+---
+
+**Monitoring and Validation Plan**
+
+- Conduct **device testing matrix** covering noise scenarios and hardware variations
+- Implement **telemetry logging** for MFCC parameter performance across platforms
+- Establish **native model quality metrics** reviewed during content updates
+- Create **automated fault injection tests** simulating identified leaf node failures
+
+---
+
+**Integration with General Risk Framework**
+
+This fault tree analysis complements the general risk analysis in Section 3.3.1 by providing:
+
+- Technical depth for R1 (Speech Recognition Accuracy) - now decomposed into 11 specific failure modes
+- Implementation guidance for R5 (Performance Issues) - addressed through MFCC optimization
+- Reliability targets for R2 (Data Loss Prevention) - supported by resource management
+
+The identified cut sets inform the mitigation strategies defined in Section 3.3.1, providing engineering-level detail for technical risk management.
+
+---
 
 ### **Conclusion**
 
