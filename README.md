@@ -124,36 +124,81 @@ pip install -r requirements.txt
 
 ### 4. Download NLTK Data (First Time Only)
 
-**Option A: Automatic (Recommended)**
+NLTK (Natural Language Toolkit) requires the Brown corpus for text analysis. Follow the instructions for your operating system:
 
-```bash
-python3 << EOF
-import nltk
-import ssl
+#### **Windows:**
 
-# Fix SSL certificate issues on macOS
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
+1. **Activate the virtual environment** (if not already activated):
 
-# Download Brown corpus
-nltk.download('brown')
-print("✓ NLTK data downloaded!")
-EOF
-```
+   ```bash
+   venv\Scripts\activate
+   ```
 
-**Option B: Manual (If SSL errors persist)**
+2. **Run the NLTK downloader**:
 
-```bash
-# On macOS, run the certificate installer first:
-/Applications/Python\ 3.*/Install\ Certificates.command
+   ```bash
+   python -c "import nltk; nltk.download('brown')"
+   ```
 
-# Then download NLTK data:
-python3 -c "import nltk; nltk.download('brown')"
-```
+3. **If you get SSL certificate errors**, try:
+   ```bash
+   python -c "import ssl; ssl._create_default_https_context = ssl._create_unverified_context; import nltk; nltk.download('brown')"
+   ```
+
+#### **macOS:**
+
+1. **Activate the virtual environment** (if not already activated):
+
+   ```bash
+   source venv/bin/activate
+   ```
+
+2. **Run the NLTK downloader**:
+
+   ```bash
+   python3 -c "import nltk; nltk.download('brown')"
+   ```
+
+3. **If you get SSL certificate errors**, install certificates first:
+   ```bash
+   /Applications/Python\ 3.*/Install\ Certificates.command
+   ```
+   Then try downloading again:
+   ```bash
+   python3 -c "import nltk; nltk.download('brown')"
+   ```
+
+#### **Linux:**
+
+1. **Activate the virtual environment** (if not already activated):
+
+   ```bash
+   source venv/bin/activate
+   ```
+
+2. **Run the NLTK downloader**:
+
+   ```bash
+   python3 -c "import nltk; nltk.download('brown')"
+   ```
+
+3. **If you get SSL certificate errors**, update your certificates:
+
+   ```bash
+   # Ubuntu/Debian:
+   sudo apt-get update && sudo apt-get install ca-certificates
+
+   # CentOS/RHEL/Fedora:
+   sudo yum update ca-certificates
+   ```
+
+   Then try downloading again:
+
+   ```bash
+   python3 -c "import nltk; nltk.download('brown')"
+   ```
+
+**Expected Output:** You should see download progress and "True" when complete. The Brown corpus is about 3.6MB.
 
 ### 5. Run the Backend Server
 
@@ -187,50 +232,15 @@ curl http://localhost:8000/api/challenges
 curl http://localhost:8000/api/progress/1
 ```
 
-### 5.5. Supabase Database Setup
-
-The backend now uses Supabase PostgreSQL for persistent data storage.
-
-#### Create Database Tables
-
-1. Go to your Supabase project dashboard
-2. Navigate to **SQL Editor**
-3. Copy and run the contents of `backend/database_setup.sql`
-
-This creates the required tables:
-
-- `user_progress` - Stores user XP, streaks, and completion stats
-- `quiz_attempts` - Records individual quiz attempts with results
-
-#### Configure Environment Variables
-
-1. Copy the environment template:
-
-```bash
-cp .env.example .env
-```
-
-2. Get your Supabase credentials:
-
-   - Go to **Settings** → **API** in your Supabase dashboard
-   - Copy **Project URL** and **anon public key**
-
-3. Edit `.env` and add:
-
-```bash
-SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=your-anon-key-here
-```
-
-**Important:** Never commit the `.env` file to git.
-
-### 7. Connect Flutter App to Backend
+### 6. Connect Flutter App to Backend
 
 In your Flutter app, the API base URL should be:
 
 - **For iOS Simulator:** `http://localhost:8000/api`
 - **For Android Emulator:** `http://10.0.2.2:8000/api`
 - **For Physical Device:** `http://YOUR_COMPUTER_IP:8000/api`
+
+**Important:** When using the backend API in the network audio API service (`app/lib/core/network/audio_api_service.dart`), make sure to update the `baseUrl` constant depending on your target device (iOS or Android).
 
 To find your computer's IP:
 
