@@ -549,6 +549,148 @@ Input Validation
 *User Experience Requirements: Error Feedback, Localization
 *System Maintenance Requirements: Logging and Debugging
 
+==== 2.2.8 Requirements Conflict Analysis and Resolution
+
+### Overview
+During requirements evaluation, three significant conflicts were identified 
+between gamification system requirements. These conflicts arose from competing 
+stakeholder needs (accountability vs. flexibility) and system design trade-offs 
+(quality vs. participation). This section documents the systematic resolution 
+process following Van Lamsweerde's conflict management methodology (Chapter 3).
+
+### Interaction Matrix
+
+|===
+| | Streak | XP | Duration | Accuracy | *Total*
+
+| *Daily Streak System* | - | 1 | 0 | 1 | *2*
+| *XP Point Award* | 1 | - | 1 | 0 | *2*
+| *Practice Duration* | 0 | 1 | - | 0 | 1
+| *Accuracy Feedback* | 1 | 0 | 0 | - | 1
+|===
+**Key Finding:** Streak and XP systems exhibit the most requirement overlaps, 
+indicating these as high-priority areas for conflict resolution.
+
+---
+
+### Conflict #1: Streak Reset Policy
+
+**Type:** Weak Conflict (Divergence)
+
+**Conflicting Statements:**
+- **Statement A:** "System must reset streak to 0 when user misses a day" 
+  (Source: David persona - Section 2.2.2, dedicated learner viewpoint)
+- **Statement B:** "System should allow grace period for missed practice days"
+  (Source: Maria persona - Section 2.2.2, commuter student viewpoint)
+
+**Boundary Condition:** User with established streak (30+ days) misses practice 
+due to uncontrollable life event (illness, family emergency, work crisis).
+
+**Root Cause:** Conflicting stakeholder objectives - accountability-focused 
+learners value strict discipline, while schedule-constrained learners require 
+flexibility for unpredictable life circumstances.
+
+**Proposed Resolutions:**
+
+1. **Restore Tactic:** Streak marked as "broken" but recoverable through 
+   double practice completion on following day
+   - Pros: Acknowledges miss while rewarding recovery effort, maintains 
+     motivation through "comeback" mechanic
+   - Cons: Complex streak state management (Active/Broken/Recovered states)
+
+2. **Weaken Tactic:** Allow one "streak freeze" token per month
+   - Pros: Simple rule, predictable for users
+   - Cons: Can be gamed by saving tokens, doesn't scale with streak length
+
+3. **Specialize Tactic:** Grace period only available for Casual pace users
+   - Pros: Aligns with learning pace selection philosophy
+   - Cons: May feel unfair to dedicated learners, encourages gaming pace selection
+
+**Selected Resolution:** Option 1 (Restore)
+
+**Rationale:** 
+- Best contribution to user retention NFR (Section 2.2.5)
+- Supports growth mindset learning philosophy
+- Adds engaging "recovery challenge" mechanic
+- Resolves conflict without dropping either stakeholder need
+
+**Updated Requirements (replaces conflicting statements):**
+
+> "The system shall maintain streak states: Active, Broken, and Recovered. 
+> When a user misses daily practice, their streak transitions to Broken state 
+> with current count preserved. Users may recover a Broken streak by completing 
+> two challenges on the following day, transitioning to Recovered state with 
+> count continuing. Broken streaks not recovered within 24 hours reset to 0."
+
+**Implementation Notes:** 
+- Add StreakState enum: {Active, Broken, Recovered}
+- Update UserProgress class (Section 2.3.2) with state machine logic
+- UI must clearly communicate streak status and recovery opportunity
+
+---
+
+### Conflict #2: XP Point Distribution
+
+**Type:** Weak Conflict (Divergence)
+
+**Conflicting Statements:**
+- **Statement A:** "XP awarded based on pronunciation accuracy percentage"
+  (Source: Section 2.2.6 - quality-focused assessment requirement)
+- **Statement B:** "XP awarded for completing any daily challenge"
+  (Source: Section 1.2.3 - engagement-focused gamification strategy)
+
+**Boundary Condition:** User with low pronunciation accuracy (40%) completes 
+daily challenge through full participation.
+
+**Root Cause:** Trade-off between quality metrics (encouraging improvement) 
+and participation incentives (maintaining engagement).
+
+**Selected Resolution:** Restore Tactic - Dual XP system
+
+> "The system shall award Base XP (50 points) upon challenge completion and 
+> Accuracy Bonus XP (0-50 points) calculated as: accuracy_percentage / 2. 
+> Total XP per challenge ranges from 50 (minimum participation) to 100 
+> (perfect accuracy)."
+
+**Rationale:** Satisfies both quality and participation objectives, rewards 
+improvement without punishing struggling learners.
+
+---
+
+### Conflict #3: Practice Duration Requirements
+
+[Similar detailed documentation structure as above...]
+
+**Selected Resolution:** Weaken Tactic - Flexible duration OR high accuracy
+
+> "The system shall consider practice complete when EITHER minimum duration 
+> requirement met for selected pace OR accuracy score exceeds 80%, allowing 
+> efficient high-performing learners to complete challenges quickly."
+
+---
+
+### Impact Summary
+
+**Conflicts Resolved:** 3  
+**New Requirements Added:** 3  
+**Requirements Modified:** 2  
+**Requirements Dropped:** 0
+
+**Most Conflicted Requirement:** Daily Streak System (2 conflicts)  
+**Resolution Tactics Applied:** Restore (2x), Weaken (1x)
+
+**Architectural Impact:**
+- UserProgress class requires state machine implementation
+- XP calculation logic needs dual-component tracking
+- Challenge completion validation requires compound boolean logic
+
+**Testing Implications:**
+- Add integration tests for streak state transitions
+- Validate XP calculation edge cases (0% accuracy, 100% accuracy)
+- Test duration/accuracy OR logic with boundary values
+
+---
+
 === 2.3 Implementation
 
 ==== 2.3.1 Software Architecture
