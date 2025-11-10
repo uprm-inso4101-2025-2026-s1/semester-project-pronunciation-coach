@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
+import '../../../../core/common/user_progress.dart';
+import '../../../../core/network/progress_service.dart';
 import '../../widgets/achievements_xp.dart';
 
 // Profile page
@@ -12,6 +14,59 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool _isMenuExpanded = false;
+
+  UserProgress? _userProgress;
+  bool _isLoading = true;
+  String? _error;
+  bool _isGuest = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProgress();
+  }
+
+  Future<void> _loadUserProgress() async {
+    try {
+      final progressService = ProgressService();
+
+      // Check if user is a guest
+      final isGuest = progressService.isGuest;
+
+      if (mounted) {
+        setState(() {
+          _isGuest = isGuest;
+        });
+      }
+
+      // Only load progress if NOT a guest
+      if (!isGuest) {
+        final userProgress = await progressService.getUserProgress();
+
+        if (mounted) {
+          setState(() {
+            _userProgress = userProgress;
+            _isLoading = false;
+          });
+        }
+      } else {
+        // Guest user - no data to load
+        if (mounted) {
+          setState(() {
+            _userProgress = null;
+            _isLoading = false;
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(height: 20),
 
                 // Achievements Sections
-                const AchievementsSection(),
+                _buildAchievementsSection(),
 
                 // Add bottom padding for tab bar
                 const SizedBox(height: 80),
@@ -224,6 +279,100 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  Widget _buildAchievementsSection() {
+    // Show loading indicator
+    if (_isLoading) {
+      return Container(
+        padding: const EdgeInsets.all(40),
+        child: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Show error state
+    if (_error != null) {
+      return Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            const Text(
+              'Error loading achievements',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _error!,
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadUserProgress,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show guest message
+    if (_isGuest || _userProgress == null) {
+      return Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(Icons.lock_outline, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            const Text(
+              'Login to View Achievements',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Create an account to track your progress and unlock achievements',
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show achievements with real data
+    return AchievementsSection(userProgress: _userProgress!);
   }
 
   Widget _buildMenuOption({
