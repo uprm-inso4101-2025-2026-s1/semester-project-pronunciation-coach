@@ -663,6 +663,17 @@ The backend architecture will integrate the following domain facets as part of i
 
 By grounding the backend in domain engineering principles, the architecture will ensure that every stored record, computed metric, and API response corresponds directly to authentic learner-tutor interactions observed in the real world. The planned integration of Supabase as the storage infrastructure and xAPI as the event standard will make the backend both domain-faithful and scalable, bridging the conceptual model of pronunciation learning with its technical implementation.
 
+
+=== 2.3.5 User Interface Accessibility and Inclusivity Guidelines
+
+The user interface of the Pronunciation Coach application has been designed with accessibility, inclusivity, and clarity as central principles. The overall layout maintains a clean and organized appearance, ensuring that users can easily identify available features without feeling overwhelmed. Each visual element follows a consistent and intuitive structure, guiding the user naturally through the learning experience.
+
+The interface uses rounded boxes and soft edges to create a friendly and approachable visual environment. A combination of fun colors and simple illustrations supports intuitive navigation and helps users quickly associate icons and actions with specific features. Readable, sans-serif fonts are used throughout the system to improve text legibility and reduce visual strain, accommodating users with reading or vision difficulties.
+
+Accessibility considerations extend to both visual and auditory design elements. The app integrates visual indicators and auditory feedback during quizzes and pronunciation exercises, providing a multisensory learning experience. These features enhance inclusivity by allowing users to learn through the sensory channel that best fits their preferences or abilities. The consistent use of color contrast and clear spacing between interface elements further ensures that users with visual impairments can interact with the system effectively.
+
+By maintaining a straightforward and accessible interface, the Pronunciation Coach supports key software quality attributes such as usability, user satisfaction, and learnability. Its design encourages engagement and inclusivity, ensuring that users of all backgrounds and abilities can benefit from the pronunciation training experience in a comfortable and enjoyable way.
+
 ---
 
 == 3. Analytic Part
