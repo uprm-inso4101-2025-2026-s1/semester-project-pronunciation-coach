@@ -33,6 +33,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   String? _feedback;
   bool _hasAnswered = false;
   bool _isCorrect = false;
+  bool _isLoading = true;
 
   int get _userId {
     final user = Supabase.instance.client.auth.currentSession?.user;
@@ -50,6 +51,15 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   void initState() {
     super.initState();
     _audioPlayer.setReleaseMode(ReleaseMode.release);
+
+    // Simulate loading time for skeleton screen
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
   }
 
   @override
@@ -124,214 +134,368 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
         foregroundColor: AppColors.background,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Challenge information card
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
+      body: _isLoading
+          ? _buildSkeletonScreen()
+          : Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.headphones,
-                        color: AppColors.primary,
-                        size: 28,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          widget.challenge.content,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
+                  // Challenge information card
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.headphones,
+                              color: AppColors.primary,
+                              size: 28,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                widget.challenge.content,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        if (widget.challenge.hint != null)
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.lightbulb_outline,
+                                  size: 18,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    widget.challenge.hint!,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.stars,
+                              size: 18,
+                              color: Colors.amber[700],
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Reward: ${widget.challenge.xpReward} XP',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.amber[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 12),
-                  if (widget.challenge.hint != null)
+                  const SizedBox(height: 24),
+
+                  Text(
+                    'Tap to hear each pronunciation:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Audio option cards
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: widget.challenge.options.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      itemBuilder: (_, index) {
+                        final option = widget.challenge.options[index];
+                        final isSelected = _selectedOption == option.letter;
+                        final isPlaying = _playingOption == option.letter;
+
+                        return _AudioOptionCard(
+                          option: option,
+                          isSelected: isSelected,
+                          isPlaying: isPlaying,
+                          isDisabled: _hasAnswered,
+                          onPlay: () => _playAudio(option.letter),
+                          onSelect: _hasAnswered
+                              ? null
+                              : () {
+                                  setState(() {
+                                    _selectedOption = option.letter;
+                                    _feedback = null;
+                                  });
+                                },
+                        );
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Feedback message after answering
+                  if (_feedback != null)
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        color: _isCorrect
+                            ? Colors.green.withValues(alpha: 0.1)
+                            : Colors.red.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _isCorrect ? Colors.green : Colors.red,
+                          width: 2,
+                        ),
                       ),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.lightbulb_outline,
-                            size: 18,
-                            color: Colors.blue,
+                          Icon(
+                            _isCorrect ? Icons.check_circle : Icons.cancel,
+                            color: _isCorrect ? Colors.green : Colors.red,
+                            size: 28,
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              widget.challenge.hint!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.blue,
+                              _isCorrect
+                                  ? 'Great job!'
+                                  : 'Try again next time!',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: _isCorrect
+                                    ? Colors.green[700]
+                                    : Colors.red[700],
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Icon(Icons.stars, size: 18, color: Colors.amber[700]),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Reward: ${widget.challenge.xpReward} XP',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.amber[700],
+
+                  const SizedBox(height: 16),
+
+                  SizedBox(
+                    height: 54,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _selectedOption == null
+                            ? Colors.grey[400]
+                            : _hasAnswered
+                            ? Colors.blue[400]
+                            : Colors.green[400],
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                    ],
+                      onPressed: _selectedOption == null || _isSubmitting
+                          ? null
+                          : _hasAnswered
+                          ? _goToResults
+                          : _submitAnswer,
+                      child: _isSubmitting
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              _hasAnswered ? 'View Results' : 'Submit Answer',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+    );
+  }
 
-            Text(
-              'Tap to hear each pronunciation:',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Audio option cards
-            Expanded(
-              child: ListView.separated(
-                itemCount: widget.challenge.options.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 12),
-                itemBuilder: (_, index) {
-                  final option = widget.challenge.options[index];
-                  final isSelected = _selectedOption == option.letter;
-                  final isPlaying = _playingOption == option.letter;
-
-                  return _AudioOptionCard(
-                    option: option,
-                    isSelected: isSelected,
-                    isPlaying: isPlaying,
-                    isDisabled: _hasAnswered,
-                    onPlay: () => _playAudio(option.letter),
-                    onSelect: _hasAnswered
-                        ? null
-                        : () {
-                            setState(() {
-                              _selectedOption = option.letter;
-                              _feedback = null;
-                            });
-                          },
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Feedback message after answering
-            if (_feedback != null)
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: _isCorrect
-                      ? Colors.green.withValues(alpha: 0.1)
-                      : Colors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: _isCorrect ? Colors.green : Colors.red,
-                    width: 2,
-                  ),
+  Widget _buildSkeletonScreen() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Skeleton for challenge information card
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
                 ),
-                child: Row(
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Icon(
-                      _isCorrect ? Icons.check_circle : Icons.cancel,
-                      color: _isCorrect ? Colors.green : Colors.red,
-                      size: 28,
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        _isCorrect ? 'Great job!' : 'Try again next time!',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: _isCorrect
-                              ? Colors.green[700]
-                              : Colors.red[700],
+                      child: Container(
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 12),
+                Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      width: 80,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
 
-            const SizedBox(height: 16),
+          // Skeleton for instruction text
+          Container(
+            height: 16,
+            width: 200,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(height: 16),
 
-            SizedBox(
-              height: 54,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedOption == null
-                      ? Colors.grey[400]
-                      : _hasAnswered
-                      ? Colors.blue[400]
-                      : Colors.green[400],
-                  foregroundColor: Colors.white,
+          // Skeleton for audio option cards
+          Expanded(
+            child: ListView.separated(
+              itemCount: 4, // Assume 4 options
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              itemBuilder: (_, index) {
+                return Card(
+                  elevation: 1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-                onPressed: _selectedOption == null || _isSubmitting
-                    ? null
-                    : _hasAnswered
-                    ? _goToResults
-                    : _submitAnswer,
-                child: _isSubmitting
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
                         ),
-                      )
-                    : Text(
-                        _hasAnswered ? 'View Results' : 'Submit Answer',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                        const SizedBox(width: 16),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
-                      ),
-              ),
+                        const Expanded(child: SizedBox()),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Skeleton for submit button
+          Container(
+            height: 54,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -414,24 +578,52 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage> {
   }
 
   void _goToResults() async {
-    final result = await _apiService.submitAudioAnswer(
-      widget.challenge.id,
-      _selectedOption!,
-      _userId,
+    // Show loading dialog while fetching result
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
 
-    if (mounted) {
-      // Use push instead of pushReplacement so user can go back
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => AudioQuizResultPage(
-            result: result,
-            difficulty: widget.difficulty,
-            challenge: widget.challenge,
-          ),
-        ),
+    try {
+      final result = await _apiService.submitAudioAnswer(
+        widget.challenge.id,
+        _selectedOption!,
+        _userId,
       );
+
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+
+        // Navigate to results page with fade transition
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                AudioQuizResultPage(
+                  result: result,
+                  difficulty: widget.difficulty,
+                  challenge: widget.challenge,
+                ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+            transitionDuration: const Duration(milliseconds: 500),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading results: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }

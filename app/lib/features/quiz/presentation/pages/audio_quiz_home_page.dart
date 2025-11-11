@@ -152,14 +152,20 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
       if (mounted) Navigator.pop(context);
 
       if (mounted) {
-        // Navigate to question page and wait for result
+        // Navigate to question page and wait for result with fade transition
         await Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => AudioQuizQuestionPage(
-              challenge: challenge,
-              difficulty: difficulty,
-            ),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                AudioQuizQuestionPage(
+                  challenge: challenge,
+                  difficulty: difficulty,
+                ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+            transitionDuration: const Duration(milliseconds: 500),
           ),
         );
       }
