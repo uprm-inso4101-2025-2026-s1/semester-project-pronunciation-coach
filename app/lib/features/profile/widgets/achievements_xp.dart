@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../../../core/common/colors.dart';
+import '../../../../core/common/user_progress.dart';
 
 class Achievement {
   final String id;
@@ -56,7 +57,12 @@ class Achievement {
 }
 
 class AchievementsSection extends StatefulWidget {
-  const AchievementsSection({super.key});
+  final UserProgress userProgress;
+
+  const AchievementsSection({
+    super.key,
+    required this.userProgress, // ← AGREGADO
+  });
 
   @override
   State<AchievementsSection> createState() => _AchievementsSectionState();
@@ -77,7 +83,8 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   Future<void> _loadProfileData() async {
     // Load stored achievements
     final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getString('achievements');
+    final userId = widget.userProgress.userId;
+    final data = prefs.getString('achievements_$userId');
 
     if (data != null) {
       final decoded = jsonDecode(data) as List;
@@ -86,9 +93,9 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       achievements = _defaultAchievements();
     }
 
-    // Set default progress values since daily challenge is removed
-    totalXP = 4200; // Default XP
-    currentStreak = 3; // Default streak
+    // Uses real data from userProgress
+    totalXP = widget.userProgress.totalXp;
+    currentStreak = widget.userProgress.currentStreak;
 
     // Update achievement progress according to default values
     for (var a in achievements) {
@@ -122,115 +129,105 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     return [
       // Streak Achievements
       Achievement(
-        id: 'streak1',
+        id: 'streak3',
         groupId: 'streak',
-        title: 'NewsLetter',
-        description: 'Get a 1-day streak from daily challenge.',
-        icon: Icons.local_fire_department,
-        currentProgress: 3,
-        totalRequired: 1,
-        isUnlocked: false,
-      ),
-      Achievement(
-        id: 'streak7',
-        groupId: 'streak',
-        title: 'Weekly Wordsmith',
-        description: 'Get a 7-day from daily challenge.',
-        icon: Icons.local_fire_department,
-        currentProgress: 3,
-        totalRequired: 7,
-        isUnlocked: false,
-      ),
-      Achievement(
-        id: 'streak30',
-        groupId: 'streak',
-        title: 'Articulate Apprentice',
-        description: 'Get a 30-day streak from daily challenge.',
+        title: 'First Spark',
+        description: 'Get 3 correct answers in a row!',
         icon: Icons.local_fire_department,
         currentProgress: 0,
-        totalRequired: 30,
+        totalRequired: 3,
+        isUnlocked: false,
+      ),
+      Achievement(
+        id: 'streak10',
+        groupId: 'streak',
+        title: 'Articulate Apprentice',
+        description: 'Nail 10 correct answers in a row!',
+        icon: Icons.local_fire_department,
+        currentProgress: 0,
+        totalRequired: 10,
+        isUnlocked: false,
+      ),
+      Achievement(
+        id: 'streak25',
+        groupId: 'streak',
+        title: 'Quiz En',
+        description: 'Achieve 25 correct answers in a row!',
+        icon: Icons.local_fire_department,
+        currentProgress: 0,
+        totalRequired: 25,
+        isUnlocked: false,
+      ),
+      Achievement(
+        id: 'streak50',
+        groupId: 'streak',
+        title: 'Vocal Virtuoso',
+        description: 'Master 50 correct answers in a row!',
+        icon: Icons.local_fire_department,
+        currentProgress: 0,
+        totalRequired: 50,
         isUnlocked: false,
       ),
       Achievement(
         id: 'streak100',
         groupId: 'streak',
-        title: 'Phonetic Centurion',
-        description: 'Get a 100-day streak from daily challenge.',
+        title: 'Speech Legend',
+        description: 'A legendary 100 correct answers in a row!',
         icon: Icons.local_fire_department,
         currentProgress: 0,
         totalRequired: 100,
         isUnlocked: false,
       ),
+
+      // XP Achievements
       Achievement(
-        id: 'streak250',
-        groupId: 'streak',
-        title: 'Vocal Virtuoso',
-        description: 'Get a 250-day streak from daily challenge.',
-        icon: Icons.local_fire_department,
+        id: 'xp50',
+        groupId: 'xp',
+        title: 'First Steps',
+        description: 'Reach 50 XP points total.',
+        icon: Icons.star,
+        currentProgress: 0,
+        totalRequired: 50,
+        isUnlocked: false,
+      ),
+      Achievement(
+        id: 'xp250',
+        groupId: 'xp',
+        title: 'Rising Star',
+        description: 'Reach 250 XP points total.',
+        icon: Icons.star_half_outlined,
         currentProgress: 0,
         totalRequired: 250,
         isUnlocked: false,
       ),
       Achievement(
-        id: 'streak500',
-        groupId: 'streak',
-        title: 'Speech Legend',
-        description: 'Get a 500-day streak from daily challenge.',
-        icon: Icons.local_fire_department,
-        currentProgress: 0,
-        totalRequired: 500,
-        isUnlocked: false,
-      ),
-
-      // XP Achievements
-      Achievement(
         id: 'xp1k',
         groupId: 'xp',
-        title: 'First Steps',
+        title: 'Dedicated Learner',
         description: 'Reach 1,000 XP points total.',
-        icon: Icons.star,
-        currentProgress: 800,
+        icon: Icons.star_rate_outlined,
+        currentProgress: 0,
         totalRequired: 1000,
         isUnlocked: false,
       ),
       Achievement(
-        id: 'xp10k',
-        groupId: 'xp',
-        title: 'Rising Star',
-        description: 'Reach 10,000 XP points total.',
-        icon: Icons.star_half_outlined,
-        currentProgress: 4200,
-        totalRequired: 10000,
-        isUnlocked: false,
-      ),
-      Achievement(
-        id: 'xp25k',
-        groupId: 'xp',
-        title: 'Dedicated Learner',
-        description: 'Reach 25,000 XP points total.',
-        icon: Icons.star_rate_outlined,
-        currentProgress: 4200,
-        totalRequired: 25000,
-        isUnlocked: false,
-      ),
-      Achievement(
-        id: 'xp75k',
+        id: 'xp5k',
         groupId: 'xp',
         title: 'Seasoned Veteran',
-        description: 'Reach 75,000 XP points total.',
+        description: 'Reach 5,000 XP points total.',
         icon: Icons.stars_outlined,
-        currentProgress: 4200,
-        totalRequired: 75000,
+        currentProgress: 0,
+        totalRequired: 5000,
         isUnlocked: false,
       ),
       Achievement(
-        id: 'xp200k',
+        id: 'xp15k',
         groupId: 'xp',
         title: 'Ultimate Champion',
-        description: 'Reach 200,000 XP points total.',
+        description: 'Reach 15,000 XP points total.',
         icon: Icons.workspace_premium,
-        currentProgress: 4200,
-        totalRequired: 200000,
+        currentProgress: 0,
+        totalRequired: 15000,
         isUnlocked: false,
       ),
     ];
