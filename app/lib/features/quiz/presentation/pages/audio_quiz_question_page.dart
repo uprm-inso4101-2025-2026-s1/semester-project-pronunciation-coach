@@ -47,6 +47,15 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     return 1;
   }
 
+  String _cleanDifficultyName(String name) {
+    return name
+        .replaceAll(
+          RegExp(r'^(green|red|orange|blue|yellow)\s+', caseSensitive: false),
+          '',
+        )
+        .trim();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,7 +110,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
         );
       } on TimeoutException {
         await _audioPlayer.stop();
-      } catch (e) {
+      } catch (_) {
         await _audioPlayer.stop();
       }
 
@@ -111,7 +120,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
           _isPlayingAudio = false;
         });
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         setState(() {
           _playingOption = null;
@@ -135,37 +144,40 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          '${widget.difficulty.name} Quiz',
+          '${_cleanDifficultyName(widget.difficulty.name)} Quiz',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
       ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildChallengeCard(),
-                const SizedBox(height: 24),
-                Text(
-                  'Tap to hear each pronunciation:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
+      body: SafeArea(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildChallengeCard(),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Tap to hear each pronunciation:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.separated(
+                  const SizedBox(height: 12),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.challenge.options.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 8),
                     itemBuilder: (_, index) {
                       final option = widget.challenge.options[index];
                       final isSelected = _selectedOption == option.letter;
@@ -184,12 +196,12 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
                           );
                         },
                         child: _AudioOptionCard(
-                          option: option,
-                          isSelected: isSelected,
-                          isPlaying: isPlaying,
-                          isDisabled: _hasAnswered,
-                          onPlay: () => _playAudio(option.letter),
-                          onSelect: _hasAnswered
+                          option,
+                          isSelected,
+                          isPlaying,
+                          _hasAnswered,
+                          () => _playAudio(option.letter),
+                          _hasAnswered
                               ? null
                               : () {
                                   setState(() {
@@ -201,12 +213,15 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
                       );
                     },
                   ),
-                ),
-                const SizedBox(height: 16),
-                if (_feedback != null) _buildFeedbackCard(),
-                const SizedBox(height: 16),
-                _buildSubmitButton(),
-              ],
+                  if (_feedback != null) ...[
+                    const SizedBox(height: 16),
+                    _buildFeedbackCard(),
+                  ],
+                  const SizedBox(height: 32),
+                  _buildSubmitButton(),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
@@ -216,14 +231,15 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
 
   Widget _buildChallengeCard() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -232,53 +248,28 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
         children: [
           Row(
             children: [
-              Icon(Icons.headphones, color: AppColors.primary, size: 28),
-              const SizedBox(width: 12),
+              Icon(Icons.headphones, color: AppColors.primary, size: 24),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   widget.challenge.content,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          if (widget.challenge.hint != null)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.lightbulb_outline,
-                    size: 18,
-                    color: Colors.blue,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.challenge.hint!,
-                      style: const TextStyle(fontSize: 14, color: Colors.blue),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.stars, size: 18, color: Colors.amber[700]),
+              Icon(Icons.stars, size: 16, color: Colors.amber[700]),
               const SizedBox(width: 6),
               Text(
                 'Reward: ${widget.challenge.xpReward} XP',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Colors.amber[700],
                 ),
@@ -292,7 +283,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
 
   Widget _buildFeedbackCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: _isCorrect
             ? Colors.green.withValues(alpha: 0.1)
@@ -308,14 +299,14 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
           Icon(
             _isCorrect ? Icons.check_circle : Icons.cancel,
             color: _isCorrect ? Colors.green : Colors.red,
-            size: 28,
+            size: 24,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
               _isCorrect ? 'Great job!' : 'Try again next time!',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: _isCorrect ? Colors.green[700] : Colors.red[700],
               ),
@@ -328,7 +319,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
 
   Widget _buildSubmitButton() {
     return SizedBox(
-      height: 54,
+      height: 52,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: _selectedOption == null
@@ -348,8 +339,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
             : _submitAnswer,
         child: _isSubmitting
             ? const SizedBox(
-                width: 24,
-                height: 24,
+                width: 22,
+                height: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   color: Colors.white,
@@ -369,9 +360,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
   Future<void> _submitAnswer() async {
     if (_selectedOption == null || _isSubmitting) return;
 
-    setState(() {
-      _isSubmitting = true;
-    });
+    setState(() => _isSubmitting = true);
 
     try {
       final result = await _apiService.submitAudioAnswer(
@@ -419,10 +408,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
         _isSubmitting = false;
       });
     } catch (e) {
-      setState(() {
-        _isSubmitting = false;
-      });
-
+      setState(() => _isSubmitting = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -453,9 +439,8 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
                   challenge: widget.challenge,
                 ),
             transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+                (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(opacity: animation, child: child),
             transitionDuration: const Duration(milliseconds: 500),
           ),
         );
@@ -481,14 +466,14 @@ class _AudioOptionCard extends StatelessWidget {
   final VoidCallback onPlay;
   final VoidCallback? onSelect;
 
-  const _AudioOptionCard({
-    required this.option,
-    required this.isSelected,
-    required this.isPlaying,
-    required this.isDisabled,
-    required this.onPlay,
+  const _AudioOptionCard(
+    this.option,
+    this.isSelected,
+    this.isPlaying,
+    this.isDisabled,
+    this.onPlay,
     this.onSelect,
-  });
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -505,12 +490,12 @@ class _AudioOptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: isDisabled ? null : onSelect,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primary
@@ -521,19 +506,19 @@ class _AudioOptionCard extends StatelessWidget {
                   child: Text(
                     option.letter,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.w700,
                       color: isSelected ? Colors.white : Colors.black87,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               IconButton(
                 onPressed: onPlay,
                 icon: Icon(
                   isPlaying ? Icons.stop_circle : Icons.play_circle_filled,
-                  size: 40,
+                  size: 36,
                   color: isPlaying ? Colors.red : AppColors.primary,
                 ),
               ),
@@ -542,7 +527,7 @@ class _AudioOptionCard extends StatelessWidget {
                 const Icon(
                   Icons.check_circle,
                   color: AppColors.primary,
-                  size: 28,
+                  size: 26,
                 ),
             ],
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
-import 'audio_quiz_home_page.dart'; // Import for navigation
+import 'audio_quiz_home_page.dart';
 import 'audio_quiz_question_page.dart';
 
 class AudioQuizResultPage extends StatefulWidget {
@@ -22,25 +22,49 @@ class AudioQuizResultPage extends StatefulWidget {
   State<AudioQuizResultPage> createState() => _AudioQuizResultPageState();
 }
 
-class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
+class _AudioQuizResultPageState extends State<AudioQuizResultPage>
+    with SingleTickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlayingCorrectAudio = false;
   StreamSubscription? _playerCompleteSubscription;
+
+  late AnimationController _animController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     _audioPlayer.setReleaseMode(ReleaseMode.release);
+    _setupAnimations();
+  }
+
+  void _setupAnimations() {
+    _animController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.elasticOut),
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
+
+    _animController.forward();
   }
 
   @override
   void dispose() {
     _playerCompleteSubscription?.cancel();
     _audioPlayer.dispose();
+    _animController.dispose();
     super.dispose();
   }
 
-  // Plays the correct word's audio or stops if already playing.
   Future<void> _playCorrectAudio() async {
     if (_isPlayingCorrectAudio) {
       await _audioPlayer.stop();
@@ -61,7 +85,6 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
         widget.result.correctAnswer,
       );
 
-      // Set up completion listener to stop playing state
       _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
         if (mounted) {
           setState(() {
@@ -72,7 +95,6 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
 
       await _audioPlayer.play(UrlSource(audioUrl));
     } catch (e) {
-      // Handle audio playback error
       if (mounted) {
         setState(() {
           _isPlayingCorrectAudio = false;
@@ -89,58 +111,41 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     }
   }
 
-  // Navigates back to the main quiz home screen and shows the nav bar.
   void _goToQuizHome(BuildContext context) {
-    // Pop all routes until the AudioQuizHomePage route is reached.
-    // This assumes AudioQuizHomePage is the route where the main nav bar is visible.
     Navigator.popUntil(context, (route) {
-      // Check if the route is a MaterialPageRoute and its builder creates an AudioQuizHomePage
-      // This is a common pattern to stop at a known route type if named routes aren't used.
       if (route is MaterialPageRoute &&
           route.builder(context) is AudioQuizHomePage) {
         return true;
       }
-      // Fallback: If AudioQuizHomePage is the first route in this stack, this will return to it.
-      // If it's not the first route of the entire app, you might need a named route reference.
       return route.isFirst;
     });
   }
 
-  // Retries the quiz with a new challenge for the same difficulty.
   Future<void> _retryQuiz(BuildContext context) async {
-    // Show loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
-
     try {
       final apiService = AudioApiService();
       final newChallenge = await apiService.generateAudioChallenge(
         widget.difficulty.id,
       );
 
-      // Close loading indicator
-      if (context.mounted) Navigator.pop(context);
-
-      // Navigate to new quiz and replace the current result screen
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => AudioQuizQuestionPage(
-              challenge: newChallenge,
-              difficulty: widget.difficulty,
-            ),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                AudioQuizQuestionPage(
+                  challenge: newChallenge,
+                  difficulty: widget.difficulty,
+                ),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+            transitionDuration: const Duration(milliseconds: 500),
           ),
         );
       }
     } catch (e) {
-      // Close loading indicator
-      if (context.mounted) Navigator.pop(context);
-
-      // Show error message
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -165,6 +170,28 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
     }
   }
 
+  IconData _getDifficultyIcon() {
+    switch (widget.difficulty.id) {
+      case 'easy':
+        return Icons.sentiment_very_satisfied;
+      case 'medium':
+        return Icons.sentiment_neutral;
+      case 'hard':
+        return Icons.sentiment_very_dissatisfied;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
+  String _cleanDifficultyName(String name) {
+    return name
+        .replaceAll(
+          RegExp(r'^(green|red|orange|blue|yellow)\s+', caseSensitive: false),
+          '',
+        )
+        .trim();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,273 +204,261 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage> {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
-        // Hide the default back button since we control navigation with the 'Home' button.
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Result icon
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: widget.result.isCorrect
-                                ? Colors.green.withValues(alpha: 0.15)
-                                : Colors.red.withValues(alpha: 0.15),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            widget.result.isCorrect
-                                ? Icons.check_circle
-                                : Icons.cancel,
-                            size: 60,
-                            color: widget.result.isCorrect
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Result title text
-                        Text(
-                          // Removed emoji from text
-                          widget.result.isCorrect ? 'Correct!' : 'Incorrect',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
-                            color: widget.result.isCorrect
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Word and play button section
-                        Container(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Container(
+                          width: double.infinity,
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.blue.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Column(
-                            children: [
-                              Text(
-                                'The word was:',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                widget.result.correctWord,
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-
-                              // Play Correct Audio Button
-                              ElevatedButton.icon(
-                                onPressed: _playCorrectAudio,
-                                icon: Icon(
-                                  _isPlayingCorrectAudio
-                                      ? Icons.stop_circle
-                                      : Icons.play_circle_filled,
-                                  size: 24,
-                                ),
-                                label: Text(
-                                  _isPlayingCorrectAudio
-                                      ? 'Stop Audio'
-                                      : 'Play Correct Pronunciation',
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              ),
-
-                              if (!widget.result.isCorrect) ...[
-                                const SizedBox(height: 12),
-                                Text(
-                                  'Correct answer: Option ${widget.result.correctAnswer}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey[700],
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // XP display section
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.amber.withValues(alpha: 0.3),
-                                Colors.orange.withValues(alpha: 0.3),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.stars,
-                                color: Colors.amber,
-                                size: 36,
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.result.isCorrect
-                                        ? 'XP Earned'
-                                        : 'No XP Earned',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${widget.result.xpEarned} XP',
-                                    style: const TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.amber,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Difficulty Badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getDifficultyColor().withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                widget.difficulty.icon,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                '${widget.difficulty.name} Level',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: _getDifficultyColor(),
-                                ),
-                              ),
+                              _buildResultIcon(),
+                              const SizedBox(height: 10),
+                              _buildResultTitle(),
+                              const SizedBox(height: 12),
+                              _buildWordSection(),
+                              const SizedBox(height: 12),
+                              _buildXpSection(),
+                              const SizedBox(height: 12),
+                              _buildDifficultyBadge(),
+                              const SizedBox(height: 16),
+                              _buildActionButtons(context),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () =>
-                        _goToQuizHome(context), // Use the new function
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      side: BorderSide(color: Colors.grey[400]!),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Home',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _retryQuiz(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Try Again',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildResultIcon() {
+    return Container(
+      width: 85,
+      height: 85,
+      decoration: BoxDecoration(
+        color: widget.result.isCorrect
+            ? Colors.green.withValues(alpha: 0.15)
+            : Colors.red.withValues(alpha: 0.15),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        widget.result.isCorrect ? Icons.check_circle : Icons.cancel,
+        size: 50,
+        color: widget.result.isCorrect ? Colors.green : Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildResultTitle() {
+    return Text(
+      widget.result.isCorrect ? 'Correct!' : 'Incorrect',
+      style: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w800,
+        color: widget.result.isCorrect ? Colors.green : Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildWordSection() {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.blue.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'The word was:',
+            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            widget.result.correctWord,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: Colors.blue,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            onPressed: _playCorrectAudio,
+            icon: Icon(
+              _isPlayingCorrectAudio
+                  ? Icons.stop_circle
+                  : Icons.play_circle_filled,
+              size: 22,
+            ),
+            label: Text(
+              _isPlayingCorrectAudio
+                  ? 'Stop Audio'
+                  : 'Play Correct Pronunciation',
+              style: const TextStyle(fontSize: 14),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          if (!widget.result.isCorrect) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Correct answer: Option ${widget.result.correctAnswer}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildXpSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.amber.withValues(alpha: 0.3),
+            Colors.orange.withValues(alpha: 0.3),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.stars, color: Colors.amber, size: 32),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.result.isCorrect ? 'XP Earned' : 'No XP Earned',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                '${widget.result.xpEarned} XP',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.amber,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDifficultyBadge() {
+    String cleanName = _cleanDifficultyName(widget.difficulty.name);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        color: _getDifficultyColor().withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_getDifficultyIcon(), size: 18, color: _getDifficultyColor()),
+          const SizedBox(width: 8),
+          Text(
+            cleanName,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: _getDifficultyColor(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => _goToQuizHome(context),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              side: BorderSide(color: Colors.grey[400]!),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Home',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () => _retryQuiz(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Try Again',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

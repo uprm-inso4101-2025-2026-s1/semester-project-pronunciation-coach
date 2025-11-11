@@ -10,36 +10,70 @@ class AudioQuizHomePage extends StatefulWidget {
   State<AudioQuizHomePage> createState() => _AudioQuizHomePageState();
 }
 
-class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
+class _AudioQuizHomePageState extends State<AudioQuizHomePage>
+    with SingleTickerProviderStateMixin {
   final AudioApiService _apiService = AudioApiService();
-  List<Difficulty>? _difficulties;
-  bool _isLoading = true;
-  String? _error;
+  late AnimationController _animController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  // Static difficulties - no need to fetch from backend
+  final List<Difficulty> _difficulties = [
+    Difficulty(
+      id: 'easy',
+      name: 'Easy',
+      description:
+          'Perfect for beginners. Simple words with clear pronunciations.',
+      xpReward: 10,
+      icon: 'sentiment_very_satisfied',
+    ),
+    Difficulty(
+      id: 'medium',
+      name: 'Medium',
+      description:
+          'Moderate challenge. Words with varying pronunciation patterns.',
+      xpReward: 15,
+      icon: 'sentiment_neutral',
+    ),
+    Difficulty(
+      id: 'hard',
+      name: 'Hard',
+      description:
+          'Expert level. Complex words requiring precise pronunciation.',
+      xpReward: 20,
+      icon: 'sentiment_very_dissatisfied',
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    _loadDifficulties();
+    _setupAnimations();
   }
 
-  Future<void> _loadDifficulties() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
+  void _setupAnimations() {
+    _animController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
 
-    try {
-      final difficulties = await _apiService.getDifficulties();
-      setState(() {
-        _difficulties = difficulties;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
-    }
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _animController, curve: Curves.easeOutCubic),
+        );
+
+    _animController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,53 +89,12 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
         foregroundColor: AppColors.background,
         elevation: 0,
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadDifficulties,
-          ),
-        ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? _buildErrorView()
-          : _difficulties == null || _difficulties!.isEmpty
-          ? const Center(child: Text('No difficulties available'))
-          : _buildDifficultyList(),
-    );
-  }
-
-  Widget _buildErrorView() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
-            const SizedBox(height: 16),
-            const Text(
-              'Error loading difficulties',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              _error!,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _loadDifficulties,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SlideTransition(
+          position: _slideAnimation,
+          child: _buildDifficultyList(),
         ),
       ),
     );
@@ -126,12 +119,25 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 24),
-        ..._difficulties!.map(
-          (difficulty) => Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: _DifficultyCard(
-              difficulty: difficulty,
-              onTap: () => _startQuiz(difficulty),
+        ..._difficulties!.asMap().entries.map(
+          (entry) => TweenAnimationBuilder<double>(
+            duration: Duration(milliseconds: 400 + (entry.key * 100)),
+            tween: Tween(begin: 0.0, end: 1.0),
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - value)),
+                  child: child,
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _DifficultyCard(
+                difficulty: entry.value,
+                onTap: () => _startQuiz(entry.value),
+              ),
             ),
           ),
         ),
@@ -140,47 +146,177 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage> {
   }
 
   Future<void> _startQuiz(Difficulty difficulty) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            _QuizLoadingPage(difficulty: difficulty, apiService: _apiService),
+      ),
+    );
+  }
+}
+
+class _QuizLoadingPage extends StatefulWidget {
+  final Difficulty difficulty;
+  final AudioApiService apiService;
+
+  const _QuizLoadingPage({required this.difficulty, required this.apiService});
+
+  @override
+  State<_QuizLoadingPage> createState() => _QuizLoadingPageState();
+}
+
+class _QuizLoadingPageState extends State<_QuizLoadingPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  String _loadingText = 'Preparing your quiz...';
+
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimations();
+    _generateQuiz();
+  }
+
+  void _setupAnimations() {
+    _animController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
     );
 
-    try {
-      final challenge = await _apiService.generateAudioChallenge(difficulty.id);
+    _fadeAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
+    );
+  }
 
-      if (mounted) Navigator.pop(context);
+  Future<void> _generateQuiz() async {
+    try {
+      // Update loading text
+      setState(() {
+        _loadingText = 'Generating challenge...';
+      });
+
+      // Generate the quiz challenge
+      final challenge = await widget.apiService.generateAudioChallenge(
+        widget.difficulty.id,
+      );
 
       if (mounted) {
-        // Navigate to question page and wait for result with fade transition
-        await Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                AudioQuizQuestionPage(
-                  challenge: challenge,
-                  difficulty: difficulty,
-                ),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
+        setState(() {
+          _loadingText = 'Almost ready...';
+        });
+
+        // Small delay for better UX
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        if (mounted) {
+          // Navigate to the actual quiz page with fade transition
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  AudioQuizQuestionPage(
+                    challenge: challenge,
+                    difficulty: widget.difficulty,
+                  ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+              transitionDuration: const Duration(milliseconds: 500),
+            ),
+          );
+        }
       }
     } catch (e) {
-      if (mounted) Navigator.pop(context);
-
       if (mounted) {
+        // Show error and go back
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating quiz: $e'),
+            content: Text('Failed to generate quiz: $e'),
             backgroundColor: Colors.red,
           ),
         );
+        Navigator.pop(context);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Animated quiz icon
+              AnimatedBuilder(
+                animation: _animController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.quiz,
+                          size: 60,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 32),
+
+              // Loading text
+              Text(
+                _loadingText,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+
+              // Progress indicator
+              SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
