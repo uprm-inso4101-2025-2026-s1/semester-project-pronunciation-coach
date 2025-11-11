@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
+import '../state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
 
 class AudioQuizHomePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class AudioQuizHomePage extends StatefulWidget {
 class _AudioQuizHomePageState extends State<AudioQuizHomePage>
     with SingleTickerProviderStateMixin {
   final AudioApiService _apiService = AudioApiService();
+  final QuizStateController _stateController = QuizStateController();
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -146,6 +148,9 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   }
 
   Future<void> _startQuiz(Difficulty difficulty) async {
+    // Send start quiz event to state machine
+    _stateController.sendEvent(StartQuizEvent(difficulty.id));
+
     Navigator.push(
       context,
       MaterialPageRoute(

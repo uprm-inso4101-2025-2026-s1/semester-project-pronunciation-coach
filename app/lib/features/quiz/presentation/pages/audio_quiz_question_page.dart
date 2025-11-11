@@ -6,6 +6,7 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../../core/common/quiz_attempt.dart';
+import '../../state_machine/quiz_state_machine.dart';
 import 'audio_quiz_result_page.dart';
 
 class AudioQuizQuestionPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     with SingleTickerProviderStateMixin {
   final AudioApiService _apiService = AudioApiService();
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final QuizStateController _stateController = QuizStateController();
 
   String? _selectedOption;
   String? _playingOption;
@@ -208,6 +210,9 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
                                     _selectedOption = option.letter;
                                     _feedback = null;
                                   });
+                                  _stateController.sendEvent(
+                                    SelectAnswerEvent(option.letter),
+                                  );
                                 },
                         ),
                       );
@@ -360,6 +365,9 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
   Future<void> _submitAnswer() async {
     if (_selectedOption == null || _isSubmitting) return;
 
+    // Send submit answer event to state machine
+    _stateController.sendEvent(SubmitAnswerEvent());
+
     setState(() => _isSubmitting = true);
 
     try {
@@ -421,6 +429,9 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
   }
 
   void _goToResults() async {
+    // Send view results event to state machine
+    _stateController.sendEvent(ViewResultsEvent());
+
     try {
       final result = await _apiService.submitAudioAnswer(
         widget.challenge.id,
