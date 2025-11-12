@@ -1,5 +1,6 @@
 class Env {
   //Passed at runtime via --dart-define
+  //Supabase
   static const supabaseUrl =
       String.fromEnvironment('SUPABASE_URL', defaultValue: ''); //currently supabase is paused, once unpaused will add url here
   static const supabaseAnonKey =
@@ -9,13 +10,27 @@ class Env {
   flutter run \
   --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
   --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+  --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
 
-  supabase URL are not hardocoded for security reasons, keeping in mind future app structure and not leaving url hardcoded
+  supabase URL and xAPI URL are not hardcoded for security reasons, keeping in mind future app structure and not leaving url hardcoded
  */
+ 
+ //xAPI
+  static const xApiBaseUrl = String.fromEnvironment('XAPI_BASE_URL', defaultValue: ''); //xAPI base url passed at runtime
+  static const xApiKey  = String.fromEnvironment('XAPI_API_KEY',  defaultValue: '');// optional
+
   static void assertConfigured() {
-    if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
+    final missingMessage = <String>[];
+
+    if (supabaseUrl.isEmpty) missingMessage.add('SUPABASE_URL');
+    if (supabaseAnonKey.isEmpty) missingMessage.add('SUPABASE_ANON_KEY');
+    if (xApiBaseUrl.isEmpty) missingMessage.add('XAPI_BASE_URL');
+    // xApiKey is optional; add if you plan to require it:
+    // if (xApiKey.isEmpty) missingMessage.add('XAPI_API_KEY');
+
+    if (missingMessage.isNotEmpty) {
       throw StateError(
-        'Missing SUPABASE_URL or SUPABASE_ANON_KEY (use --dart-define).',
+        'Missing required env: ${missing.join(', ')} (use --dart-define or --dart-define-from-file).',
       );
     }
   }

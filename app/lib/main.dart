@@ -9,6 +9,8 @@ import 'features/dashboard/widgets/welcome_screen.dart';
 import 'pace selector/pace_selector.dart';
 
 import 'core/services/supabase_client.dart';
+import 'core/xapi/xapi_client.dart';
+import 'core/xapi/xapi_provider.dart';
 
 Future<void> main() async{ //future<void>main() async is done to make sure 
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +18,7 @@ Future<void> main() async{ //future<void>main() async is done to make sure
   flutter run \
   --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
   --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+  --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
  */
   try {
   await AppSupabase.init();
@@ -26,10 +29,28 @@ Future<void> main() async{ //future<void>main() async is done to make sure
   return;
 }
 
+// Init xAPI client (e.g., build base URL, headers, quick health check)
+  late final XApiClient xapi;
+  try {
+    xapi = await XApiClient.init(); // implement static init() in xapi_client.dart
+  } catch (e) {
+    // ignore: avoid_print
+    print('XApi init failed: $e');
+    // You can continue without xAPI; provider can start in "degraded" mode.
+    xapi = XApiClient.degraded();
+  }
+
+
   
   runApp(
-    ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
-  );
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => MyAppState()),
+      ChangeNotifierProvider(create: (_) => XApiProvider(xapi)),
+    ],
+    child: const MyApp(),
+  ),
+);
 }
 
 class MyApp extends StatelessWidget {
@@ -39,22 +60,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return ChangeNotifierProvider(
-          create: (_) => MyAppState(),
-          child: MaterialApp(
-            title: 'Pronunciation Coach',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              fontFamily: 'SF Pro Display',
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: const WelcomeScreen(),
-            routes: {
-              '/login': (context) => const LoginPage(),
-              '/dashboard': (context) => const MainNavigationScreen(),
-            },
+        return MaterialApp(
+          title: 'Pronunciation Coach',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: 'SF Pro Display',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          home: const WelcomeScreen(),
+          routes: {
+            '/login': (context) => const LoginPage(),
+            '/dashboard': (context) => const MainNavigationScreen(),
+          },
         );
       },
     );
