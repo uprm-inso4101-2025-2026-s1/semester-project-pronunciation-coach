@@ -30,7 +30,7 @@ class Env {
 
     if (missingMessage.isNotEmpty) {
       throw StateError(
-        'Missing required env: ${missing.join(', ')} (use --dart-define or --dart-define-from-file).',
+        'Missing required env: ${missingMessage.join(', ')} (use --dart-define or --dart-define-from-file).',
       );
     }
   }
