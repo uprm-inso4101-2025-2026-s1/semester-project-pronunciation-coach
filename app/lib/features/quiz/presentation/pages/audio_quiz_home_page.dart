@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
-import '../state_machine/quiz_state_machine.dart';
+import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
 
 class AudioQuizHomePage extends StatefulWidget {
@@ -121,7 +121,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 24),
-        ..._difficulties!.asMap().entries.map(
+        ..._difficulties.asMap().entries.map(
           (entry) => TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (entry.key * 100)),
             tween: Tween(begin: 0.0, end: 1.0),

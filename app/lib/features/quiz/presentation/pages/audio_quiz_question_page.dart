@@ -6,7 +6,7 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../../core/common/quiz_attempt.dart';
-import '../../state_machine/quiz_state_machine.dart';
+import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_result_page.dart';
 
 class AudioQuizQuestionPage extends StatefulWidget {

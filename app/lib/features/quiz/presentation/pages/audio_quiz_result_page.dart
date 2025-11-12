@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
-import '../../state_machine/quiz_state_machine.dart';
+import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_home_page.dart';
 import 'audio_quiz_question_page.dart';
 

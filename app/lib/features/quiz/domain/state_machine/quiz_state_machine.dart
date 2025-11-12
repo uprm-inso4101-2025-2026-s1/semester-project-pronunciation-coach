@@ -1,6 +1,3 @@
-/// State Machine implementation based on Statecharts concepts
-/// Demonstrates hierarchical state machines with proper state transitions
-
 import 'package:flutter/material.dart';
 
 /// Base event class for state machine events

@@ -2,7 +2,7 @@
 /// Demonstrates that the statecharts concepts are working correctly
 
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/features/quiz/state_machine/quiz_state_machine.dart';
+import '../lib/features/quiz/domain/state_machine/quiz_state_machine.dart';
 
 void main() {
   group('Quiz State Machine Tests', () {
