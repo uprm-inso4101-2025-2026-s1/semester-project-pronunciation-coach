@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+
 import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import 'features/dashboard/presentation/widgets/welcome_screen.dart';
@@ -11,6 +13,9 @@ import 'core/common/pace_selector.dart';
 import 'core/network/supabase_client.dart';
 import 'core/network/session_manager.dart';
 import 'core/di/service_locator.dart';
+import 'core/xapi/xapi_client.dart';
+import 'core/xapi/xapi_provider.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,20 +24,36 @@ Future<void> main() async {
   // flutter run \
   // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
   // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
+   // --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
 
   try {
     await AppSupabase.init();
   } catch (e) {
     return;
   }
+  // Initialize xAPI client
+  late final XApiClient xapi;
+  try {
+    xapi = await XApiClient.init();
+  } catch (e) {
+    print('XApi init failed: $e');
+    xapi = XApiClient.degraded();
+  }
 
+  // Run app with multiple providers
   await SessionManager.instance.start();
 
   // Setup dependency injection
   setupServiceLocator();
 
   runApp(
-    ChangeNotifierProvider(create: (_) => MyAppState(), child: const MyApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MyAppState()),
+        ChangeNotifierProvider(create: (_) => XApiProvider(xapi)),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
