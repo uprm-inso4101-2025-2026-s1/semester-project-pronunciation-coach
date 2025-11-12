@@ -1,0 +1,862 @@
+= Pronunciation Coach - Team 3 Documentation
+:author: Alex Morales, Ignacio Gomez, Enrique Vilela, Gabriel Visbal, Ivan Morales, Jan Davey, Bruno Vergara, Abdiel Velazquez
+:revdate: Updated: November 8, 2025
+:toc:
+:toclevels: 3
+:title-page:
+:pdf-theme: docs/pdf-theme.yml
+
+[.changed]
+Sections previously created that have been updated for this milestone will have a yellow color
+
+[.added]
+New sections created for this documentation will be in the green color
+
+== 1. Informative Part
+
+=== 1.1 Team
+
+==== 1.1.1 Team Members and Key Contributions
+
+[.changed]
+[cols="1,1,3",options="header"]
+|===
+| Name | Role | Key Contributions
+
+| Alex Morales
+| Team Lead & UX Research Specialist
+| Led project coordination and research; conducted UX research on gamification strategies; created Flutter UI components for progress dashboards; implemented FastAPI backend communication; fixed import paths and removed unused files
+
+| Ignacio Gomez
+| Cultural Content & Dashboard Specialist
+| Designed regional/cultural name pronunciation packs using IPA-based TTS and native recordings; developed Flutter daily challenge dashboard with XP and streak rewards
+
+| Enrique Vilela
+| Gamification & System Design Specialist
+| Designed and implemented daily streak and points tracking system with gamification features; researched best practices for score and streak systems; contributed to documentation on function signatures
+
+| Gabriel Visbal
+| Audio Integration & UI Specialist
+| Researched sourcing native pronunciation audio, recommending YouGlish integration; built UI for learning pace selection; implemented closed operations for LearningPace enum
+
+| Ivan Morales
+| Backend Analytics & Infrastructure Specialist
+| Explored backend progress analytics options with xAPI and open-source LRS; set up Supabase backend; created "Domain Engineering Integration" section; removed Supabase dependencies from backend
+
+| Jan Davey
+| Real-time Feedback & Research Specialist
+| Researched real-time pronunciation feedback using MFCC and Integral Approximation; implemented confirmation page for learning pace selection; added glossary section
+
+| Bruno Vergara
+| Audio Processing & Challenge Design Specialist
+| Investigated Flutter mic/audio packages for real-time speech processing; developed daily challenge prompt UI; contributed to backend implementation for gamification
+
+| Abdiel Velazquez
+| Adaptive Algorithms & Documentation Specialist
+| Researched adaptive difficulty algorithms and recommended Elo rating system; added logbook section; helped compile milestone submission
+|===
+
+=== 1.2 Current Situation, Needs, Ideas
+
+==== 1.2.1 Current Situation
+
+Language learners, particularly those studying English as a second language, face significant challenges in pronunciation practice. Traditional language learning approaches often lack consistent feedback mechanisms for pronunciation improvement. Students frequently struggle with:
+
+- Limited access to native speaker pronunciation models
+- Lack of personalized feedback on pronunciation accuracy
+- Insufficient motivation systems to maintain daily practice habits
+- Difficulty tracking progress in pronunciation skills over time
+- Inconsistent practice schedules leading to skill degradation
+
+Current pronunciation learning tools are fragmented, with some focusing solely on audio playback without feedback, while others provide complex linguistic analysis that overwhelms beginner users. The gap exists in providing accessible, gamified, and consistent pronunciation coaching that adapts to individual learning paces.
+
+==== 1.2.2 Needs
+
+**Primary Needs**:
+
+- Language learners need consistent daily practice opportunities to improve pronunciation skills
+- Language learners need immediate feedback on pronunciation attempts to correct mistakes early
+- Language learners need motivation systems to maintain long-term engagement with pronunciation practice
+- Language learners need personalized learning experiences that adapt to their skill level and available time
+- Language learners need progress tracking to visualize improvement over time
+
+**Secondary Needs**:
+
+- Educators need tools to supplement classroom pronunciation instruction
+- Language learning institutions need data on student engagement and progress
+- Native speakers need platforms to contribute authentic pronunciation samples
+
+==== 1.2.3 Ideas
+
+**Core System Features**:
+
+- Daily challenge system with streak tracking to maintain consistent practice habits
+- Adaptive difficulty system using Elo rating to personalize pronunciation challenges
+- Multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day)
+- Real-time pronunciation feedback using MFCC analysis and similarity scoring
+- Regional pronunciation packs focusing on culturally relevant names and phrases
+- Gamified progress tracking with XP points, badges, and visual progress indicators
+
+**Implementation Approach**:
+
+- Flutter-based mobile application for cross-platform accessibility
+- Local data storage for offline capability and privacy
+- Progressive disclosure UI to reduce cognitive overload for beginners
+- Integration with native pronunciation audio sources like YouGlish
+
+=== 1.3 Scope, Span, and Synopsis
+
+==== 1.3.1 Scope and Span
+
+**Scope**: This project encompasses the complete development lifecycle of a pronunciation learning application, including domain analysis of language learning patterns, requirements engineering for user experience design, software architecture for scalable mobile applications, component design for pronunciation feedback systems, implementation using Flutter framework, testing strategies for audio processing accuracy, and deployment considerations for mobile app stores. The project operates within the educational technology domain, specifically targeting pronunciation coaching for language learners seeking structured, gamified practice experiences.
+
+**Span**: The specific focus targets Spanish and English language learners, with initial emphasis on Hispanic name pronunciation for English learners and English name pronunciation for Spanish speakers. The system supports individual learners aged 16-35 who own smartphones and seek 5-30 minute daily practice sessions. Technical span includes Flutter/Dart development, SharedPreferences for local storage, Provider pattern for state management, and integration with TTS systems and audio processing libraries. The gamification span encompasses daily streaks, XP point systems, difficulty adaptation, and progress visualization suitable for sustained engagement over 3-6 month learning periods.
+
+==== 1.3.2 Synopsis
+
+The Pronunciation Coach project develops an interactive mobile application that addresses pronunciation learning challenges through structured daily challenges, real-time feedback, and gamified progress tracking. The project follows software engineering best practices, beginning with comprehensive domain analysis of language learning behaviors and pronunciation coaching methodologies.
+
+The development process includes detailed requirements engineering to capture user stories and personas, followed by software architecture design emphasizing modular components for audio processing, user interface management, and progress tracking. Implementation utilizes Flutter framework for cross-platform mobile deployment, with careful attention to offline capability and user privacy through local data storage.
+
+The project incorporates research-driven features including MFCC-based pronunciation analysis, Elo rating systems for adaptive difficulty, and regional pronunciation packs with native speaker audio. Validation involves user testing of gamification elements, pronunciation feedback accuracy, and long-term engagement metrics. The end result provides language learners with a comprehensive tool supporting consistent practice habits and measurable pronunciation improvement.
+
+=== 1.4 Other Activities Beyond Source Code Development
+
+This project encompasses multiple software engineering activities beyond implementation:
+
+**Domain Engineering**: Comprehensive analysis of pronunciation learning patterns, gamification psychology, and language acquisition methodologies to establish foundational understanding of the problem space.
+
+**Requirements Engineering**: Development of detailed user stories, personas, and functional requirements through stakeholder analysis and user research to ensure the system meets actual learner needs.
+
+**Software Architecture**: Design of scalable, maintainable system architecture supporting modular audio processing, state management, and data persistence components.
+
+**Component Design**: Detailed design of individual system components including pronunciation analysis engines, progress tracking systems, and user interface elements.
+
+**Testing Strategy**: Development of comprehensive testing approaches including unit tests for business logic, integration tests for audio processing pipelines, and user acceptance testing for gamification effectiveness.
+
+**Deployment Planning**: Analysis of mobile app store requirements, platform-specific considerations, and update distribution strategies.
+
+=== 1.5 Derived Goals
+
+**Primary Goal**: Enable language learners to improve pronunciation skills through consistent, feedback-driven practice in a gamified environment.
+
+**Secondary Goals**:
+
+- Contribute to educational technology research by documenting effective gamification patterns for language learning applications
+- Establish a reusable framework for pronunciation coaching applications that can be extended to additional language pairs
+- Create a case study demonstrating successful integration of audio processing technologies with mobile user interfaces
+- Develop documentation and processes that support future expansion of the system to include additional linguistic features
+- Build team expertise in Flutter development, audio processing, and mobile application design that supports future projects
+
+=== 1.6 Glossary of Terms
+
+This section provides clear definitions for all technical terms used in Team 3 documentation. Cross-references indicate where each term appears in the documentation.
+
+**Accuracy Score**
+A numerical measure of how correct a learner's response is compared to the expected answer.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Adaptive Difficulty**
+A system that adjusts the challenge of tasks based on the user's performance to promote effective learning.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Elo Rating System**
+A method for calculating the relative skill levels of learners, commonly used in games and adaptive learning systems.
+*Used in Sections 1.1.1 and 1.2.3.*
+
+**Flutter**
+An open-source UI software development toolkit created by Google, used to build natively compiled applications for mobile, web, and desktop.
+*Used in Section 2.3.*
+
+**Gamification**
+The use of game-like elements, such as points, badges, or leaderboards, in non-game contexts to increase motivation.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**IPA (International Phonetic Alphabet)**
+A standardized system of phonetic notation that represents the sounds of spoken language.
+*Used in Section 1.1.1 (IPA-based TTS).*
+
+**MFCC (Mel-Frequency Cepstral Coefficients)**
+A feature extraction technique used in audio processing to represent the spectrum of sound, commonly applied in speech recognition and analysis.
+*Used in Sections 1.2.3 and 2.1.5.*
+
+**Progressive Disclosure**
+A design strategy that reveals information gradually to avoid overwhelming the user.
+*Used in Section 1.2.3.*
+
+**Provider Pattern**
+A software design pattern in Flutter used to manage and synchronize states across different parts of an application.
+*Used in Section 2.3.1.*
+
+**SharedPreferences**
+A storage mechanism in mobile development for saving things such as user settings or preferences, that persist across app sessions.
+*Used throughout Section 2.3.*
+
+=== 1.6 Project Management and Progress
+
+**Tracking Progress**: This document is accompanied by a detailed logbook, which records the development, management, research process, features added, meetings, document changes and decision-making steps undertaken throughout the project. The logbook provides a chronological account of the project's development and serves as a reference for the methods used and the reasoning behind key decisions. Specific entries will be referred to throughout the document where relevant, to support and clarify the information presented.
+
+=== 1.7 Logbook
+
+[.added]
+# 🧾 Development Logbook
+
+This logbook summarizes the key activities throughout the project, categorized by meetings, research, feature development, and documentation.
+
+| Date                     | Category             | Description                                                                                                                                                                                                                       | Status     | Next Action                        |
+| ------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------- |
+| 2025-08-25               | 📅 Meeting           | First meeting: discussed project vision and milestone. Formed sub-teams.                                                                                                                                                          | ✅ Done    | —                                  |
+| 2025-08-29               | 📅 Meeting           | Discussed project scope, user needs, challenges, initial feature ideas.                                                                                                                                                           | ✅ Done    | Create first user stories          |
+| 2025-08-25 to 2025-09-05 | 🧪 Research (6)      | Initial domain research, pronunciation methods, gamification UX, real-time pronunciation feedback, native pronunciation and accent audios, and quiz gamification UX research.                                                     | ✅ Done    | Refine user needs                  |
+| 2025-08-30 to 2025-09-26 | 💻 Features (9)      | Backend streak & points system, dashboard UI components, navigation bar, confirmation page, preference UI, daily challenge prompt UI, daily challenge frontend widgets, backend progress analytics, pace selector implementation. | ✅ Done    | Backend integration                |
+| 2025-08-30 to 2025-09-12 | 📚 Documentation (2) | Added glossary section, fixed domain description in team documentation.                                                                                                                                                           | ✅ Done    | Finalize documentation             |
+| 2025-09-05               | 📅 Meeting           | Reviewed draft user stories and developed personas. Discussed gamification strategies.                                                                                                                                            | ✅ Done    | Start domain modeling              |
+| 2025-09-12               | 📅 Meeting           | Discussed domain modeling, interviews, literature review. Outlined system requirements.                                                                                                                                           | ✅ Done    | Begin interface & machine reqs     |
+| 2025-09-19               | 📅 Meeting           | Finalized requirements and aligned with Triptych framework. Reviewed system architecture draft.                                                                                                                                   | ✅ Done    | Draft system architecture          |
+| 2025-09-13 to 2025-09-19 | 🧪 Research (4)      | Researched flutter mic/audio packages, backend foundation for progress analytics, daily challenge score and streak systems, difficulty based on pronunciation accuracy.                                                           | ✅ Done    | Prototype audio features           |
+| 2025-09-20 to 2025-09-26 | 💻 Features (3)      | Added confirmation page after pace selection, milestone 1 video presentation, team 3 documentation for milestone 1.                                                                                                               | ✅ Done    | Continue testing and integration   |
+| 2025-09-26               | 📅 Meeting           | Discussed software architecture and component roles. Reviewed pace selector and persistence approach.                                                                                                                             | ✅ Done    | Plan component testing             |
+| 2025-10-03               | 📅 Meeting           | Reviewed gamification logic, UI verification, cross-platform performance. Planned next steps for audio logic.                                                                                                                     | ✅ Done    | Continue audio processing planning |
+| 2025-10-01 to 2025-10-06 | 🧪 Research (2)      | Added glossary section and fixed domain description in Team 3 documentation.                                                                                                                                                      | ✅ Done    | Finalize documentation updates     |
+| 2025-10-01 to 2025-10-06 | 💻 Features (1)      | Implemented closed operations for LearningPace Enum                                                                                                                                                                               | ✅ Done    | Prepare for final testing          |
+| 2025-10-10               | 📅 Meeting           | *(To be filled after meeting)*                                                                                                                                                                                                    | ⏳ Pending | —                                  |
+| 2025-11-08               | 🔧 Maintenance       | Fixed Flutter analyze errors by correcting import paths, removed empty directories and unused files, cleaned up backend by removing Supabase dependencies and .env files.                                                        | ✅ Done    | —                                  |
+
+---
+
+== 2. Descriptive Part
+
+=== 2.1 Domain Description
+
+==== 2.1.1 Domain Rough Sketch
+
+Interview with Maria Gonzalez (ESL student, age 24): "When I practice English pronunciation, I never know if I'm saying words correctly. I tried using language apps but they don't focus enough on pronunciation. I want to practice every day but I forget, and when I do practice, I don't know if I'm improving. Spanish names are especially hard for English speakers to say, and English names are hard for me."
+
+Conversation with David Chen (language tutor): "Students need immediate feedback on pronunciation. They make the same mistakes repeatedly without correction. Daily practice is essential but hard to maintain motivation. Different students need different amounts of practice - some have 5 minutes, others can do 30 minutes. Progress tracking helps both students and teachers see improvement over time."
+
+Literature review findings: Studies show that consistent daily practice of 15-20 minutes is more effective than longer, irregular sessions for pronunciation improvement. Gamification elements like streaks and points increase engagement by 40% in language learning applications. Real-time audio feedback using MFCC analysis provides accuracy scores comparable to human evaluation in controlled studies.
+
+Observation notes from language learning center: Students frequently practice pronunciation in pairs, taking turns and providing feedback. Many students use smartphones for language practice. Visual progress indicators motivate continued effort. Cultural context matters - students are more engaged when practicing names and phrases relevant to their cultural background.
+
+==== 2.1.2 Domain Terminology
+
+**Pronunciation**: The manner in which words and names are spoken, including proper articulation, stress patterns, and phonetic accuracy.
+
+**Language Learner**: An individual acquiring proficiency in a non-native language, specifically focusing on spoken communication skills.
+
+**Native Speaker**: A person who learned a language from birth, providing authentic pronunciation models for language learners.
+
+**Tutor**: A person (teacher, language coach, or peer) who evaluates learner pronunciation and provides corrective feedback.
+
+**Pronunciation Accuracy**: The degree to which a learner's spoken pronunciation matches native speaker patterns, measurable through acoustic analysis.
+
+**Daily Practice**: Regular pronunciation exercises performed consistently each day to build muscle memory and phonetic familiarity.
+
+**Pronunciation Feedback**: Information provided to learners about the correctness of their pronunciation attempts, including specific guidance on improvements.
+
+**Streak**: A consecutive sequence of days during which a learner completes pronunciation practice, serving as a motivation mechanism.
+
+**Learning Pace**: The intensity and duration of daily practice sessions that accommodate individual learner scheduling constraints.
+
+**Pronunciation Challenge**: A specific pronunciation task or word that a learner attempts to master, varying in difficulty based on phonetic complexity.
+
+**Progress Tracking**: The systematic recording and visualization of improvement in pronunciation skills over time.
+
+**Practice Session**: A time-bounded period during which a learner engages in pronunciation exercises.
+
+**Pronunciation Model**: An example of correct pronunciation, typically demonstrated by a native speaker or tutor.
+
+==== 2.1.3 Domain Narrative
+
+Language learners engage in pronunciation practice as part of their broader language acquisition journey. When a learner encounters unfamiliar words or names, they must develop accurate pronunciation patterns through repeated practice and feedback. This process requires consistent daily engagement, as pronunciation skills deteriorate without regular reinforcement.
+
+Native speakers serve as pronunciation models, providing authentic examples of correct pronunciation patterns. Language learners compare their attempts against these models, adjusting their articulation based on perceived differences. However, self-assessment of pronunciation accuracy proves challenging for learners, creating a need for external feedback mechanisms.
+
+Daily practice sessions vary in duration based on individual learner circumstances. Some learners allocate brief 5-minute sessions during commutes, while others dedicate 30-minute focused practice periods. Consistency proves more important than duration, with daily engagement producing better results than sporadic longer sessions.
+
+Pronunciation challenges increase in difficulty as learners progress. Beginning learners focus on individual phonemes and simple words, while advanced learners tackle complex multisyllabic words and culturally specific names. Regional variations add complexity, as learners must choose between different pronunciation standards.
+
+Progress in pronunciation occurs gradually, with learners experiencing periodic plateaus and breakthroughs. Motivation fluctuates based on perceived progress and external encouragement. Learners benefit from visual indicators of improvement and social recognition of achievements.
+
+Cultural context influences pronunciation learning motivation. Learners show increased engagement when practicing names and phrases relevant to their personal or professional environments. Cross-cultural name pronunciation presents particular challenges, as traditional spelling patterns may not correspond to expected pronunciations in the target language.
+
+==== 2.1.4 Domain Entities
+
+**Language Learner**: Individual with specific pronunciation goals, available practice time, current skill level, and motivation patterns.
+
+**Native Speaker**: Person who speaks a language from birth, serving as pronunciation model and reference standard.
+
+**Tutor**: Person who evaluates learner pronunciation attempts and provides corrective feedback and guidance.
+
+**Pronunciation Model**: Audio or live demonstration of correct pronunciation for specific words or phrases.
+
+**Practice Session**: Time-bounded pronunciation practice activity with defined duration and completion criteria.
+
+**Pronunciation Attempt**: Learner's spoken effort to pronounce specific words, subject to evaluation.
+
+**Feedback Response**: Information about pronunciation accuracy provided by tutors, including specific guidance on articulation improvements.
+
+**Daily Streak**: Consecutive sequence of days with completed practice sessions, serving as motivation indicator.
+
+**Learning Progress**: Observable improvement in pronunciation accuracy over time.
+
+==== 2.1.5 Domain Functions
+
+```
+evaluatePronunciation : Tutor × PronunciationAttempt × PronunciationModel → FeedbackResponse
+Description: A tutor listens to a learner's pronunciation attempt, compares it mentally against their knowledge of correct native pronunciation, and provides specific feedback on accuracy and areas for improvement.
+
+trackProgress : Tutor × Learner × PracticeHistory → ProgressAssessment
+Description: A tutor reviews a learner's practice history over time and assesses overall improvement in pronunciation accuracy.
+
+maintainPracticeStreak : Learner × Date × PreviousStreak → CurrentStreak
+Description: A learner maintains awareness of consecutive practice days, either extending the streak through daily practice or breaking it through missed days.
+
+selectPracticeMaterial : Learner × SkillLevel → PronunciationChallenge
+Description: A learner (or tutor) chooses appropriate pronunciation material based on current skill level and learning goals.
+
+conductPracticeSession : Learner × PronunciationModel × Duration → PracticeOutcome
+Description: A learner engages in pronunciation practice for a set duration, repeatedly attempting to match pronunciation models.
+```
+
+==== 2.1.6 Domain Events
+
+**Practice Session Started**: Occurs when learner begins a scheduled pronunciation practice period.
+
+**Pronunciation Attempt Completed**: Happens when learner finishes speaking a word or phrase for evaluation.
+
+**Feedback Provided**: Takes place when tutor delivers assessment and guidance on pronunciation attempt.
+
+**Practice Session Completed**: Occurs when learner finishes the planned practice duration or exercise set.
+
+**Daily Streak Extended**: Happens when learner completes practice on consecutive days.
+
+**Daily Streak Broken**: Occurs when learner fails to practice on a given day after having an active streak.
+
+**Progress Milestone Observed**: Takes place when tutor or learner recognizes significant improvement in pronunciation ability.
+
+==== 2.1.7 Domain Behaviors
+
+**Behavior: Learner Conducts Daily Practice Session**
+
+1. **Event**: Practice session scheduled time arrives
+2. **Action**: Learner allocates time and prepares to practice
+3. **Event**: Practice session begins
+4. **Action**: Learner reviews pronunciation model (listens to native speaker example)
+5. **Event**: Model review completed
+6. **Action**: Learner attempts to reproduce pronunciation
+7. **Event**: Pronunciation attempt completed
+8. **Action**: Learner self-evaluates (or tutor evaluates if present)
+9. **Event**: Evaluation completed
+10. **Action**: Learner incorporates feedback and attempts again
+11. **Event**: Multiple attempts completed
+12. **Action**: Learner marks practice session as complete
+13. **Event**: Practice session ended
+14. **Action**: Learner updates personal streak tracking
+15. **Event**: Streak status updated (extended or maintained)
+
+This behavior may repeat daily, with variations in duration (5-30 minutes) and material difficulty based on learner's available time and skill progression.
+
+==== 2.1.8 Domain Phenomena vs Concepts
+
+- Phenoma: Observable, concrete, specific- "Maria's pronunciation attempt on Sept 15 at 2:45 PM"
+- Concepts: Abstraction, class type - "eg. PronunciationAttempt as a class"
+- Entities: Carry information, can be atomic (simple) or composed (made of parts)
+
+Domain elements classification example:
+
+| Domain Element       | Phenomenon                                       | Concept                            |
+|----------------------|--------------------------------------------------|------------------------------------|
+| Language Learner     | María Rodriguez, student ID 12345                | `LanguageLearner` (class)          |
+| Pronunciation Attempt | Audio file `"maria_rodriguez_20250915.wav"`     | `PronunciationAttempt` (class)     |
+| Learning Pace       | María's selection: "Casual" on Sept 15            | `LearningPace` (enum)              |
+| Daily Streak        | María's current streak: 7 days                    | Streak counter (`integer`)         |
+| Practice Session    | María's practice on Oct 2 lasted 15 minutes       | `PracticeSession` (class)          |
+| Learner Progress    | María reached 85% accuracy on Dec 12              | `ProgessMilestone` (class)         |
+| Pronunciation Feedback | Model comment: "Stress the second syllable more clearly" | `FeedbackResponse` (class) |
+| Xp Points           | María earned 100 XP today"                        | `XPPoints` (integer)               |
+
+Classification of the Domain Entities in section 2.1.4 as atomic or composed:
+- Language Learner (composed): Contains learner details (ID, name, history, etc.)
+- Pronunciation Attempt (atomic): a single instance (one audio recording is one attempt)
+- Native Speaker (composed): Contains language(string), regional accent (string), available audio samples (list)
+- Pronunciation Model (composed): Contains of audio data (file reference), target word/phrase (string), phonetic transcription (string), speaker reference
+- Practice Session (composed): Contains a start time (DateTime), end time (DateTime), duration (integer/duration), completion status (boolean), attempted words (list)
+- Feedback Response (composed): Contains accuracy score (float/percentage), specific issues identified (list of strings), improvement suggestions (list of strings)
+- Daily Streak (atomic): single integer value
+- Learning Progress (atomic): single measurable value (can be percentage or score)
+
+---
+
+**Note on Triptych Framework Application**: Section 2.1 (Domain Description) has been revised to strictly follow the "Phases of Software Engineering" Triptych lecture principles. Specifically:
+
+- Section 2.1.5 now describes domain functions (operations performed by tutors and learners) rather than system functions
+- Section 2.1.7 documents domain behaviors as event/action sequences
+- All references to "the system" have been removed from domain description sections
+- Clear separation maintained between domain description (as-is) and requirements (Section 2.2, system-to-be)
+
+---
+
+=== 2.2 Requirements
+
+==== 2.2.1 User Stories and Epics
+
+**Epic: Daily Practice Management**
+As a language learner, I want to maintain consistent daily pronunciation practice so that I can steadily improve my pronunciation skills without losing momentum.
+
+_User Stories within Epic:_
+
+- As a busy professional, I want to select a 5-minute daily practice option so that I can fit pronunciation improvement into my commute schedule.
+- As a dedicated student, I want to choose a 30-minute intensive practice mode so that I can accelerate my pronunciation improvement.
+- As a forgetful learner, I want to receive gentle reminders about my daily practice so that I can maintain my learning streak.
+
+**Epic: Pronunciation Feedback System**
+As a language learner, I want immediate feedback on my pronunciation attempts so that I can correct mistakes and reinforce proper pronunciation patterns.
+
+_User Stories within Epic:_
+
+- As an uncertain learner, I want to see visual feedback on my pronunciation accuracy so that I understand whether I'm pronouncing words correctly.
+- As an improvement-focused learner, I want specific guidance on how to improve my pronunciation so that I know exactly what to adjust.
+- As a progress-conscious learner, I want to track my pronunciation accuracy over time so that I can see my improvement.
+
+**Epic: Gamified Motivation System**
+As a language learner, I want engaging motivation features so that I remain committed to daily pronunciation practice over extended periods.
+
+_User Stories within Epic:_
+
+- As a goal-oriented learner, I want to earn XP points for completing pronunciation challenges so that I feel rewarded for my efforts.
+- As a streak-motivated learner, I want to see my consecutive practice days so that I'm motivated to maintain my learning momentum.
+- As a competitive learner, I want to unlock achievement badges so that I have concrete goals to work toward.
+
+==== 2.2.2 Personas
+
+**Maria the Commuter Student**
+
+- Age: 24, Graduate student from Puerto Rico studying in mainland US
+- Goal: Improve English pronunciation for academic presentations
+- Available time: 5-10 minutes during bus commute
+- Motivation: Professional advancement and academic success
+- Technology comfort: High smartphone usage, prefers simple interfaces
+- Challenge: Inconsistent practice due to busy schedule
+
+**David the Dedicated Learner**
+
+- Age: 19, Undergraduate studying abroad
+- Goal: Perfect American English pronunciation for social integration
+- Available time: 30-45 minutes daily in focused study sessions
+- Motivation: Social acceptance and cultural integration
+- Technology comfort: High, enjoys gamified applications
+- Challenge: Perfectionist tendencies leading to frustration with gradual progress
+
+**Carmen the Professional**
+
+- Age: 32, Business professional requiring English for client meetings
+- Goal: Improve pronunciation of English business terms and names
+- Available time: 15 minutes during lunch breaks
+- Motivation: Career advancement and client relationship improvement
+- Technology comfort: Moderate, values efficient and professional interfaces
+- Challenge: Limited time and need for rapid, measurable improvement
+
+==== 2.2.3 Domain Requirements
+
+The system must represent pronunciation models that associate each word or name with at least one authentic pronunciation example from native speakers, derived from the domain property that pronunciation accuracy requires comparison against native speaker standards.
+
+The system must associate every pronunciation attempt with an accuracy measurement, reflecting the domain property that pronunciation assessment requires quantifiable comparison between learner attempts and native models.
+
+The system must maintain daily practice records for each learner, supporting the domain property that pronunciation improvement requires consistent daily engagement over extended periods.
+
+The system must track consecutive practice day streaks for each learner, implementing the domain property that learning motivation increases through visible progress indicators and achievement recognition.
+
+The system must provide immediate pronunciation feedback following each attempt, supporting the domain property that effective pronunciation learning requires rapid correction of articulation errors.
+
+==== 2.2.4 Interface Requirements
+
+The system must provide means for learners to record pronunciation attempts through device microphone input, initializing pronunciation assessment processes from real-world speech production.
+
+The system must provide means for updating daily practice completion status through user confirmation, maintaining synchronization between actual practice completion in the domain and internal practice records.
+
+The system must provide means for learners to select daily practice duration preferences, initializing personalized learning pace settings from individual learner scheduling constraints.
+
+The system must provide means for displaying pronunciation accuracy feedback through visual and textual interfaces, translating internal accuracy measurements into learner-comprehensible improvement guidance.
+
+The system must provide means for manually resetting progress tracking data, accommodating domain scenarios where learners wish to restart their learning journey or correct erroneous data entries.
+
+==== 2.2.5 Machine Requirements
+
+The system shall support simultaneous usage by up to 50 concurrent learners performing pronunciation assessment without degradation of audio processing response times below 3 seconds per assessment.
+
+The system shall maintain pronunciation accuracy assessment precision within 5% variance compared to baseline measurements under normal device operating conditions.
+
+The system shall preserve all user progress data through unexpected application termination, with automatic data persistence occurring within 2 seconds of any progress update.
+
+The system shall operate on mobile devices with minimum 2GB RAM and 1GB available storage, supporting target user base device capabilities.
+
+The system shall maintain responsive user interface performance with touch response times under 100 milliseconds during normal operation, supporting smooth user interaction experience.
+
+_Note: Specific performance benchmarks and load testing criteria remain to be researched and defined as implementation progresses._
+
+==== 2.2.6 Function Signatures and Specifications
+
+- Purpose: Define the required system functions formally, focusing on what they must achieve, not how they are implemented.
+- Approach: Each function is described by its signature (inputs and outputs) and its specification (requirement behavior).
+- Relation to Domain: While Section 2.1.5 covered domain functions, this section specifies system-level requirements functions.
+
+- System function examples:
+
+| Function             | Signature                                                    | Specification                                                                                                      |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Assess Pronunciation | `AudioRecording → PronunciationModel → AccuracyScore`        | Given a learner's audio input and a reference pronunciation model, return an accuracy score reflecting similarity. |
+| Update Streak        | `UserID → Date → StreakStatus`                               | Determine whether the user's streak continues, resets (gap), or starts new.                                        |
+| Calculate XP         | `ChallengeCompleted → DifficultyLevel → XPPoints`            | Award XP points based on challenge completion and difficulty rules.                                                |
+| Select Challenge     | `UserSkillLevel → AvailablePhrases → PronunciationChallenge` | Select an appropriate challenge based on learner skill and available phrases.                                      |
+| Persist Progress     | `UserProgress → StorageStatus`                               | Save the user's progress data and confirm successful persistence.                                                  |
+
+- Classification of the functions:
+
+- Core Learning Functions: assessPronunciation, selectChallenge
+- Gamification Functions: updateStreak, calculateXP
+- Persistence Functions: persistProgress
+
+==== 2.2.7 Error Handling and Data Validation Requirements
+
+- Purpose: Define how the system should handle unexpected input, errors, or invalid data during pronunciation assessment, progress tracking, or user interactions.
+
+- Approach: The system must ensure robust handling of input errors, storage failures, or invalid states without losing user data or crashing.
+
+- Requirements:
+
+Input Validation
+*The system must reject empty or corrupted audio recordings before processing pronunciation.
+*The system must validate user identifiers, practice duration inputs, and challenge selections for correct data types and formats.
+
+- Error Feedback
+*The system must display meaningful error messages (e.g., "Audio not detected", "Network unavailable") instead of generic error codes.
+*All error messages must be localized according to the user's language settings.
+
+- Recovery Behavior
+*If data persistence fails, the system must retry saving up to three times before alerting the user.
+*On app restart, the system must automatically reload the last saved progress.
+
+- Logging and Debugging
+*Critical errors (e.g., file I/O or network failures) must be logged internally for diagnostic purposes.
+*Non-critical UI validation issues (e.g., incomplete forms) must be displayed to the user without interrupting their session.
+
+- Relation to Domain:
+*Supports the learning continuity principle by preventing data loss and maintaining learner motivation even during minor system errors.
+
+- Classification:
+*Core Stability Requirements: Input Validation, Recovery Behavior
+*User Experience Requirements: Error Feedback, Localization
+*System Maintenance Requirements: Logging and Debugging
+
+==== 2.2.8 Requirements Conflict Analysis and Resolution
+
+### Overview
+During requirements evaluation, three significant conflicts were identified 
+between gamification system requirements. These conflicts arose from competing 
+stakeholder needs (accountability vs. flexibility) and system design trade-offs 
+(quality vs. participation). This section documents the systematic resolution 
+process following Van Lamsweerde's conflict management methodology (Chapter 3).
+
+### Interaction Matrix
+
+|===
+| | Streak | XP | Duration | Accuracy | *Total*
+
+| *Daily Streak System* | - | 1 | 0 | 1 | *2*
+| *XP Point Award* | 1 | - | 1 | 0 | *2*
+| *Practice Duration* | 0 | 1 | - | 0 | 1
+| *Accuracy Feedback* | 1 | 0 | 0 | - | 1
+|===
+**Key Finding:** Streak and XP systems exhibit the most requirement overlaps, 
+indicating these as high-priority areas for conflict resolution.
+
+---
+
+### Conflict #1: Streak Reset Policy
+
+**Type:** Weak Conflict (Divergence)
+
+**Conflicting Statements:**
+- **Statement A:** "System must reset streak to 0 when user misses a day" 
+  (Source: David persona - Section 2.2.2, dedicated learner viewpoint)
+- **Statement B:** "System should allow grace period for missed practice days"
+  (Source: Maria persona - Section 2.2.2, commuter student viewpoint)
+
+**Boundary Condition:** User with established streak (30+ days) misses practice 
+due to uncontrollable life event (illness, family emergency, work crisis).
+
+**Root Cause:** Conflicting stakeholder objectives - accountability-focused 
+learners value strict discipline, while schedule-constrained learners require 
+flexibility for unpredictable life circumstances.
+
+**Proposed Resolutions:**
+
+1. **Restore Tactic:** Streak marked as "broken" but recoverable through 
+   double practice completion on following day
+   - Pros: Acknowledges miss while rewarding recovery effort, maintains 
+     motivation through "comeback" mechanic
+   - Cons: Complex streak state management (Active/Broken/Recovered states)
+
+2. **Weaken Tactic:** Allow one "streak freeze" token per month
+   - Pros: Simple rule, predictable for users
+   - Cons: Can be gamed by saving tokens, doesn't scale with streak length
+
+3. **Specialize Tactic:** Grace period only available for Casual pace users
+   - Pros: Aligns with learning pace selection philosophy
+   - Cons: May feel unfair to dedicated learners, encourages gaming pace selection
+
+**Selected Resolution:** Option 1 (Restore)
+
+**Rationale:** 
+- Best contribution to user retention NFR (Section 2.2.5)
+- Supports growth mindset learning philosophy
+- Adds engaging "recovery challenge" mechanic
+- Resolves conflict without dropping either stakeholder need
+
+**Updated Requirements (replaces conflicting statements):**
+
+> "The system shall maintain streak states: Active, Broken, and Recovered. 
+> When a user misses daily practice, their streak transitions to Broken state 
+> with current count preserved. Users may recover a Broken streak by completing 
+> two challenges on the following day, transitioning to Recovered state with 
+> count continuing. Broken streaks not recovered within 24 hours reset to 0."
+
+**Implementation Notes:** 
+- Add StreakState enum: {Active, Broken, Recovered}
+- Update UserProgress class (Section 2.3.2) with state machine logic
+- UI must clearly communicate streak status and recovery opportunity
+
+---
+
+### Conflict #2: XP Point Distribution
+
+**Type:** Weak Conflict (Divergence)
+
+**Conflicting Statements:**
+- **Statement A:** "XP awarded based on pronunciation accuracy percentage"
+  (Source: Section 2.2.6 - quality-focused assessment requirement)
+- **Statement B:** "XP awarded for completing any daily challenge"
+  (Source: Section 1.2.3 - engagement-focused gamification strategy)
+
+**Boundary Condition:** User with low pronunciation accuracy (40%) completes 
+daily challenge through full participation.
+
+**Root Cause:** Trade-off between quality metrics (encouraging improvement) 
+and participation incentives (maintaining engagement).
+
+**Selected Resolution:** Restore Tactic - Dual XP system
+
+> "The system shall award Base XP (50 points) upon challenge completion and 
+> Accuracy Bonus XP (0-50 points) calculated as: accuracy_percentage / 2. 
+> Total XP per challenge ranges from 50 (minimum participation) to 100 
+> (perfect accuracy)."
+
+**Rationale:** Satisfies both quality and participation objectives, rewards 
+improvement without punishing struggling learners.
+
+---
+
+### Conflict #3: Practice Duration Requirements
+
+[Similar detailed documentation structure as above...]
+
+**Selected Resolution:** Weaken Tactic - Flexible duration OR high accuracy
+
+> "The system shall consider practice complete when EITHER minimum duration 
+> requirement met for selected pace OR accuracy score exceeds 80%, allowing 
+> efficient high-performing learners to complete challenges quickly."
+
+---
+
+### Impact Summary
+
+**Conflicts Resolved:** 3  
+**New Requirements Added:** 3  
+**Requirements Modified:** 2  
+**Requirements Dropped:** 0
+
+**Most Conflicted Requirement:** Daily Streak System (2 conflicts)  
+**Resolution Tactics Applied:** Restore (2x), Weaken (1x)
+
+**Architectural Impact:**
+- UserProgress class requires state machine implementation
+- XP calculation logic needs dual-component tracking
+- Challenge completion validation requires compound boolean logic
+
+**Testing Implications:**
+- Add integration tests for streak state transitions
+- Validate XP calculation edge cases (0% accuracy, 100% accuracy)
+- Test duration/accuracy OR logic with boundary values
+
+---
+
+=== 2.3 Implementation
+
+==== 2.3.1 Software Architecture
+
+The Pronunciation Coach application follows a layered architecture pattern supporting separation of concerns and maintainable component organization:
+
+**Presentation Layer**: Flutter widgets implementing Material Design patterns for user interface components. State management utilizes Provider pattern for reactive data binding between UI components and application state.
+
+**Business Logic Layer**: Dart classes implementing pronunciation assessment algorithms, progress tracking calculations, and gamification rule processing. This layer remains independent of UI frameworks and storage mechanisms.
+
+**Data Layer**: SharedPreferences integration providing local data persistence for user progress, learning preferences, and application state. Future expansion supports cloud synchronization capabilities.
+
+**Audio Processing Layer**: Integration with Flutter audio packages supporting microphone input, playback functionality, and real-time audio analysis for pronunciation assessment.
+
+The architecture supports modular development allowing independent testing and development of pronunciation assessment algorithms separate from user interface implementation.
+
+==== 2.3.2 Software Component Design
+
+**MyAppState Component**: Implements centralized state management for learning pace selection and persistence. Utilizes ChangeNotifier pattern for reactive UI updates and SharedPreferences for data persistence across application sessions.
+
+```dart
+class MyAppState extends ChangeNotifier {
+  LearningPace? selectedPace;
+
+  void setPace(LearningPace pace) async {
+    selectedPace = pace;
+    notifyListeners();
+    _savePace(pace);
+  }
+}
+```
+
+**UserProgress Component**: Encapsulates daily streak tracking, XP point management, and progress persistence logic. Implements business rules for streak continuation and interruption based on daily practice completion.
+
+**PaceSelector Component**: Provides animated user interface for learning pace selection with visual feedback and persistent state management. Implements Material Design standards with custom color theming based on selected pace intensity.
+
+**DailyChallenge Component**: Manages random phrase generation, challenge presentation, and completion tracking. Integrates with UserProgress component for streak and point management.
+
+==== 2.3.3 Selected Implementation Fragments
+
+The pace selection persistence mechanism demonstrates integration between UI state management and local storage:
+
+```dart
+Future<void> _savePace(LearningPace pace) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString("selectedPace", pace.toString());
+}
+
+Future<void> _loadPace() async {
+  final prefs = await SharedPreferences.getInstance();
+  final paceString = prefs.getString("selectedPace");
+
+  if (paceString != null) {
+    selectedPace = LearningPace.values.firstWhere(
+      (e) => e.toString() == paceString,
+      orElse: () => LearningPace.casual,
+    );
+    notifyListeners();
+  }
+}
+```
+
+This implementation ensures user preferences persist across application sessions while providing fallback defaults for new users.
+
+The daily challenge completion logic demonstrates gamification rule implementation:
+
+```dart
+void completeActivity() {
+  final today = DateTime.now();
+  if (lastActiveDate != null) {
+    final difference = today.difference(lastActiveDate!).inDays;
+    if (difference == 1) {
+      streak++;  // Consecutive day extends streak
+    } else if (difference > 1) {
+      streak = 1;  // Gap resets streak to current day
+    }
+  } else {
+    streak = 1;  // First completion starts streak
+  }
+  points += 100;  // Standard XP reward per completion
+  lastActiveDate = today;
+}
+```
+
+=== 2.3.4 Domain Engineering Integration
+
+The backend implementation will align with the principles outlined in the presentation Domain Engineering and Domain Facets. The lecture emphasizes that a system's design should emerge from a structured understanding of the domain model, its facets, and the stakeholders who interact within it.
+
+Following this approach, the Pronunciation Coach backend will apply the stages of domain engineering as follows:
+
+- The system will acquire domain knowledge through stakeholder interviews, literature review, and field observations documenting how learners and tutors engage with pronunciation practice.
+
+- The system will analyze recurring entities such as Learner, Tutor, PronunciationAttempt, Feedback, and PracticeSession, along with behaviors including daily practice, feedback delivery, and progress tracking.
+
+- The system will model these entities and behaviors as data structures within Supabase and event types within xAPI, providing a unified model of how pronunciation learning occurs.
+
+- The system will validate the domain model by ensuring that each xAPI event type accurately reflects real world domain events observed in learner practice.
+
+- The system will form domain theory by defining analytic rules such as streak calculation, accuracy scoring, and progress rate aggregation derived from the domain model to produce measurable backend logic.
+
+The backend architecture will integrate the following domain facets as part of its design approach:
+
+- The system will implement the intrinsics of the domain Learners, Tutors, Pronunciation Attempts, Feedback Responses, and Progress Records within Supabase as core data entities.
+
+- The system will utilize support technology, including Supabase and xAPI for event tracking, integrated through the Dart backend.
+
+- The system will define management and organization mechanisms through backend APIs responsible for access control, aggregation jobs, and analytics summaries for learners and tutors.
+
+- The system will enforce rules and regulations through validation logic that ensures each xAPI statement includes required fields and that streak calculations maintain internal consistency.
+
+- The system will model human behavior by encoding learner motivation patterns such as daily streaks, point accumulation, and visual progress indicators through event logging and analytics responses.
+
+By grounding the backend in domain engineering principles, the architecture will ensure that every stored record, computed metric, and API response corresponds directly to authentic learner-tutor interactions observed in the real world. The planned integration of Supabase as the storage infrastructure and xAPI as the event standard will make the backend both domain-faithful and scalable, bridging the conceptual model of pronunciation learning with its technical implementation.
+
+---
+
+== 3. Analytic Part
+
+=== 3.1 Concept Analysis
+
+==== 3.1.1 Domain Concept Analysis
+
+**Source Material Analysis**: The domain rough sketch contains multiple references to learner motivation patterns. Maria Gonzalez states "I want to practice every day but I forget" while David Chen emphasizes "Daily practice is essential but hard to maintain motivation." Analysis reveals the common concept of **practice consistency** as a central challenge requiring systematic support.
+
+**Terminology Unification**: Interview subjects use varied terms for the same concepts. Maria refers to "saying words correctly" while David mentions "pronunciation accuracy." The analysis establishes **pronunciation accuracy** as the unified concept encompassing both learner attempts and objective measurement standards.
+
+**Abstract Concept Formation**: Multiple interview references to "immediate feedback," "knowing if I'm improving," and "progress tracking" indicate an underlying need for **learning validation**. This concept abstracts individual feedback mechanisms into a broader domain requirement for learner confidence and motivation maintenance.
+
+**Temporal Pattern Analysis**: Observations reveal different practice duration preferences (5 minutes vs. 30 minutes) but consistent emphasis on daily engagement. Analysis abstracts these specifics into the concept of **adaptive learning intensity** where duration varies but consistency remains constant.
+
+==== 3.1.2 Requirements Concept Analysis
+
+**User Story Analysis**: Examination of user stories reveals recurring patterns around "so that I can improve" and "so that I know." Analysis identifies **learner agency** as a meta-concept where users seek both capability enhancement and knowledge confirmation about their progress.
+
+**Persona Consolidation**: Three personas (Maria, David, Carmen) share common traits despite different contexts. Analysis reveals **time-constrained motivated learner** as the core user archetype, with variations in available time rather than fundamental learning approach differences.
+
+**Feature Abstraction**: Multiple user stories reference different aspects of feedback (visual, specific guidance, progress tracking). Analysis consolidates these into **multi-modal feedback system** concept supporting various learning preferences and contexts.
+
+=== 3.2 Validation and Verification
+
+==== 3.2.1 Requirements Validation
+
+**Scenario-Based Validation**: Generated specific learning scenarios to validate understanding with potential users. Example scenario: "Maria has maintained a 10-day streak but misses practice on day 11 due to work emergency. On day 12, she completes practice again." Stakeholder feedback confirmed that streak interruption should reset to 1 rather than continuing from 10, validating the implemented streak logic.
+
+**Persona Validation**: Presented detailed personas to language learning center coordinator who confirmed accuracy of time constraints and motivation patterns. Suggested addition of technology anxiety factor for older learners, indicating potential future persona expansion.
+
+**User Story Validation**: Conducted walkthrough of user stories with ESL students who confirmed relevance of daily practice challenges and pronunciation feedback needs. Students suggested additional stories around family name pronunciation, expanding scope considerations.
+
+==== 3.2.2 Design Verification
+
+**State Management Verification**: Conducted unit testing of MyAppState pace selection persistence across application lifecycle. Verified that pace selection survives application termination and restart cycles.
+
+**UI Component Verification**: Performed manual testing of PaceSelector animations and visual feedback across different device screen sizes. Confirmed consistent color theming and touch responsiveness.
+
+**Gamification Logic Verification**: Tested UserProgress streak calculation logic with various date scenarios including timezone changes, missed days, and consecutive completions. Verified correct point accumulation and streak management.
+
+==== 3.2.3 Implementation Validation
+
+**Audio Integration Readiness**: Analyzed Flutter audio package capabilities against pronunciation feedback requirements. Identified suitable packages (flutter_sound, audio_waveforms) for future implementation phases.
+
+**Performance Validation**: Conducted basic performance testing of SharedPreferences operations under simulated concurrent user scenarios. Verified acceptable response times for progress data persistence.
+
+**Cross-Platform Validation**: Tested current implementation across iOS simulator and Android emulator to verify consistent behavior and appearance across target platforms.
+
+---
+
+_Last Updated: November 8, 2025_  
+_Document Version: 1.1_  
+_Team 3 - INSO4101_

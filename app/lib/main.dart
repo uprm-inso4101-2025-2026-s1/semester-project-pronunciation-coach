@@ -15,7 +15,6 @@ import 'core/xapi/xapi_client.dart';
 import 'core/xapi/xapi_provider.dart';
 
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,28 +22,20 @@ Future<void> main() async {
   // flutter run \
   // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
   // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
-  // --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
+   // --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
 
   try {
     await AppSupabase.init();
   } catch (e) {
     return;
   }
-
-  // Initialize SessionManager
-  await SessionManager.instance.start();
-
-
-  setupServiceLocator();
-
   // Initialize xAPI client
   late final XApiClient xapi;
   try {
     xapi = await XApiClient.init();
   } catch (e) {
-    // ignore: avoid_print
     print('XApi init failed: $e');
-    xapi = XApiClient.degraded(); // continue in degraded mode
+    xapi = XApiClient.degraded();
   }
 
   // Run app with multiple providers

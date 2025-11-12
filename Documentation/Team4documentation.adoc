@@ -245,3 +245,201 @@ Format:
     * Unit Testing
     * Model-Checking
 
+####3.2.1 Validation Scenarios:
+
+- Validation complements verification by confirming that the system being developed 
+is the one stakeholders actually want. “Are we doing the right thing?”
+- Each scenario below represents a concrete, inspectable situation that a stakeholder 
+could review without any technical knowledge.
+
+> Scenario A – Pronunciation Feedback
+
+  - Goal: Allow learners to confirm whether their spoken words are correctly pronounced.
+  - Stakeholder Perspective: I want immediate, understandable feedback on pronunciation quality.
+  
+  - Preconditions:
+    > Student is logged into the app.
+    > Microphone permission granted.
+    > Audio output device available.
+  
+  - Main Flow:
+    > Student chooses to practice their pronunciation.
+    > Select the words they want to practice.
+    > Press record and pronounce the first word.
+    > App analyzes audio -> converts speech to text -> computes pronunciation score.
+    > Screen shows pronunciation score and highlighted problematic sounds, as well as feedback.
+    > Process repeats until all words have been practiced.
+  
+  - Edge Cases:
+    > Background noise detected 
+      -> App pauses and displays “Detecting a lot of background noise,
+      please move to a quieter area.”
+    > No speech captured 
+      -> Prompt to re-record.
+    > Spoken input ambiguous (ex. “wood” vs. “would”) 
+      -> App pauses and displays “Your pronunciation matches several words. Please confirm which one you meant.” 
+      Then shows a small list of candidate words for student to choose. Student selects intended word, 
+      program continues. If none match, then student is prompted the option to try again.
+                  
+  - Observable Outcomes:
+    > Score displayed per word.
+    > Mispronounced syllables highlighted.
+    > Feedback tip (ex. “/æ/ sounds too short”).
+  
+  - Acceptance Criteria:
+    > Given clear input audio, when the learner records a word, 
+    the app displays the score and some feedback tips within 2-3 seconds.
+    > Given background noise above the defined threshold, when recording starts, 
+    the app shows the noisy environment warning and prevents scoring.
+
+> Scenario B – Custom Quiz Practice
+
+  - Goal: Let a learner practice self-chosen words via 4-option 
+  IPA questions (with audio for each option), receive immediate correctness feedback, 
+  and then speak the word through STT for pronunciation feedback.
+  - Stakeholder Perspective: I want to practice my words, hear how each IPA option sounds, 
+  choose the right one, and then try saying it to get feedback.
+
+  - Preconditions:
+    > Student is logged into the app.
+    > Microphone permission granted.
+    > Audio output device available.
+    > Cached audio present.
+  
+  - Main Flow:
+    > Student selects Quiz -> Custom Practice.
+    > App prompts “How many words do you want to practice?” Student enters a number N (ex. 5).
+    > App prompts the student to input N words. (ex. software, computer, friend, thought, joy).
+    > For each word, the app generates one 4-option question: each option is an IPA rendering of the 
+    target word (one correct and three distractors).
+    > Student can tap a speaker icon on each option to hear that IPA realized as audio.
+    > Student chooses an option -> App shows correct/incorrect with feedback tip(s).
+    > After answering all questions, App prompts the student to "say the word" for each practiced word.
+    > Student records pronunciation -> App analyzes and shows feedback per-word, 
+    which includes the score and feedback tip(s).
+    > App displays a results page with: overall quiz score, per-word question results,
+    and per-word speaking score. Student can choose to retry or save their results to their profile.
+  
+  - Edge Cases:
+    > User enters a number N ≤ 0 or non-integer: 
+      -> App prompts “Please enter a whole number greater or equal to 1”.
+    > A typed input word is not recognized (OOV): 
+      -> App suggests closest matches or asks the student to replace the word.
+    > An audio option fails to play: 
+      -> App shows “Playback error” and offers re-fetch. Question can still be answered.
+    > A duplicate word is entered: 
+      -> App prompts the student to “Please enter a different word”.
+
+  - Observable Outcomes:
+    > Running list of all entered words remains visible until quiz starts.
+    > A clear progress indicator during the IPA questions and the speaking step.
+    > Each item shows 4 options, each with a speaker icon. The selected option is visually marked.
+    > Immediate Correct/Incorrect marker plus at least one feedback tip.
+    > Final results page with overall % score, per-word IPA question results, and per-word speaking score.
+    > If saved, a new history entry appears with timestamp, quiz information, and scores.
+
+  - Acceptance Criteria:
+    > Given a number N ≥ 1 and N words entered: when the quiz starts, exactly N items are presented, 
+    each with 4 options and audio playback per option.
+    > Given a valid item, when the learner taps an option, 
+    the App shows Correct/Incorrect and at least one feedback tip within 2-3 seconds.
+    > Given the speaking step, when the student records a word, 
+    the App returns a pronunciation score percentage and at least one feedback tip within 2-3 seconds.
+    > Given a playback error during audio fetch, 
+    the App shows “Playback error-Audio unavailable” and still allows a selection.
+
+####3.2.2 Verification Plan for Quiz:
+
+- Verification confirms that the implementation is correct by proving the quiz behaves as required 
+under normal and abnormal conditions. “Are we doing it right?”
+
+- This plan covers the complete quiz flow, including:
+  > Custom word entry
+  > 4-option IPA questions with audio 
+  > Correctness feedback
+  > Spoken pronunciation step
+  > Results saving and history
+
+- Methods utilized:
+  > Unit Testing
+  > Property-Based Testing
+  > Integration/UI Testing
+  > Contract Testing
+  > Negative/Robustness Testing
+
+- Requirements list:
+  > R1: Options cardinality and correctness (4 options, 1 correct, all different).
+  > R2: Randomized correct option placement across attempts.
+  > R3: Audio playback available with fallback on error.
+  > R4: Microphone permission required before speaking step.
+  > R5: Speaking feedback timing (score + tip <= 3 seconds).
+  > R6: Save results and show history within <= 5 seconds.
+  > R7: Input validation for invalid, duplicate, or OOV words.
+  > R8: Robustness during network or playback failures.
+
+- Verification Cases:
+  > Case 1 – Options Distinctiveness and Single Correct Answer
+    - Requirement(s): R1
+    - Preconditions: word = “software.”
+    - Steps: Generate the options with the word (“software”).
+    - Expected Output: Exactly 4 options; all distinct; one marked as correct.
+    
+  > Case 2 – Randomized Correct Option Position
+    - Requirement(s): R2
+    - Preconditions: word = “computer.”
+    - Steps: Run 100 quiz generations with random values.
+    - Expected Output: Correct option varies across positions; not fixed in one slot.
+
+  > Case 3 – Audio Playback Success
+    - Requirement(s): R3
+    - Preconditions: Audio output enabled.
+    - Steps: Tap each speaker icon.
+    - Expected Output: Audio plays successfully; selection remains enabled.
+
+  > Case 4 – Audio Playback Failure Fallback
+    - Requirement(s): R3, R8
+    - Preconditions: Triggered audio fetch error.
+    - Steps: Tap speaker icon.
+    - Expected Output: “Playback error” displayed; question can still be answered.
+
+  > Case 5 – Microphone Permission Gating
+    - Requirement(s): R4
+    - Preconditions: Mic permission not granted.
+    - Steps: Enter spoken pronunciation step.
+    - Expected Output: App prompts “Enable microphone to continue”; recording disabled until granted.
+
+  > Case 6 – Speaking Feedback Timing
+    - Requirement(s): R5
+    - Preconditions: Mic permission granted.
+    - Steps: Record and submit pronunciation.
+    - Expected Output: Score and feedback tip(s) displayed within 2–3 seconds.
+
+  > Case 7 – Save Results and Idempotence
+    - Requirement(s): R6
+    - Preconditions: Quiz completed; network available.
+    - Steps: Save results twice.
+    - Expected Output: One entry appears in history; no duplicates created.
+
+  > Case 8 – Input Validation (Invalid N)
+    - Requirement(s): R7
+    - Preconditions: N = 0 or non-integer value.
+    - Steps: Attempt to start quiz.
+    - Expected Output: App shows “Please enter a whole number greater or equal to 1.”
+ 
+  > Case 9 – Duplicate or OOV Words
+    - Requirement(s): R7
+    - Preconditions: User enters duplicates or unrecognized words.
+    - Steps: Start quiz.
+    - Expected Output: Duplicates removed; OOV prompts replacement.
+
+  > Case 10 – Network Loss During Audio Fetch
+    - Requirement(s): R8
+    - Preconditions: Network temporarily unavailable.
+    - Steps: Play word audio.
+    - Expected Output: Fallback message displayed; quiz continues normally.
+
+- Performance Checks:
+  > Question generation time <= 3 seconds.
+  > Speaking feedback (score + tip(s)) <= 3 seconds.
+  > Results saved and visible in history <= 5 seconds, 
+  or flagged as “Pending Sync” if offline.

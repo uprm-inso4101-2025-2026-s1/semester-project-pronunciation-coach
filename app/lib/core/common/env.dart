@@ -24,6 +24,7 @@ class Env {
         supabaseAnonKey.isEmpty || 
         supabaseAnonKey == 'your-anon-key-here' ||
         xApiBaseUrl.isEmpty) {
+        supabaseAnonKey == 'your-anon-key-here') {
       throw StateError(
         'Missing or invalid SUPABASE_URL or SUPABASE_ANON_KEY.\n'
         'Please follow the setup instructions in lib/core/common/README.md',
