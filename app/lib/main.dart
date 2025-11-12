@@ -1,56 +1,68 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'features/dashboard/pages/user_progress_dashboard.dart';
 import 'package:sizer/sizer.dart';
-import 'features/dashboard/pages/login_page.dart';
-import 'features/dashboard/widgets/welcome_screen.dart';
 
-import 'pace selector/pace_selector.dart';
+// --- Feature imports ---
+import 'features/authentication/presentation/pages/login_page.dart';
+import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
+import 'features/dashboard/presentation/widgets/welcome_screen.dart';
+import 'features/quiz/presentation/pages/audio_quiz_home_page.dart';
+import 'core/common/pace_selector.dart';
 
-import 'core/services/supabase_client.dart';
+// --- Core services ---
+import 'core/network/supabase_client.dart';
+import 'core/network/session_manager.dart';
+import 'core/di/service_locator.dart';
 import 'core/xapi/xapi_client.dart';
 import 'core/xapi/xapi_provider.dart';
 
-Future<void> main() async{ //future<void>main() async is done to make sure 
-  WidgetsFlutterBinding.ensureInitialized();
-  /*to be able to run must use in terminal:
-  flutter run \
-  --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
-  --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
-  --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
- */
-  try {
-  await AppSupabase.init();
-} catch (e) {
-  // Just print and exit
-  // ignore: avoid_print
-  print('Supabase init failed: $e');
-  return;
-}
+// --- App state ---
+import 'core/state/my_app_state.dart';
 
-// Init xAPI client (e.g., build base URL, headers, quick health check)
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // To run with required environment variables:
+  // flutter run \
+  // --dart-define=SUPABASE_URL=https://YOUR-PROJECT.supabase.co \
+  // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY \
+  // --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
+
+  // Initialize Supabase
+  try {
+    await AppSupabase.init();
+  } catch (e) {
+    // ignore: avoid_print
+    print('Supabase init failed: $e');
+    return; // Stop app if Supabase fails to init
+  }
+
+  // Initialize SessionManager
+  await SessionManager.instance.start();
+
+  // Initialize dependency injection
+  setupServiceLocator();
+
+  // Initialize xAPI client
   late final XApiClient xapi;
   try {
-    xapi = await XApiClient.init(); // implement static init() in xapi_client.dart
+    xapi = await XApiClient.init();
   } catch (e) {
     // ignore: avoid_print
     print('XApi init failed: $e');
-    // You can continue without xAPI; provider can start in "degraded" mode.
-    xapi = XApiClient.degraded();
+    xapi = XApiClient.degraded(); // continue in degraded mode
   }
 
-
-  
+  // Run app with multiple providers
   runApp(
-  MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => MyAppState()),
-      ChangeNotifierProvider(create: (_) => XApiProvider(xapi)),
-    ],
-    child: const MyApp(),
-  ),
-);
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MyAppState()),
+        ChangeNotifierProvider(create: (_) => XApiProvider(xapi)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -70,8 +82,10 @@ class MyApp extends StatelessWidget {
           ),
           home: const WelcomeScreen(),
           routes: {
-            '/login': (context) => const LoginPage(),
-            '/dashboard': (context) => const MainNavigationScreen(),
+            '/login': (_) => const LoginPage(),
+            '/dashboard': (_) => const MainNavigationScreen(),
+            '/audio-quiz': (_) => const AudioQuizHomePage(),
+            '/quiz': (_) => const AudioQuizHomePage(),
           },
         );
       },
@@ -79,88 +93,76 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+// --- Navigation ---
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  final List<Widget> _pages = [
+    const UserProgressDashboard(),
+    const AudioQuizHomePage(),
+    const ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.headphones), label: 'Quiz'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+// --- Profile page placeholder ---
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Profile'),
+        backgroundColor: Colors.blue,
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+          children: [
+            const Icon(Icons.person, size: 80, color: Colors.blue),
+            const SizedBox(height: 16),
+            const Text(
+              'Profile Page',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Coming soon...',
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
