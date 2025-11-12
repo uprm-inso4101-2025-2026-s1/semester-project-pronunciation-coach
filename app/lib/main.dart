@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-// --- Feature imports ---
+
 import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import 'features/dashboard/presentation/widgets/welcome_screen.dart';
 import 'features/quiz/presentation/pages/audio_quiz_home_page.dart';
 import 'core/common/pace_selector.dart';
 
-// --- Core services ---
+
 import 'core/network/supabase_client.dart';
 import 'core/network/session_manager.dart';
 import 'core/di/service_locator.dart';
 import 'core/xapi/xapi_client.dart';
 import 'core/xapi/xapi_provider.dart';
 
-// --- App state ---
-import 'core/state/my_app_state.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,15 +31,13 @@ Future<void> main() async {
   try {
     await AppSupabase.init();
   } catch (e) {
-    // ignore: avoid_print
-    print('Supabase init failed: $e');
-    return; // Stop app if Supabase fails to init
+    return;
   }
 
   // Initialize SessionManager
   await SessionManager.instance.start();
 
-  // Initialize dependency injection
+
   setupServiceLocator();
 
   // Initialize xAPI client
@@ -82,10 +79,10 @@ class MyApp extends StatelessWidget {
           ),
           home: const WelcomeScreen(),
           routes: {
-            '/login': (_) => const LoginPage(),
-            '/dashboard': (_) => const MainNavigationScreen(),
-            '/audio-quiz': (_) => const AudioQuizHomePage(),
-            '/quiz': (_) => const AudioQuizHomePage(),
+            '/login': (context) => const LoginPage(),
+            '/dashboard': (context) => const MainNavigationScreen(),
+            '/audio-quiz': (context) => const AudioQuizHomePage(),
+            '/quiz': (context) => const AudioQuizHomePage(),
           },
         );
       },
@@ -121,7 +118,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
+        items: const <BottomNavigationBarItem> [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.headphones), label: 'Quiz'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
