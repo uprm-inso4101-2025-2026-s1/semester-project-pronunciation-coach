@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 setState(() {
                                   _isMenuExpanded = false;
                                 });
-                                _showComingSoonDialog(context, 'Settings');
+                                Navigator.of(context).pushNamed('/settings');
                               },
                             ),
                             const Divider(height: 1),

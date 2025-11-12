@@ -5,6 +5,8 @@ import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import 'features/dashboard/presentation/widgets/welcome_screen.dart';
 import 'features/quiz/presentation/pages/audio_quiz_home_page.dart';
+import 'features/profile/presentation/pages/profile_page.dart';
+import 'features/settings/presentation/pages/settings_page.dart';
 import 'core/common/pace_selector.dart';
 import 'core/network/supabase_client.dart';
 import 'core/network/session_manager.dart';
@@ -55,6 +57,7 @@ class MyApp extends StatelessWidget {
             '/dashboard': (context) => const MainNavigationScreen(),
             '/audio-quiz': (context) => const AudioQuizHomePage(),
             '/quiz': (context) => const AudioQuizHomePage(),
+            '/settings': (context) => const SettingsPage(),
           },
         );
       },
@@ -72,10 +75,10 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const UserProgressDashboard(),
-    const AudioQuizHomePage(),
-    const ProfilePage(),
+  final List<Widget> _pages = const [
+    UserProgressDashboard(),
+    AudioQuizHomePage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -97,38 +100,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
         onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.blue,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.person, size: 80, color: Colors.blue),
-            const SizedBox(height: 16),
-            const Text(
-              'Profile Page',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Coming soon...',
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-            ),
-          ],
-        ),
       ),
     );
   }
