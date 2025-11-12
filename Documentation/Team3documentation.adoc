@@ -674,6 +674,7 @@ Accessibility considerations extend to both visual and auditory design elements.
 
 By maintaining a straightforward and accessible interface, the Pronunciation Coach supports key software quality attributes such as usability, user satisfaction, and learnability. Its design encourages engagement and inclusivity, ensuring that users of all backgrounds and abilities can benefit from the pronunciation training experience in a comfortable and enjoyable way.
 
+
 ---
 
 == 3. Analytic Part
