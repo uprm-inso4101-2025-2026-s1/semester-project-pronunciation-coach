@@ -34,7 +34,7 @@ jobs:
             | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
           echo "Collected $(wc -l < .issues.jsonl) issues"
 
-      - name: Generate files for qualifying issues
+            - name: Generate files for qualifying issues
         env:
           FOLDER: ${{ env.FOLDER }}
         run: |
