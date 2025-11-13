@@ -1,78 +1,71 @@
-name: Archive Lecture Topic Tasks
+name: Archive Lecture Topic Issues to Folder
 
 on:
-  workflow_dispatch:
+  issues:
+    types: [opened, edited, reopened, labeled, unlabeled]
 
 permissions:
   contents: write
-  issues: read
+  issues: write
 
 jobs:
-  backfill:
+  archive:
     runs-on: ubuntu-latest
     env:
       FOLDER: "lecture-topic-tasks"
     steps:
-      - name: Check out main with full history
+      - id: gate
+        env:
+          TITLE: ${{ github.event.issue.title }}
+          LABELS_JSON: ${{ toJson(github.event.issue.labels.*.name) }}
+        run: |
+          shopt -s nocasematch
+          qualifies=no
+          if [[ "$TITLE" =~ lecture[[:space:]-_]*topic[[:space:]-_]*task ]]; then qualifies=yes; fi
+          if [[ "$LABELS_JSON" =~ "Lecture Topic Task" ]]; then qualifies=yes; fi
+          echo "qualifies=$qualifies" >> $GITHUB_OUTPUT
+
+      - if: steps.gate.outputs.qualifies == 'yes'
+        name: Check out branch with full history
         uses: actions/checkout@v4
         with:
           ref: Yulio7-LTTtoFolder
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Install jq (for JSON parsing)
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Fetch all issues (open + closed), excluding PRs
+      - id: name
+        if: steps.gate.outputs.qualifies == 'yes'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            -H "Accept: application/vnd.github+json" \
-            --paginate \
-            "/repos/${{ github.repository }}/issues?state=all&per_page=100" \
-            | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
-          echo "Collected $(wc -l < .issues.jsonl) issues"
-
-      - name: Generate files for qualifying issues
-        env:
+          N: ${{ github.event.issue.number }}
+          TITLE: ${{ github.event.issue.title }}
           FOLDER: ${{ env.FOLDER }}
         run: |
-          set -euo pipefail
           mkdir -p "$FOLDER"
-          count=0
+          slug="$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')"
+          filepath="$FOLDER/${N}-${slug}.md"
+          echo "filepath=$filepath" >> $GITHUB_OUTPUT
+          shopt -s nullglob
+          for f in "$FOLDER"/${N}-*.md; do
+            if [ "$f" != "$filepath" ]; then git rm -f "$f"; fi
+          done
 
-          while IFS= read -r line; do
-            title=$(echo "$line"   | jq -r '.title')
-            number=$(echo "$line"  | jq -r '.number')
-            url=$(echo "$line"     | jq -r '.html_url')
-            state=$(echo "$line"   | jq -r '.state')
-            created=$(echo "$line" | jq -r '.created_at')
-            updated=$(echo "$line" | jq -r '.updated_at')
-            author=$(echo "$line"  | jq -r '.user.login')
-            body=$(echo "$line"    | jq -r '.body // ""')
-            # labels array -> plain names (case-sensitive list)
-            labels=$(echo "$line"  | jq -cr '[.labels[].name]')
-
-            tl=$(echo "$title" | tr '[:upper:]' '[:lower:]')
-            has_label=$(echo "$labels" | jq -r '.[]' | grep -iqx 'Lecture Topic Task' && echo yes || echo no)
-
-            qualifies=no
-            if echo "$tl" | grep -Eq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then qualifies=yes; fi
-            if [ "$has_label" = "yes" ]; then qualifies=yes; fi
-            [ "$qualifies" = "no" ] && continue
-
-            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')
-            path="$FOLDER/${number}-${slug}.md"
-
-            shopt -s nullglob
-            for f in "$FOLDER"/${number}-*.md; do
-              [ "$f" != "$path" ] && git rm -f "$f" || true
-            done
-
-            cat > "$path" <<EOF
+      - name: Write/refresh the archive file
+        if: steps.gate.outputs.qualifies == 'yes'
+        env:
+          FILEPATH: ${{ steps.name.outputs.filepath }}
+        run: |
+          n='${{ github.event.issue.number }}'
+          url='${{ github.event.issue.html_url }}'
+          title='${{ github.event.issue.title }}'
+          labels='${{ toJson(github.event.issue.labels.*.name) }}'
+          state='${{ github.event.issue.state }}'
+          created='${{ github.event.issue.created_at }}'
+          updated='${{ github.event.issue.updated_at }}'
+          author='${{ github.event.issue.user.login }}'
+          body='${{ github.event.issue.body }}'
+          cat > "$FILEPATH" <<EOF
 ---
-issue_number: $number
+issue_number: $n
 title: "$title"
 state: "$state"
 url: "$url"
@@ -84,7 +77,7 @@ updated_at: "$updated"
 
 # $title
 
-- **Issue:** [$number]($url)
+- **Issue:** [$n]($url)
 - **Author:** @$author
 - **Labels:** $labels
 - **Created:** $created
@@ -92,12 +85,9 @@ updated_at: "$updated"
 ## Details
 $body
 EOF
-            count=$((count+1))
-          done < .issues.jsonl
 
-          echo "Wrote/updated $count files."
-
-      - name: Rebuild index
+      - name: Rebuild auto-index
+        if: steps.gate.outputs.qualifies == 'yes'
         env:
           FOLDER: ${{ env.FOLDER }}
         run: |
@@ -109,7 +99,6 @@ EOF
             echo "| # | Title | Issue |"
             echo "|---:|-------|-------|"
           } > "$FOLDER/README.md"
-
           shopt -s nullglob
           files=( "$FOLDER"/[0-9]*-*.md )
           printf '%s\n' "${files[@]}" | sort -V -r | while IFS= read -r f; do
@@ -122,10 +111,50 @@ EOF
             echo "| ${issue} | [${title}](${rel}) | [View Issue](${url}) |" >> "$FOLDER/README.md"
           done
 
-      - name: Commit and push
+      - name: Commit
+        if: steps.gate.outputs.qualifies == 'yes'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Backfill lecture-topic-tasks from existing issues" || echo "No changes"
+          git commit -m "Sync issue #${{ github.event.issue.number }} -> lecture-topic-tasks/" || echo "No changes"
+
+      - name: Push to branch
+        if: steps.gate.outputs.qualifies == 'yes'
+        run: |
           git push origin HEAD:Yulio7-LTTtoFolder
+
+      - name: Link back on the issue
+        if: steps.gate.outputs.qualifies == 'yes'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.payload.issue.number;
+            const repo = context.repo;
+            const path = "${{ steps.name.outputs.filepath }}";
+            const fileUrl = `https://github.com/${repo.owner}/${repo.repo}/blob/HEAD/${path}`;
+            const markerStart = "<!-- LTT-ARCHIVE-LINK:START -->";
+            const markerEnd = "<!-- LTT-ARCHIVE-LINK:END -->";
+            const bodyBlock = `${markerStart}\nLinked archive file: ${fileUrl}\n${markerEnd}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: repo.owner,
+              repo: repo.repo,
+              issue_number,
+              per_page: 100
+            });
+            const existing = comments.find(c => c.body && c.body.includes(markerStart));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: repo.owner,
+                repo: repo.repo,
+                comment_id: existing.id,
+                body: bodyBlock
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: repo.owner,
+                repo: repo.repo,
+                issue_number,
+                body: bodyBlock
+              });
+            }
