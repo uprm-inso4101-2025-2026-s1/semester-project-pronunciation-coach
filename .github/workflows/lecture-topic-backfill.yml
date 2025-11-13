@@ -35,7 +35,7 @@ jobs:
             | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
           echo "Collected $(wc -l < .issues.jsonl) issues"
 
-      - name: Generate files for qualifying issues
+            - name: Generate files for qualifying issues
         env:
           FOLDER: ${{ env.FOLDER }}
         run: |
@@ -70,28 +70,29 @@ jobs:
               [ "$f" != "$path" ] && git rm -f "$f" || true
             done
 
-            cat > "$path" <<EOF
----
-issue_number: $number
-title: "$title"
-state: "$state"
-url: "$url"
-author: "$author"
-labels: $labels
-created_at: "$created"
-updated_at: "$updated"
----
+            {
+              echo '---'
+              echo "issue_number: $number"
+              echo "title: \"$title\""
+              echo "state: \"$state\""
+              echo "url: \"$url\""
+              echo "author: \"$author\""
+              echo "labels: $labels"
+              echo "created_at: \"$created\""
+              echo "updated_at: \"$updated\""
+              echo '---'
+              echo
+              echo "# $title"
+              echo
+              echo "- **Issue:** [$number]($url)"
+              echo "- **Author:** @$author"
+              echo "- **Labels:** $labels"
+              echo "- **Created:** $created"
+              echo
+              echo '## Details'
+              echo "$body"
+            } > "$path"
 
-# $title
-
-- **Issue:** [$number]($url)
-- **Author:** @$author
-- **Labels:** $labels
-- **Created:** $created
-
-## Details
-$body
-EOF
             count=$((count+1))
           done < .issues.jsonl
 
