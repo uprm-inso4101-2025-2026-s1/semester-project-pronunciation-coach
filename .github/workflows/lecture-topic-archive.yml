@@ -1,66 +1,78 @@
-name: Archive Lecture Topic Issues to Folder
+name: Archive Lecture Topic Tasks
 
 on:
-  issues:
-    types: [opened, edited, reopened, labeled, unlabeled]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  issues: write
+  issues: read
 
 jobs:
-  archive:
+  backfill:
     runs-on: ubuntu-latest
     env:
-      FOLDER: "lecture topic tasks"
+      FOLDER: "lecture-topic-tasks"
     steps:
-      - id: gate
-        env:
-          TITLE: ${{ github.event.issue.title }}
-          LABELS_JSON: ${{ toJson(github.event.issue.labels.*.name) }}
-        run: |
-          shopt -s nocasematch
-          qualifies=no
-          if [[ "$TITLE" =~ lecture[[:space:]-_]*topic[[:space:]-_]*task ]]; then qualifies=yes; fi
-          if [[ "$LABELS_JSON" =~ "Lecture Topic Task" ]]; then qualifies=yes; fi
-          echo "qualifies=$qualifies" >> $GITHUB_OUTPUT
-
-      - if: steps.gate.outputs.qualifies == 'yes'
+      - name: Check out main with full history
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
 
-      - id: name
-        if: steps.gate.outputs.qualifies == 'yes'
+      - name: Install jq (for JSON parsing)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Fetch all issues (open + closed), excluding PRs
         env:
-          N: ${{ github.event.issue.number }}
-          TITLE: ${{ github.event.issue.title }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            --paginate \
+            "/repos/${{ github.repository }}/issues?state=all&per_page=100" \
+            | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
+          echo "Collected $(wc -l < .issues.jsonl) issues"
+
+      - name: Generate files for qualifying issues
+        env:
           FOLDER: ${{ env.FOLDER }}
         run: |
+          set -euo pipefail
           mkdir -p "$FOLDER"
-          slug="$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')"
-          filepath="$FOLDER/${N}-${slug}.md"
-          echo "filepath=$filepath" >> $GITHUB_OUTPUT
-          shopt -s nullglob
-          for f in "$FOLDER"/${N}-*.md; do
-            if [ "$f" != "$filepath" ]; then git rm -f "$f"; fi
-          done
+          count=0
 
-      - if: steps.gate.outputs.qualifies == 'yes'
-        env:
-          FILEPATH: ${{ steps.name.outputs.filepath }}
-        run: |
-          n='${{ github.event.issue.number }}'
-          url='${{ github.event.issue.html_url }}'
-          title='${{ github.event.issue.title }}'
-          labels='${{ toJson(github.event.issue.labels.*.name) }}'
-          state='${{ github.event.issue.state }}'
-          created='${{ github.event.issue.created_at }}'
-          updated='${{ github.event.issue.updated_at }}'
-          author='${{ github.event.issue.user.login }}'
-          body='${{ github.event.issue.body }}'
+          while IFS= read -r line; do
+            title=$(echo "$line"   | jq -r '.title')
+            number=$(echo "$line"  | jq -r '.number')
+            url=$(echo "$line"     | jq -r '.html_url')
+            state=$(echo "$line"   | jq -r '.state')
+            created=$(echo "$line" | jq -r '.created_at')
+            updated=$(echo "$line" | jq -r '.updated_at')
+            author=$(echo "$line"  | jq -r '.user.login')
+            body=$(echo "$line"    | jq -r '.body // ""')
+            # labels array -> plain names (case-sensitive list)
+            labels=$(echo "$line"  | jq -cr '[.labels[].name]')
 
-          cat > "$FILEPATH" <<EOF
+            tl=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+            has_label=$(echo "$labels" | jq -r '.[]' | grep -iqx 'Lecture Topic Task' && echo yes || echo no)
+
+            qualifies=no
+            if echo "$tl" | grep -Eq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then qualifies=yes; fi
+            if [ "$has_label" = "yes" ]; then qualifies=yes; fi
+            [ "$qualifies" = "no" ] && continue
+
+            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')
+            path="$FOLDER/${number}-${slug}.md"
+
+            shopt -s nullglob
+            for f in "$FOLDER"/${number}-*.md; do
+              [ "$f" != "$path" ] && git rm -f "$f" || true
+            done
+
+            cat > "$path" <<EOF
 ---
-issue_number: $n
+issue_number: $number
 title: "$title"
 state: "$state"
 url: "$url"
@@ -72,18 +84,20 @@ updated_at: "$updated"
 
 # $title
 
-- **Issue:** [$n]($url)
+- **Issue:** [$number]($url)
 - **Author:** @$author
 - **Labels:** $labels
 - **Created:** $created
 
 ## Details
 $body
-
-> _This file mirrors the issue for reference. Edits to the issue update this file automatically._
 EOF
+            count=$((count+1))
+          done < .issues.jsonl
 
-      - if: steps.gate.outputs.qualifies == 'yes'
+          echo "Wrote/updated $count files."
+
+      - name: Rebuild index
         env:
           FOLDER: ${{ env.FOLDER }}
         run: |
@@ -102,51 +116,16 @@ EOF
             [ "$(basename "$f")" = "README.md" ] && continue
             issue=$(grep -m1 '^issue_number:' "$f" | sed 's/[^0-9]//g')
             title=$(grep -m1 '^title:' "$f" | sed -E 's/^title:[[:space:]]*"?([^"]*)"?/\1/')
-            url=$(grep -m1 '^url:' "$f" | sed -E 's/^url:[[:space:]]*"?([^"]*)"?/\1/')
-            rel="${f// /%20}"
+            url=$(grep -m1 '^url:' "$f"   | sed -E 's/^url:[[:space:]]*"?([^"]*)"?/\1/')
+            rel="${f}"
             [ -z "$title" ] && title="$(basename "$f" .md)"
             echo "| ${issue} | [${title}](${rel}) | [View Issue](${url}) |" >> "$FOLDER/README.md"
           done
 
-      - if: steps.gate.outputs.qualifies == 'yes'
+      - name: Commit and push
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Update lecture topic task file and index" || echo "No changes"
-          git push
-
-      - if: steps.gate.outputs.qualifies == 'yes'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issue_number = context.payload.issue.number;
-            const repo = context.repo;
-            const rawPath = `/${{ steps.name.outputs.filepath }}`;
-            const encodedPath = rawPath.split('/').map(encodeURIComponent).join('/');
-            const fileUrl = `https://github.com/${repo.owner}/${repo.repo}/blob/HEAD${encodedPath}`;
-            const markerStart = "<!-- LTT-ARCHIVE-LINK:START -->";
-            const markerEnd = "<!-- LTT-ARCHIVE-LINK:END -->";
-            const bodyBlock = `${markerStart}\nLinked archive file: ${fileUrl}\n${markerEnd}`;
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: repo.owner,
-              repo: repo.repo,
-              issue_number,
-              per_page: 100
-            });
-            const existing = comments.find(c => c.body && c.body.includes(markerStart));
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner: repo.owner,
-                repo: repo.repo,
-                comment_id: existing.id,
-                body: bodyBlock
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: repo.owner,
-                repo: repo.repo,
-                issue_number,
-                body: bodyBlock
-              });
-            }
+          git add -A
+          git commit -m "Backfill lecture-topic-tasks from existing issues" || echo "No changes"
+          git push origin HEAD:main
