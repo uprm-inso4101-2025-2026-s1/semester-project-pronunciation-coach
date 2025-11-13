@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T20:01:33Z"
-updated_at: "2025-11-13T20:01:33Z"
+updated_at: "2025-11-13T20:01:43Z"
 ---
 
 # [Lecture Topic Task]: Using Mocking and Stubs to Validate Pronunciation AI Responses
