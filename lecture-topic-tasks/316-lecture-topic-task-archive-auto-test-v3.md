@@ -1,15 +1,15 @@
 ---
 issue_number: 316
 title: "[Lecture Topic Task]: Archive auto-test V3"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/316"
 author: "Yulio7"
 labels: [
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-13T05:13:44Z"
-updated_at: "2025-11-13T05:13:54Z"
+updated_at: "2025-11-13T05:22:05Z"
 ---
 
 # [Lecture Topic Task]: Archive auto-test V3
@@ -18,7 +18,7 @@ updated_at: "2025-11-13T05:13:54Z"
 - **Author:** @Yulio7
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-13T05:13:44Z
 
