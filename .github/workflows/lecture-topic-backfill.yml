@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FOLDER: "lecture-topic-tasks"
+
     steps:
       - name: Check out main with full history
         uses: actions/checkout@v4
@@ -35,6 +36,8 @@ jobs:
           echo "Collected $(wc -l < .issues.jsonl) issues"
 
       - name: Generate files for qualifying issues
+        env:
+          FOLDER: ${{ env.FOLDER }}
         run: |
           set -euo pipefail
           mkdir -p "$FOLDER"
@@ -95,6 +98,8 @@ EOF
           echo "Wrote/updated $count files."
 
       - name: Rebuild index
+        env:
+          FOLDER: ${{ env.FOLDER }}
         run: |
           set -euo pipefail
           mkdir -p "$FOLDER"
