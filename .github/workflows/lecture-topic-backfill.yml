@@ -1,0 +1,130 @@
+name: Backfill Lecture Topic Tasks
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    env:
+      FOLDER: "lecture-topic-tasks"
+    steps:
+      - name: Check out main with full history
+        uses: actions/checkout@v4
+        with:
+          ref: Yulio7-LTTtoFolder
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Install jq (for JSON parsing)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Fetch all issues (open + closed), excluding PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            --paginate \
+            "/repos/${{ github.repository }}/issues?state=all&per_page=100" \
+            | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
+          echo "Collected $(wc -l < .issues.jsonl) issues"
+
+      - name: Generate files for qualifying issues
+        env:
+          FOLDER: ${{ env.FOLDER }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$FOLDER"
+          count=0
+
+          while IFS= read -r line; do
+            title=$(echo "$line"   | jq -r '.title')
+            number=$(echo "$line"  | jq -r '.number')
+            url=$(echo "$line"     | jq -r '.html_url')
+            state=$(echo "$line"   | jq -r '.state')
+            created=$(echo "$line" | jq -r '.created_at')
+            updated=$(echo "$line" | jq -r '.updated_at')
+            author=$(echo "$line"  | jq -r '.user.login')
+            body=$(echo "$line"    | jq -r '.body // ""')
+            labels=$(echo "$line"  | jq -cr '[.labels[].name]')
+
+            tl=$(echo "$title" | tr '[:upper:]' '[:lower:]')
+            has_label=$(echo "$labels" | jq -r '.[]' | grep -iqx 'Lecture Topic Task' && echo yes || echo no)
+
+            qualifies=no
+            if echo "$tl" | grep -Eq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then qualifies=yes; fi
+            if [ "$has_label" = "yes" ]; then qualifies=yes; fi
+            [ "$qualifies" = "no" ] && continue
+
+            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')
+            path="$FOLDER/${number}-${slug}.md"
+
+            shopt -s nullglob
+            for f in "$FOLDER"/${number}-*.md; do
+              [ "$f" != "$path" ] && git rm -f "$f" || true
+            done
+
+            cat > "$path" <<EOF
+---
+issue_number: $number
+title: "$title"
+state: "$state"
+url: "$url"
+author: "$author"
+labels: $labels
+created_at: "$created"
+updated_at: "$updated"
+---
+
+# $title
+
+- **Issue:** [$number]($url)
+- **Author:** @$author
+- **Labels:** $labels
+- **Created:** $created
+
+## Details
+$body
+EOF
+            count=$((count+1))
+          done < .issues.jsonl
+
+          echo "Wrote/updated $count files."
+
+      - name: Rebuild index
+        env:
+          FOLDER: ${{ env.FOLDER }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$FOLDER"
+          {
+            echo "# Lecture Topic Tasks"
+            echo
+            echo "| # | Title | Issue |"
+            echo "|---:|-------|-------|"
+          } > "$FOLDER/README.md"
+
+          shopt -s nullglob
+          files=( "$FOLDER"/[0-9]*-*.md )
+          printf '%s\n' "${files[@]}" | sort -V -r | while IFS= read -r f; do
+            [ "$(basename "$f")" = "README.md" ] && continue
+            issue=$(grep -m1 '^issue_number:' "$f" | sed 's/[^0-9]//g')
+            title=$(grep -m1 '^title:' "$f" | sed -E 's/^title:[[:space:]]*"?([^"]*)"?/\1/')
+            url=$(grep -m1 '^url:' "$f"   | sed -E 's/^url:[[:space:]]*"?([^"]*)"?/\1/')
+            rel="${f}"
+            [ -z "$title" ] && title="$(basename "$f" .md)"
+            echo "| ${issue} | [${title}](${rel}) | [View Issue](${url}) |" >> "$FOLDER/README.md"
+          done
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Backfill lecture-topic-tasks from existing issues" || echo "No changes"
+          git push origin HEAD:Yulio7-LTTtoFolder
