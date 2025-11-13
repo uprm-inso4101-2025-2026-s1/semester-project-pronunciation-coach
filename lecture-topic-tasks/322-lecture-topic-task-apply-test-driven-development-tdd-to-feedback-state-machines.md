@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T20:14:43Z"
-updated_at: "2025-11-13T20:14:43Z"
+updated_at: "2025-11-13T20:14:54Z"
 ---
 
 # [Lecture Topic Task]: Apply Test-Driven Development (TDD) to Feedback State Machines
