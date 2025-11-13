@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T19:30:17Z"
-updated_at: "2025-11-13T19:30:17Z"
+updated_at: "2025-11-13T19:30:28Z"
 ---
 
 # [Lecture Topic Task]: Applying the ISO/EEC 25010 Quality Model to Evaluate App Maintanability
