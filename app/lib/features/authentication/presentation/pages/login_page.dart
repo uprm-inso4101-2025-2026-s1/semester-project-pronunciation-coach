@@ -8,6 +8,7 @@ import '../../../../core/common/text_styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
+import '/core/common/sound_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,11 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
   bool _loading = false;
   final LoadingSystem _loadingSystem = LoadingSystem();
+  final SoundService _soundService = SoundService();
 
   @override
   void initState() {
     super.initState();
-    // Optional: Add listener for loading state changes
     _loadingSystem.addLoadingListener((isLoading) {
       if (mounted) {
         setState(() {
@@ -60,6 +61,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
+    // Play loading sound for authentication process
+    _soundService.playFactReveal();
+
     _loadingSystem.showLoading(
       context: context,
       message: 'Signing you in...',
@@ -76,18 +80,29 @@ class _LoginPageState extends State<LoginPage> {
         password: password,
       );
 
-      // After an await, guard context usage
       if (!mounted) return;
+      
+      // Play success sound for successful login
+      _soundService.playLoadingSuccess();
       _loadingSystem.hideLoading(context);
+
+      // Play transition sound before navigation
+      _soundService.playTransition();
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
-      if (mounted) _loadingSystem.hideLoading(context);
+      if (mounted) {
+        _soundService.playWrongAnswer();
+        _loadingSystem.hideLoading(context);
+      }
       _showSnack(e.message);
     } catch (e) {
-      if (mounted) _loadingSystem.hideLoading(context);
+      if (mounted) {
+        _soundService.playWrongAnswer();
+        _loadingSystem.hideLoading(context);
+      }
       _showSnack('Unexpected error. Please try again.');
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -95,7 +110,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onContinueAsGuest() async {
-    // Ensure user is signed out before continuing as guest
+    // Play transition sound for guest mode
+    _soundService.playTransition();
+
     try {
       await AppSupabase.client.auth.signOut();
     } catch (e) {
@@ -104,12 +121,83 @@ class _LoginPageState extends State<LoginPage> {
 
     if (!mounted) return;
 
-    // Show a brief message
     _showSnack('Continuing as guest - progress will not be saved');
 
-    // Navigate to app
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+    );
+  }
+
+  void _onCreateAccount() {
+    // Play button click for create account navigation
+    _soundService.playButtonClick();
+    
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SigninPage(),
+      ),
+    );
+  }
+
+  void _onForgotPassword() {
+    // Play button click for forgot password
+    _soundService.playButtonClick();
+    _showSnack('Password reset feature coming soon!');
+  }
+
+  void _onRememberMeChanged(bool? value) {
+    // Play button click for checkbox
+    _soundService.playButtonClick();
+    setState(() => _rememberMe = value ?? false);
+  }
+
+  // Wrap the MyTextField with GestureDetector for tap sounds
+  Widget _buildEmailField() {
+    return GestureDetector(
+      onTap: () {
+        _soundService.playButtonClick();
+        FocusScope.of(context).requestFocus(FocusNode());
+        Future.delayed(Duration.zero, () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          _emailCtrl.selection = TextSelection.collapsed(offset: _emailCtrl.text.length);
+        });
+      },
+      child: MyTextField(
+        controller: _emailCtrl,
+        labelText: 'Email Address',
+        hintText: 'your@email.com',
+        icon: Icon(
+          Icons.email_outlined,
+          color: AppColors.textMuted,
+          size: 20.sp,
+        ),
+        validator: _validateEmail,
+      ),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return GestureDetector(
+      onTap: () {
+        _soundService.playButtonClick();
+        FocusScope.of(context).requestFocus(FocusNode());
+        Future.delayed(Duration.zero, () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          _passCtrl.selection = TextSelection.collapsed(offset: _passCtrl.text.length);
+        });
+      },
+      child: MyTextField(
+        controller: _passCtrl,
+        isPass: true,
+        labelText: 'Password',
+        hintText: 'Enter your password',
+        icon: Icon(
+          Icons.lock_outlined,
+          color: AppColors.textMuted,
+          size: 20.sp,
+        ),
+        validator: _validatePass,
+      ),
     );
   }
 
@@ -126,10 +214,6 @@ class _LoginPageState extends State<LoginPage> {
     if (value.isEmpty) return 'Please enter your password';
     if (value.length < 4) return 'Password must be at least 4 characters';
     return null;
-  }
-
-  void _onForgotPassword() {
-    _showSnack('Password reset feature coming soon!');
   }
 
   @override
@@ -157,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
 
               Text.rich(
                 TextSpan(
-                  text: 'Log In ', // Default style for this part
+                  text: 'Log In ',
                   style: AppTextStyles.welcomeSubtitle.copyWith(
                     fontSize: 15.sp,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -165,8 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text:
-                          'to continue your pronunciation journey', // This part will be bold
+                      text: 'to continue your pronunciation journey',
                       style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.normal,
@@ -197,8 +280,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextSpan(
-                      text:
-                          'to begin your pronunciation journey', // This part will be bold
+                      text: 'to begin your pronunciation journey',
                       style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
                         color: Colors.white.withValues(alpha: 0.9),
@@ -230,34 +312,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Email Field
-                      MyTextField(
-                        controller: _emailCtrl,
-                        labelText: 'Email Address',
-                        hintText: 'your@email.com',
-                        icon: Icon(
-                          Icons.email_outlined,
-                          color: AppColors.textMuted,
-                          size: 20.sp,
-                        ),
-                        validator: _validateEmail,
-                      ),
+                      // Email Field with tap sound
+                      _buildEmailField(),
 
                       SizedBox(height: 4.h),
 
-                      // Password Field
-                      MyTextField(
-                        controller: _passCtrl,
-                        isPass: true,
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        icon: Icon(
-                          Icons.lock_outlined,
-                          color: AppColors.textMuted,
-                          size: 20.sp,
-                        ),
-                        validator: _validatePass,
-                      ),
+                      // Password Field with tap sound
+                      _buildPasswordField(),
 
                       SizedBox(height: 1.h),
 
@@ -270,8 +331,7 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Checkbox(
                                 value: _rememberMe,
-                                onChanged: (v) =>
-                                    setState(() => _rememberMe = v ?? false),
+                                onChanged: _onRememberMeChanged,
                                 activeColor: AppColors.primary,
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
@@ -360,13 +420,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 8.h,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const SigninPage(),
-                              ),
-                            );
-                          },
+                          onPressed: _onCreateAccount,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.success,
                             foregroundColor: Colors.white,
@@ -428,7 +482,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Continue as Guest Button - FIXED
+                      // Continue as Guest Button
                       SizedBox(
                         width: double.infinity,
                         height: 7.h,
