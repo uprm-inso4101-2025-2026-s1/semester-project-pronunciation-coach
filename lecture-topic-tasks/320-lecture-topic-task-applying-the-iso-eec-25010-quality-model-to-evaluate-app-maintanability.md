@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "pedroamorales"
 labels: [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-13T19:30:17Z"
-updated_at: "2025-11-13T19:30:54Z"
+updated_at: "2025-11-13T19:47:13Z"
 ---
 
 # [Lecture Topic Task]: Applying the ISO/EEC 25010 Quality Model to Evaluate App Maintanability
@@ -19,8 +18,7 @@ updated_at: "2025-11-13T19:30:54Z"
 - **Author:** @pedroamorales
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-13T19:30:17Z
 
