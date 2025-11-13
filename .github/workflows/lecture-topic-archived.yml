@@ -19,11 +19,18 @@ jobs:
           TITLE: ${{ github.event.issue.title }}
           LABELS_JSON: ${{ toJson(github.event.issue.labels.*.name) }}
         run: |
-          shopt -s nocasematch
           qualifies=no
-          if [[ "$TITLE" =~ lecture[[:space:]-_]*topic[[:space:]-_]*task ]]; then qualifies=yes; fi
-          if [[ "$LABELS_JSON" =~ "Lecture Topic Task" ]]; then qualifies=yes; fi
-          echo "qualifies=$qualifies" >> $GITHUB_OUTPUT
+
+          tl=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]')
+          if echo "$tl" | grep -Eiq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then
+            qualifies=yes
+          fi
+
+          if echo "$LABELS_JSON" | grep -Eiq '(^task: lecture-topic$|lecture-topic)'; then
+            qualifies=yes
+          fi
+
+          echo "qualifies=$qualifies" >> "$GITHUB_OUTPUT"
 
       - if: steps.gate.outputs.qualifies == 'yes'
         name: Check out branch with full history
@@ -43,7 +50,7 @@ jobs:
           mkdir -p "$FOLDER"
           slug="$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')"
           filepath="$FOLDER/${N}-${slug}.md"
-          echo "filepath=$filepath" >> $GITHUB_OUTPUT
+          echo "filepath=$filepath" >> "$GITHUB_OUTPUT"
           shopt -s nullglob
           for f in "$FOLDER"/${N}-*.md; do
             if [ "$f" != "$filepath" ]; then git rm -f "$f"; fi
@@ -63,28 +70,29 @@ jobs:
           updated='${{ github.event.issue.updated_at }}'
           author='${{ github.event.issue.user.login }}'
           body='${{ github.event.issue.body }}'
-          cat > "$FILEPATH" <<EOF
----
-issue_number: $n
-title: "$title"
-state: "$state"
-url: "$url"
-author: "$author"
-labels: $labels
-created_at: "$created"
-updated_at: "$updated"
----
 
-# $title
-
-- **Issue:** [$n]($url)
-- **Author:** @$author
-- **Labels:** $labels
-- **Created:** $created
-
-## Details
-$body
-EOF
+          {
+            echo '---'
+            echo "issue_number: $n"
+            echo "title: \"$title\""
+            echo "state: \"$state\""
+            echo "url: \"$url\""
+            echo "author: \"$author\""
+            echo "labels: $labels"
+            echo "created_at: \"$created\""
+            echo "updated_at: \"$updated\""
+            echo '---'
+            echo
+            echo "# $title"
+            echo
+            echo "- **Issue:** [$n]($url)"
+            echo "- **Author:** @$author"
+            echo "- **Labels:** $labels"
+            echo "- **Created:** $created"
+            echo
+            echo '## Details'
+            echo "$body"
+          } > "$FILEPATH"
 
       - name: Rebuild auto-index
         if: steps.gate.outputs.qualifies == 'yes'
@@ -99,9 +107,15 @@ EOF
             echo "| # | Title | Issue |"
             echo "|---:|-------|-------|"
           } > "$FOLDER/README.md"
+
           shopt -s nullglob
           files=( "$FOLDER"/[0-9]*-*.md )
-          printf '%s\n' "${files[@]}" | sort -V -r | while IFS= read -r f; do
+
+          if [ ${#files[@]} -eq 0 ]; then
+            exit 0
+          fi
+
+          for f in "${files[@]}"; do
             [ "$(basename "$f")" = "README.md" ] && continue
             issue=$(grep -m1 '^issue_number:' "$f" | sed 's/[^0-9]//g')
             title=$(grep -m1 '^title:' "$f" | sed -E 's/^title:[[:space:]]*"?([^"]*)"?/\1/')
