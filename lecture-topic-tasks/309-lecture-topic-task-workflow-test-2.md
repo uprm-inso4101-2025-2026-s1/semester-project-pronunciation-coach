@@ -1,19 +1,25 @@
 ---
 issue_number: 309
 title: "[Lecture Topic Task]:  Workflow Test 2"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/309"
 author: "Yulio7"
-labels: ["Task: lecture-topic","state: needs fix","state: in progress"]
+labels: [
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-11-12T20:18:08Z"
-updated_at: "2025-11-13T03:47:04Z"
+updated_at: "2025-11-13T05:05:02Z"
 ---
 
 # [Lecture Topic Task]:  Workflow Test 2
 
 - **Issue:** [309](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/309)
 - **Author:** @Yulio7
-- **Labels:** ["Task: lecture-topic","state: needs fix","state: in progress"]
+- **Labels:** [
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-11-12T20:18:08Z
 
 ## Details
@@ -59,3 +65,4 @@ Estimated completion time: 1-3 days!
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: _@Yulio7_  
+
