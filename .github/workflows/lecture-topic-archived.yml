@@ -1,4 +1,4 @@
-name: Archive Lecture Topic Issues to Folder
+name: Archived Lecture Topic Issues to Folder
 
 on:
   issues:
