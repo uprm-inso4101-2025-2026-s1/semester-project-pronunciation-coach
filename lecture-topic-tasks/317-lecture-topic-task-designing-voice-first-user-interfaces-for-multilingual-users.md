@@ -7,10 +7,10 @@ author: "ignaaaaacio"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-13T15:27:17Z"
-updated_at: "2025-11-13T15:27:52Z"
+updated_at: "2025-11-13T15:36:58Z"
 ---
 
 # [Lecture Topic Task]: Designing Voice-First User Interfaces for Multilingual Users
@@ -20,7 +20,7 @@ updated_at: "2025-11-13T15:27:52Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-13T15:27:17Z
 
