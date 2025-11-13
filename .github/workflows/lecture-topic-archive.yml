@@ -29,7 +29,7 @@ jobs:
         name: Check out branch with full history
         uses: actions/checkout@v4
         with:
-          ref: Yulio7-LTTtoFolder
+          ref: main
           fetch-depth: 0
           persist-credentials: true
 
@@ -122,7 +122,7 @@ EOF
       - name: Push to branch
         if: steps.gate.outputs.qualifies == 'yes'
         run: |
-          git push origin HEAD:Yulio7-LTTtoFolder
+          git push origin HEAD:main
 
       - name: Link back on the issue
         if: steps.gate.outputs.qualifies == 'yes'
