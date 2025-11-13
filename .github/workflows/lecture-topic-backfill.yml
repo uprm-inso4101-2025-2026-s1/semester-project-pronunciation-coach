@@ -52,14 +52,23 @@ jobs:
             labels=$(echo "$line"  | jq -cr '[.labels[].name]')
 
             tl=$(echo "$title" | tr '[:upper:]' '[:lower:]')
-            has_label=$(echo "$labels" | jq -r '.[]' | grep -iqx 'Lecture Topic Task' && echo yes || echo no)
+
+            has_label=$(echo "$labels" \
+              | jq -r '.[]' \
+              | grep -Eiq '(^task: lecture-topic$|lecture-topic)' \
+              && echo yes || echo no)
 
             qualifies=no
-            if echo "$tl" | grep -Eq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then qualifies=yes; fi
-            if [ "$has_label" = "yes" ]; then qualifies=yes; fi
+            if echo "$tl" | grep -Eiq 'lecture[[:space:]-_]*topic[[:space:]-_]*task'; then
+              qualifies=yes
+            fi
+            if [ "$has_label" = "yes" ]; then
+              qualifies=yes
+            fi
             [ "$qualifies" = "no" ] && continue
 
-            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')
+            slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' \
+              | sed -E 's/[^a-z0-9]+/-/g;s/^-|-$//g')
             path="$FOLDER/${number}-${slug}.md"
 
             shopt -s nullglob
@@ -110,7 +119,13 @@ jobs:
 
           shopt -s nullglob
           files=( "$FOLDER"/[0-9]*-*.md )
-          printf '%s\n' "${files[@]}" | sort -V -r | while IFS= read -r f; do
+
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No lecture-topic task files found. Leaving index header-only."
+            exit 0
+          fi
+
+          for f in "${files[@]}"; do
             [ "$(basename "$f")" = "README.md" ] && continue
             issue=$(grep -m1 '^issue_number:' "$f" | sed 's/[^0-9]//g')
             title=$(grep -m1 '^title:' "$f" | sed -E 's/^title:[[:space:]]*"?([^"]*)"?/\1/')
