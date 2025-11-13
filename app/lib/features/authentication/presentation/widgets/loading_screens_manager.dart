@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'loading_screens_core.dart';
 import 'loading_screens_factory.dart';
 import '../../../../core/common/colors.dart';
+import '/core/common/sound_service.dart';
 
 /// ===========================================================================
 /// SINGLETON PATTERN + OBSERVER PATTERN + DECORATOR PATTERN
@@ -92,11 +93,25 @@ class LoadingSystem {
     _notifyLoadingListeners(true);
   }
 
-  /// Hide loading overlay
-  void hideLoading(BuildContext context) {
+/// Hide loading overlay - without success sound
+void hideLoading(BuildContext context) {
+  Navigator.of(context, rootNavigator: true).pop();
+  _notifyLoadingListeners(false);
+}
+
+/// Hide loading overlay with success sound and optional delay
+Future<void> hideLoadingWithSuccess(BuildContext context, {Duration delay = const Duration(milliseconds: 100)}) async {
+  // Play success sound
+  SoundService().playLoadingSuccess();
+  
+  // Wait for the delay to let the sound play
+  await Future.delayed(delay);
+  
+  if (context.mounted) {
     Navigator.of(context, rootNavigator: true).pop();
     _notifyLoadingListeners(false);
   }
+}
 }
 
 /// ===========================================================================

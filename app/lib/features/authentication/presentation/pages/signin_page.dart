@@ -8,7 +8,6 @@ import '../../../../core/common/text_styles.dart';
 // import '../widgets/loading_screens_factory.dart';
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
-
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 
 class SigninPage extends StatefulWidget {
