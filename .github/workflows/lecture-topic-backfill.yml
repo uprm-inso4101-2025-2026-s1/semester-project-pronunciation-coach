@@ -10,8 +10,6 @@ permissions:
 jobs:
   backfill:
     runs-on: ubuntu-latest
-    env:
-      FOLDER: "lecture-topic-tasks"
 
     steps:
       - name: Check out main with full history
@@ -35,11 +33,10 @@ jobs:
             | jq -c '.[] | select(.pull_request|not)' > .issues.jsonl
           echo "Collected $(wc -l < .issues.jsonl) issues"
 
-            - name: Generate files for qualifying issues
-        env:
-          FOLDER: ${{ env.FOLDER }}
+      - name: Generate files for qualifying issues
         run: |
           set -euo pipefail
+          FOLDER="lecture-topic-tasks"
           mkdir -p "$FOLDER"
           count=0
 
@@ -99,11 +96,11 @@ jobs:
           echo "Wrote/updated $count files."
 
       - name: Rebuild index
-        env:
-          FOLDER: ${{ env.FOLDER }}
         run: |
           set -euo pipefail
+          FOLDER="lecture-topic-tasks"
           mkdir -p "$FOLDER"
+
           {
             echo "# Lecture Topic Tasks"
             echo
