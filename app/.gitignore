@@ -1,6 +1,7 @@
 # Environment Configuration
 # NEVER EVER EVER commit actual environment variables
 lib/core/config/env.dart
+lib/core/common/env.dart
 
 # Keep the example file for reference
 !lib/core/config/env.example.dart

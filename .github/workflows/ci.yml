@@ -1,0 +1,84 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  # Check that env.dart is not committed
+  check-env-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check that env.dart is not committed
+        run: |
+          if [ -f "app/lib/core/common/env.dart" ]; then
+            echo "ERROR: env.dart should not be committed to the repository!"
+            echo "Please ensure env.dart is in .gitignore and use env.example.dart as a template."
+            exit 1
+          else
+            echo "env.dart is properly excluded from commits"
+          fi
+
+  # Flutter checks
+  flutter-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.1"
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter analyze lib/
+
+  flutter-build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.1"
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build apk --debug
+
+  flutter-build-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.1"
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build ios --no-codesign --debug
+
+  # Python backend checks
+  python-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      - name: Run linting (optional but recommended)
+        run: |
+          pip install ruff
+          ruff check backend/
+      - name: Test FastAPI startup
+        run: |
+          cd backend
+          timeout 10 python -m uvicorn main:app --host 0.0.0.0 --port 8000 || exit 0

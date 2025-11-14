@@ -1,11 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'sound_constants.dart';
 
 /// Sound Service - Centralized audio management for the application
-/// 
+///
 /// This service provides a singleton instance for playing sound effects
 /// throughout the app, with volume control and sound toggle functionality.
-/// 
+///
 /// Features:
 /// - Singleton pattern for consistent audio state
 /// - Sound effect categorization (Loading, UI, Quiz)
@@ -112,16 +113,16 @@ class SoundService {
   // ===========================================================================
 
   /// Internal method to play a sound from asset path
-  /// 
+  ///
   /// [assetPath] - Path to the sound file in assets folder
-  /// 
+  ///
   /// Handles audio playback errors gracefully to prevent app crashes
   /// and provides debug logging for troubleshooting
   Future<void> _playSound(String assetPath) async {
     try {
       await _player.play(AssetSource(assetPath));
     } catch (e) {
-      print('Sound error playing $assetPath: $e');
+      debugPrint('Sound error playing $assetPath: $e');
     }
   }
 
@@ -130,7 +131,7 @@ class SoundService {
   // ===========================================================================
 
   /// Set custom volume level
-  /// 
+  ///
   /// [volume] - Volume level between 0.0 (silent) and 1.0 (max)
   /// Automatically clamps values to valid range
   void setVolume(double volume) {
@@ -155,7 +156,7 @@ class SoundService {
   // ===========================================================================
 
   /// Enable or disable all sounds globally
-  /// 
+  ///
   /// [enabled] - true to enable sounds, false to mute all audio
   /// Use case: User preferences, quiet mode, background app state
   void enableSounds(bool enabled) {
@@ -173,7 +174,7 @@ class SoundService {
   // ===========================================================================
 
   /// Clean up audio resources when service is no longer needed
-  /// 
+  ///
   /// Call this when the app is closing or when audio is no longer required
   /// to free up system resources
   void dispose() {

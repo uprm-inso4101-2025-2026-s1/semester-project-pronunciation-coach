@@ -119,7 +119,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 24),
-        ..._difficulties!.asMap().entries.map(
+        ..._difficulties.asMap().entries.map(
           (entry) => TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (entry.key * 100)),
             tween: Tween(begin: 0.0, end: 1.0),

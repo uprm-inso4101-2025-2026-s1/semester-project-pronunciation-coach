@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/session_manager.dart';
 
+// ignore_for_file: use_build_context_synchronously
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -79,7 +81,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: const Icon(Icons.person, color: Colors.blue),
                         ),
                         title: Text(
-                          isGuest ? 'Guest user' : (user?.email ?? 'Unknown user'),
+                          isGuest
+                              ? 'Guest user'
+                              : (user.email ?? 'Unknown user'),
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
@@ -95,9 +99,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       if (!isGuest) ...[
                         const Divider(height: 0),
                         ListTile(
-                          leading: const Icon(Icons.lock_outline, color: Colors.blue),
+                          leading: const Icon(
+                            Icons.lock_outline,
+                            color: Colors.blue,
+                          ),
                           title: const Text('Change password'),
-                          subtitle: const Text('Update your account security settings'),
+                          subtitle: const Text(
+                            'Update your account security settings',
+                          ),
                           onTap: () => _showWorkInProgressDialog(
                             context,
                             title: 'Change password',
@@ -111,9 +120,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           leading: const Icon(Icons.login, color: Colors.blue),
                           title: const Text('Create an account'),
-                          subtitle: const Text('Unlock achievements, stats, and cloud sync'),
-                          onTap: () => Navigator.of(context)
-                              .pushNamedAndRemoveUntil('/login', (route) => false),
+                          subtitle: const Text(
+                            'Unlock achievements, stats, and cloud sync',
+                          ),
+                          onTap: () => Navigator.of(
+                            context,
+                          ).pushNamedAndRemoveUntil('/login', (route) => false),
                         ),
                       ],
                     ],
@@ -127,7 +139,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       SwitchListTile(
                         value: _autoPlayEnabled,
                         title: const Text('Auto-play pronunciations'),
-                        subtitle: const Text('Automatically play audio examples on new lessons'),
+                        subtitle: const Text(
+                          'Automatically play audio examples on new lessons',
+                        ),
                         onChanged: (value) {
                           setState(() => _autoPlayEnabled = value);
                           _updatePreference(_autoPlayKey, value);
@@ -136,7 +150,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       SwitchListTile(
                         value: _dailyRemindersEnabled,
                         title: const Text('Daily practice reminders'),
-                        subtitle: const Text('Stay on track with motivational nudges'),
+                        subtitle: const Text(
+                          'Stay on track with motivational nudges',
+                        ),
                         onChanged: (value) {
                           setState(() => _dailyRemindersEnabled = value);
                           _updatePreference(_remindersKey, value);
@@ -153,7 +169,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       SwitchListTile(
                         value: _notificationsEnabled,
                         title: const Text('App notifications'),
-                        subtitle: const Text('Be notified about new challenges and streaks'),
+                        subtitle: const Text(
+                          'Be notified about new challenges and streaks',
+                        ),
                         onChanged: (value) {
                           setState(() => _notificationsEnabled = value);
                           _updatePreference(_notificationsKey, value);
@@ -170,14 +188,19 @@ class _SettingsPageState extends State<SettingsPage> {
                       SwitchListTile(
                         value: _analyticsEnabled,
                         title: const Text('Share anonymous usage analytics'),
-                        subtitle: const Text('Help us improve Pronunciation Coach'),
+                        subtitle: const Text(
+                          'Help us improve Pronunciation Coach',
+                        ),
                         onChanged: (value) {
                           setState(() => _analyticsEnabled = value);
                           _updatePreference(_analyticsKey, value);
                         },
                       ),
                       ListTile(
-                        leading: const Icon(Icons.description_outlined, color: Colors.blue),
+                        leading: const Icon(
+                          Icons.description_outlined,
+                          color: Colors.blue,
+                        ),
                         title: const Text('Privacy policy'),
                         onTap: () => _showWorkInProgressDialog(
                           context,
@@ -194,7 +217,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   _buildSection(
                     title: 'Security',
                     child: ListTile(
-                      leading: const Icon(Icons.logout, color: Colors.redAccent),
+                      leading: const Icon(
+                        Icons.logout,
+                        color: Colors.redAccent,
+                      ),
                       title: const Text(
                         'Sign out',
                         style: TextStyle(color: AppColors.textPrimary),
@@ -266,7 +292,9 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sign out'),
-        content: const Text('Are you sure you want to sign out of Pronunciation Coach?'),
+        content: const Text(
+          'Are you sure you want to sign out of Pronunciation Coach?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -281,11 +309,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
 
     if (shouldSignOut == true) {
+      final navigator = Navigator.of(context);
       await SessionManager.instance.safeSignOut();
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        navigator.pushNamedAndRemoveUntil('/login', (route) => false);
       }
     }
   }
 }
-

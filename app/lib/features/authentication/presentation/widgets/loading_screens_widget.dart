@@ -25,8 +25,7 @@ abstract class BaseLoadingWidget extends StatefulWidget {
   final String message;
   final String? fact;
 
-  const BaseLoadingWidget({Key? key, required this.message, this.fact})
-    : super(key: key);
+  const BaseLoadingWidget({super.key, required this.message, this.fact});
 
   /// =========================================================================
   /// TEMPLATE METHOD: Abstract hook for subclasses
@@ -85,9 +84,9 @@ abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget>
       width: double.infinity,
       padding: EdgeInsets.all(2.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(2.h),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -130,12 +129,12 @@ class PulsatingWaveWidget extends BaseLoadingWidget {
   final Color secondaryColor;
 
   const PulsatingWaveWidget({
-    Key? key,
-    required String message,
-    String? fact,
+    super.key,
+    required super.message,
+    super.fact,
     this.primaryColor = AppColors.primary,
     this.secondaryColor = AppColors.cardBackground,
-  }) : super(key: key, message: message, fact: fact);
+  });
 
   @override
   PulsatingWaveWidgetState createState() => PulsatingWaveWidgetState();
@@ -186,8 +185,10 @@ class PulsatingWaveWidgetState
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
-                    widget.primaryColor.withOpacity(_animation.value),
-                    widget.secondaryColor.withOpacity(_animation.value * 0.3),
+                    widget.primaryColor.withValues(alpha: _animation.value),
+                    widget.secondaryColor.withValues(
+                      alpha: _animation.value * 0.3,
+                    ),
                   ],
                 ),
                 shape: BoxShape.circle,
@@ -202,8 +203,10 @@ class PulsatingWaveWidgetState
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: widget.primaryColor.withOpacity(
-                              0.4 * (1 - (_animation.value * (index + 1) / 5)),
+                            color: widget.primaryColor.withValues(
+                              alpha:
+                                  0.4 *
+                                  (1 - (_animation.value * (index + 1) / 5)),
                             ),
                           ),
                         ),
@@ -244,14 +247,14 @@ class ProgressStagesWidget extends BaseLoadingWidget {
   final int currentStage;
 
   const ProgressStagesWidget({
-    Key? key,
-    required String message,
-    String? fact,
+    super.key,
+    required super.message,
+    super.fact,
     required this.stages,
     this.currentStage = 0,
     this.activeColor = AppColors.primary,
     this.inactiveColor = AppColors.textMuted,
-  }) : super(key: key, message: message, fact: fact);
+  });
 
   @override
   ProgressStagesWidgetState createState() => ProgressStagesWidgetState();
@@ -292,7 +295,7 @@ class ProgressStagesWidgetState
           width: 18.w,
           height: 18.w,
           decoration: BoxDecoration(
-            color: widget.activeColor.withOpacity(0.1),
+            color: widget.activeColor.withValues(alpha: 0.1),
             shape: BoxShape.circle,
             border: Border.all(color: widget.activeColor, width: 2),
           ),
@@ -380,9 +383,9 @@ class MorphingShapeWidget extends BaseLoadingWidget {
   final List<IconData> shapeSequence;
 
   const MorphingShapeWidget({
-    Key? key,
-    required String message,
-    String? fact,
+    super.key,
+    required super.message,
+    super.fact,
     this.shapeColor = AppColors.primary,
     this.shapeSequence = const [
       Icons.volume_up,
@@ -391,7 +394,7 @@ class MorphingShapeWidget extends BaseLoadingWidget {
       Icons.hearing,
       Icons.record_voice_over,
     ],
-  }) : super(key: key, message: message, fact: fact);
+  });
 
   @override
   MorphingShapeWidgetState createState() => MorphingShapeWidgetState();
@@ -443,7 +446,7 @@ class MorphingShapeWidgetState
               width: 20.w,
               height: 20.w,
               decoration: BoxDecoration(
-                color: widget.shapeColor.withOpacity(0.1),
+                color: widget.shapeColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
                 border: Border.all(color: widget.shapeColor, width: 2),
               ),
@@ -478,9 +481,9 @@ class TextTypingWidget extends BaseLoadingWidget {
   final List<String> messageSequence;
 
   const TextTypingWidget({
-    Key? key,
-    required String message,
-    String? fact,
+    super.key,
+    required super.message,
+    super.fact,
     this.textColor = AppColors.textPrimary,
     this.messageSequence = const [
       "Processing your request",
@@ -488,7 +491,7 @@ class TextTypingWidget extends BaseLoadingWidget {
       "Just a moment longer",
       "Finishing up",
     ],
-  }) : super(key: key, message: message, fact: fact);
+  });
 
   @override
   TextTypingWidgetState createState() => TextTypingWidgetState();
@@ -557,7 +560,7 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
           width: 18.w,
           height: 18.w,
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(3.h),
             border: Border.all(color: AppColors.primary),
           ),
@@ -568,8 +571,8 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
                 return Icon(
                   Icons.keyboard,
                   size: 8.w,
-                  color: AppColors.primary.withOpacity(
-                    0.6 + 0.4 * _controller.value,
+                  color: AppColors.primary.withValues(
+                    alpha: 0.6 + 0.4 * _controller.value,
                   ),
                 );
               },
