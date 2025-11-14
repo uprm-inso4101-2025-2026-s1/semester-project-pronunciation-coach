@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
+import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_home_page.dart';
 import 'audio_quiz_question_page.dart';
 
@@ -25,6 +26,7 @@ class AudioQuizResultPage extends StatefulWidget {
 class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     with SingleTickerProviderStateMixin {
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final QuizStateController _stateController = QuizStateController();
   bool _isPlayingCorrectAudio = false;
   StreamSubscription? _playerCompleteSubscription;
 
@@ -112,6 +114,9 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
   }
 
   void _goToQuizHome(BuildContext context) {
+    // Send go home event to state machine
+    _stateController.sendEvent(GoHomeEvent());
+
     Navigator.popUntil(context, (route) {
       if (route is MaterialPageRoute &&
           route.builder(context) is AudioQuizHomePage) {
@@ -122,6 +127,9 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
   }
 
   Future<void> _retryQuiz(BuildContext context) async {
+    // Send retry quiz event to state machine
+    _stateController.sendEvent(RetryQuizEvent());
+
     try {
       final apiService = AudioApiService();
       final newChallenge = await apiService.generateAudioChallenge(

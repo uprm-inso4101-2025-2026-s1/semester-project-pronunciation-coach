@@ -45,3 +45,6 @@ dist/
 .flutter-plugins
 .packages
 pubspec.lock
+
+# Personal files (not to be committed)
+personal/
