@@ -7,10 +7,11 @@ author: "JuliT02"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: waiting for dev",
+  "state: in progress"
 ]
 created_at: "2025-11-14T17:08:18Z"
-updated_at: "2025-11-14T17:10:06Z"
+updated_at: "2025-11-14T17:53:25Z"
 ---
 
 # [Lecture Topic Task]: TLA+ for login/signup authentication state
@@ -20,7 +21,8 @@ updated_at: "2025-11-14T17:10:06Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: waiting for dev",
+  "state: in progress"
 ]
 - **Created:** 2025-11-14T17:08:18Z
 
