@@ -1,16 +1,16 @@
 ---
 issue_number: 303
 title: "[Lecture Topic Task]: Implement Statechart-Based State Machine for Quiz Flow"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/303"
 author: "amtrevisan"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-11T23:21:15Z"
-updated_at: "2025-11-14T16:18:45Z"
+updated_at: "2025-11-14T18:01:12Z"
 ---
 
 # [Lecture Topic Task]: Implement Statechart-Based State Machine for Quiz Flow
@@ -20,7 +20,7 @@ updated_at: "2025-11-14T16:18:45Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-11T23:21:15Z
 
