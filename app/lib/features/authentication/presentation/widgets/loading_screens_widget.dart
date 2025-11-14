@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import 'loading_screens_facts.dart';
+import '/core/common/sound_service.dart';
 
 /// ===========================================================================
 /// TEMPLATE METHOD PATTERN: Base Loading Widget
@@ -44,6 +45,11 @@ abstract class BaseLoadingWidgetState<T extends BaseLoadingWidget>
   void initState() {
     super.initState();
     currentFact = widget.fact ?? PronunciationFacts.getRandomFact();
+
+    // SOUND EFFECT: Play fact reveal sound when fact is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SoundService().playFactReveal();
+    });
   }
 
   // Abstract method that subclasses must implement
@@ -148,6 +154,7 @@ class PulsatingWaveWidgetState
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -266,6 +273,7 @@ class ProgressStagesWidgetState
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -406,6 +414,7 @@ class MorphingShapeWidgetState
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 3000),
       vsync: this,
@@ -502,6 +511,7 @@ class TextTypingWidgetState extends BaseLoadingWidgetState<TextTypingWidget>
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 4000),
       vsync: this,

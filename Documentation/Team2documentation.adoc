@@ -319,6 +319,7 @@ These functions have been studied, prototyped, or conceptually investigated but 
 * `provideHints(mispronouncedPhonemes)` → Investigated ways to give actionable corrective suggestions.  
 * `exportProgressReport(learnerData)` → Considered exporting summaries of learner performance for personal review or tutor use.
 
+*Note:* All explored functions are **derived from domain research and observations** and will be formally implemented in subsequent milestones.
 ==== 2.1.7. Stakeholder Perspectives Analysis
 
 This section analyzes the pronunciation coaching domain through the distinct perspectives of its primary stakeholder groups, following domain engineering principles. Recognizing that these groups maintain different mental models of the same domain is essential for identifying requirement conflicts and informing a flexible design.
@@ -416,7 +417,32 @@ Design implication: Include gamification, achievements, and adaptive difficulty 
 
 Design implication: Provide clear analytics summaries but include notes reminding users that AI feedback is supplementary.
 
-*Note:* All explored functions are **derived from domain research and observations** and will be formally implemented in subsequent milestones.
+==== 2.1.9 Support Technology Facet Analysis
+
+The support technology facet identifies the technological means through which our pronunciation coach is implemented. In our pronunciation coach, the domain phenomena cannot be realized without computational support: the evaluation of speech, its alignment in time, and the generation of feedback all depend on the capability of supporting technology.
+
+===== Means of Implementation and Technology Levels
+This domain uses multiple technology levels, each serving different roles:
+
+* **Automatic Speech Recognition (ASR):** Whisper is used to provide high-accuracy recognition when resources allow, while Vosk is used for lower-latency and offline operation. These represent different support technology levels with different trade-offs.
+* **Phoneme Alignment:** Montreal Forced Aligner (MFA) aligns user audio to phonemes and syllables, enabling precise evaluation of timing and articulation.
+* **Pronunciation Scoring:** Kaldi GOP computes “Goodness of Pronunciation” values, providing a quantitative score that can be used to identify mispronounced phonemes.
+* **Voice Generation:** OpenVoice supports voice cloning. This is used both to generate target reference voices for learners to imitate, and to optionally produce personalized feedback voices that are more emotionally comfortable for users to listen to.
+* **Conversational Interfaces:** An AI-based chatbot module is planned as a feedback delivery channel, assisting users by explaining pronunciation issues, suggesting corrections, or guiding practice.
+
+===== Quality Constraints
+As per the domain engineering framework, support technologies must satisfy several quality constraints:
+
+* Accuracy — scores must correspond to actual pronunciation quality.
+* Reliability — models should behave consistently across accents and noise conditions.
+* Fault Tolerance — the system must not break when the learner produces silence, pauses, or unintelligible audio.
+* Availability — practice should be possible even when internet access is limited (Vosk supports this).
+* Accessibility — feedback must be understandable to learners, not only experts.
+* Safety — feedback must not harm user motivation or emotional state.
+
+===== Relation to Other Facets
+Support technologies are means of implementing other facets: they enable real-time corrective feedback (human behavior facet), operational practice workflows (business procedures), and impose certain constraints on the domain model itself. The choice of support technologies ultimately determines the feasibility of feedback strategies within the pronunciation coach domain.
+
 === 2.2 Requirements
 
 ==== 2.2.1 User Stories, Epics, Features

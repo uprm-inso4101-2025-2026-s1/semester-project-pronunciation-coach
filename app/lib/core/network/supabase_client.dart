@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../common/env.dart';
+import '../common/env.dart'; // Changed back to env.dart
 
 class AppSupabase {
   static late final SupabaseClient client;
@@ -14,8 +14,6 @@ class AppSupabase {
     await Supabase.initialize(
       url: Env.supabaseUrl,
       anonKey: Env.supabaseAnonKey,
-      // 2.10.x does not take a top-level `localStorage` parameter.
-      // It already persists sessions for you.
       authOptions: const FlutterAuthClientOptions(autoRefreshToken: true),
       debug: kDebugMode,
     );

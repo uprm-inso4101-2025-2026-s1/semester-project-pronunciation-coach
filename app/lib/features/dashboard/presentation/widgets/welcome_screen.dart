@@ -3,6 +3,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import 'package:app/features/authentication/presentation/pages/login_page.dart';
+import '/core/common/sound_service.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -23,6 +24,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     super.initState();
+
+    // SOUND EFFECT: Play start sound when welcome screen appears
+    SoundService().playLoadingStart();
 
     _controller = AnimationController(
       vsync: this,

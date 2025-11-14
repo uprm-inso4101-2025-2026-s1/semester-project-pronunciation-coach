@@ -3,14 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:app/core/common/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../core/common/colors.dart';
-import '../../../../core/common/text_styles.dart';
+import '../../../../core/common/colors.dart' as common_colors;
+import '../../../../core/common/text_styles.dart' as common_text_styles;
 import '../../../../core/common/user_progress_stats.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../quiz/presentation/pages/audio_quiz_home_page.dart';
 import '../../../authentication/presentation/pages/login_page.dart';
 import '../widgets/monthly_practice_calendar.dart';
 import 'package:app/features/profile/presentation/pages/profile_page.dart';
+import '/core/common/sound_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Main navigation screen with bottom tab bar
+/// -------------------------------
+///  MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
+/// -------------------------------
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -59,6 +62,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   void _onTabTapped(int index) {
+    // Play transition sound when changing tabs
+    SoundService().playTransition();
+
     setState(() {
       _currentIndex = index;
     });
@@ -84,7 +90,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey[600],
+          unselectedItemColor: Colors.grey.shade600,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,
@@ -122,7 +128,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 }
 
-// User progress dashboard
+/// -------------------------------
+///  USER PROGRESS DASHBOARD (UPDATED - NO DRAWER)
+/// -------------------------------
 class UserProgressDashboard extends StatefulWidget {
   final double? accuracyRate;
   final int? wordsPracticed;
@@ -228,14 +236,14 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: common_colors.AppColors.background,
       appBar: AppBar(
         title: const Text(
           'Dashboard',
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        backgroundColor: AppColors.cardBackground,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: common_colors.AppColors.cardBackground,
+        foregroundColor: common_colors.AppColors.textPrimary,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
@@ -333,16 +341,16 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   Widget _buildSelectedPace(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
-    String paceText = 'âšª Not selected âšª';
+    String paceText = '⚡ Not selected ⚡';
     switch (appState.selectedPace) {
       case LearningPace.casual:
-        paceText = 'ðŸŸ¡ Casual ðŸŸ¡';
+        paceText = '🚲 Casual 🚲';
         break;
       case LearningPace.standard:
-        paceText = 'ðŸŸ  Standard ðŸŸ ';
+        paceText = '🚗 Standard 🚗';
         break;
       case LearningPace.intensive:
-        paceText = 'ðŸ"´ Intensive ðŸ"´';
+        paceText = '🚀 Intensive 🚀';
         break;
     }
 
@@ -350,11 +358,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: common_colors.AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardShadow,
+            color: common_colors.AppColors.cardShadow,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -365,7 +373,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
+          color: common_colors.AppColors.textPrimary,
         ),
       ),
     );
@@ -377,11 +385,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         width: double.infinity,
         padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: common_colors.AppColors.cardBackground,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cardShadow,
+              color: common_colors.AppColors.cardShadow,
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -412,7 +420,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             'Overall Accuracy',
             '${_userProgress!.accuracyRate.toInt()}%',
             Icons.gps_fixed,
-            AppColors.success,
+            common_colors.AppColors.success,
             _userProgress!.accuracyImprovement,
           ),
         ),
@@ -422,7 +430,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             'Words Attempted',
             '${_userProgress!.wordsPracticed}',
             Icons.record_voice_over,
-            AppColors.primary,
+            common_colors.AppColors.primary,
             _userProgress!.wordsImprovement,
           ),
         ),
@@ -449,11 +457,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: common_colors.AppColors.cardBackground,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardShadow,
+            color: common_colors.AppColors.cardShadow,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -484,9 +492,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             ],
           ),
           const SizedBox(height: 12),
-          Text(value, style: AppTextStyles.progressValue),
+          Text(value, style: common_text_styles.AppTextStyles.progressValue),
           const SizedBox(height: 4),
-          Text(title, style: AppTextStyles.bodySmall),
+          Text(title, style: common_text_styles.AppTextStyles.bodySmall),
         ],
       ),
     );
@@ -498,11 +506,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         width: double.infinity,
         padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: common_colors.AppColors.cardBackground,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cardShadow,
+              color: common_colors.AppColors.cardShadow,
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -529,11 +537,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: common_colors.AppColors.cardBackground,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardShadow,
+            color: common_colors.AppColors.cardShadow,
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -547,7 +555,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: common_colors.AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -558,7 +566,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                   'Practice Days',
                   '${_userProgress!.sessionsCount}',
                   Icons.calendar_today,
-                  AppColors.primary,
+                  common_colors.AppColors.primary,
                 ),
               ),
               Expanded(
@@ -566,7 +574,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                   'Recent Accuracy',
                   _userProgress!.avgScore,
                   Icons.gps_fixed,
-                  AppColors.success,
+                  common_colors.AppColors.success,
                 ),
               ),
               Expanded(
@@ -574,7 +582,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                   'Highest Streak',
                   '${_userProgress!.highestStreak}',
                   Icons.local_fire_department,
-                  AppColors.warning,
+                  common_colors.AppColors.warning,
                 ),
               ),
             ],
@@ -592,11 +600,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           constraints: const BoxConstraints(maxWidth: 500),
           padding: const EdgeInsets.all(40),
           decoration: BoxDecoration(
-            color: AppColors.cardBackground,
+            color: common_colors.AppColors.cardBackground,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.cardShadow,
+                color: common_colors.AppColors.cardShadow,
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -605,14 +613,18 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.lock_outline, size: 64, color: AppColors.primary),
+              Icon(
+                Icons.lock_outline,
+                size: 64,
+                color: common_colors.AppColors.primary,
+              ),
               const SizedBox(height: 24),
               const Text(
                 'Login Required',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: common_colors.AppColors.textPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -621,7 +633,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                 'Create an account or sign in to:',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[700],
+                  color: Colors.grey.shade700,
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,
@@ -644,7 +656,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                 icon: const Icon(Icons.login),
                 label: const Text('Sign In / Create Account'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: common_colors.AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
@@ -661,7 +673,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                 'Your progress and data are secure and private',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  color: Colors.grey.shade600,
                   fontStyle: FontStyle.italic,
                 ),
                 textAlign: TextAlign.center,
@@ -676,9 +688,9 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
   Widget _buildFeatureItem(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primary, size: 20),
+        Icon(icon, color: common_colors.AppColors.primary, size: 20),
         const SizedBox(width: 12),
-        Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
+        Text(text, style: TextStyle(fontSize: 15, color: Colors.grey.shade700)),
       ],
     );
   }
@@ -705,12 +717,12 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: common_colors.AppColors.textPrimary,
           ),
         ),
         Text(
           title,
-          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           textAlign: TextAlign.center,
         ),
       ],
