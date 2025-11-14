@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../common/env.example.dart';
+import '../common/env.dart';
 
 class AppSupabase {
   static late final SupabaseClient client;

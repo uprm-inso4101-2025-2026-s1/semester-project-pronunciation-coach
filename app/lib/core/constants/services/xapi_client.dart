@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../../common/env.example.dart';
+import '../../common/env.dart';
 
 class XApiClient {
   XApiClient({http.Client? client}) : _client = client ?? http.Client();

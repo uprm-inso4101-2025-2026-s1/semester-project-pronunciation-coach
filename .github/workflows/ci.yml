@@ -35,6 +35,8 @@ jobs:
           cd app
           flutter pub get
           flutter analyze lib/
+        env:
+          CI: true
 
   flutter-build-android:
     runs-on: ubuntu-latest
@@ -48,6 +50,8 @@ jobs:
           cd app
           flutter pub get
           flutter build apk --debug
+        env:
+          CI: true
 
   flutter-build-ios:
     runs-on: macos-latest
@@ -61,6 +65,8 @@ jobs:
           cd app
           flutter pub get
           flutter build ios --no-codesign --debug
+        env:
+          CI: true
 
   # Python backend checks
   python-backend:
