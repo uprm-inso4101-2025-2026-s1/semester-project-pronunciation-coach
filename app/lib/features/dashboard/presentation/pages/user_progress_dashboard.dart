@@ -1,4 +1,4 @@
-import 'package:app/features/dashboard/presentation/pages/home_page.dart';
+import 'package:app/features/home/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:app/core/common/pace_selector.dart';
 import 'package:flutter/material.dart';

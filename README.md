@@ -279,7 +279,8 @@ The Flutter app follows **Clean Architecture** principles with **Feature-First**
 
 - **`features/`** - Feature-based modules (each following Clean Architecture)
   - `authentication/` - User login/signup functionality
-  - `dashboard/` - Main dashboard and progress visualization
+  - `dashboard/` - Progress visualization dashboard
+  - `home/` - Home screen with user overview (`app/lib/features/home/presentation/pages/home_page.dart`)
   - `quiz/` - Audio pronunciation quiz feature
   - `progress/` - User progress tracking
   - `profile/` - User profile management

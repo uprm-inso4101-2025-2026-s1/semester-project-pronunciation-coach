@@ -1,8 +1,5 @@
-/// Unit tests for the Quiz State Machine implementation
-/// Demonstrates that the statecharts concepts are working correctly
-
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/features/quiz/domain/state_machine/quiz_state_machine.dart';
+import 'package:app/features/quiz/domain/state_machine/quiz_state_machine.dart';
 
 void main() {
   group('Quiz State Machine Tests', () {
@@ -29,21 +26,12 @@ void main() {
     test(
       'SelectAnswerEvent should transition from Answering to Evaluating',
       () {
-        // Set up the state machine in answering state
-        stateMachine.sendEvent(StartQuizEvent('easy'));
-        // Simulate transitioning to answering state (normally done by UI)
         final answeringState = AnsweringState('easy', null, false);
-        stateMachine = QuizStateMachine(); // Reset
-        stateMachine.sendEvent(StartQuizEvent('easy'));
-
-        // Create a test state machine with answering state
-        final testMachine = QuizStateMachine();
-        testMachine.sendEvent(StartQuizEvent('easy'));
-        final answeringState2 = AnsweringState('easy', null, false);
 
         // Test the transition logic directly
-        final newState = answeringState2.handleEvent(SelectAnswerEvent('A'));
+        final newState = answeringState.handleEvent(SelectAnswerEvent('A'));
         expect(newState, isA<AnsweringState>());
+        // ignore: unnecessary_cast
         expect((newState as AnsweringState).selectedAnswer, 'A');
       },
     );
@@ -54,7 +42,9 @@ void main() {
         final answeringState = AnsweringState('easy', 'A', false);
         final newState = answeringState.handleEvent(SubmitAnswerEvent());
         expect(newState, isA<EvaluatingAnswerState>());
+        // ignore: unnecessary_cast
         expect((newState as EvaluatingAnswerState).selectedAnswer, 'A');
+        // ignore: unnecessary_cast
         expect((newState as EvaluatingAnswerState).hasAnswered, true);
       },
     );
@@ -63,7 +53,9 @@ void main() {
       final evaluatingState = EvaluatingAnswerState('easy', 'A', true);
       final newState = evaluatingState.handleEvent(ViewResultsEvent());
       expect(newState, isA<ResultsState>());
+      // ignore: unnecessary_cast
       expect((newState as ResultsState).selectedAnswer, 'A');
+      // ignore: unnecessary_cast
       expect((newState as ResultsState).hasAnswered, true);
     });
 
