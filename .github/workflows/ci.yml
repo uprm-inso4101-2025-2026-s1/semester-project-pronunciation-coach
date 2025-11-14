@@ -30,13 +30,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.38.1"
+      - name: Create dummy env.dart for CI
+        run: |
+          cd app
+          cp lib/core/common/env.example.dart lib/core/common/env.dart
       - name: Run Flutter commands in app directory
         run: |
           cd app
           flutter pub get
           flutter analyze lib/
-        env:
-          CI: true
 
   flutter-build-android:
     runs-on: ubuntu-latest
@@ -45,13 +47,15 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.38.1"
+      - name: Create dummy env.dart for CI
+        run: |
+          cd app
+          cp lib/core/common/env.example.dart lib/core/common/env.dart
       - name: Run Flutter commands in app directory
         run: |
           cd app
           flutter pub get
           flutter build apk --debug
-        env:
-          CI: true
 
   flutter-build-ios:
     runs-on: macos-latest
@@ -60,13 +64,32 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.38.1"
+      - name: Create dummy env.dart for CI
+        run: |
+          cd app
+          cp lib/core/common/env.example.dart lib/core/common/env.dart
       - name: Run Flutter commands in app directory
         run: |
           cd app
           flutter pub get
           flutter build ios --no-codesign --debug
-        env:
-          CI: true
+
+  flutter-build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.1"
+      - name: Create dummy env.dart for CI
+        run: |
+          cd app
+          cp lib/core/common/env.example.dart lib/core/common/env.dart
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build web
 
   # Python backend checks
   python-backend:
