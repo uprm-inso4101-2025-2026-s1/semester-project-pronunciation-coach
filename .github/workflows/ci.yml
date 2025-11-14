@@ -30,8 +30,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-      - run: flutter pub get
-      - run: flutter analyze lib/
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter analyze lib/
 
   flutter-build-android:
     runs-on: ubuntu-latest
@@ -40,8 +43,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-      - run: flutter pub get
-      - run: flutter build apk --debug
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build apk --debug
 
   flutter-build-ios:
     runs-on: macos-latest
@@ -50,8 +56,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-      - run: flutter pub get
-      - run: flutter build ios --no-codesign --debug
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build ios --no-codesign --debug
 
   flutter-build-web:
     runs-on: ubuntu-latest
@@ -60,8 +69,11 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-      - run: flutter pub get
-      - run: flutter build web
+      - name: Run Flutter commands in app directory
+        run: |
+          cd app
+          flutter pub get
+          flutter build web
 
   # Python backend checks
   python-backend:
