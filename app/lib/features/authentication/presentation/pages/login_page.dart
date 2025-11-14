@@ -10,6 +10,8 @@ import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
 
+// ignore_for_file: use_build_context_synchronously
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -70,6 +72,8 @@ class _LoginPageState extends State<LoginPage> {
       contextType: 'authentication',
     );
 
+    final navigator = Navigator.of(context);
+
     try {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
@@ -81,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!mounted) return;
-      
+
       // Play success sound for successful login
       _soundService.playLoadingSuccess();
       _loadingSystem.hideLoading(context);
@@ -89,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
       // Play transition sound before navigation
       _soundService.playTransition();
 
-      Navigator.of(context).pushReplacement(
+      navigator.pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
@@ -131,12 +135,10 @@ class _LoginPageState extends State<LoginPage> {
   void _onCreateAccount() {
     // Play button click for create account navigation
     _soundService.playButtonClick();
-    
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SigninPage(),
-      ),
-    );
+
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
   void _onForgotPassword() {
@@ -159,7 +161,9 @@ class _LoginPageState extends State<LoginPage> {
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
           FocusScope.of(context).requestFocus(FocusNode());
-          _emailCtrl.selection = TextSelection.collapsed(offset: _emailCtrl.text.length);
+          _emailCtrl.selection = TextSelection.collapsed(
+            offset: _emailCtrl.text.length,
+          );
         });
       },
       child: MyTextField(
@@ -183,7 +187,9 @@ class _LoginPageState extends State<LoginPage> {
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
           FocusScope.of(context).requestFocus(FocusNode());
-          _passCtrl.selection = TextSelection.collapsed(offset: _passCtrl.text.length);
+          _passCtrl.selection = TextSelection.collapsed(
+            offset: _passCtrl.text.length,
+          );
         });
       },
       child: MyTextField(

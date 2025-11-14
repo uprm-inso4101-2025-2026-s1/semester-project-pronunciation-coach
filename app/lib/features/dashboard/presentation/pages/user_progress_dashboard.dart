@@ -90,7 +90,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey[600],
+          unselectedItemColor: Colors.grey.shade600,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,
@@ -613,7 +613,11 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.lock_outline, size: 64, color: common_colors.AppColors.primary),
+              Icon(
+                Icons.lock_outline,
+                size: 64,
+                color: common_colors.AppColors.primary,
+              ),
               const SizedBox(height: 24),
               const Text(
                 'Login Required',
@@ -629,7 +633,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                 'Create an account or sign in to:',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[700],
+                  color: Colors.grey.shade700,
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,
@@ -669,7 +673,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                 'Your progress and data are secure and private',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  color: Colors.grey.shade600,
                   fontStyle: FontStyle.italic,
                 ),
                 textAlign: TextAlign.center,
@@ -686,7 +690,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       children: [
         Icon(icon, color: common_colors.AppColors.primary, size: 20),
         const SizedBox(width: 12),
-        Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
+        Text(text, style: TextStyle(fontSize: 15, color: Colors.grey.shade700)),
       ],
     );
   }
@@ -702,7 +706,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color, size: 24),
@@ -718,7 +722,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         ),
         Text(
           title,
-          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           textAlign: TextAlign.center,
         ),
       ],

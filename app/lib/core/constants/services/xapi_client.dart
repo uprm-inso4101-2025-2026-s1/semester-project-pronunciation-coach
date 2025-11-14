@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../../env.dart';
+import '../../common/env.dart';
 
 class XApiClient {
   XApiClient({http.Client? client}) : _client = client ?? http.Client();
@@ -11,7 +11,10 @@ class XApiClient {
   Uri get _statementsUri => Uri.parse('${Env.xApiBaseUrl}/xapi/statements');
 
   /// Returns true on success, throws on non-2xx unless `silent` is true.
-  Future<bool> sendStatement(Map<String, dynamic> statement, {bool silent = false}) async {
+  Future<bool> sendStatement(
+    Map<String, dynamic> statement, {
+    bool silent = false,
+  }) async {
     final headers = <String, String>{
       'Content-Type': 'application/json',
       if (Env.xApiKey.isNotEmpty) 'Authorization': 'Bearer ${Env.xApiKey}',
