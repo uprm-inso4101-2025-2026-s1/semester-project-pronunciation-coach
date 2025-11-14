@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-14T03:59:15Z"
-updated_at: "2025-11-14T03:59:15Z"
+updated_at: "2025-11-14T04:02:40Z"
 ---
 
 # [Lecture Topic Task]: Risk-Based Sound Effects Prioritization Using Weighted Matrix Analysis
@@ -33,7 +33,7 @@ Apply Quantitative Risk Analysis and Weighted Matrix Evaluation to prioritize so
 ---
 
 ## 📝 Description
-This lecture topic uses the Requirements Evaluation framework from Chapter 3 to systematically evaluate and prioritize sound effect features through risk analysis and quantitative decision-making. The approach combines:
+This lecture topic uses the Requirements Evaluation framework to systematically evaluate and prioritize sound effect features through risk analysis and quantitative decision-making. The approach combines:
 **Risk Analysis Components:**
 •	Product Risks: Sound effects that could negatively impact learning experience
 •	Process Risks: Development challenges in audio implementation
