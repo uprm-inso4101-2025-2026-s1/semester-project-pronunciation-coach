@@ -53,7 +53,7 @@ flutter pub get
 Copy the example file:
 
 ```bash
-cp lib/core/config/env.example.dart lib/core/config/env.dart
+cp lib/core/common/env.example.dart lib/core/common/env.dart
 ```
 
 #### Get your Supabase credentials
@@ -66,7 +66,7 @@ cp lib/core/config/env.example.dart lib/core/config/env.dart
 
 #### Add your credentials
 
-Open `lib/core/config/env.dart` and replace these two lines:
+Open `lib/core/common/env.dart` and replace these two lines:
 
 ```dart
 defaultValue: 'https://your-project-id.supabase.co',  // ← Paste your Project URL here
@@ -317,7 +317,6 @@ The Python backend follows **Layered Architecture**:
 - **Always activate the virtual environment** before working on backend code
 - **The backend must be running** for Flutter app features that depend on it (quiz, challenges)
 - **Test your endpoints** using the Swagger UI at http://localhost:8000/docs
-- **Code attribution:** Some utilities come from the QuizPython team. See `backend/CREDITS.md` for details.
 
 ---
 
@@ -462,4 +461,4 @@ flutter run
 2. Make your changes
 3. Test thoroughly (both Flutter and backend if applicable)
 4. Submit a pull request
-5. Tag appropriate reviewers
+5. Ensure PR passes all CI checks so that it can be review by team leader
