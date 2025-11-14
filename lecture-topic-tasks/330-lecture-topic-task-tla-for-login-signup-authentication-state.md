@@ -6,10 +6,11 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "JuliT02"
 labels: [
   "Team 1",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-14T17:08:18Z"
-updated_at: "2025-11-14T17:08:29Z"
+updated_at: "2025-11-14T17:10:06Z"
 ---
 
 # [Lecture Topic Task]: TLA+ for login/signup authentication state
@@ -18,7 +19,8 @@ updated_at: "2025-11-14T17:08:29Z"
 - **Author:** @JuliT02
 - **Labels:** [
   "Team 1",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-14T17:08:18Z
 
