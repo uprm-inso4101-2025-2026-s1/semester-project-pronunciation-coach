@@ -9,7 +9,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-17T18:00:53Z"
-updated_at: "2025-11-17T18:00:53Z"
+updated_at: "2025-11-17T18:01:03Z"
 ---
 
 # [Lecture Topic Task]: <Create a Work Breakdown Structure (WBS) for the AI Pronunciation Coach>
