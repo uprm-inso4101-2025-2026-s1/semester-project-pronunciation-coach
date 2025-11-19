@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-19T19:41:15Z"
-updated_at: "2025-11-19T19:41:15Z"
+updated_at: "2025-11-19T19:41:26Z"
 ---
 
 # [Lecture Topic Task] <Define Entities, Events, Functions, and Behaviors>
