@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-19T19:44:54Z"
-updated_at: "2025-11-19T19:44:54Z"
+updated_at: "2025-11-19T19:45:04Z"
 ---
 
 # [Lecture Topic Task] <Layered Architecture Mapping (Domain / Application / Presentation / Infrastructure)>
