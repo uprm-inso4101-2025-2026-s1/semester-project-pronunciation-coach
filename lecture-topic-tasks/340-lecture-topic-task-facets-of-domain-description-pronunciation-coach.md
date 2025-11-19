@@ -1,6 +1,6 @@
 ---
 issue_number: 340
-title: "[Lecture Topic Task] <Facets of Domain Description Pronunciation Coach>"
+title: "[Lecture Topic Task]: <Facets of Domain Description Pronunciation Coach>"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/340"
 author: "Yulio7"
@@ -9,10 +9,10 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-19T19:31:29Z"
-updated_at: "2025-11-19T20:53:51Z"
+updated_at: "2025-11-19T20:54:38Z"
 ---
 
-# [Lecture Topic Task] <Facets of Domain Description Pronunciation Coach>
+# [Lecture Topic Task]: <Facets of Domain Description Pronunciation Coach>
 
 - **Issue:** [340](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/340)
 - **Author:** @Yulio7
