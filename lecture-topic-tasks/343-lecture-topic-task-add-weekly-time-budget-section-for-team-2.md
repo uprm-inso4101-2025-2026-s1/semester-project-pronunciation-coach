@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-19T22:05:50Z"
-updated_at: "2025-11-19T22:05:50Z"
+updated_at: "2025-11-19T22:06:01Z"
 ---
 
 # [Lecture Topic Task]:  Add Weekly Time Budget Section for Team 2
