@@ -9,7 +9,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-19T19:31:29Z"
-updated_at: "2025-11-19T19:31:29Z"
+updated_at: "2025-11-19T19:31:40Z"
 ---
 
 # [Lecture Topic Task] <Facets of Domain Description Applied to Pronunciation Coach>
