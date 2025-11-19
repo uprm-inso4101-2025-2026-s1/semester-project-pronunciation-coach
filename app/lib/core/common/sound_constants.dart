@@ -27,6 +27,12 @@ class SoundConstants {
   static const String correctAnswer = 'sounds/Quiz_Sounds/Correct.mp3'; // Sound when user selects correct answer (Not implemented)
   static const String wrongAnswer = 'sounds/Quiz_Sounds/Wrong.mp3';     // Sound when user selects incorrect answer (Not Implemented)
 
+  // ---------------------------------------------------------------------------
+  // BACKGROUND SOUNDS
+  // Used for ambient audio in different app sections
+  // ---------------------------------------------------------------------------
+  static const String authBackground = 'sounds/background/authbackground.mp3'; // Background sound for authentication screens
+  static const String homeBackground = 'sounds/background/homebackground.mp3'; // Background sound for home/main screens
   
   // ===========================================================================
   // VOLUME CONFIGURATION
@@ -40,6 +46,9 @@ class SoundConstants {
   
   /// High volume level for important notifications (100% volume)
   static const double highVolume = 1.0;
+  
+  /// Background music volume (20% volume - lower for ambient audio)
+  static const double backgroundVolume = 0.2;
   
   // ===========================================================================
   // SOUND CATEGORIES
@@ -58,6 +67,12 @@ class SoundConstants {
   static const List<String> uiSounds = [
     buttonClick,
     transition,
+  ];
+  
+  /// All background sounds for ambient audio
+  static const List<String> backgroundSounds = [
+    authBackground,
+    homeBackground,
   ];
   
   // ===========================================================================

@@ -79,6 +79,8 @@ flutter:
     - assets/sounds/UI/transition.mp3
     - assets/sounds/Quiz_Sounds/Correct.mp3
     - assets/sounds/Quiz_Sounds/Wrong.mp3
+    - assets/sounds/background/authbackground.mp3
+    - assets/sounds/background/homebackground.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:
