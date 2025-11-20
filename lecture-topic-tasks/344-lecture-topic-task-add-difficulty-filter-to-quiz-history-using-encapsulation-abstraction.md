@@ -1,6 +1,6 @@
 ---
 issue_number: 344
-title: "[Lecture Topic Task] Add Difficulty Filter to Quiz History Using Encapsulation & Abstraction"
+title: "[Lecture Topic Task]: Add Difficulty Filter to Quiz History Using Encapsulation & Abstraction"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/344"
 author: "diegohdnz11"
@@ -11,10 +11,10 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-20T18:22:00Z"
-updated_at: "2025-11-20T18:22:00Z"
+updated_at: "2025-11-20T18:22:09Z"
 ---
 
-# [Lecture Topic Task] Add Difficulty Filter to Quiz History Using Encapsulation & Abstraction
+# [Lecture Topic Task]: Add Difficulty Filter to Quiz History Using Encapsulation & Abstraction
 
 - **Issue:** [344](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/344)
 - **Author:** @diegohdnz11
