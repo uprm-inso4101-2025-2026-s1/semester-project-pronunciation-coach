@@ -4,16 +4,30 @@ title: "[Lecture Topic Task]: Maintenance Requirements (2.2.9)"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/307"
 author: "EnriqueVilela2714"
-labels: ["documentation","Team 3","Task: lecture-topic","state: in progress"]
+labels: [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: waiting for team lead",
+  "state: in progress",
+  "state: waiting for manager"
+]
 created_at: "2025-11-12T17:50:07Z"
-updated_at: "2025-11-12T18:11:53Z"
+updated_at: "2025-11-21T15:56:39Z"
 ---
 
 # [Lecture Topic Task]: Maintenance Requirements (2.2.9)
 
 - **Issue:** [307](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/307)
 - **Author:** @EnriqueVilela2714
-- **Labels:** ["documentation","Team 3","Task: lecture-topic","state: in progress"]
+- **Labels:** [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: waiting for team lead",
+  "state: in progress",
+  "state: waiting for manager"
+]
 - **Created:** 2025-11-12T17:50:07Z
 
 ## Details
