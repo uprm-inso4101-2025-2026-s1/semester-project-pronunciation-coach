@@ -230,7 +230,7 @@ class ProgressService {
 
   bool isMissingTable(Object error, String tableName) {
     if (error is PostgrestException) {
-      final message = error.message ?? '';
+      final message = error.message;
       return message.contains("table 'public.$tableName'");
     }
     return false;
