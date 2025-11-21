@@ -13,7 +13,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-12T17:50:07Z"
-updated_at: "2025-11-21T15:56:39Z"
+updated_at: "2025-11-21T16:09:43Z"
 ---
 
 # [Lecture Topic Task]: Maintenance Requirements (2.2.9)
@@ -88,7 +88,7 @@ Estimated completion time: **2–3 days**
 ## 🎚️ Difficulty
 - [ ] Easy  
 - [x] Moderate  
-- [ ] Hard  
+- [x] Hard  
 
 ---
 
