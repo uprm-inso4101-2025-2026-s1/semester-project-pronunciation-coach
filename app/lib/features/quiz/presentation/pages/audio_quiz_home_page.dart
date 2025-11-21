@@ -3,6 +3,8 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
+import 'audio_quiz_history_page.dart';
+
 
 class AudioQuizHomePage extends StatefulWidget {
   const AudioQuizHomePage({super.key});
@@ -119,6 +121,28 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         Text(
           'Listen to audio pronunciations and pick the correct one!',
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
+            );
+          },
+          icon: const Icon(Icons.history),
+          label: const Text(
+            'View Quiz History',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         ),
         const SizedBox(height: 24),
         ..._difficulties.asMap().entries.map(
