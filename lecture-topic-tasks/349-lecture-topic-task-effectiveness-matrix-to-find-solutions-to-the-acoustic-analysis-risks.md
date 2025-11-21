@@ -7,10 +7,10 @@ author: "Uriel-D"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-21T16:48:39Z"
-updated_at: "2025-11-21T16:48:39Z"
+updated_at: "2025-11-21T17:34:13Z"
 ---
 
 # [Lecture Topic Task]: <Effectiveness Matrix to find solutions to the Acoustic Analysis risks>
@@ -20,7 +20,7 @@ updated_at: "2025-11-21T16:48:39Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-21T16:48:39Z
 
