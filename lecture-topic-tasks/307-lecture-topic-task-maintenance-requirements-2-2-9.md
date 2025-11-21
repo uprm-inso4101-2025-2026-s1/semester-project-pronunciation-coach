@@ -8,11 +8,10 @@ labels: [
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-12T17:50:07Z"
-updated_at: "2025-11-21T17:33:20Z"
+updated_at: "2025-11-21T17:33:30Z"
 ---
 
 # [Lecture Topic Task]: Maintenance Requirements (2.2.9)
@@ -23,8 +22,7 @@ updated_at: "2025-11-21T17:33:20Z"
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-12T17:50:07Z
 
