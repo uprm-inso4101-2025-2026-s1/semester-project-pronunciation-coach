@@ -691,6 +691,234 @@ improvement without punishing struggling learners.
 
 ---
 
+==== 2.2.9 Maintenance Requirements
+
+===== 2.2.9.1 Adaptive Maintenance
+
+**Purpose**: Define requirements for system adaptation to evolving user needs, platform changes, and external service integration.
+
+**AM-001: Language Pack Extensibility**
+The system shall support addition of new language pairs (beyond Spanish-English) without modifying core pronunciation assessment logic. New language packs shall be loadable as plugin modules containing:
+- Phonetic transcription mappings (IPA)
+- Native speaker audio samples
+- Language-specific pronunciation rules
+
+**Rationale**: Future expansion to support French, Mandarin, or other languages requires architectural flexibility without core system rewrites.
+
+**AM-002: Operating System Version Compatibility**
+The system shall maintain compatibility with the two most recent major versions of iOS and Android operating systems. When a new OS version releases, the system shall be updated within 60 days to ensure continued functionality.
+
+**Rationale**: Mobile OS fragmentation requires proactive compatibility maintenance to prevent user lockout.
+
+**AM-003: Third-Party API Migration**
+The system shall encapsulate all dependencies on external pronunciation audio sources (e.g., YouGlish) behind abstract interfaces. When external services deprecate or change APIs, only adapter layer implementations shall require modification.
+
+**Rationale**: External service providers may change pricing, shut down, or alter APIs unpredictably. Isolation prevents cascading maintenance costs.
+
+**AM-004: Accessibility Standards Compliance**
+The system shall be updated to maintain compliance with WCAG 2.2 (or latest version) accessibility guidelines as standards evolve. Updates shall be implemented within 90 days of new guideline publication.
+
+**Rationale**: Legal requirements (ADA compliance) and ethical obligations to support users with disabilities require adaptive maintenance.
+
+---
+
+===== 2.2.9.2 Corrective Maintenance
+
+**Purpose**: Define requirements for defect identification, reporting, and resolution processes.
+
+**CM-001: Crash Report Collection**
+The system shall automatically collect anonymized crash logs including:
+- Device type and OS version
+- Application version
+- Stack trace of failure point
+- User actions preceding crash (last 5 interactions)
+
+Crash reports shall be transmitted on next successful network connection with user consent.
+
+**Rationale**: Rapid defect identification requires detailed diagnostic data from production environments.
+
+**CM-002: Bug Fix Priority Classification**
+The system maintenance process shall classify reported defects using severity levels:
+- **Critical**: Data loss, security vulnerability, or complete feature unavailability → 24-hour response
+- **High**: Major feature degradation affecting >10% users → 7-day response
+- **Medium**: Minor feature issues or cosmetic defects → 30-day response
+- **Low**: Enhancement requests or edge case issues → Best effort
+
+**Rationale**: Limited maintenance resources require prioritization based on user impact.
+
+**CM-003: Hotfix Deployment Capability**
+The system architecture shall support hotfix deployment for critical defects without requiring full app store review cycles. Configuration-based fixes and server-side logic updates shall be deployable within 4 hours of defect confirmation.
+
+**Rationale**: App store review processes (2-7 days) are too slow for critical security or data loss issues.
+
+**CM-004: Pronunciation Algorithm Correction**
+The system shall maintain a defect tracking database specifically for pronunciation assessment false positives/negatives. When accuracy issues are reported for specific words:
+1. Audio samples and MFCC analysis data shall be logged
+2. Linguistic experts shall review within 14 days
+3. Algorithm parameter adjustments shall be deployed via server-side configuration
+
+**Rationale**: Pronunciation assessment is probabilistic; continuous refinement prevents user frustration.
+
+---
+
+===== 2.2.9.3 Perfective Maintenance
+
+**Purpose**: Define requirements for system optimization and quality improvement based on usage analytics.
+
+**PM-001: Performance Optimization Cycle**
+The system shall undergo quarterly performance audits analyzing:
+- Audio processing latency (target: <2 seconds)
+- UI responsiveness (target: <100ms touch response)
+- Battery consumption (target: <5% per 15-minute session)
+- Storage efficiency (target: <50MB app footprint)
+
+Optimizations addressing >10% degradation from targets shall be prioritized for next release.
+
+**Rationale**: Performance degrades over time due to feature additions; proactive optimization maintains user experience.
+
+**PM-002: UI/UX Refinement Based on Analytics**
+The system shall log user interaction patterns including:
+- Feature usage frequency
+- Navigation path analysis
+- Task completion rates
+- Error rate per UI component
+
+Bi-annual UI reviews shall identify components with <60% task completion rates or >15% error rates for redesign.
+
+**Rationale**: Data-driven UX improvements reduce user frustration and increase long-term engagement.
+
+**PM-003: Gamification Effectiveness Tuning**
+The system shall track gamification metric effectiveness:
+- Streak retention rates (target: 60% users maintain 7-day streaks)
+- XP point value perception (user satisfaction surveys)
+- Badge unlock distribution (target: 80% users unlock ≥3 badges monthly)
+
+Gamification parameters (XP values, badge thresholds) shall be adjusted quarterly based on retention analytics.
+
+**Rationale**: Gamification effectiveness varies by user population; continuous tuning maximizes motivation impact.
+
+**PM-004: Pronunciation Model Quality Improvement**
+The system shall maintain a pronunciation model accuracy tracking database. When assessment accuracy drops below 85% for specific phoneme categories:
+1. Additional native speaker audio samples shall be collected
+2. MFCC feature extraction parameters shall be re-tuned
+3. Machine learning models (if implemented) shall be retrained with expanded datasets
+
+**Rationale**: Pronunciation assessment quality directly impacts user trust; continuous improvement maintains credibility.
+
+---
+
+===== 2.2.9.4 Preventive Maintenance
+
+**Purpose**: Define requirements for proactive system health monitoring and failure prevention.
+
+**PV-001: Automated Dependency Security Scanning**
+The system build pipeline shall automatically scan all third-party dependencies (Flutter packages, native libraries) for known security vulnerabilities. Builds with HIGH or CRITICAL severity vulnerabilities shall fail until dependencies are updated.
+
+**Rationale**: Reactive security patching is costly and risky; proactive scanning prevents exploitation.
+
+**PV-002: Database Schema Migration Testing**
+The system shall maintain automated test suites for SharedPreferences schema migrations covering:
+- Version N → N+1 upgrades
+- Multi-version skip upgrades (N → N+3)
+- Corrupted data recovery scenarios
+
+All migration paths shall be tested before production deployment.
+
+**Rationale**: Data migration failures cause user data loss; preventive testing ensures upgrade safety.
+
+**PV-003: API Deprecation Monitoring**
+The system shall monitor deprecation notices from all external dependencies:
+- Flutter framework APIs
+- Android/iOS platform APIs
+- Third-party service APIs (YouGlish, TTS engines)
+
+Deprecation notices with <6-month sunset timelines shall trigger immediate refactoring tasks.
+
+**Rationale**: Reactive API migration under deadline pressure increases defect risk; proactive monitoring enables planned transitions.
+
+**PV-004: Capacity Planning for User Growth**
+The system architecture shall be reviewed quarterly for scalability constraints. Growth projections (based on 30-day user acquisition trends) shall trigger infrastructure upgrades when:
+- Projected concurrent users exceed 75% of current capacity
+- Projected storage requirements exceed 80% of available quota
+- Network bandwidth utilization exceeds 70% of available capacity
+
+**Rationale**: Reactive scaling during traffic spikes causes service degradation; preventive capacity planning maintains performance.
+
+**PV-005: Code Quality Metrics Tracking**
+The system codebase shall maintain minimum quality thresholds enforced via CI/CD:
+- Test coverage: ≥70% line coverage
+- Cyclomatic complexity: ≤15 per function
+- Code duplication: ≤5% duplicate code blocks
+- Linting violations: 0 errors (warnings allowed)
+
+Quarterly code health reviews shall address declining trends before technical debt accumulates.
+
+**Rationale**: Code quality degradation increases future maintenance costs; preventive quality enforcement reduces long-term burden.
+
+---
+
+===== 2.2.9.5 Maintenance Process Requirements
+
+**MP-001: Version Control and Release Management**
+The system shall maintain semantic versioning (MAJOR.MINOR.PATCH) with documented release notes for each version. Breaking changes shall increment MAJOR version, feature additions shall increment MINOR version, and bug fixes shall increment PATCH version.
+
+**MP-002: Backwards Compatibility Policy**
+The system shall maintain data format compatibility across N-1 versions (e.g., version 2.0 must read data written by version 1.9). Breaking data format changes shall be announced 60 days in advance with migration tools provided.
+
+**MP-003: Maintenance Documentation Requirements**
+All maintenance activities shall be documented in the project logbook (Section 1.7) including:
+- Date and version affected
+- Issue type (Adaptive/Corrective/Perfective/Preventive)
+- Root cause analysis
+- Solution implemented
+- Testing performed
+
+**MP-004: Maintenance Resource Allocation**
+The project maintenance plan shall allocate development effort using the following distribution:
+- 40% Adaptive maintenance (new features, platform updates)
+- 30% Corrective maintenance (bug fixes)
+- 20% Perfective maintenance (optimization)
+- 10% Preventive maintenance (monitoring, testing infrastructure)
+
+Resource allocation shall be reviewed quarterly and adjusted based on actual maintenance workload.
+
+---
+
+===== 2.2.9.6 Maintenance Success Metrics
+
+The effectiveness of maintenance requirements shall be measured using:
+
+| Metric | Target | Measurement Frequency |
+|--------|--------|----------------------|
+| **Mean Time to Repair (MTTR)** | <48 hours for critical issues | Weekly |
+| **Defect Recurrence Rate** | <5% of fixed bugs reappear | Monthly |
+| **User-Reported Defect Rate** | <2 defects per 1000 active users | Monthly |
+| **Maintenance Cost Ratio** | <30% of total development effort | Quarterly |
+| **Platform Compatibility Rate** | 100% on supported OS versions | Per release |
+| **Security Vulnerability Exposure** | 0 HIGH/CRITICAL unfixed for >7 days | Continuous |
+
+---
+
+===== 2.2.9.7 Integration with Existing Requirements
+
+**Relationship to Machine Requirements (Section 2.2.5)**:
+- Maintenance requirements extend performance requirements by defining how performance targets are maintained over time
+- Dependability attributes (when added) will require maintenance procedures for ensuring continued reliability
+
+**Relationship to Interface Requirements (Section 2.2.4)**:
+- Adaptive maintenance may require interface requirement updates when new input methods are added
+- Corrective maintenance addresses interface defects reported by users
+
+**Relationship to Domain Requirements (Section 2.2.3)**:
+- Perfective maintenance improves alignment between system implementation and domain model
+- Adaptive maintenance extends domain coverage (new language pairs, new pronunciation features)
+
+**Relationship to Validation (Section 3.2)**:
+- Maintenance activities trigger re-validation of affected requirements
+- Preventive maintenance includes continuous validation testing
+
+---
+
 === 2.3 Implementation
 
 ==== 2.3.1 Software Architecture
