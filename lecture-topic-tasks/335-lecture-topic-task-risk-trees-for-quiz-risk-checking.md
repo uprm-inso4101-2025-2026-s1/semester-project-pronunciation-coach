@@ -7,10 +7,10 @@ author: "Adriel-bracero"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-17T21:13:03Z"
-updated_at: "2025-11-19T19:07:42Z"
+updated_at: "2025-11-21T04:10:49Z"
 ---
 
 # [Lecture Topic Task]: <Risk trees for quiz risk checking>
@@ -20,7 +20,7 @@ updated_at: "2025-11-19T19:07:42Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-17T21:13:03Z
 
