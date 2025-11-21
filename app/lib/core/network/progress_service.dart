@@ -5,6 +5,7 @@ import '../common/user_progress_stats.dart';
 
 class ProgressService {
   final SupabaseClient _supabase = Supabase.instance.client;
+  static final List<QuizAttempt> historyList = [];
 
   int? get _userId {
     final user = _supabase.auth.currentUser;
@@ -55,6 +56,9 @@ class ProgressService {
 
       await _supabase.from('user_progress').upsert(data);
     } catch (e) {
+      if (isMissingTable(e, 'user_progress')) {
+        return;
+      }
       rethrow;
     }
   }
@@ -63,6 +67,7 @@ class ProgressService {
   /// Does nothing for guest users to prevent unauthorized writes
   Future<void> createQuizAttempt(QuizAttempt attempt) async {
     if (_isGuest) {
+      saveAttempt(attempt);
       return; // Don't save attempts for guests
     }
 
@@ -72,8 +77,13 @@ class ProgressService {
 
       await _supabase.from('quiz_attempts').insert(data);
     } catch (e) {
+      if (isMissingTable(e, 'quiz_attempts')) {
+        saveAttempt(attempt);
+        return;
+      }
       rethrow;
     }
+    saveAttempt(attempt);
   }
 
   /// Get quiz attempts for statistics calculation
@@ -83,7 +93,7 @@ class ProgressService {
     int? limit,
   }) async {
     if (_isGuest) {
-      return []; // Guests have no attempts
+      return List.unmodifiable(historyList); // Guests have no attempts
     }
 
     try {
@@ -110,9 +120,13 @@ class ProgressService {
         attempts = attempts.take(limit).toList();
       }
 
+      if (attempts.isEmpty) {
+        return List.unmodifiable(historyList);
+      }
+
       return attempts;
     } catch (e) {
-      return [];
+      return List.unmodifiable(historyList);
     }
   }
 
@@ -212,5 +226,20 @@ class ProgressService {
   Future<void> clearGuestData() async {
     // This method can be used to explicitly clear any in-memory cached data
     // if your app implements caching
+  }
+
+  bool isMissingTable(Object error, String tableName) {
+    if (error is PostgrestException) {
+      final message = error.message ?? '';
+      return message.contains("table 'public.$tableName'");
+    }
+    return false;
+  }
+
+  void saveAttempt(QuizAttempt attempt) {
+    historyList.insert(0, attempt);
+    if (historyList.length > 50) {
+      historyList.removeLast();
+    }
   }
 }
