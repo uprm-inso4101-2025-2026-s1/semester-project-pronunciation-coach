@@ -8,10 +8,10 @@ labels: [
   "Team 4",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-20T18:22:00Z"
-updated_at: "2025-11-20T18:22:09Z"
+updated_at: "2025-11-21T17:35:54Z"
 ---
 
 # [Lecture Topic Task]: Add Difficulty Filter to Quiz History Using Encapsulation & Abstraction
@@ -22,7 +22,7 @@ updated_at: "2025-11-20T18:22:09Z"
   "Team 4",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-20T18:22:00Z
 
