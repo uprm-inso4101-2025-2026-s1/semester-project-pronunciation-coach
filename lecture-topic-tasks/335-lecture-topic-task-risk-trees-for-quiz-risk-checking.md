@@ -1,16 +1,16 @@
 ---
 issue_number: 335
 title: "[Lecture Topic Task]: <Risk trees for quiz risk checking>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/335"
 author: "Adriel-bracero"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-17T21:13:03Z"
-updated_at: "2025-11-21T04:10:49Z"
+updated_at: "2025-11-21T17:44:53Z"
 ---
 
 # [Lecture Topic Task]: <Risk trees for quiz risk checking>
@@ -20,7 +20,7 @@ updated_at: "2025-11-21T04:10:49Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-17T21:13:03Z
 
