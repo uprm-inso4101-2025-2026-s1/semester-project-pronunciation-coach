@@ -15,6 +15,7 @@ class QuizHistoryPage extends StatefulWidget {
 
 class _QuizHistoryPageState extends State<QuizHistoryPage> {
   final QuizHistoryController _controller = QuizHistoryController();
+  String filterDificulty = 'all';
   late Future<QuizHistoryLoadResult> _historyFuture;
 
   @override
@@ -32,6 +33,15 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
       _historyFuture = _loadHistory();
     });
     await _historyFuture;
+  }
+
+  List<QuizAttempt> filterAttempts(List<QuizAttempt> attempts) {
+    if (filterDificulty == 'all') {
+      return attempts;
+    }
+
+    final lettered = filterDificulty.toLowerCase();
+    return attempts.where((a) => a.difficulty.toLowerCase() == lettered).toList();
   }
 
   @override
@@ -89,11 +99,22 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
             );
           }
 
+          final filteredAttempts = filterAttempts(attempts);
+
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             children: [
               _HistoryInsights(attempts: attempts),
+              const SizedBox(height: 16),
+              DifficultySlider(
+                selectedDifficulty: filterDificulty,
+                onPressed: (i) {
+                  setState(() {
+                    filterDificulty = i;
+                  });
+                },
+              ),
               const SizedBox(height: 20),
               const Text(
                 'Recent Attempts',
@@ -104,14 +125,27 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
                 ),
               ),
               const SizedBox(height: 12),
-              for (final attempt in attempts)
+              if(filteredAttempts.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: QuizAttemptContainer(attempt: attempt),
-                ),
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+                  child: Text(
+                    'No quizzes on this difficulty yet.',
+                    style: TextStyle(
+                      color: AppColors.textMuted.withValues(alpha: 0.9),
+                      fontSize: 13,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              else
+                for (final attempt in filteredAttempts)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: QuizAttemptContainer(attempt: attempt),
+                  ),
               const SizedBox(height: 8),
               Text(
-                'Showing last ${attempts.length} quizzes',
+                'Showing ${filteredAttempts.length} of ${attempts.length} quizzes',
                 style: TextStyle(
                   color: AppColors.textMuted.withValues(alpha: 0.9),
                   fontSize: 13,
@@ -235,6 +269,42 @@ class _HistoryInsights extends StatelessWidget {
       }
       return current.xpEarned > prev.xpEarned ? current : prev;
     });
+  }
+}
+
+class DifficultySlider extends StatelessWidget {
+  final String selectedDifficulty;
+  final ValueChanged<String> onPressed;
+
+  const DifficultySlider({super.key, 
+    required this.selectedDifficulty,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final dificulties = ['all', 'easy', 'medium', 'hard'];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Wrap(
+          spacing: 8,
+          children: [
+            for (final i in dificulties)
+              ChoiceChip(
+                label: Text(
+                  capitalizeDifficulty(i),
+                ),
+                selected: selectedDifficulty.toLowerCase() == i,
+                selectedColor: AppColors.primary.withValues(alpha: 0.15),
+                backgroundColor: AppColors.background,
+                onSelected: (_) => onPressed(i),
+              ),
+          ],
+        ),
+      ],
+    );
   }
 }
 
