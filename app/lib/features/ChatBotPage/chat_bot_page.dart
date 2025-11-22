@@ -1,6 +1,30 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// CHATBOT PAGE - AI PRONUNCIATION COACH INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Interactive chat interface for user-AI communication
+/// - Provides conversational pronunciation coaching
+/// - Features smooth animations and realistic chat experience
+/// - Simulates AI responses with typing indicators
+/// 
+/// KEY FEATURES:
+/// - Animated message transitions with slide effects
+/// - Real-time typing indicators
+/// - Pre-defined AI response system
+/// - Modern chat UI with gradient app bar
+/// - Responsive design for all screen sizes
+/// 
+/// ARCHITECTURE:
+/// - Stateful widget with SingleTickerProviderStateMixin
+/// - AnimatedList for smooth message management
+/// - Custom typing indicator with animation
+/// - Random response selection for variety
+/// ===========================================================================
+
 class ChatbotPage extends StatefulWidget {
   const ChatbotPage({super.key});
 
@@ -10,10 +34,17 @@ class ChatbotPage extends StatefulWidget {
 
 class _ChatbotPageState extends State<ChatbotPage>
     with SingleTickerProviderStateMixin {
+  // Text editing controller for message input
   final TextEditingController _controller = TextEditingController();
+  
+  // Key for animated list to manage message transitions
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  
+  // List to store all chat messages with sender and text
   final List<Map<String, String>> _messages = [];
 
+  /// Pre-defined responses for the AI pronunciation coach
+  /// These simulate AI responses until full AI integration
   final List<String> _botResponses = [
     "I'm still learning to talk, please be patient 😅",
     "That sounds interesting!",
@@ -23,19 +54,29 @@ class _ChatbotPageState extends State<ChatbotPage>
     "Cool! Tell me more about that.",
   ];
 
+  /// Tracks whether the bot is currently "typing"
   bool _botTyping = false;
 
+  /// =========================================================================
+  /// MESSAGE MANAGEMENT
+  /// =========================================================================
+  
+  /// Handles sending user messages and triggering bot responses
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
 
+    // Create user message object
     final userMessage = {'sender': 'user', 'text': text};
 
+    // Clear input and add message to chat
     _controller.clear();
     _insertMessage(userMessage);
 
+    // Show typing indicator
     setState(() => _botTyping = true);
 
+    // Simulate AI processing delay and response
     Future.delayed(const Duration(milliseconds: 1200), () {
       final randomResponse =
           _botResponses[Random().nextInt(_botResponses.length)];
@@ -44,6 +85,7 @@ class _ChatbotPageState extends State<ChatbotPage>
     });
   }
 
+  /// Inserts a new message into the animated list with smooth transition
   void _insertMessage(Map<String, String> message) {
     _messages.add(message);
     _listKey.currentState?.insertItem(
@@ -52,6 +94,11 @@ class _ChatbotPageState extends State<ChatbotPage>
     );
   }
 
+  /// =========================================================================
+  /// UI BUILDING METHODS
+  /// =========================================================================
+  
+  /// Builds individual message bubbles with animations
   Widget _buildMessage(
     Map<String, String> message,
     Animation<double> animation,
@@ -98,6 +145,7 @@ class _ChatbotPageState extends State<ChatbotPage>
     );
   }
 
+  /// Builds animated typing indicator for bot responses
   Widget _buildTypingIndicator() {
     return AnimatedOpacity(
       opacity: _botTyping ? 1 : 0,
@@ -172,8 +220,12 @@ class _ChatbotPageState extends State<ChatbotPage>
         ),
       ),
 
+      /// =====================================================================
+      /// MAIN CHAT INTERFACE
+      /// =====================================================================
       body: Column(
         children: [
+          // Message list area
           Expanded(
             child: AnimatedList(
               key: _listKey,
@@ -184,13 +236,20 @@ class _ChatbotPageState extends State<ChatbotPage>
                   _buildMessage(_messages[index], animation),
             ),
           ),
+          
+          // Typing indicator (only visible when bot is typing)
           if (_botTyping) _buildTypingIndicator(),
+          
+          // Input area divider
           const Divider(height: 1),
+          
+          // Message input section
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Row(
                 children: [
+                  // Text input field
                   Expanded(
                     child: TextField(
                       controller: _controller,
@@ -211,6 +270,8 @@ class _ChatbotPageState extends State<ChatbotPage>
                     ),
                   ),
                   const SizedBox(width: 6),
+                  
+                  // Send button
                   GestureDetector(
                     onTap: _sendMessage,
                     child: CircleAvatar(
@@ -229,6 +290,21 @@ class _ChatbotPageState extends State<ChatbotPage>
   }
 }
 
+/// ===========================================================================
+/// TYPING INDICATOR COMPONENT
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Visual representation of AI "typing" state
+/// - Animated dots that bounce to simulate typing activity
+/// - Provides user feedback that AI is processing response
+/// 
+/// ANIMATION:
+/// - Three dots with sinusoidal vertical movement
+/// - Continuous looping animation
+/// - Smooth bouncing effect
+/// ===========================================================================
+
 class TypingIndicator extends StatefulWidget {
   const TypingIndicator({super.key});
 
@@ -243,6 +319,7 @@ class TypingIndicatorState extends State<TypingIndicator>
   @override
   void initState() {
     super.initState();
+    // Create animation controller with 1-second loop
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -263,6 +340,7 @@ class TypingIndicatorState extends State<TypingIndicator>
         return AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
+            // Calculate vertical offset using sine wave for bouncing effect
             final offset = sin((_controller.value * 2 * pi) + (i * 0.5));
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
