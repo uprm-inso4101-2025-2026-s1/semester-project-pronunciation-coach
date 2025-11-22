@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Yulio7"
 labels: [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-19T19:44:54Z"
-updated_at: "2025-11-21T19:18:48Z"
+updated_at: "2025-11-22T04:01:32Z"
 ---
 
 # [Lecture Topic Task] <Layered Architecture Mapping (Domain / Application / Presentation / Infrastructure)>
@@ -19,8 +18,7 @@ updated_at: "2025-11-21T19:18:48Z"
 - **Author:** @Yulio7
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-19T19:44:54Z
 
