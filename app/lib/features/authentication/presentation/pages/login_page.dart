@@ -113,25 +113,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _onContinueAsGuest() async {
-    // Play transition sound for guest mode
-    _soundService.playTransition();
-
-    try {
-      await AppSupabase.client.auth.signOut();
-    } catch (e) {
-      // Ignore sign out errors for guests
-    }
-
-    if (!mounted) return;
-
-    _showSnack('Continuing as guest - progress will not be saved');
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-    );
-  }
-
   void _onCreateAccount() {
     // Play button click for create account navigation
     _soundService.playButtonClick();
@@ -456,85 +437,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
 
-                      SizedBox(height: 4.h),
-
-                      // Divider
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Colors.grey.shade400,
-                              thickness: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text(
-                              'or, continue as guest',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.textMuted,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Colors.grey.shade400,
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      // Continue as Guest Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 7.h,
-                        child: OutlinedButton(
-                          onPressed: _onContinueAsGuest,
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3.w),
-                            ),
-                            side: BorderSide(
-                              color: AppColors.primary,
-                              width: 2,
-                            ),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.person_off_outlined,
-                                color: AppColors.primary,
-                                size: 16.sp,
-                              ),
-                              SizedBox(width: 3.w),
-                              Text(
-                                'Continue as Guest',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 1.h),
-                      Text(
-                        'Note: Progress will not be saved',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: Colors.orange[700],
-                          fontSize: 11.sp,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                       SizedBox(height: 2.h),
                     ],
                   ),
