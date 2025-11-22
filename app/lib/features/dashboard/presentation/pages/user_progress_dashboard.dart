@@ -13,6 +13,9 @@ import '../widgets/monthly_practice_calendar.dart';
 import 'package:app/features/profile/presentation/pages/profile_page.dart';
 import '/core/common/sound_service.dart';
 
+/// ===========================================================================
+/// MAIN APPLICATION ENTRY POINT
+/// ===========================================================================
 void main() {
   runApp(const MyApp());
 }
@@ -35,9 +38,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// -------------------------------
-///  MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
-/// -------------------------------
+/// ===========================================================================
+/// MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Root navigation container with bottom tab bar
+/// - Manages screen transitions between main app sections
+/// - Provides consistent navigation structure
+/// 
+/// SECTIONS:
+/// - Home: Main landing page with activities
+/// - Dashboard: Progress tracking and statistics
+/// - Quiz: Pronunciation assessment and practice
+/// - Profile: User settings and account management
+/// ===========================================================================
+
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -61,6 +77,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     ];
   }
 
+  /// Handle tab navigation with sound feedback
   void _onTabTapped(int index) {
     // Play transition sound when changing tabs
     SoundService().playTransition();
@@ -128,9 +145,23 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 }
 
-/// -------------------------------
-///  USER PROGRESS DASHBOARD (UPDATED - NO DRAWER)
-/// -------------------------------
+/// ===========================================================================
+/// USER PROGRESS DASHBOARD - PROGRESS TRACKING INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Comprehensive progress tracking and visualization
+/// - Real-time statistics from ProgressService
+/// - Practice calendar and achievement display
+/// - Guest user handling with login prompts
+/// 
+/// FEATURES:
+/// - Progress overview cards with improvement indicators
+/// - Practice statistics and streak tracking
+/// - Monthly practice calendar visualization
+/// - Learning pace selection integration
+/// ===========================================================================
+
 class UserProgressDashboard extends StatefulWidget {
   final double? accuracyRate;
   final int? wordsPracticed;
@@ -187,6 +218,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     super.dispose();
   }
 
+  /// Load user progress data from ProgressService
   Future<void> _loadUserProgress() async {
     try {
       final progressService = ProgressService();
@@ -278,6 +310,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build authenticated user dashboard with full features
   Widget _buildAuthenticatedView() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -338,6 +371,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Display current learning pace selection
   Widget _buildSelectedPace(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
@@ -379,6 +413,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build progress overview cards with key metrics
   Widget _buildProgressOverview() {
     if (_userProgress == null) {
       return Container(
@@ -438,6 +473,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build individual overview card with improvement indicator
   Widget _buildOverviewCard(
     String title,
     String value,
@@ -500,6 +536,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build practice statistics section
   Widget _buildPracticeStatistics() {
     if (_userProgress == null) {
       return Container(
@@ -592,6 +629,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build guest user view with login prompt
   Widget _buildGuestView() {
     return Center(
       child: SingleChildScrollView(
@@ -685,6 +723,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build feature item for guest view
   Widget _buildFeatureItem(IconData icon, String text) {
     return Row(
       children: [
@@ -695,6 +734,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
     );
   }
 
+  /// Build individual statistic item
   Widget _buildStatItem(
     String title,
     String value,
