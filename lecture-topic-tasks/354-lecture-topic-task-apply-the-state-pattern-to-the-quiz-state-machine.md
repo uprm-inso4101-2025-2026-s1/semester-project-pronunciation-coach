@@ -10,7 +10,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-22T20:50:42Z"
+updated_at: "2025-11-22T20:50:51Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
@@ -68,13 +68,13 @@ Estimated completion time: 1 day
 ## ⚡ Urgency
 - [ ] Low  
 - [ ] Medium  
-- [ ] High  
+- [x] High  
 
 ---
 
 ## 🎚️ Difficulty
 - [ ] Easy  
-- [ ] Moderate  
+- [x] Moderate  
 - [ ] Hard  
 
 ---
