@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Yulio7"
 labels: [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-19T19:41:15Z"
-updated_at: "2025-11-21T19:20:38Z"
+updated_at: "2025-11-22T04:00:40Z"
 ---
 
 # [Lecture Topic Task] <Define Entities, Events, Functions, and Behaviors>
@@ -19,8 +18,7 @@ updated_at: "2025-11-21T19:20:38Z"
 - **Author:** @Yulio7
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-19T19:41:15Z
 
