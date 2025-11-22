@@ -10,7 +10,29 @@ import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
 
-// ignore_for_file: use_build_context_synchronously
+/// ===========================================================================
+/// LOGIN PAGE - AUTHENTICATION INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Primary login screen for user authentication
+/// - Handles email/password login with Supabase backend
+/// - Provides navigation to signup and password recovery
+/// - Implements sound feedback for user interactions
+/// 
+/// KEY FEATURES:
+/// - Form validation for email and password
+/// - Loading states with visual feedback
+/// - Sound effects for user interactions
+/// - "Remember me" functionality
+/// - Error handling with user-friendly messages
+/// 
+/// ARCHITECTURE:
+/// - Stateful widget managing form state and authentication flow
+/// - Integration with LoadingSystem for loading states
+/// - SoundService for audio feedback
+/// - Supabase client for backend authentication
+/// ===========================================================================
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,18 +42,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Form management
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
 
+  // UI state management
   bool _rememberMe = false;
   bool _loading = false;
+  
+  // Service dependencies
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
 
   @override
   void initState() {
     super.initState();
+    // Observer pattern: Listen to loading state changes
     _loadingSystem.addLoadingListener((isLoading) {
       if (mounted) {
         setState(() {
@@ -43,12 +70,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    // Cleanup: Remove listeners and controllers
     _loadingSystem.removeLoadingListener((isLoading) {});
     _emailCtrl.dispose();
     _passCtrl.dispose();
     super.dispose();
   }
 
+  /// Display snackbar message for user feedback
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -60,12 +89,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Handle user sign-in authentication
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
     // Play loading sound for authentication process
     _soundService.playFactReveal();
 
+    // Show loading overlay using LoadingSystem
     _loadingSystem.showLoading(
       context: context,
       message: 'Signing you in...',
@@ -78,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
-      // Sign in with Supabase
+      // Sign in with Supabase authentication
       await AppSupabase.client.auth.signInWithPassword(
         email: email,
         password: password,
@@ -86,55 +117,54 @@ class _LoginPageState extends State<LoginPage> {
 
       if (!mounted) return;
 
-      // Play success sound for successful login
+      // Authentication successful
       _soundService.playLoadingSuccess();
       _loadingSystem.hideLoading(context);
 
-      // Play transition sound before navigation
+      // Navigate to main app screen
       _soundService.playTransition();
-
       navigator.pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
+      // Handle authentication-specific errors
       if (mounted) {
         _soundService.playWrongAnswer();
         _loadingSystem.hideLoading(context);
       }
       _showSnack(e.message);
     } catch (e) {
+      // Handle generic errors
       if (mounted) {
         _soundService.playWrongAnswer();
         _loadingSystem.hideLoading(context);
       }
       _showSnack('Unexpected error. Please try again.');
     } finally {
+      // Reset loading state
       if (mounted) setState(() => _loading = false);
     }
   }
 
+  /// Navigate to account creation screen
   void _onCreateAccount() {
-    // Play button click for create account navigation
     _soundService.playButtonClick();
-
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
+  /// Handle forgot password flow (placeholder)
   void _onForgotPassword() {
-    // Play button click for forgot password
     _soundService.playButtonClick();
     _showSnack('Password reset feature coming soon!');
   }
 
+  /// Toggle remember me preference
   void _onRememberMeChanged(bool? value) {
-    // Play button click for checkbox
     _soundService.playButtonClick();
     setState(() => _rememberMe = value ?? false);
   }
 
-  // Wrap the MyTextField with GestureDetector for tap sounds
+  /// Build email field with tap sound functionality
   Widget _buildEmailField() {
     return GestureDetector(
       onTap: () {
@@ -161,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Build password field with tap sound functionality
   Widget _buildPasswordField() {
     return GestureDetector(
       onTap: () {
@@ -188,6 +219,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Validate email format
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';
     if (value.isEmpty) return 'Please enter your email';
@@ -196,6 +228,7 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  /// Validate password requirements
   String? _validatePass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';

@@ -3,16 +3,40 @@ import 'package:flutter/material.dart';
 import 'loading_screens_core.dart';
 import '../../../../core/common/colors.dart';
 
+/// ===========================================================================
+/// LOADING SYSTEM - MAIN LOADING MANAGEMENT CLASS
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Centralized loading state management for the entire application
+/// - Provides show/hide loading functionality with various strategies
+/// - Implements Observer pattern for loading state notifications
+/// - Uses Decorator pattern for enhanced loading configurations
+/// 
+/// DESIGN PATTERNS:
+/// - SINGLETON: Single instance across the app
+/// - OBSERVER: Notifies listeners of loading state changes
+/// - DECORATOR: Enhances loading configurations with additional features
+/// 
+/// KEY FEATURES:
+/// - Multiple loading strategies (wave, progress, morphing, typing)
+/// - Customizable configurations (background, blur effects)
+/// - State change notifications for UI updates
+/// - Barrier dismissal control
+/// ===========================================================================
+
 /// Main Loading System using Decorator and Observer Patterns
 class LoadingSystem {
+  // SINGLETON PATTERN: Ensure single instance
   static final LoadingSystem _instance = LoadingSystem._internal();
   factory LoadingSystem() => _instance;
   LoadingSystem._internal();
 
-  // Observer pattern for loading state changes
+  // OBSERVER PATTERN: Loading state change listeners
   final List<Function(bool)> _loadingListeners = [];
 
-  /// Decorator Pattern: Enhanced loading configuration
+  /// DECORATOR PATTERN: Enhanced loading configuration
+  /// Adds additional features like background color and blur effects
   LoadingConfiguration _createEnhancedConfiguration(
     LoadingStrategy strategy,
     String context,
@@ -25,14 +49,17 @@ class LoadingSystem {
     );
   }
 
+  /// OBSERVER PATTERN: Add listener for loading state changes
   void addLoadingListener(Function(bool) listener) {
     _loadingListeners.add(listener);
   }
 
+  /// OBSERVER PATTERN: Remove loading state listener
   void removeLoadingListener(Function(bool) listener) {
     _loadingListeners.remove(listener);
   }
 
+  /// OBSERVER PATTERN: Notify all listeners of loading state change
   void _notifyLoadingListeners(bool isLoading) {
     for (final listener in _loadingListeners) {
       listener(isLoading);
@@ -46,6 +73,7 @@ class LoadingSystem {
     required String message,
     String contextType = 'general',
   }) {
+    // DECORATOR PATTERN: Create enhanced configuration
     final config = _createEnhancedConfiguration(strategy, contextType);
 
     showDialog(
@@ -56,6 +84,7 @@ class LoadingSystem {
           _LoadingOverlay(configuration: config, message: message),
     );
 
+    // OBSERVER PATTERN: Notify listeners of loading state
     _notifyLoadingListeners(true);
   }
 
@@ -66,7 +95,20 @@ class LoadingSystem {
   }
 }
 
-/// Decorator Pattern: Enhanced Loading Configuration
+/// ===========================================================================
+/// DECORATOR PATTERN: Enhanced Loading Configuration
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Wraps base loading strategy with additional visual features
+/// - Provides context-specific customization options
+/// - Extends functionality without modifying core loading logic
+/// 
+/// ENHANCEMENTS:
+/// - Custom background colors with opacity control
+/// - Blur effects for modern UI appearance
+/// - Context-based theming options
+/// ===========================================================================
 class LoadingConfiguration {
   final LoadingStrategy strategy;
   final String context;
@@ -81,7 +123,20 @@ class LoadingConfiguration {
   });
 }
 
-/// Loading Overlay Widget
+/// ===========================================================================
+/// LOADING OVERLAY WIDGET
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Actual widget displayed during loading states
+/// - Applies enhanced configuration from Decorator pattern
+/// - Delegates content building to current strategy (Strategy pattern)
+/// 
+/// FEATURES:
+/// - Non-dismissible overlay (barrierDismissible: false)
+/// - Semi-transparent background
+/// - Centered loading content with shadow effects
+/// ===========================================================================
 class _LoadingOverlay extends StatelessWidget {
   final LoadingConfiguration configuration;
   final String message;
@@ -123,6 +178,7 @@ class _LoadingOverlay extends StatelessWidget {
             ),
           ],
         ),
+        // STRATEGY PATTERN: Delegate to current strategy
         child: configuration.strategy.buildLoadingWidget(context, message),
       ),
     );
