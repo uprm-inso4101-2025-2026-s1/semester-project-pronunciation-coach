@@ -10,7 +10,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-22T20:50:32Z"
+updated_at: "2025-11-22T20:50:42Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
