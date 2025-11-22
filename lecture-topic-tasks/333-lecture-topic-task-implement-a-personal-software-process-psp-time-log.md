@@ -6,10 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "jorge-belgo2"
 labels: [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-17T18:03:19Z"
-updated_at: "2025-11-17T18:03:29Z"
+updated_at: "2025-11-22T04:02:54Z"
 ---
 
 # [Lecture Topic Task]: <Implement a Personal Software Process (PSP) Time Log>
@@ -18,7 +18,7 @@ updated_at: "2025-11-17T18:03:29Z"
 - **Author:** @jorge-belgo2
 - **Labels:** [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-17T18:03:19Z
 
