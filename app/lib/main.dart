@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import 'features/dashboard/presentation/widgets/welcome_screen.dart';
