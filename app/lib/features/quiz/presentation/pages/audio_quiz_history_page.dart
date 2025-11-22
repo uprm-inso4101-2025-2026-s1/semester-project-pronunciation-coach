@@ -302,6 +302,7 @@ class DifficultySlider extends StatelessWidget {
                 onSelected: (_) => onPressed(i),
               ),
           ],
+          
         ),
       ],
     );
