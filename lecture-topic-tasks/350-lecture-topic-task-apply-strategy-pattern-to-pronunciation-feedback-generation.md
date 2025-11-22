@@ -7,11 +7,10 @@ author: "Gabriel-Visbal"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: waiting for manager"
+  "task: development"
 ]
 created_at: "2025-11-22T03:01:53Z"
-updated_at: "2025-11-22T03:02:03Z"
+updated_at: "2025-11-22T04:02:03Z"
 ---
 
 # [Lecture Topic Task]: Apply Strategy Pattern to Pronunciation Feedback Generation
@@ -21,8 +20,7 @@ updated_at: "2025-11-22T03:02:03Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: waiting for manager"
+  "task: development"
 ]
 - **Created:** 2025-11-22T03:01:53Z
 
