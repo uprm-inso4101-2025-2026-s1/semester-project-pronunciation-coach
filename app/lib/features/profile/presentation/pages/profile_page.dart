@@ -138,37 +138,32 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // -------------------------------------------------------
-  //                 IMPROVED PROFILE HEADER
-  // -------------------------------------------------------
   Widget _buildProfileHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Bigger level circle
           Container(
-            width: 170,
-            height: 170,
+            width: 190,
+            height: 190,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [
-                  Colors.blue.withOpacity(0.15),
-                  Colors.blue.withOpacity(0.08),
+                  Colors.blue.withValues(alpha: 0.15),
+                  Colors.blue.withValues(alpha: 0.08),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -182,7 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     "Lvl",
                     style: TextStyle(
                       color: Colors.blue.shade700,
-                      fontSize: 22,
+                      fontSize: 24,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -192,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         : _getUserLevel(_userProgress!.totalXp).toString(),
                     style: TextStyle(
                       color: Colors.blue.shade700,
-                      fontSize: 42,
+                      fontSize: 48,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -201,9 +196,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
-          // Email (always one line)
           SizedBox(
             width: double.infinity,
             child: Text(
@@ -223,9 +217,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // -------------------------------------------------------
-  //              ACHIEVEMENTS SECTION LOGIC
-  // -------------------------------------------------------
   Widget _buildAchievementsSection() {
     if (_isLoading) {
       return Container(
@@ -310,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.05),
+          color: Colors.black.withValues(alpha: 0.05),
           blurRadius: 10,
           offset: const Offset(0, 3),
         ),
