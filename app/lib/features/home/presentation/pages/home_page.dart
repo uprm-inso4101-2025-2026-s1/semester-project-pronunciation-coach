@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:app/features/dashboard/presentation/widgets/home_sections.dart';
 import 'package:app/features/ChatBotPage/chat_bot_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-// Progress / stats
 import '../../../../core/network/progress_service.dart';
 import '../../../../core/common/user_progress.dart';
 
@@ -28,10 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _avatarUrl =
       'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
   String _proficiencyLevel = 'Pronunciation learner';
-
-  // Stats from user_progress
-  int _activeDays = 0;           // will be currentStreak
-  int _challengesCompleted = 0;  // will be challengesCompleted
+  int _activeDays = 0;      
+  int _challengesCompleted = 0;  
 
   @override
   void initState() {
