@@ -43,7 +43,7 @@ class XApiClient {
 
   // Public API: sending an xAPI statement
   /// Gets the xAPI statements endpoint URI from environment configuration
-  Uri get _statementsUri => Uri.parse('${env.Env.xApiBaseUrl}/xapi/statements');
+  //Uri get _statementsUri => Uri.parse('${env.Env.xApiBaseUrl}/xapi/statements');
 
   /// Sends an xAPI statement to the Learning Record Store (LRS).
   /// 
