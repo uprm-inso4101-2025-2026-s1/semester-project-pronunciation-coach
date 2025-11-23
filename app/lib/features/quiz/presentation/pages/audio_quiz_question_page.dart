@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../../../core/network/progress_service.dart';
@@ -10,14 +11,14 @@ import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_result_page.dart';
 
 /// ===========================================================================
-/// AUDIO QUIZ QUESTION PAGE 
-/// 
+/// AUDIO QUIZ QUESTION PAGE
+///
 /// This file contains the main quiz interface where users:
 /// - Listen to audio pronunciations
 /// - Select their answer
 /// - Submit and get immediate feedback
 /// - Navigate to results
-/// 
+///
 /// KEY FEATURES:
 /// - Audio playback with visual feedback
 /// - Answer selection with state management
@@ -52,6 +53,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
   bool _hasAnswered = false;
   bool _isCorrect = false;
   bool _isPlayingAudio = false;
+  bool _autoPlayEnabled = false;
 
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
@@ -79,6 +81,29 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     super.initState();
     _audioPlayer.setReleaseMode(ReleaseMode.release);
     _setupAnimations();
+    _loadAutoPlaySetting();
+  }
+
+  Future<void> _loadAutoPlaySetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    _autoPlayEnabled =
+        prefs.getBool('settings.autoplay_audio_enabled') ?? false;
+
+    if (_autoPlayEnabled) {
+      // Auto-play all options with delays
+      Future.delayed(const Duration(milliseconds: 500), () => _startAutoPlay());
+    }
+  }
+
+  Future<void> _startAutoPlay() async {
+    if (!mounted || _hasAnswered) return;
+
+    // Play each option sequentially (next plays immediately when current finishes)
+    for (final option in widget.challenge.options) {
+      if (!mounted || _hasAnswered) break;
+
+      await _playAutoAudio(option.letter);
+    }
   }
 
   void _setupAnimations() {
@@ -105,6 +130,62 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     _audioPlayer.dispose();
     _animController.dispose();
     super.dispose();
+  }
+
+  /// Plays audio for autoplay and waits for completion (returns when finished)
+  Future<void> _playAutoAudio(String optionLetter) async {
+    if (_isPlayingAudio && _playingOption != null) {
+      await _audioPlayer.stop();
+    }
+
+    if (!mounted || _hasAnswered) return;
+
+    setState(() {
+      _playingOption = optionLetter;
+      _isPlayingAudio = true;
+    });
+
+    try {
+      await _audioPlayer.stop();
+      final audioUrl = widget.challenge.getAudioUrl(optionLetter);
+      await _audioPlayer.play(UrlSource(audioUrl));
+
+      // Wait for audio completion with timeout
+      try {
+        await _audioPlayer.onPlayerComplete.first.timeout(
+          const Duration(seconds: 10),
+        );
+      } on TimeoutException {
+        await _audioPlayer.stop();
+      } catch (_) {
+        await _audioPlayer.stop();
+      }
+
+      if (mounted) {
+        setState(() {
+          _playingOption = null;
+          _isPlayingAudio = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _playingOption = null;
+          _isPlayingAudio = false;
+        });
+
+        // Only show error for user-triggered audio, not auto-play
+        if (!_autoPlayEnabled) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Could not play audio. Please try again.'),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    }
   }
 
   /// Plays audio for the selected option with error handling and timeout
