@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: <Add New Section 2.3.4 "Domain Engineering Integra
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/140"
 author: "ivxnmorxles"
-labels: ["documentation","Team 3","Task: lecture-topic","state: waiting for manager"]
+labels: [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-06T17:39:28Z"
-updated_at: "2025-10-07T18:55:45Z"
+updated_at: "2025-11-23T00:40:56Z"
 ---
 
 # [Lecture Topic Task]: <Add New Section 2.3.4 "Domain Engineering Integration" for Team 3>
 
 - **Issue:** [140](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/140)
 - **Author:** @ivxnmorxles
-- **Labels:** ["documentation","Team 3","Task: lecture-topic","state: waiting for manager"]
+- **Labels:** [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-06T17:39:28Z
 
 ## Details
@@ -54,3 +64,4 @@ Estimated completion time:  1 day
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: @ivxnmorxles  
+
