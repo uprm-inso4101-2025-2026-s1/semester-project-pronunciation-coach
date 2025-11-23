@@ -12,7 +12,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-23T01:02:59Z"
-updated_at: "2025-11-23T01:02:59Z"
+updated_at: "2025-11-23T01:03:11Z"
 ---
 
 # [Lecture Topic Task]: Applying Observer Pattern to User Progress and Achievement Updates
