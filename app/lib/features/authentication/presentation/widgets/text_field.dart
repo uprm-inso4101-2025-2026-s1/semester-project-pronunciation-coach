@@ -26,12 +26,25 @@ class MyTextField extends StatefulWidget {
 }
 
 class _MyTextFieldState extends State<MyTextField> {
+  // controla si se muestra u oculta el texto cuando es contraseña
+  late bool _obscure;
+
+  @override
+  void initState() {
+    super.initState();
+    // si es un campo de password, empezamos ocultando. Si no, da igual
+    _obscure = widget.isPass ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool isPasswordField = widget.isPass ?? false;
+
     return TextFormField(
       controller: widget.controller,
-      obscureText: widget.isPass ?? false,
-      keyboardType: TextInputType.emailAddress,
+      obscureText: isPasswordField ? _obscure : false,
+      keyboardType:
+          isPasswordField ? TextInputType.text : TextInputType.emailAddress,
       style: TextStyle(fontSize: 14.sp, color: AppColors.textPrimary),
       decoration: InputDecoration(
         labelText: widget.labelText,
@@ -67,6 +80,20 @@ class _MyTextFieldState extends State<MyTextField> {
         prefixIcon: widget.icon,
         filled: true,
         fillColor: Colors.grey.shade50,
+
+        suffixIcon: isPasswordField
+            ? IconButton(
+                icon: Icon(
+                  _obscure ? Icons.visibility_off : Icons.visibility,
+                  color: AppColors.textMuted,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscure = !_obscure;
+                  });
+                },
+              )
+            : null,
       ),
       validator: widget.validator,
     );
