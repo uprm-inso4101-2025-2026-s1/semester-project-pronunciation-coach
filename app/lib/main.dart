@@ -115,7 +115,7 @@ Future<void> main() async {
   }
 
   // Initialize xAPI client (optional - will use defaults if not configured)
-  final XApiClient xapi = XApiClient();
+  final XApiClient xapi = XApiClient.create();
 
   // Initialize session management
   await SessionManager.instance.start();

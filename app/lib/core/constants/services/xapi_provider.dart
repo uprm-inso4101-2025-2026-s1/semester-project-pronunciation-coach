@@ -9,22 +9,20 @@ import 'xapi_client.dart';
 /// when used in more complex scenarios involving UI updates.
 class XApiNotifier with ChangeNotifier {
   XApiNotifier(this._client);
+
   final XApiClient _client;
 
-  /// Sends an xAPI statement to the Learning Record Store (LRS).
-  /// 
-  /// Delegates to the underlying [XApiClient.sendStatement] method while
-  /// providing ChangeNotifier compatibility for reactive state management.
-  /// 
-  /// [statement]: A Map containing the xAPI statement data following the
-  ///              xAPI specification format
-  /// 
-  /// Returns [Future<bool>] indicating success (true) or failure (false)
-  /// of the statement submission.
-  /// 
-  /// Note: This method does not automatically notify listeners. If you need
-  /// to trigger UI updates based on xAPI events, call notifyListeners() after
-  /// successful statement submission.
-  Future<bool> send(Map<String, dynamic> statement) =>
-      _client.sendStatement(statement);
+  String? _lastError;
+  String? get lastError => _lastError;
+
+  Future<bool> send(Map<String, dynamic> statement) async {
+    _lastError = null;
+    final ok = await _client.sendStatement(statement, silent: true);
+    if (!ok) {
+      _lastError = "Failed to send xAPI statement.";
+      notifyListeners();
+    }
+    return ok;
+  }
 }
+
