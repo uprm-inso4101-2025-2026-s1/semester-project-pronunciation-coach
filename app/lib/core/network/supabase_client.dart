@@ -5,13 +5,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../common/env.example.dart'; // Changed back to env.example.dart for it to work
 
 /// Main Supabase client wrapper for initializing and accessing Supabase services.
-/// 
+///
 /// This class provides a centralized interface for Supabase initialization
 /// and client access throughout the application. It handles the setup of
 /// Supabase with proper configuration and environment variables.
 class AppSupabase {
   /// Static Supabase client instance accessible throughout the application.
-  /// 
+  ///
   /// This client provides access to all Supabase features including:
   /// - Database operations (CRUD)
   /// - Authentication services
@@ -20,16 +20,16 @@ class AppSupabase {
   static late final SupabaseClient client;
 
   /// Initializes the Supabase client with environment configuration.
-  /// 
+  ///
   /// This method must be called during application startup before any
   /// Supabase operations are attempted. It performs the following:
   /// - Validates environment configuration
   /// - Initializes Supabase with URL and API key
   /// - Configures authentication options
   /// - Enables debug mode in development
-  /// 
+  ///
   /// Throws [StateError] if environment variables are not properly configured.
-  /// 
+  ///
   /// Usage:
   /// ```dart
   /// void main() async {
@@ -50,5 +50,19 @@ class AppSupabase {
     );
 
     client = Supabase.instance.client;
+  }
+
+  static Future<String?> getUserName() async {
+    final user = client.auth.currentUser;
+
+    if (user == null) return null;
+
+    final response = await client
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+
+    return response['full_name'] as String?;
   }
 }

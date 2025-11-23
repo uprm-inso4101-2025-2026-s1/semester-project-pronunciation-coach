@@ -5,21 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:app/features/dashboard/presentation/widgets/home_sections.dart';
 import 'package:app/features/ChatBotPage/chat_bot_page.dart';
+import 'package:app/core/network/supabase_client.dart';
 
 /// ===========================================================================
 /// HOME SCREEN - MAIN APPLICATION LANDING PAGE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Primary landing page and navigation hub for the application
 /// - Centralized access point to all main features and activities
 /// - Personalized user dashboard with quick access to key functions
-/// 
+///
 /// ARCHITECTURE:
 /// - Stateful widget managing the main home interface
 /// - Integrates multiple dashboard widgets for comprehensive overview
 /// - Provides floating action button for quick chatbot access
-/// 
+///
 /// LAYOUT STRUCTURE:
 /// 1. App Bar: Branding and navigation
 /// 2. User Info Box: Profile summary and statistics
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       // Main background color from app theme
       backgroundColor: AppColors.background,
-      
+
       // Application header with branding
       appBar: AppBar(
         title: const Text(
@@ -54,43 +55,58 @@ class _HomeScreenState extends State<HomeScreen> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
       ),
-      
+
       // Main content area with scrollable layout
       body: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                // User profile and statistics section
-                const UserInfoBox(
-                    name: "Maria Hernandez",
-                    avatarURL: "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
-                    proficiencyLevel: "Intermediate Student",
+        child: FutureBuilder<String?>(
+          future: AppSupabase.getUserName(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 40),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            final fullName = snapshot.data ?? "Guest User";
+            final shortName = fullName.split(" ").first;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // User profile box
+                UserInfoBox(
+                  name: fullName,
+                  avatarURL:
+                      "https://www.applesfromny.com/wp-content/uploads/2020/06/SnapdragonNEW.png",
+                  proficiencyLevel: "Intermediate Student",
                 ),
+
                 const SizedBox(height: 10),
-                
-                // Personalized welcome and quick actions section
-                const WelcomeBackBox(
-                    name: "Maria", 
-                ),
-                const SizedBox(height: 16), // Espacio
-                
-                // Main activity sections and feature cards
+
+                // Welcome box
+                WelcomeBackBox(name: shortName),
+
+                const SizedBox(height: 16),
+
+                // Main dashboard sections
                 const HomeSections(),
-           ],
+              ],
+            );
+          },
         ),
       ),
-      
-      // Quick access floating action button for AI chatbot
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.chat),
-        onPressed: (){
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ChatbotPage()),
-            );
+          );
         },
-      )
+      ),
     );
   }
 }

@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/user_progress.dart';
 import '../../../../core/network/progress_service.dart';
+import '../../../../core/network/supabase_client.dart';
 import '../../widgets/achievements_xp.dart';
 
 /// ===========================================================================
 /// PROFILE PAGE - USER PROFILE AND ACHIEVEMENTS INTERFACE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Central hub for user profile management and achievement tracking
 /// - Displays user progress, statistics, and earned achievements
 /// - Provides access to app settings and information
 /// - Handles both authenticated and guest user states
-/// 
+///
 /// ARCHITECTURE:
 /// - Stateful widget with expandable menu overlay
 /// - Integration with ProgressService for real-time user data
 /// - Dynamic content based on authentication status
 /// - Comprehensive error handling and loading states
-/// 
+///
 /// KEY FEATURES:
 /// - Expandable side menu for additional options
 /// - Achievement and progress visualization
@@ -45,10 +46,14 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _error;
   bool _isGuest = false;
 
+  String? _fullName;
+  bool _isNameLoading = true;
+
   @override
   void initState() {
     super.initState();
     _loadUserProgress();
+    _loadUserName();
   }
 
   /// Load user progress data from ProgressService
@@ -90,6 +95,25 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           _error = e.toString();
           _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadUserName() async {
+    try {
+      final name = await AppSupabase.getUserName();
+      if (mounted) {
+        setState(() {
+          _fullName = name ?? "Guest User";
+          _isNameLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _fullName = "Guest User";
+          _isNameLoading = false;
         });
       }
     }
@@ -185,14 +209,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 16),
                       // User Name
-                      const Text(
-                        'John Doe',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
+                      _isNameLoading
+                          ? const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            )
+                          : Text(
+                              _fullName ?? "Guest User",
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
                       // User Role
                       const Text(
                         'Pronunciation Learner',
