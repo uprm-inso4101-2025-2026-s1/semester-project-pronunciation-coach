@@ -12,7 +12,7 @@ labels: [
   "state: needs fix"
 ]
 created_at: "2025-11-09T22:25:27Z"
-updated_at: "2025-11-23T03:35:33Z"
+updated_at: "2025-11-23T03:35:56Z"
 ---
 
 # [Lecture Topic Task]: Replace Dummy User Names with Supabase Profile Name Using UI-Data Synchronization
@@ -30,41 +30,41 @@ updated_at: "2025-11-23T03:35:33Z"
 
 ## Details
 ## 🎯 Objective
-Apply Design Rationale Documentation principles from Risk Analysis File [Chapter 3 (slides 43 - 45)] to record why specific interface design choices were made for the Pronunciation Feedback Display.
-The goal is to strengthen the documentation process by formally linking each design decision to the underlying problem, explored alternatives, and justification.
+Apply lecture concepts on data binding and dynamic user context integration to replace dummy user name data with the actual profile name retrieved from Supabase.
+
+This task reinforces the principle of connecting UI elements to real backend-driven user context, improving personalization and consistency across the learning interface.
 
 ---
 
 ## 📝 Description
-This task focuses on the structure and traceability of design reasoning rather than NFR trade-offs.
-Following Van Lamsweerde’s approach, the documentation will explicitly capture:
+Following the lecture topic on dynamic data integration in user interfaces, we need to update the Pronunciation Feedback Display so that it no longer uses hard-coded placeholder names. Instead, it should pull the authenticated user’s profile name directly from Supabase.
 
-- The decision question (e.g., "How should pronunciation feedback be shown?")
+This task focuses on:
 
-- The alternatives considered (e.g., text, visual, or audio-based feedback)
+- Applying lecture concepts about UI-data synchronization.
 
-- The criteria for selection (based on user context, accessibility, or learning flow)
+- Ensuring the user interface reflects real authenticated data.
 
-- The final rationale explaining why the chosen design best meets project goals.
+- Replacing temporary mock values with actual profile context.
 
 ---
 
 ## ✅ Acceptance Criteria 
-- [ ] Document at least one design decision record (DDR) entry following the rationale structure: Question → Alternatives → Criteria → Decision → Justification.
-- [ ] Include at least three alternatives and specify which was selected.
-- [ ] Insert the record under Section 3.3 Design Decision Rationale in the documentation.
+- [ ] All dummy or placeholder names are replaced with the real profile name from Supabase.
+- [ ] The UI correctly reflects the authenticated user’s name across all feedback components.
+- [ ] No hard-coded names remain in the display logic.
 
 ---
 
 ## 🧪 Testing Plan
-- Check that each documented decision follows the full rationale structure.
-- Verify all alternatives and criteria are explicitly listed.
-- Confirm the reasoning is understandable without needing additional context.
+- Verify that the correct Supabase profile name appears in the Profile.
+- Test logging in with different accounts to ensure names match their respective profiles.
+- Search for any leftover hard-coded name strings.
 
 ---
 
 ## ⏱️ Timeframe
-2 - 4 Hours
+1 Day
 
 ---
 
@@ -76,8 +76,8 @@ Following Van Lamsweerde’s approach, the documentation will explicitly capture
 ---
 
 ## 🎚️ Difficulty
-- [x] Easy  
-- [ ] Moderate  
+- [ ] Easy  
+- [x] Moderate  
 - [ ] Hard  
 
 ---
