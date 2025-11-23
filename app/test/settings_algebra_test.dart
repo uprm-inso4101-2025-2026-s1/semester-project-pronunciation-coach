@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/core/settings_algebra.dart';
+import '../lib/features/settings/domain/settings_algebra.dart';
 
 void main() {
   group('Settings Algebra Tests', () {

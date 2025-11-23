@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/session_manager.dart';
-import '../../../../core/settings_algebra.dart';
+import '../../domain/settings_algebra.dart';
 
 // ignore_for_file: use_build_context_synchronously
 
@@ -90,19 +90,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   /// Saves current algebraic state to SharedPreferences
   Future<void> _saveSettings() async {
-    if (_prefs != null) {
-      await _prefs.setBool(_notificationsKey, _currentSettings.notifications);
-      // Could save other settings here in the future
-    }
+    await _prefs.setBool(_notificationsKey, _currentSettings.notifications);
+    // Could save other settings here in the future
   }
 
   /// Updates a preference value in SharedPreferences
-  /// [key]: The preference key to update
-  /// [value]: The new boolean value to store
   Future<void> _updatePreference(String key, bool value) async {
-    final prefs = _prefs;
-    if (prefs == null) return;
-    await prefs.setBool(key, value);
+    await _prefs.setBool(key, value);
   }
 
   @override

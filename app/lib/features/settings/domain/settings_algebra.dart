@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
 
-/// ===========================================================================
-/// SETTINGS ALGEBRA: (SettingsState, Operations)
-///
-/// This file implements an algebraic structure for settings management:
-/// - Carrier Set A: SettingsState (all possible settings configurations)
-/// - Operations Ω: SettingsAlgebra (transformations on the carrier set)
-///
-/// All operations maintain the invariant: SettingsState → SettingsState
-/// ===========================================================================
-
-/// Carrier Set A: All possible settings states
-/// Immutable value object representing a settings configuration
+/// Settings algebra implementation: (SettingsState, Operations)
 abstract class SettingsState {
   const SettingsState();
 
-  // Algebraic properties (values in the carrier set)
   bool get notifications;
   bool get soundEffects;
   ThemeMode get theme;
   Difficulty get difficulty;
 
-  /// Factory method for default settings
   static SettingsState defaultState() => const DefaultSettings();
 }
 
-/// Concrete implementation of default settings
 class DefaultSettings extends SettingsState {
   const DefaultSettings();
 
