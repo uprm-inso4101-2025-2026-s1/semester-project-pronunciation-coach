@@ -4,12 +4,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/session_manager.dart';
+import '../../../../core/settings_algebra.dart';
 
 // ignore_for_file: use_build_context_synchronously
 
 /// ===========================================================================
-/// SETTINGS PAGE 
-/// 
+/// SETTINGS PAGE
+///
 /// This file implements the user settings interface for the Pronunciation Coach app.
 /// It provides:
 /// - User account management and authentication status
@@ -17,7 +18,7 @@ import '../../../../core/network/session_manager.dart';
 /// - Notification settings control
 /// - Privacy and analytics preferences
 /// - Persistent settings storage using SharedPreferences
-/// 
+///
 /// KEY FEATURES:
 /// - Guest vs authenticated user differentiation
 /// - Persistent preference storage
@@ -40,34 +41,59 @@ class _SettingsPageState extends State<SettingsPage> {
   static const _autoPlayKey = 'settings.autoplay_audio_enabled';
   static const _analyticsKey = 'settings.analytics_enabled';
 
-  // State variables for settings toggles
+  // Algebraic settings state management
   bool _isLoading = true;
-  bool _notificationsEnabled = true;
-  bool _dailyRemindersEnabled = true;
-  bool _autoPlayEnabled = false;
-  bool _analyticsEnabled = true;
+  late SettingsState _currentSettings;
+  final SettingsAlgebra _settingsAlgebra = SettingsAlgebraImplementation();
+  late SharedPreferences _prefs;
 
-  SharedPreferences? _prefs;
+  // Legacy boolean variables (could be migrated to algebra later)
+  late bool _autoPlayEnabled;
+  late bool _dailyRemindersEnabled;
+  late bool _analyticsEnabled;
+
+  // Algebraic state getters
+  bool get _notificationsEnabled => _currentSettings.notifications;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
+    _loadSettings();
   }
 
-  /// Loads user preferences from SharedPreferences storage
-  /// Initializes default values if preferences don't exist
-  Future<void> _loadPreferences() async {
+  /// Loads settings from SharedPreferences
+  Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // Load notifications which is part of our algebra
+    final notifications = prefs.getBool(_notificationsKey) ?? true;
+
+    // Create algebraic state - start with default and override notifications
+    _currentSettings = SettingsState.defaultState();
+    if (!notifications) {
+      _currentSettings = _settingsAlgebra.toggleNotifications(_currentSettings);
+    }
 
     setState(() {
       _prefs = prefs;
-      _notificationsEnabled = prefs.getBool(_notificationsKey) ?? true;
-      _dailyRemindersEnabled = prefs.getBool(_remindersKey) ?? true;
-      _autoPlayEnabled = prefs.getBool(_autoPlayKey) ?? false;
-      _analyticsEnabled = prefs.getBool(_analyticsKey) ?? true;
       _isLoading = false;
     });
+  }
+
+  /// Algebraic wrapper for toggle notifications
+  void _toggleNotifications() {
+    setState(() {
+      _currentSettings = _settingsAlgebra.toggleNotifications(_currentSettings);
+    });
+    _saveSettings(); // Save to SharedPreferences
+  }
+
+  /// Saves current algebraic state to SharedPreferences
+  Future<void> _saveSettings() async {
+    if (_prefs != null) {
+      await _prefs.setBool(_notificationsKey, _currentSettings.notifications);
+      // Could save other settings here in the future
+    }
   }
 
   /// Updates a preference value in SharedPreferences
@@ -161,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // LEARNING PREFERENCES SECTION
                 _buildSection(
                   title: 'Learning preferences',
@@ -195,29 +221,27 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // NOTIFICATIONS SECTION
                 _buildSection(
                   title: 'Notifications',
                   child: Column(
                     children: [
-                      // APP NOTIFICATIONS SETTING
+                      // APP NOTIFICATIONS SETTING - Using Algebraic Operations
                       SwitchListTile(
                         value: _notificationsEnabled,
                         title: const Text('App notifications'),
                         subtitle: const Text(
                           'Be notified about new challenges and streaks',
                         ),
-                        onChanged: (value) {
-                          setState(() => _notificationsEnabled = value);
-                          _updatePreference(_notificationsKey, value);
-                        },
+                        onChanged: (_) =>
+                            _toggleNotifications(), // Algebraic operation
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // PRIVACY SECTION
                 _buildSection(
                   title: 'Privacy',
@@ -253,7 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // SECURITY SECTION (AUTHENTICATED USERS ONLY)
                 if (!isGuest)
                   _buildSection(
