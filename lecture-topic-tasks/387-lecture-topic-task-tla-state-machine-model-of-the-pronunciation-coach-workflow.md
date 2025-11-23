@@ -10,7 +10,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-23T18:43:41Z"
-updated_at: "2025-11-23T18:44:14Z"
+updated_at: "2025-11-23T18:44:23Z"
 ---
 
 # [Lecture Topic Task]: TLA+ State Machine Model of the Pronunciation Coach Workflow
@@ -56,7 +56,7 @@ Estimated completion time: 1 day
 
 ## 🎚️ Difficulty
 - [ ] Easy  
-- [ ] Moderate  
+- [x] Moderate  
 - [ ] Hard  
 
 ---
