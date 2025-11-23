@@ -81,6 +81,7 @@ flutter:
     - assets/sounds/Quiz_Sounds/Wrong.mp3
     - assets/sounds/background/authbackground.mp3
     - assets/sounds/background/homebackground.mp3
+    - assets/sounds/wordbank.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
