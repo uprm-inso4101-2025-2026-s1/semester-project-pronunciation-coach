@@ -9,6 +9,22 @@ import '../../../../core/common/quiz_attempt.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_result_page.dart';
 
+/// ===========================================================================
+/// AUDIO QUIZ QUESTION PAGE 
+/// 
+/// This file contains the main quiz interface where users:
+/// - Listen to audio pronunciations
+/// - Select their answer
+/// - Submit and get immediate feedback
+/// - Navigate to results
+/// 
+/// KEY FEATURES:
+/// - Audio playback with visual feedback
+/// - Answer selection with state management
+/// - XP calculation and progress tracking
+/// - Smooth animations and transitions
+/// ===========================================================================
+
 class AudioQuizQuestionPage extends StatefulWidget {
   final AudioChallenge challenge;
   final Difficulty difficulty;
@@ -91,6 +107,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     super.dispose();
   }
 
+  /// Plays audio for the selected option with error handling and timeout
   Future<void> _playAudio(String optionLetter) async {
     if (_isPlayingAudio && _playingOption != null) {
       await _audioPlayer.stop();
@@ -234,6 +251,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     );
   }
 
+  /// Displays the current challenge information and XP reward
   Widget _buildChallengeCard() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -286,6 +304,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     );
   }
 
+  /// Shows feedback after answer submission (correct/incorrect)
   Widget _buildFeedbackCard() {
     return Container(
       padding: const EdgeInsets.all(12),
@@ -322,6 +341,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     );
   }
 
+  /// Submit button that changes state based on quiz progress
   Widget _buildSubmitButton() {
     return SizedBox(
       height: 52,
@@ -362,6 +382,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     );
   }
 
+  /// Submits the selected answer to the API and updates user progress
   Future<void> _submitAnswer() async {
     if (_selectedOption == null || _isSubmitting) return;
 
@@ -428,6 +449,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
     }
   }
 
+  /// Navigates to the results page after answer submission
   void _goToResults() async {
     // Send view results event to state machine
     _stateController.sendEvent(ViewResultsEvent());
@@ -469,6 +491,7 @@ class _AudioQuizQuestionPageState extends State<AudioQuizQuestionPage>
   }
 }
 
+/// Individual audio option card with play button and selection state
 class _AudioOptionCard extends StatelessWidget {
   final AudioOption option;
   final bool isSelected;

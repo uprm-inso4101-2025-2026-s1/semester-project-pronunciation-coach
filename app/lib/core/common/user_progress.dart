@@ -1,8 +1,22 @@
+/// Represents a user's learning progress and achievements.
+/// 
+/// This data class tracks key progress metrics including experience points,
+/// daily streaks, and challenge completion counts. It supports JSON
+/// serialization for API communication and data persistence.
 class UserProgress {
+  /// Unique identifier of the user
   final int userId;
+  
+  /// Total experience points earned by the user
   final int totalXp;
+  
+  /// Current consecutive days of activity streak
   final int currentStreak;
+  
+  /// Total number of challenges successfully completed
   final int challengesCompleted;
+  
+  /// Date of the last challenge completed in string format (optional)
   final String? lastChallengeDate;
 
   UserProgress({
@@ -13,6 +27,10 @@ class UserProgress {
     this.lastChallengeDate,
   });
 
+  /// Creates a UserProgress instance from JSON data.
+  /// 
+  /// Used to deserialize data from API responses or local storage.
+  /// Expects JSON keys to match the field names with snake_case convention.
   factory UserProgress.fromJson(Map<String, dynamic> json) {
     return UserProgress(
       userId: json['user_id'],
@@ -23,6 +41,10 @@ class UserProgress {
     );
   }
 
+  /// Converts this UserProgress instance to JSON format.
+  /// 
+  /// Used for serializing data for API requests or local storage.
+  /// Returns a Map with snake_case keys as expected by most backend APIs.
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,
@@ -33,6 +55,10 @@ class UserProgress {
     };
   }
 
+  /// Creates a copy of this UserProgress with the specified fields replaced.
+  /// 
+  /// This is useful for creating modified versions of user progress data
+  /// while maintaining immutability of the original object.
   UserProgress copyWith({
     int? userId,
     int? totalXp,

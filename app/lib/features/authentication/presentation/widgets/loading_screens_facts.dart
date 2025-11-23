@@ -1,5 +1,24 @@
-
 class PronunciationFacts {
+  /// ===========================================================================
+/// PRONUNCIATION FACTS DATABASE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Provides educational content during loading screens
+/// - Enhances user engagement with pronunciation tips
+/// - Supports learning even during waiting periods
+/// 
+/// CONTENT:
+/// - Collection of 20 English pronunciation facts and tips
+/// - Covers various aspects of phonetics and speech patterns
+/// - Educational content relevant to language learning app
+/// 
+/// USAGE:
+/// - Random fact selection for variety
+/// - Displayed alongside loading animations
+/// ===========================================================================
+/// 
+/// Collection of pronunciation facts and tips
   static final List<String> facts = [
     "The 'th' sound is one of the most difficult for English learners",
     "English has 44 different phonemes (speech sounds)",
@@ -23,6 +42,7 @@ class PronunciationFacts {
     "Thought groups help organize speech into meaningful chunks"
   ];
 
+  /// Get a random pronunciation fact from the collection
   static String getRandomFact() {
     final random = DateTime.now().millisecondsSinceEpoch % facts.length;
     return facts[random];

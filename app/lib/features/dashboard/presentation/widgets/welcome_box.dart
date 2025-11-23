@@ -2,6 +2,21 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// WELCOME BACK BOX - USER WELCOME AND QUICK ACTIONS
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Welcome message for returning users
+/// - Quick action buttons for common tasks
+/// - Progress continuation prompts
+/// 
+/// FEATURES:
+/// - Personalized welcome message
+/// - Continue lesson and fast practice buttons
+/// - Gradient background with border styling
+/// ===========================================================================
+
 class WelcomeBackBox extends StatelessWidget {
   final String name;
 
