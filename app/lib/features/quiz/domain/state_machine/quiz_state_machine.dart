@@ -1,16 +1,56 @@
 import 'package:flutter/material.dart';
 
 /// ===========================================================================
-/// QUIZ STATE MACHINE 
-/// 
+/// QUIZ STATE MACHINE
+///
 /// This file implements a finite state machine (FSM) for managing quiz flow.
 /// The state machine handles transitions between different quiz states and
 /// ensures proper state management throughout the user journey.
-/// 
+///
 /// STATE MACHINE FLOW:
 /// Idle → SelectingDifficulty → LoadingQuiz → Answering → Evaluating → Results
-/// 
+///
 /// Events trigger state transitions, and each state defines valid transitions.
+/// ===========================================================================
+
+/// ===========================================================================
+/// CONDITION EVENT NETWORK (CEN) COMPONENTS
+/// ===========================================================================
+
+class Place {
+  final String name;
+  int marks;
+
+  Place(this.name, {this.marks = 0});
+
+  bool get isMarked => marks > 0;
+
+  void mark() => marks++;
+  void unmark() {
+    if (marks > 0) marks--;
+  }
+}
+
+class Transition {
+  final String name;
+  final List<Place> preConditions;
+  final List<Place> postConditions;
+
+  Transition(
+    this.name, {
+    required this.preConditions,
+    required this.postConditions,
+  });
+
+  bool canFire() => preConditions.every((p) => p.isMarked);
+
+  void fire() {
+    if (!canFire()) return;
+    for (final place in preConditions) place.unmark();
+    for (final place in postConditions) place.mark();
+  }
+}
+
 /// ===========================================================================
 
 /// Base event class for state machine events
@@ -195,15 +235,34 @@ class ResultsState extends ActiveQuizState {
 class QuizStateMachine {
   QuizState _currentState;
 
+  /// CEN places for each state
+  Place idlePlace = Place('Idle', marks: 1);
+  Place selectingPlace = Place('SelectingDifficulty');
+  Place loadingPlace = Place('LoadingQuiz');
+  Place answeringPlace = Place('Answering');
+  Place evaluatingPlace = Place('EvaluatingAnswer');
+  Place resultsPlace = Place('Results');
+
   QuizStateMachine() : _currentState = const IdleState();
 
   /// Get the current state
   QuizState get currentState => _currentState;
 
+  /// Update CEN marks to match current state
+  void _updateMarks() {
+    idlePlace.marks = isInState<IdleState>() ? 1 : 0;
+    selectingPlace.marks = isInState<SelectingDifficultyState>() ? 1 : 0;
+    loadingPlace.marks = isInState<LoadingQuizState>() ? 1 : 0;
+    answeringPlace.marks = isInState<AnsweringState>() ? 1 : 0;
+    evaluatingPlace.marks = isInState<EvaluatingAnswerState>() ? 1 : 0;
+    resultsPlace.marks = isInState<ResultsState>() ? 1 : 0;
+  }
+
   /// Send an event to the state machine
   void sendEvent(QuizEvent event) {
     final newState = _currentState.handleEvent(event);
     _currentState = newState;
+    _updateMarks();
   }
 
   /// Check if we're in a specific state type
