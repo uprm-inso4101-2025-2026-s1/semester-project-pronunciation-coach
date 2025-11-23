@@ -46,8 +46,12 @@ class Transition {
 
   void fire() {
     if (!canFire()) return;
-    for (final place in preConditions) place.unmark();
-    for (final place in postConditions) place.mark();
+    for (final place in preConditions) {
+      place.unmark();
+    }
+    for (final place in postConditions) {
+      place.mark();
+    }
   }
 }
 
