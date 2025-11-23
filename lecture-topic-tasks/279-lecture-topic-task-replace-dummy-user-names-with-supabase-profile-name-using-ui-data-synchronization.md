@@ -5,14 +5,14 @@ state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/279"
 author: "JanDavey"
 labels: [
-  "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: needs fix"
+  "task: development",
+  "state: waiting for team lead",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-09T22:25:27Z"
-updated_at: "2025-11-23T03:35:56Z"
+updated_at: "2025-11-23T03:36:59Z"
 ---
 
 # [Lecture Topic Task]: Replace Dummy User Names with Supabase Profile Name Using UI-Data Synchronization
@@ -20,11 +20,11 @@ updated_at: "2025-11-23T03:35:56Z"
 - **Issue:** [279](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/279)
 - **Author:** @JanDavey
 - **Labels:** [
-  "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: needs fix"
+  "task: development",
+  "state: waiting for team lead",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-09T22:25:27Z
 
