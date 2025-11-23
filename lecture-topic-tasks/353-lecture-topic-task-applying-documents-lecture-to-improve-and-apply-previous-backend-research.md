@@ -8,10 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-22T20:17:47Z"
-updated_at: "2025-11-22T20:21:41Z"
+updated_at: "2025-11-23T00:34:24Z"
 ---
 
 # [Lecture Topic Task]: <Applying Documents Lecture to improve and apply previous Backend research>
@@ -22,7 +22,7 @@ updated_at: "2025-11-22T20:21:41Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-22T20:17:47Z
 
