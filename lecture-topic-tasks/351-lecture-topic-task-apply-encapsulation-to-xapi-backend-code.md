@@ -8,10 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-22T18:40:30Z"
-updated_at: "2025-11-23T17:12:55Z"
+updated_at: "2025-11-23T22:17:31Z"
 ---
 
 # [Lecture Topic Task]:  <Apply Encapsulation to xAPI Backend code>
@@ -22,7 +22,7 @@ updated_at: "2025-11-23T17:12:55Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-22T18:40:30Z
 
