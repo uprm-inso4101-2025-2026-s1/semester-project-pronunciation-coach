@@ -7,11 +7,10 @@ author: "aryamdiaz"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-21T03:58:51Z"
-updated_at: "2025-11-23T00:58:12Z"
+updated_at: "2025-11-23T00:58:24Z"
 ---
 
 # [Lecture Topic Task] <Requirements Satisfiability & Feasibility Checklist for Quiz Feature>
@@ -21,8 +20,7 @@ updated_at: "2025-11-23T00:58:12Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-21T03:58:51Z
 
