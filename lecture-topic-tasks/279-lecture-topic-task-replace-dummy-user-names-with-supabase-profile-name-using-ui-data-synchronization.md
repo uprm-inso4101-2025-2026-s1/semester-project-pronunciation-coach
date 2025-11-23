@@ -1,19 +1,31 @@
 ---
 issue_number: 279
-title: "[Lecture Topic Task]: Add New Section '3.3.3' Pronunciation Feedback Design Rationale for Team's 3 Documentation"
+title: "[Lecture Topic Task]: Replace Dummy User Names with Supabase Profile Name Using UI-Data Synchronization"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/279"
 author: "JanDavey"
-labels: ["documentation","Team 3","Task: lecture-topic","state: waiting for dev","state: needs fix"]
+labels: [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: waiting for dev",
+  "state: needs fix"
+]
 created_at: "2025-11-09T22:25:27Z"
-updated_at: "2025-11-12T17:54:40Z"
+updated_at: "2025-11-23T03:35:33Z"
 ---
 
-# [Lecture Topic Task]: Add New Section '3.3.3' Pronunciation Feedback Design Rationale for Team's 3 Documentation
+# [Lecture Topic Task]: Replace Dummy User Names with Supabase Profile Name Using UI-Data Synchronization
 
 - **Issue:** [279](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/279)
 - **Author:** @JanDavey
-- **Labels:** ["documentation","Team 3","Task: lecture-topic","state: waiting for dev","state: needs fix"]
+- **Labels:** [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: waiting for dev",
+  "state: needs fix"
+]
 - **Created:** 2025-11-09T22:25:27Z
 
 ## Details
@@ -72,3 +84,4 @@ Following Van Lamsweerde’s approach, the documentation will explicitly capture
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: @JanDavey 
+
