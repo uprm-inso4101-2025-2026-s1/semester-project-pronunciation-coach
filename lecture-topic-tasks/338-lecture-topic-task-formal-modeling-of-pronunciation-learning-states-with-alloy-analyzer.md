@@ -8,11 +8,10 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead",
   "state: waiting for manager"
 ]
 created_at: "2025-11-19T19:10:25Z"
-updated_at: "2025-11-23T02:54:56Z"
+updated_at: "2025-11-23T03:04:18Z"
 ---
 
 # [Lecture Topic Task]: Formal Modeling of Pronunciation Learning States with Alloy Analyzer
@@ -23,7 +22,6 @@ updated_at: "2025-11-23T02:54:56Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-19T19:10:25Z
