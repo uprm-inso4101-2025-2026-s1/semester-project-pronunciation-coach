@@ -7,10 +7,10 @@ author: "amtrevisan"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-23T21:12:35Z"
-updated_at: "2025-11-23T21:12:35Z"
+updated_at: "2025-11-23T23:08:13Z"
 ---
 
 # [Lecture Topic Task]: Apply Condition Event Network (CEN) Modeling to Quiz State Machine
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T21:12:35Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-23T21:12:35Z
 
