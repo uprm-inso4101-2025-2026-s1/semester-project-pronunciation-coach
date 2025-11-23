@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../../../../core/common/colors.dart' as common_colors;
 import '../../../../core/common/text_styles.dart' as common_text_styles;
 import '../../../../core/common/user_progress_stats.dart';
+import '../../../../core/common/quiz_attempt.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../quiz/presentation/pages/audio_quiz_home_page.dart';
 import '../../../authentication/presentation/pages/login_page.dart';
@@ -316,7 +317,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
               ),
             )
           else ...[
-            // Progress Overview Cards (Portrait Layout)
+            // Progress Overview Cards
             _buildProgressOverview(),
             const SizedBox(height: 20),
 
@@ -324,7 +325,36 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             _buildPracticeStatistics(),
             const SizedBox(height: 20),
 
-            // Recent Practice Sessions
+            // Recent Quizzes Row
+            if (_userProgress != null)
+              FutureBuilder<List<QuizAttempt>>(
+                future: _getRecentAttempts(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Error loading recent quizzes',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const SizedBox(
+                      height: 40,
+                      child: Center(child: Text('No recent quizzes')),
+                    );
+                  }
+
+                  return _buildRecentQuizzes(snapshot.data!);
+                },
+              ),
+
+            const SizedBox(height: 20),
+
+            // Practice Calendar
             MonthlyPracticeCalendar(
               practiceDays: _practiceDays,
               isLoading: false,
@@ -333,6 +363,101 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
 
           // Add bottom padding for tab bar
           const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  /// Helper to fetch last 10 quiz attempts
+  Future<List<QuizAttempt>> _getRecentAttempts() async {
+    // Fetch last 10 attempts from ProgressService
+
+    final allAttempts = await ProgressService().getQuizAttempts(limit: 10);
+
+    allAttempts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    return allAttempts.take(10).toList();
+  }
+
+  /// Recent Quizzes widget
+  Widget _buildRecentQuizzes(List<QuizAttempt> recentAttempts) {
+    if (recentAttempts.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: common_colors.AppColors.cardBackground,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: common_colors.AppColors.cardShadow,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            'No recent quizzes',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: common_colors.AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: common_colors.AppColors.cardShadow,
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Recent Quizzes',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: common_colors.AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: recentAttempts.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final attempt = recentAttempts[index];
+                return Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: attempt.isCorrect
+                        ? common_colors.AppColors.success.withOpacity(0.2)
+                        : common_colors.AppColors.danger.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    attempt.isCorrect ? Icons.check : Icons.close,
+                    color: attempt.isCorrect
+                        ? common_colors.AppColors.success
+                        : common_colors.AppColors.danger,
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
