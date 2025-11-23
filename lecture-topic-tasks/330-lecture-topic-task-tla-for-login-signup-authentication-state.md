@@ -7,11 +7,10 @@ author: "JuliT02"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead",
   "state: waiting for manager"
 ]
 created_at: "2025-11-14T17:08:18Z"
-updated_at: "2025-11-23T15:47:30Z"
+updated_at: "2025-11-23T17:09:44Z"
 ---
 
 # [Lecture Topic Task]: TLA+ for login/signup authentication state
@@ -21,7 +20,6 @@ updated_at: "2025-11-23T15:47:30Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-14T17:08:18Z
