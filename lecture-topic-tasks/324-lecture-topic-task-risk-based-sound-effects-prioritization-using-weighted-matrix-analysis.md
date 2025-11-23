@@ -7,12 +7,10 @@ author: "FabianVelezOcasio"
 labels: [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-14T03:59:15Z"
-updated_at: "2025-11-23T03:00:18Z"
+updated_at: "2025-11-23T20:32:19Z"
 ---
 
 # [Lecture Topic Task]: Risk-Based Sound Effects Prioritization Using Weighted Matrix Analysis
@@ -22,9 +20,7 @@ updated_at: "2025-11-23T03:00:18Z"
 - **Labels:** [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-14T03:59:15Z
 
