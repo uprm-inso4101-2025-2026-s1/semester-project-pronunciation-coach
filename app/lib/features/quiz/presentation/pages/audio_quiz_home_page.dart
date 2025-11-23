@@ -5,16 +5,15 @@ import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
 import 'audio_quiz_history_page.dart';
 
-
 /// ===========================================================================
-/// AUDIO QUIZ HOME PAGE 
-/// 
+/// AUDIO QUIZ HOME PAGE
+///
 /// This file contains the main entry point for the audio quiz feature.
 /// It provides:
 /// - Difficulty selection interface
 /// - Animated transitions
 /// - Quiz initialization and navigation
-/// 
+///
 /// MAIN COMPONENTS:
 /// - AudioQuizHomePage: Main difficulty selection screen
 /// - _QuizLoadingPage: Loading screen while generating quiz
@@ -138,28 +137,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 16),
-        ElevatedButton.icon(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
-            );
-          },
-          icon: const Icon(Icons.history),
-          label: const Text(
-            'View Quiz History',
-            style: TextStyle(fontWeight: FontWeight.w700),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
+
         ..._difficulties.asMap().entries.map(
           (entry) => TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (entry.key * 100)),
