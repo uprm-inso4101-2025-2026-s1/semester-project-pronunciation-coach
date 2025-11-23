@@ -295,10 +295,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Display Selected Pace
-          _buildSelectedPace(context),
-
-          const SizedBox(height: 20),
 
           // Loading/Error states
           if (_isLoading)
