@@ -1,18 +1,17 @@
 ---
 issue_number: 360
 title: "[Lecture Topic Task]: Applying Observer Pattern to User Progress and Achievement Updates"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/360"
 author: "Brzno"
 labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-23T01:02:59Z"
-updated_at: "2025-11-23T14:58:48Z"
+updated_at: "2025-11-23T15:25:07Z"
 ---
 
 # [Lecture Topic Task]: Applying Observer Pattern to User Progress and Achievement Updates
@@ -23,8 +22,7 @@ updated_at: "2025-11-23T14:58:48Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-23T01:02:59Z
 
