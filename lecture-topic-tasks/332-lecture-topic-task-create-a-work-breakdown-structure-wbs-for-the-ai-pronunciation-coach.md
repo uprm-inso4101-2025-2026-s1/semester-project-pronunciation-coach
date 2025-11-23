@@ -1,15 +1,15 @@
 ---
 issue_number: 332
 title: "[Lecture Topic Task]: <Create a Work Breakdown Structure (WBS) for the AI Pronunciation Coach>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/332"
 author: "jorge-belgo2"
 labels: [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-17T18:00:53Z"
-updated_at: "2025-11-17T18:01:03Z"
+updated_at: "2025-11-23T00:31:32Z"
 ---
 
 # [Lecture Topic Task]: <Create a Work Breakdown Structure (WBS) for the AI Pronunciation Coach>
@@ -18,7 +18,7 @@ updated_at: "2025-11-17T18:01:03Z"
 - **Author:** @jorge-belgo2
 - **Labels:** [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-17T18:00:53Z
 
