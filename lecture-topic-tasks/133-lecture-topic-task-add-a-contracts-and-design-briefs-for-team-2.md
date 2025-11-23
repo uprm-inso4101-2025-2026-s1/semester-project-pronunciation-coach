@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: Add a “Contracts and Design Briefs” for team 2
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/133"
 author: "Dieg0Rios"
-labels: ["documentation","Team 2","Task: lecture-topic","state: in progress","state: waiting for manager"]
+labels: [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-04T19:05:32Z"
-updated_at: "2025-10-21T22:51:49Z"
+updated_at: "2025-11-23T00:38:47Z"
 ---
 
 # [Lecture Topic Task]: Add a “Contracts and Design Briefs” for team 2
 
 - **Issue:** [133](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/133)
 - **Author:** @Dieg0Rios
-- **Labels:** ["documentation","Team 2","Task: lecture-topic","state: in progress","state: waiting for manager"]
+- **Labels:** [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-04T19:05:32Z
 
 ## Details
@@ -48,3 +58,4 @@ This issue focuses on documenting the team’s internal agreements in a structur
  [ ] Moderate  
 
 Suggested developer: @Dieg0Rios 
+
