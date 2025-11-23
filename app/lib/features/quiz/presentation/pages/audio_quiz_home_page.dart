@@ -4,6 +4,21 @@ import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
 
+/// ===========================================================================
+/// AUDIO QUIZ HOME PAGE 
+/// 
+/// This file contains the main entry point for the audio quiz feature.
+/// It provides:
+/// - Difficulty selection interface
+/// - Animated transitions
+/// - Quiz initialization and navigation
+/// 
+/// MAIN COMPONENTS:
+/// - AudioQuizHomePage: Main difficulty selection screen
+/// - _QuizLoadingPage: Loading screen while generating quiz
+/// - _DifficultyCard: Individual difficulty option card
+/// ===========================================================================
+
 class AudioQuizHomePage extends StatefulWidget {
   const AudioQuizHomePage({super.key});
 
@@ -161,6 +176,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   }
 }
 
+/// Loading screen displayed while quiz content is being generated
 class _QuizLoadingPage extends StatefulWidget {
   final Difficulty difficulty;
   final AudioApiService apiService;
@@ -325,6 +341,7 @@ class _QuizLoadingPageState extends State<_QuizLoadingPage>
   }
 }
 
+/// Individual difficulty selection card with icon, description, and XP reward
 class _DifficultyCard extends StatelessWidget {
   final Difficulty difficulty;
   final VoidCallback onTap;

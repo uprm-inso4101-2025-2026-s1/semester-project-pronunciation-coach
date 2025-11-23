@@ -4,6 +4,29 @@ import '../../../../core/common/user_progress.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../widgets/achievements_xp.dart';
 
+/// ===========================================================================
+/// PROFILE PAGE - USER PROFILE AND ACHIEVEMENTS INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Central hub for user profile management and achievement tracking
+/// - Displays user progress, statistics, and earned achievements
+/// - Provides access to app settings and information
+/// - Handles both authenticated and guest user states
+/// 
+/// ARCHITECTURE:
+/// - Stateful widget with expandable menu overlay
+/// - Integration with ProgressService for real-time user data
+/// - Dynamic content based on authentication status
+/// - Comprehensive error handling and loading states
+/// 
+/// KEY FEATURES:
+/// - Expandable side menu for additional options
+/// - Achievement and progress visualization
+/// - Guest user handling with appropriate messaging
+/// - Responsive design with smooth animations
+/// ===========================================================================
+
 // Profile page
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,8 +36,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // Menu state management
   bool _isMenuExpanded = false;
 
+  // User progress data state
   UserProgress? _userProgress;
   bool _isLoading = true;
   String? _error;
@@ -26,6 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadUserProgress();
   }
 
+  /// Load user progress data from ProgressService
+  /// Handles both authenticated and guest user scenarios
   Future<void> _loadUserProgress() async {
     try {
       final progressService = ProgressService();
@@ -72,6 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
+      // Custom app bar with menu toggle
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: SafeArea(
@@ -88,6 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const Spacer(),
+                // Menu toggle button
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -110,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Stack(
         children: [
-          // Backdrop overlay
+          // Backdrop overlay for menu dismissal
           if (_isMenuExpanded)
             Positioned.fill(
               child: GestureDetector(
@@ -123,12 +152,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-          // Main Content
+          // Main Content Area
           SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // Profile Header
+                // Profile Header Section
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -144,6 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Column(
                     children: [
+                      // User Avatar
                       CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.blue.withValues(alpha: 0.1),
@@ -154,6 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      // User Name
                       const Text(
                         'John Doe',
                         style: TextStyle(
@@ -162,6 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppColors.textPrimary,
                         ),
                       ),
+                      // User Role
                       const Text(
                         'Pronunciation Learner',
                         style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -171,10 +203,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Achievements Sections
+                // Achievements Sections - Dynamic content based on user state
                 _buildAchievementsSection(),
 
-                // Add bottom padding for tab bar
+                // Bottom padding for tab bar
                 const SizedBox(height: 80),
               ],
             ),
@@ -225,7 +257,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
 
-                    // Menu Options
+                    // Menu Options List
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
@@ -281,6 +313,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Build achievements section with dynamic content based on user state
   Widget _buildAchievementsSection() {
     // Show loading indicator
     if (_isLoading) {
@@ -375,6 +408,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return AchievementsSection(userProgress: _userProgress!);
   }
 
+  /// Build individual menu option item
   Widget _buildMenuOption({
     required IconData icon,
     required String title,
@@ -406,6 +440,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Show coming soon dialog for unfinished features
   void _showComingSoonDialog(BuildContext context, String feature) {
     showDialog(
       context: context,
@@ -426,6 +461,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Show about dialog with app information
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,

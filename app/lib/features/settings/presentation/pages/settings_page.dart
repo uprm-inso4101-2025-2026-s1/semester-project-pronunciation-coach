@@ -7,6 +7,25 @@ import '../../../../core/network/session_manager.dart';
 
 // ignore_for_file: use_build_context_synchronously
 
+/// ===========================================================================
+/// SETTINGS PAGE 
+/// 
+/// This file implements the user settings interface for the Pronunciation Coach app.
+/// It provides:
+/// - User account management and authentication status
+/// - Learning preferences configuration
+/// - Notification settings control
+/// - Privacy and analytics preferences
+/// - Persistent settings storage using SharedPreferences
+/// 
+/// KEY FEATURES:
+/// - Guest vs authenticated user differentiation
+/// - Persistent preference storage
+/// - Account management options
+/// - Security controls (sign out)
+/// - Work-in-progress feature placeholders
+/// ===========================================================================
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -15,11 +34,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  // SharedPreferences keys for persistent storage
   static const _notificationsKey = 'settings.notifications_enabled';
   static const _remindersKey = 'settings.daily_reminders_enabled';
   static const _autoPlayKey = 'settings.autoplay_audio_enabled';
   static const _analyticsKey = 'settings.analytics_enabled';
 
+  // State variables for settings toggles
   bool _isLoading = true;
   bool _notificationsEnabled = true;
   bool _dailyRemindersEnabled = true;
@@ -34,6 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadPreferences();
   }
 
+  /// Loads user preferences from SharedPreferences storage
+  /// Initializes default values if preferences don't exist
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -47,6 +70,9 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  /// Updates a preference value in SharedPreferences
+  /// [key]: The preference key to update
+  /// [value]: The new boolean value to store
   Future<void> _updatePreference(String key, bool value) async {
     final prefs = _prefs;
     if (prefs == null) return;
@@ -71,6 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                // ACCOUNT SECTION
                 _buildSection(
                   title: 'Account',
                   child: Column(
@@ -96,6 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: const TextStyle(color: AppColors.textMuted),
                         ),
                       ),
+                      // PASSWORD CHANGE (AUTHENTICATED USERS ONLY)
                       if (!isGuest) ...[
                         const Divider(height: 0),
                         ListTile(
@@ -115,6 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                       ],
+                      // ACCOUNT CREATION (GUEST USERS ONLY)
                       if (isGuest) ...[
                         const Divider(height: 0),
                         ListTile(
@@ -132,10 +161,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                
+                // LEARNING PREFERENCES SECTION
                 _buildSection(
                   title: 'Learning preferences',
                   child: Column(
                     children: [
+                      // AUTO-PLAY PRONUNCIATIONS SETTING
                       SwitchListTile(
                         value: _autoPlayEnabled,
                         title: const Text('Auto-play pronunciations'),
@@ -147,6 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           _updatePreference(_autoPlayKey, value);
                         },
                       ),
+                      // DAILY PRACTICE REMINDERS SETTING
                       SwitchListTile(
                         value: _dailyRemindersEnabled,
                         title: const Text('Daily practice reminders'),
@@ -162,10 +195,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                
+                // NOTIFICATIONS SECTION
                 _buildSection(
                   title: 'Notifications',
                   child: Column(
                     children: [
+                      // APP NOTIFICATIONS SETTING
                       SwitchListTile(
                         value: _notificationsEnabled,
                         title: const Text('App notifications'),
@@ -181,10 +217,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                
+                // PRIVACY SECTION
                 _buildSection(
                   title: 'Privacy',
                   child: Column(
                     children: [
+                      // ANALYTICS SHARING SETTING
                       SwitchListTile(
                         value: _analyticsEnabled,
                         title: const Text('Share anonymous usage analytics'),
@@ -196,6 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           _updatePreference(_analyticsKey, value);
                         },
                       ),
+                      // PRIVACY POLICY LINK
                       ListTile(
                         leading: const Icon(
                           Icons.description_outlined,
@@ -213,6 +253,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                
+                // SECURITY SECTION (AUTHENTICATED USERS ONLY)
                 if (!isGuest)
                   _buildSection(
                     title: 'Security',
@@ -233,6 +275,9 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Builds a consistent settings section with title and content
+  /// [title]: Section header text
+  /// [child]: Section content widgets
   Widget _buildSection({required String title, required Widget child}) {
     return Container(
       decoration: BoxDecoration(
@@ -249,6 +294,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Section header
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
@@ -261,12 +307,17 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           const Divider(height: 0),
+          // Section content
           child,
         ],
       ),
     );
   }
 
+  /// Shows a dialog for features that are not yet implemented
+  /// [context]: BuildContext for showing the dialog
+  /// [title]: Dialog title
+  /// [message]: Dialog content message
   void _showWorkInProgressDialog(
     BuildContext context, {
     required String title,
@@ -287,6 +338,8 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Shows confirmation dialog and handles user sign out process
+  /// [context]: BuildContext for showing the dialog and navigation
   Future<void> _confirmSignOut(BuildContext context) async {
     final shouldSignOut = await showDialog<bool>(
       context: context,

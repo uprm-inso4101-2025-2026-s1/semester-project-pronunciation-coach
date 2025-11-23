@@ -4,6 +4,27 @@ import 'dart:convert';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/user_progress.dart';
 
+/// ===========================================================================
+/// ACHIEVEMENT ENTITY - ACHIEVEMENT DATA MODEL
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Represents individual user achievements with progress tracking
+/// - Supports JSON serialization for persistent storage
+/// - Manages achievement states (locked/unlocked) and progress
+/// 
+/// PROPERTIES:
+/// - id: Unique identifier for the achievement
+/// - groupId: Category grouping (xp, streak, etc.)
+/// - title: Achievement display name
+/// - description: Detailed achievement description
+/// - icon: Visual representation icon
+/// - currentProgress: User's current progress towards completion
+/// - totalRequired: Total required for achievement completion
+/// - isUnlocked: Achievement completion status
+/// - unlockedDate: Timestamp when achievement was unlocked
+/// ===========================================================================
+
 class Achievement {
   final String id;
   final String groupId;
@@ -27,8 +48,10 @@ class Achievement {
     this.unlockedDate,
   });
 
+  /// Calculate progress percentage (0.0 to 1.0)
   double get progress => currentProgress / totalRequired;
 
+  /// Convert achievement to JSON for storage
   Map<String, dynamic> toJson() => {
     'id': id,
     'groupId': groupId,
@@ -41,6 +64,7 @@ class Achievement {
     'unlockedDate': unlockedDate?.toIso8601String(),
   };
 
+  /// Create achievement from JSON data
   factory Achievement.fromJson(Map<String, dynamic> json) => Achievement(
     id: json['id'],
     groupId: json['groupId'],
@@ -56,12 +80,30 @@ class Achievement {
   );
 }
 
+/// ===========================================================================
+/// ACHIEVEMENTS SECTION - ACHIEVEMENT DISPLAY AND MANAGEMENT
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Main widget for displaying and managing user achievements
+/// - Integrates with UserProgress for real-time data
+/// - Provides expandable achievement groups and progress tracking
+/// - Handles achievement unlocking and persistence
+/// 
+/// FEATURES:
+/// - Grouped achievement display with expand/collapse
+/// - Progress visualization with linear progress bars
+/// - XP and streak summary cards
+/// - Completed achievements section
+/// - Persistent storage using SharedPreferences
+/// ===========================================================================
+
 class AchievementsSection extends StatefulWidget {
   final UserProgress userProgress;
 
   const AchievementsSection({
     super.key,
-    required this.userProgress, // ← AGREGADO
+    required this.userProgress, // Real user progress data
   });
 
   @override
@@ -72,7 +114,9 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   int totalXP = 0;
   int currentStreak = 0;
   List<Achievement> achievements = [];
-  Map<String, bool> expandedGroups = {}; // To track which groups are expanded
+  
+  /// Track which achievement groups are expanded
+  Map<String, bool> expandedGroups = {};
 
   @override
   void initState() {
@@ -80,8 +124,9 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     _loadProfileData();
   }
 
+  /// Load user profile data and achievements
   Future<void> _loadProfileData() async {
-    // Load stored achievements
+    // Load stored achievements from persistent storage
     final prefs = await SharedPreferences.getInstance();
     final userId = widget.userProgress.userId;
     final data = prefs.getString('achievements_$userId');
@@ -90,14 +135,15 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       final decoded = jsonDecode(data) as List;
       achievements = decoded.map((e) => Achievement.fromJson(e)).toList();
     } else {
+      // Initialize with default achievements if none exist
       achievements = _defaultAchievements();
     }
 
-    // Uses real data from userProgress
+    // Use real data from userProgress
     totalXP = widget.userProgress.totalXp;
     currentStreak = widget.userProgress.currentStreak;
 
-    // Update achievement progress according to default values
+    // Update achievement progress based on user data
     for (var a in achievements) {
       if (a.groupId == 'xp') {
         a.currentProgress = totalXP;
@@ -105,7 +151,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
         a.currentProgress = currentStreak;
       }
 
-      // Automatically unlock if progress is enough
+      // Automatically unlock if progress requirements are met
       if (!a.isUnlocked && a.currentProgress >= a.totalRequired) {
         a.isUnlocked = true;
         a.unlockedDate = DateTime.now();
@@ -113,10 +159,10 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     }
 
     await _saveAchievements();
-
     setState(() {});
   }
 
+  /// Save achievements to persistent storage
   Future<void> _saveAchievements() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(
@@ -125,9 +171,12 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     );
   }
 
+  /// Define default achievement structure
   List<Achievement> _defaultAchievements() {
     return [
-      // Streak Achievements
+      // =======================================================================
+      // STREAK ACHIEVEMENTS - Consecutive correct answers
+      // =======================================================================
       Achievement(
         id: 'streak3',
         groupId: 'streak',
@@ -151,7 +200,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       Achievement(
         id: 'streak25',
         groupId: 'streak',
-        title: 'Quiz En',
+        title: 'Quiz Enthusiast',
         description: 'Achieve 25 correct answers in a row!',
         icon: Icons.local_fire_department,
         currentProgress: 0,
@@ -179,7 +228,9 @@ class _AchievementsSectionState extends State<AchievementsSection> {
         isUnlocked: false,
       ),
 
-      // XP Achievements
+      // =======================================================================
+      // XP ACHIEVEMENTS - Total experience points milestones
+      // =======================================================================
       Achievement(
         id: 'xp50',
         groupId: 'xp',
@@ -235,17 +286,21 @@ class _AchievementsSectionState extends State<AchievementsSection> {
 
   @override
   Widget build(BuildContext context) {
+    // Group achievements by category
     final Map<String, List<Achievement>> grouped = {};
     for (var a in achievements) {
       grouped.putIfAbsent(a.groupId, () => []).add(a);
     }
 
+    // Filter completed achievements
     final completed = achievements.where((a) => a.isUnlocked).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 24),
+        
+        // Section Header
         const Text(
           'Achievements',
           style: TextStyle(
@@ -256,7 +311,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
         ),
         const SizedBox(height: 12),
 
-        // XP and Streak summary
+        // XP and Streak Summary Cards
         Row(
           children: [
             Expanded(
@@ -280,12 +335,12 @@ class _AchievementsSectionState extends State<AchievementsSection> {
         ),
         const SizedBox(height: 20),
 
-        // Grouped Achievements
+        // Grouped Achievements (Expandable)
         ...grouped.entries.map(
           (entry) => _buildAchievementGroup(entry.key, entry.value),
         ),
 
-        // Completed Achievements
+        // Completed Achievements Section
         if (completed.isNotEmpty) ...[
           const SizedBox(height: 30),
           const Text(
@@ -303,6 +358,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     );
   }
 
+  /// Build summary card for XP and Streak display
   Widget _buildSummaryCard(
     String title,
     String value,
@@ -348,14 +404,17 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     );
   }
 
+  /// Build expandable achievement group
   Widget _buildAchievementGroup(String groupId, List<Achievement> group) {
     final isExpanded = expandedGroups[groupId] ?? false;
 
+    // Find the first locked achievement to display at top
     final topAchievement = group.firstWhere(
       (a) => !a.isUnlocked,
       orElse: () => group.last,
     );
 
+    // Get remaining locked achievements for expanded view
     final restAchievements = group
         .where((a) => a != topAchievement && !a.isUnlocked)
         .toList();
@@ -364,6 +423,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         children: [
+          // Top achievement card (always visible)
           GestureDetector(
             onTap: () {
               setState(() {
@@ -377,6 +437,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                   isTopOfGroup: true,
                   group: group,
                 ),
+                // Visual indicator for expandable content
                 if (!isExpanded && group.any((a) => !a.isUnlocked))
                   Positioned(
                     bottom: 0,
@@ -392,6 +453,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                       ),
                     ),
                   ),
+                // Expand/collapse indicator
                 Positioned(
                   right: 8,
                   top: 8,
@@ -405,6 +467,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
               ],
             ),
           ),
+          // Expanded list of remaining achievements
           if (isExpanded)
             Column(
               children: restAchievements.map(_buildAchievementCard).toList(),
@@ -414,7 +477,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     );
   }
 
-  // Modified achievement card
+  /// Build individual achievement card
   Widget _buildAchievementCard(
     Achievement a, {
     bool isTopOfGroup = false,
@@ -422,11 +485,11 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   }) {
     bool locked = !a.isUnlocked && a.currentProgress < a.totalRequired;
 
-    // If this is the first locked achievement in its group, unlock visually
+    // Special visual treatment for first locked achievement in group
     if (isTopOfGroup && group != null) {
       final firstLockedIndex = group.indexWhere((ach) => !ach.isUnlocked);
       if (firstLockedIndex != -1 && group[firstLockedIndex].id == a.id) {
-        locked = false; // visually unlock
+        locked = false; // visually unlock for better UX
       }
     }
 
@@ -449,6 +512,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
         ),
         child: Row(
           children: [
+            // Achievement icon with conditional coloring
             Icon(
               a.icon,
               color: locked
@@ -460,6 +524,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Achievement title
                   Text(
                     a.title,
                     style: TextStyle(
@@ -467,17 +532,20 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                       color: locked ? Colors.grey : AppColors.textPrimary,
                     ),
                   ),
+                  // Achievement description
                   Text(
                     a.description,
                     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
+                  // Progress bar visualization
                   LinearProgressIndicator(
                     value: a.progress.clamp(0, 1),
                     backgroundColor: Colors.grey[300],
                     color: locked ? Colors.grey : Colors.blue,
                   ),
                   const SizedBox(height: 4),
+                  // Progress text or completion date
                   Text(
                     a.isUnlocked
                         ? 'Completed on ${a.unlockedDate?.toLocal()}'
@@ -487,6 +555,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                 ],
               ),
             ),
+            // Lock icon for locked achievements
             if (locked)
               const Padding(
                 padding: EdgeInsets.only(left: 8.0),
@@ -498,6 +567,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     );
   }
 
+  /// Build completed achievement card with special styling
   Widget _buildCompletedAchievementCard(Achievement a) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
