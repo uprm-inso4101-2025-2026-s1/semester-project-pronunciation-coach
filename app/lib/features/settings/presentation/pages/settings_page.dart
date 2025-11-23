@@ -37,9 +37,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   // SharedPreferences keys for persistent storage
   static const _notificationsKey = 'settings.notifications_enabled';
-  static const _remindersKey = 'settings.daily_reminders_enabled';
   static const _autoPlayKey = 'settings.autoplay_audio_enabled';
-  static const _analyticsKey = 'settings.analytics_enabled';
 
   // Algebraic settings state management
   bool _isLoading = true;
@@ -49,8 +47,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // Legacy boolean variables (could be migrated to algebra later)
   late bool _autoPlayEnabled;
-  late bool _dailyRemindersEnabled;
-  late bool _analyticsEnabled;
 
   // Algebraic state getters
   bool get _notificationsEnabled => _currentSettings.notifications;
@@ -65,8 +61,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Load notifications which is part of our algebra
+    // Load all preferences
     final notifications = prefs.getBool(_notificationsKey) ?? true;
+    final autoPlay = prefs.getBool(_autoPlayKey) ?? false;
+
+    // Load legacy boolean variables
+    _autoPlayEnabled = autoPlay;
 
     // Create algebraic state - start with default and override notifications
     _currentSettings = SettingsState.defaultState();
@@ -187,28 +187,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: 'Learning preferences',
                   child: Column(
                     children: [
-                      // AUTO-PLAY PRONUNCIATIONS SETTING
+                      // AUTO-PLAY AUDIO SETTING
                       SwitchListTile(
                         value: _autoPlayEnabled,
-                        title: const Text('Auto-play pronunciations'),
+                        title: const Text('Automatically play audio options'),
                         subtitle: const Text(
-                          'Automatically play audio examples on new lessons',
+                          'Auto-play pronunciation options in quizzes',
                         ),
                         onChanged: (value) {
                           setState(() => _autoPlayEnabled = value);
                           _updatePreference(_autoPlayKey, value);
-                        },
-                      ),
-                      // DAILY PRACTICE REMINDERS SETTING
-                      SwitchListTile(
-                        value: _dailyRemindersEnabled,
-                        title: const Text('Daily practice reminders'),
-                        subtitle: const Text(
-                          'Stay on track with motivational nudges',
-                        ),
-                        onChanged: (value) {
-                          setState(() => _dailyRemindersEnabled = value);
-                          _updatePreference(_remindersKey, value);
                         },
                       ),
                     ],
@@ -230,42 +218,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         onChanged: (_) =>
                             _toggleNotifications(), // Algebraic operation
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // PRIVACY SECTION
-                _buildSection(
-                  title: 'Privacy',
-                  child: Column(
-                    children: [
-                      // ANALYTICS SHARING SETTING
-                      SwitchListTile(
-                        value: _analyticsEnabled,
-                        title: const Text('Share anonymous usage analytics'),
-                        subtitle: const Text(
-                          'Help us improve Pronunciation Coach',
-                        ),
-                        onChanged: (value) {
-                          setState(() => _analyticsEnabled = value);
-                          _updatePreference(_analyticsKey, value);
-                        },
-                      ),
-                      // PRIVACY POLICY LINK
-                      ListTile(
-                        leading: const Icon(
-                          Icons.description_outlined,
-                          color: Colors.blue,
-                        ),
-                        title: const Text('Privacy policy'),
-                        onTap: () => _showWorkInProgressDialog(
-                          context,
-                          title: 'Privacy policy',
-                          message:
-                              'The privacy policy is being finalized. Please check back soon or contact support for details.',
-                        ),
                       ),
                     ],
                   ),
