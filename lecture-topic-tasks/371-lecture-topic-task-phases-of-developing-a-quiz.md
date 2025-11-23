@@ -6,10 +6,11 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Joy-Martinez"
 labels: [
   "Team 4",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: in progress"
 ]
 created_at: "2025-11-23T06:02:31Z"
-updated_at: "2025-11-23T06:02:31Z"
+updated_at: "2025-11-23T15:06:08Z"
 ---
 
 # [Lecture Topic Task]: Phases of developing a quiz
@@ -18,7 +19,8 @@ updated_at: "2025-11-23T06:02:31Z"
 - **Author:** @Joy-Martinez
 - **Labels:** [
   "Team 4",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: in progress"
 ]
 - **Created:** 2025-11-23T06:02:31Z
 
