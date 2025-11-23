@@ -6,16 +6,12 @@ class UserInfoBox extends StatelessWidget {
   final String name;
   final String avatarURL;
   final String proficiencyLevel;
-  final int activeDays;     
-  final int challengesCompleted; 
 
   const UserInfoBox({
     super.key,
     required this.name,
     required this.avatarURL,
     required this.proficiencyLevel,
-    required this.activeDays,
-    required this.challengesCompleted,
   });
 
   @override
@@ -84,8 +80,8 @@ class UserInfoBox extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,          
                 children: [
-                  _buildStatBox(Icons.calendar_month, "$activeDays", "Active Days"),
-                  _buildStatBox(Icons.arrow_outward_rounded, "$challengesCompleted", "Challenges Completed"),
+                  _buildStatBox(Icons.calendar_month, "15", "Active Days"),
+                  _buildStatBox(Icons.arrow_outward_rounded, "92%", "Precision"),
                 ],
               );
             },
