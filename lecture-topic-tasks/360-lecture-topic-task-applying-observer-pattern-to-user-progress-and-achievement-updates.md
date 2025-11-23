@@ -8,11 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: waiting for team lead"
 ]
 created_at: "2025-11-23T01:02:59Z"
-updated_at: "2025-11-23T01:04:00Z"
+updated_at: "2025-11-23T01:40:57Z"
 ---
 
 # [Lecture Topic Task]: Applying Observer Pattern to User Progress and Achievement Updates
@@ -23,8 +22,7 @@ updated_at: "2025-11-23T01:04:00Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: waiting for team lead"
 ]
 - **Created:** 2025-11-23T01:02:59Z
 
