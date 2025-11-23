@@ -4,16 +4,26 @@ title: "[Lecture Topic Task] <Add Logbook section to Document>"
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/128"
 author: "abdielvelazquez"
-labels: ["documentation","Team 3","Task: lecture-topic","state: waiting for manager"]
+labels: [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-03T01:01:38Z"
-updated_at: "2025-10-07T18:56:19Z"
+updated_at: "2025-11-23T00:38:24Z"
 ---
 
 # [Lecture Topic Task] <Add Logbook section to Document>
 
 - **Issue:** [128](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/128)
 - **Author:** @abdielvelazquez
-- **Labels:** ["documentation","Team 3","Task: lecture-topic","state: waiting for manager"]
+- **Labels:** [
+  "documentation",
+  "Team 3",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-03T01:01:38Z
 
 ## Details
@@ -64,3 +74,4 @@ Estimated completion time: 2 days
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: _@abdielvelazquez_  
+
