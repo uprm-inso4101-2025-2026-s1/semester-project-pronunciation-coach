@@ -1,16 +1,16 @@
 ---
 issue_number: 346
 title: "[Lecture Topic Task] <Requirements Satisfiability & Feasibility Checklist for Quiz Feature>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/346"
 author: "aryamdiaz"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-21T03:58:51Z"
-updated_at: "2025-11-23T00:58:24Z"
+updated_at: "2025-11-23T02:08:21Z"
 ---
 
 # [Lecture Topic Task] <Requirements Satisfiability & Feasibility Checklist for Quiz Feature>
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T00:58:24Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-21T03:58:51Z
 
