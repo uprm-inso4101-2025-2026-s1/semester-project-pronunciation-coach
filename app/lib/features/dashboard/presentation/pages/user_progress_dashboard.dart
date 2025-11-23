@@ -352,7 +352,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
