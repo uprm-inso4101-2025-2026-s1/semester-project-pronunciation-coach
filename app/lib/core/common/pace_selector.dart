@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Represents different learning intensity levels with associated properties.
+/// 
+/// Each pace defines a daily time commitment and has visual representations
+/// including display names, icons, and colors.
 enum LearningPace {
   casual,
   standard,
   intensive;
 
+  /// Returns the default learning pace (casual)
   static LearningPace get defaultPace => LearningPace.casual;
 
-  //Operation: get next pace
+  /// Returns the next higher intensity pace.
+  /// 
+  /// If already at the highest intensity (intensive), returns intensive.
   LearningPace next() {
     switch (this) {
       case LearningPace.casual:
@@ -21,7 +28,9 @@ enum LearningPace {
     }
   }
 
-  //Operation: get previous pace
+  /// Returns the previous lower intensity pace.
+  /// 
+  /// If already at the lowest intensity (casual), returns casual.
   LearningPace previous() {
     switch (this) {
       case LearningPace.casual:
@@ -33,7 +42,7 @@ enum LearningPace {
     }
   }
 
-  //Operation: get minutes for pace
+  /// Returns the daily time commitment in minutes for this pace.
   int get minutes {
     switch (this) {
       case LearningPace.casual:
@@ -45,7 +54,7 @@ enum LearningPace {
     }
   }
 
-  //Helper: display name
+  /// Returns the user-friendly display name for this pace.
   String get displayName {
     switch (this) {
       case LearningPace.casual:
@@ -57,10 +66,10 @@ enum LearningPace {
     }
   }
 
-  //Helper: subtitle
+  /// Returns a descriptive subtitle showing the daily time commitment.
   String get subtitle => "$minutes minutes/day";
 
-  //Helper: icon
+  /// Returns an icon that visually represents this pace.
   IconData get icon {
     switch (this) {
       case LearningPace.casual:
@@ -73,6 +82,10 @@ enum LearningPace {
   }
 }
 
+/// Page widget that displays the pace selection interface.
+/// 
+/// This page provides a clean, focused interface for users to choose
+/// their preferred learning intensity level.
 class ChallengesPage extends StatelessWidget {
   const ChallengesPage({super.key});
 
@@ -91,37 +104,50 @@ class ChallengesPage extends StatelessWidget {
   }
 }
 
+/// Application state manager for learning pace selection.
+/// 
+/// Manages the currently selected learning pace and provides operations
+/// to change it. Persists the selection using SharedPreferences.
 class MyAppState extends ChangeNotifier {
   LearningPace _selectedPace = LearningPace.defaultPace;
 
+  /// Returns the currently selected learning pace.
   LearningPace get selectedPace => _selectedPace;
 
   MyAppState() {
     _loadPace();
   }
 
+  /// Sets a new learning pace and persists the selection.
+  /// 
+  /// [pace] - The new learning pace to set
   void setPace(LearningPace pace) async {
-    //The algebra operation: replacing one value with another from the carrier set
     _selectedPace = pace;
     notifyListeners();
     _savePace(pace);
   }
 
-  //Operation: increment the pacce
+  /// Increases the learning pace to the next higher intensity level.
   void incrementPace() {
     setPace(_selectedPace.next());
   }
 
-  //Operation: decrement the pace
+  /// Decreases the learning pace to the next lower intensity level.
   void decrementPace() {
     setPace(_selectedPace.previous());
   }
 
+  /// Saves the selected pace to persistent storage.
+  /// 
+  /// [pace] - The learning pace to save
   Future<void> _savePace(LearningPace pace) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("selectedPace", pace.name);
   }
 
+  /// Loads the previously saved pace from persistent storage.
+  /// 
+  /// If no saved pace is found or an error occurs, defaults to casual pace.
   Future<void> _loadPace() async {
     final prefs = await SharedPreferences.getInstance();
     final paceString = prefs.getString("selectedPace");
@@ -137,6 +163,10 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
+/// Widget that displays the pace selection interface with interactive controls.
+/// 
+/// Provides both incremental controls (faster/slower buttons) and direct
+/// selection of all available pace options with visual feedback.
 class PaceSelector extends StatelessWidget {
   const PaceSelector({super.key});
 
@@ -189,13 +219,16 @@ class PaceSelector extends StatelessWidget {
               selected: appState.selectedPace == pace,
             ),
           const SizedBox(height: 30),
-
-          //Algebraic increment/drecrement controls
         ],
       ),
     );
   }
 
+  /// Builds an individual pace option card with visual selection state.
+  /// 
+  /// [context] - The build context
+  /// [pace] - The learning pace to display
+  /// [selected] - Whether this pace is currently selected
   Widget _buildOption(
     BuildContext context, {
     required LearningPace pace,
@@ -236,6 +269,16 @@ class PaceSelector extends StatelessWidget {
   }
 }
 
+/// Returns the background color for a pace option based on its type and selection state.
+/// 
+/// [pace] - The learning pace to get color for
+/// [selected] - Whether the pace is currently selected
+/// 
+/// Returns:
+/// - For selected casual: Yellow shade 400
+/// - For selected standard: Orange shade 400  
+/// - For selected intensive: Red shade 400
+/// - For unselected: White
 Color _getButtonColorBox(LearningPace pace, bool selected) {
   if (selected) {
     switch (pace) {

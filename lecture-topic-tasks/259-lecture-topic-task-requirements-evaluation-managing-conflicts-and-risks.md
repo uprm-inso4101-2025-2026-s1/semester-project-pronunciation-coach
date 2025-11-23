@@ -7,10 +7,10 @@ author: "klrskevin"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-05T13:04:42Z"
-updated_at: "2025-11-13T16:25:44Z"
+updated_at: "2025-11-23T16:49:23Z"
 ---
 
 # [Lecture Topic Task]: <Requirements Evaluation — Managing Conflicts and Risks>
@@ -20,7 +20,7 @@ updated_at: "2025-11-13T16:25:44Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-05T13:04:42Z
 

@@ -7,10 +7,10 @@ author: "iralys-sanchez18"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-23T00:44:23Z"
+updated_at: "2025-11-23T05:23:19Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T00:44:23Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 - **Created:** 2025-11-22T20:50:32Z
 
@@ -43,11 +43,11 @@ The quiz’s UI and behavior will remain unchanged; only the internal structure 
 ---
 
 ## ✅ Acceptance Criteria 
-- [ ] A QuizState abstraction exists (class or interface) representing a quiz state.
-- [ ] At least two concrete quiz states (ex. QuestionState, ResultsState) implement this abstraction.
-- [ ] quiz_state_machine.dart assigns transitions through the State Pattern logic.
-- [ ] Existing quiz behavior remains unchanged.
-- [ ] Documentation inside the file explains the changes.
+- [x] A QuizState abstraction exists (class or interface) representing a quiz state.
+- [x] At least two concrete quiz states (ex. QuestionState, ResultsState) implement this abstraction.
+- [x] quiz_state_machine.dart assigns transitions through the State Pattern logic.
+- [x] Existing quiz behavior remains unchanged.
+- [x] Documentation inside the file explains the changes.
 
 ---
 

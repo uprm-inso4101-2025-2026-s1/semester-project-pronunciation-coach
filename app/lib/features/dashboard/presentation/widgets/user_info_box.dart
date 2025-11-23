@@ -2,6 +2,22 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// USER INFO BOX - USER PROFILE SUMMARY DISPLAY
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Compact user profile display with avatar and stats
+/// - Proficiency level and activity statistics
+/// - Responsive layout for different screen sizes
+/// 
+/// FEATURES:
+/// - User avatar and name display
+/// - Proficiency level indicator
+/// - Activity statistics with icons
+/// - Responsive design using LayoutBuilder
+/// ===========================================================================
+
 class UserInfoBox extends StatelessWidget {
   final String name;
   final String avatarURL;
@@ -95,6 +111,7 @@ class UserInfoBox extends StatelessWidget {
     );
   }
 
+    /// Build individual statistic box
     Widget _buildStatBox(IconData icon, String value, String label) {
       return Column(
         children: [

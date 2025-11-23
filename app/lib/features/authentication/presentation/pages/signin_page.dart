@@ -5,10 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-// import '../widgets/loading_screens_factory.dart';
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
+
+/// ===========================================================================
+/// SIGNUP PAGE - USER REGISTRATION INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - User registration screen for new account creation
+/// - Collects user information and creates Supabase authentication
+/// - Handles email confirmation flow
+/// - Creates user profile in database
+/// 
+/// KEY FEATATURES:
+/// - Multi-field form validation (name, email, password, confirmation)
+/// - Password strength validation with specific requirements
+/// - Email confirmation handling
+/// - Profile creation in Supabase database
+/// 
+/// ARCHITECTURE:
+/// - Stateful widget with form management
+/// - Integration with LoadingSystem for async operations
+/// - Supabase authentication and database operations
+/// - Navigation back to login page
+/// ===========================================================================
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -18,21 +40,22 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
+  // Form management
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmPassCtrl = TextEditingController();
 
+  // Loading state management
   late final void Function(bool) _loadingListener;
-
   bool _loading = false;
   final LoadingSystem _loadingSystem = LoadingSystem();
 
   @override
   void initState() {
     super.initState();
-    // Optional: Add listener for loading state changes
+    // Observer pattern: Listen to loading state changes
     _loadingListener = (isLoading) {
       if (mounted) {
         setState(() {
@@ -45,6 +68,7 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   void dispose() {
+    // Cleanup: Remove listeners and controllers
     _loadingSystem.removeLoadingListener(_loadingListener);
     _nameCtrl.dispose();
     _emailCtrl.dispose();
@@ -53,6 +77,7 @@ class _SigninPageState extends State<SigninPage> {
     super.dispose();
   }
 
+  /// Display snackbar message for user feedback
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -81,11 +106,13 @@ class _SigninPageState extends State<SigninPage> {
   // - Automatic UI updates based on loading state
   // =============================================================================
 
+  /// Handle user registration process
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
+    // Show loading overlay during registration
     _loadingSystem.showLoading(
       context: context,
       message: 'Creating your account...',
@@ -132,24 +159,28 @@ class _SigninPageState extends State<SigninPage> {
         // Navigator.of(context).pop();
       }
     } on AuthException catch (e) {
+      // Handle authentication-specific errors
       if (!mounted) return;
       _loadingSystem.hideLoading(context);
       _showSnack(e.message);
     } catch (e) {
+      // Handle generic errors
       if (!mounted) return;
       _loadingSystem.hideLoading(context);
       _showSnack('Unexpected error. Please try again.');
     } finally {
+      // Reset loading state
       if (mounted) setState(() => _loading = false);
     }
   }
 
+  /// Validate full name format
   String? _validateName(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your name';
     final nameReg = RegExp(
       r"^[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]"
-      r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F'’\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ])"
+      r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F''\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ])"
       r"(?:\s+[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]"
       r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F'’\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]))+$",
       unicode: true,
@@ -161,6 +192,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate email format
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';
     if (value.isEmpty) return 'Please enter your email';
@@ -171,6 +203,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate password strength requirements
   String? _validatePass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';
@@ -183,6 +216,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate password confirmation matches
   String? _validateConfPass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please confirm your password';

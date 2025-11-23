@@ -7,12 +7,10 @@ author: "FabianVelezOcasio"
 labels: [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-19T19:10:25Z"
-updated_at: "2025-11-23T02:54:56Z"
+updated_at: "2025-11-23T20:37:38Z"
 ---
 
 # [Lecture Topic Task]: Formal Modeling of Pronunciation Learning States with Alloy Analyzer
@@ -22,9 +20,7 @@ updated_at: "2025-11-23T02:54:56Z"
 - **Labels:** [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-19T19:10:25Z
 

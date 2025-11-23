@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// QUIZ STATE MACHINE 
+/// 
+/// This file implements a finite state machine (FSM) for managing quiz flow.
+/// The state machine handles transitions between different quiz states and
+/// ensures proper state management throughout the user journey.
+/// 
+/// STATE MACHINE FLOW:
+/// Idle → SelectingDifficulty → LoadingQuiz → Answering → Evaluating → Results
+/// 
+/// Events trigger state transitions, and each state defines valid transitions.
+/// ===========================================================================
+
 /// Base event class for state machine events
 abstract class QuizEvent {}
 

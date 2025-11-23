@@ -1,17 +1,15 @@
 ---
 issue_number: 330
 title: "[Lecture Topic Task]: TLA+ for login/signup authentication state"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/330"
 author: "JuliT02"
 labels: [
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-14T17:08:18Z"
-updated_at: "2025-11-14T17:53:25Z"
+updated_at: "2025-11-23T20:34:07Z"
 ---
 
 # [Lecture Topic Task]: TLA+ for login/signup authentication state
@@ -20,9 +18,7 @@ updated_at: "2025-11-14T17:53:25Z"
 - **Author:** @JuliT02
 - **Labels:** [
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-14T17:08:18Z
 
