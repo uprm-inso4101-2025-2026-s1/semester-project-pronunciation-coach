@@ -8,10 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-22T19:19:03Z"
-updated_at: "2025-11-23T17:06:02Z"
+updated_at: "2025-11-23T22:24:46Z"
 ---
 
 # [Lecture Topic Task]: <Applying Software Risks and Fault Analysis to current backend code>
@@ -22,7 +22,7 @@ updated_at: "2025-11-23T17:06:02Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-22T19:19:03Z
 
