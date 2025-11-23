@@ -20,7 +20,7 @@ Research on Learning Analytics Dashboards (LADs) highlights how adaptive dashboa
 - LADs should promote student–student and student–instructor interaction.
 - Dashboards support time management, planning, and metacognitive processes.
 - Adaptive features (personalized recommendations, alerts, transparency) improve self-regulation.
-- Zimmerman’s Self-Regulated Learning (SRL) model is often referenced in LAD design as it supports reflection, goal-setting, and effort monitoring.
+- Zimmerman’s Self-Regulated Learning model is often referenced in LAD design as it supports reflection, goal-setting, and effort monitoring.
 
 === Example Use Cases
 - Moodle-style modular dashboards that show progress, completion, and resource history.
