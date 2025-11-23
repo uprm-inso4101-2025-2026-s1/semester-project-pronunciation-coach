@@ -276,6 +276,7 @@ class QuizStateMachine {
   /// Reset to initial state
   void reset() {
     _currentState = const IdleState();
+    _updateMarks();
   }
 }
 
