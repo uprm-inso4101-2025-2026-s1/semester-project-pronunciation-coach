@@ -7,10 +7,10 @@ author: "iralys-sanchez18"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-22T20:50:51Z"
+updated_at: "2025-11-23T00:44:23Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
@@ -20,7 +20,7 @@ updated_at: "2025-11-22T20:50:51Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-22T20:50:32Z
 
