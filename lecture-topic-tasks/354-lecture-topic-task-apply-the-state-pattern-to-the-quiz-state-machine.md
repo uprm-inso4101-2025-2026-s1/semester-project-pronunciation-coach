@@ -10,7 +10,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-23T04:18:12Z"
+updated_at: "2025-11-23T04:18:16Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
@@ -46,7 +46,7 @@ The quiz’s UI and behavior will remain unchanged; only the internal structure 
 - [ ] A QuizState abstraction exists (class or interface) representing a quiz state.
 - [ ] At least two concrete quiz states (ex. QuestionState, ResultsState) implement this abstraction.
 - [x] quiz_state_machine.dart assigns transitions through the State Pattern logic.
-- [ ] Existing quiz behavior remains unchanged.
+- [x] Existing quiz behavior remains unchanged.
 - [ ] Documentation inside the file explains the changes.
 
 ---
