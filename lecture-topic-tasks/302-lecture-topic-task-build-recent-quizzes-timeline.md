@@ -8,11 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-11T22:41:11Z"
-updated_at: "2025-11-23T02:21:59Z"
+updated_at: "2025-11-23T02:44:06Z"
 ---
 
 # [Lecture Topic Task]: Build Recent Quizzes Timeline
@@ -23,8 +22,7 @@ updated_at: "2025-11-23T02:21:59Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-11T22:41:11Z
 
