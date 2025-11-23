@@ -6,10 +6,11 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Joy-Martinez"
 labels: [
   "Team 4",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: in progress"
 ]
 created_at: "2025-11-23T03:47:21Z"
-updated_at: "2025-11-23T05:42:47Z"
+updated_at: "2025-11-23T15:22:27Z"
 ---
 
 # [Lecture Topic Task]: Phenomena and concepts. Front end and back end of the quiz!
@@ -18,7 +19,8 @@ updated_at: "2025-11-23T05:42:47Z"
 - **Author:** @Joy-Martinez
 - **Labels:** [
   "Team 4",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: in progress"
 ]
 - **Created:** 2025-11-23T03:47:21Z
 
