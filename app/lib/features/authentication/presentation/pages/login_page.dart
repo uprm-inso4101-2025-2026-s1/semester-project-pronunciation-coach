@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'signin_page.dart';
 import 'package:app/features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import '../widgets/text_field.dart';
@@ -79,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Display snackbar message for user feedback
   void _showSnack(String msg) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
@@ -96,14 +99,15 @@ class _LoginPageState extends State<LoginPage> {
     // Play loading sound for authentication process
     _soundService.playFactReveal();
 
+    // Store context locally before async operations
+    final currentContext = context;
+
     // Show loading overlay using LoadingSystem
     _loadingSystem.showLoading(
-      context: context,
+      context: currentContext,
       message: 'Signing you in...',
       contextType: 'authentication',
     );
-
-    final navigator = Navigator.of(context);
 
     try {
       final email = _emailCtrl.text.trim();
@@ -119,25 +123,25 @@ class _LoginPageState extends State<LoginPage> {
 
       // Authentication successful
       _soundService.playLoadingSuccess();
-      _loadingSystem.hideLoading(context);
+      _loadingSystem.hideLoading(currentContext);
 
       // Navigate to main app screen
       _soundService.playTransition();
-      navigator.pushReplacement(
+      Navigator.of(currentContext).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
       // Handle authentication-specific errors
       if (mounted) {
         _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(context);
+        _loadingSystem.hideLoading(currentContext);
       }
       _showSnack(e.message);
     } catch (e) {
       // Handle generic errors
       if (mounted) {
         _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(context);
+        _loadingSystem.hideLoading(currentContext);
       }
       _showSnack('Unexpected error. Please try again.');
     } finally {
