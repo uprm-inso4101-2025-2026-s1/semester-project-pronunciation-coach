@@ -3,6 +3,23 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
+import 'audio_quiz_history_page.dart';
+
+
+/// ===========================================================================
+/// AUDIO QUIZ HOME PAGE 
+/// 
+/// This file contains the main entry point for the audio quiz feature.
+/// It provides:
+/// - Difficulty selection interface
+/// - Animated transitions
+/// - Quiz initialization and navigation
+/// 
+/// MAIN COMPONENTS:
+/// - AudioQuizHomePage: Main difficulty selection screen
+/// - _QuizLoadingPage: Loading screen while generating quiz
+/// - _DifficultyCard: Individual difficulty option card
+/// ===========================================================================
 
 class AudioQuizHomePage extends StatefulWidget {
   const AudioQuizHomePage({super.key});
@@ -120,6 +137,28 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
           'Listen to audio pronunciations and pick the correct one!',
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
+            );
+          },
+          icon: const Icon(Icons.history),
+          label: const Text(
+            'View Quiz History',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        ),
         const SizedBox(height: 24),
         ..._difficulties.asMap().entries.map(
           (entry) => TweenAnimationBuilder<double>(
@@ -161,6 +200,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   }
 }
 
+/// Loading screen displayed while quiz content is being generated
 class _QuizLoadingPage extends StatefulWidget {
   final Difficulty difficulty;
   final AudioApiService apiService;
@@ -325,6 +365,7 @@ class _QuizLoadingPageState extends State<_QuizLoadingPage>
   }
 }
 
+/// Individual difficulty selection card with icon, description, and XP reward
 class _DifficultyCard extends StatelessWidget {
   final Difficulty difficulty;
   final VoidCallback onTap;

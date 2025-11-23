@@ -8,11 +8,11 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: in progress"
+  "state: waiting for team lead",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-14T03:59:15Z"
-updated_at: "2025-11-14T17:58:08Z"
+updated_at: "2025-11-23T03:00:18Z"
 ---
 
 # [Lecture Topic Task]: Risk-Based Sound Effects Prioritization Using Weighted Matrix Analysis
@@ -23,8 +23,8 @@ updated_at: "2025-11-14T17:58:08Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for dev",
-  "state: in progress"
+  "state: waiting for team lead",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-14T03:59:15Z
 

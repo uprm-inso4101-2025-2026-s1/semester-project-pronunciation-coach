@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: Triptych: Harden Create Account — Idempotency, E
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/275"
 author: "alondra-arce"
-labels: ["Team 1","Task: lecture-topic","task: development","state: concluded","state: waiting for manager"]
+labels: [
+  "Team 1",
+  "Task: lecture-topic",
+  "task: development",
+  "state: concluded"
+]
 created_at: "2025-11-09T16:19:49Z"
-updated_at: "2025-11-10T17:40:12Z"
+updated_at: "2025-11-23T00:32:10Z"
 ---
 
 # [Lecture Topic Task]: Triptych: Harden Create Account — Idempotency, Email Uniqueness, and Verification Cooldown
 
 - **Issue:** [275](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/275)
 - **Author:** @alondra-arce
-- **Labels:** ["Team 1","Task: lecture-topic","task: development","state: concluded","state: waiting for manager"]
+- **Labels:** [
+  "Team 1",
+  "Task: lecture-topic",
+  "task: development",
+  "state: concluded"
+]
 - **Created:** 2025-11-09T16:19:49Z
 
 ## Details
@@ -61,3 +71,4 @@ Estimated completion time: 1 day
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: @alondra-arce 
+

@@ -1,6 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+/// Service for interacting with the audio challenge backend API.
+/// 
+/// Handles all audio-related operations including:
+/// - Difficulty level management
+/// - Audio challenge generation
+/// - Answer submission and validation
+/// - Audio file URL generation
+/// 
+/// Note: Base URL configuration varies by platform:
+/// - iOS Simulator: http://localhost:8000/api
+/// - Android Emulator: http://10.0.2.2:8000/api  
+/// - Physical Device: http://YOUR_IP:8000/api
 class AudioApiService {
   // Update based on your platform
   // iOS Simulator: http://localhost:8000/api
@@ -8,7 +20,13 @@ class AudioApiService {
   // Physical Device: http://YOUR_IP:8000/api
   static const String baseUrl = 'http://localhost:8000/api';
 
-  /// Get available difficulty levels
+  /// Retrieves available difficulty levels for audio challenges.
+  /// 
+  /// Fetches the list of difficulty settings from the backend API
+  /// including names, descriptions, XP rewards, and icons.
+  /// 
+  /// Returns [List<Difficulty>] - Available difficulty levels
+  /// Throws [Exception] on network errors or non-200 responses
   Future<List<Difficulty>> getDifficulties() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/difficulties'));
@@ -25,7 +43,12 @@ class AudioApiService {
     }
   }
 
-  /// Generate a new audio challenge
+  /// Generates a new audio challenge with the specified difficulty.
+  /// 
+  /// [difficulty]: The difficulty level for the challenge (e.g., 'easy', 'medium')
+  /// 
+  /// Returns [AudioChallenge] - Generated challenge with audio options and metadata
+  /// Throws [Exception] on network errors or non-200 responses
   Future<AudioChallenge> generateAudioChallenge(String difficulty) async {
     try {
       final response = await http.post(
@@ -44,7 +67,14 @@ class AudioApiService {
     }
   }
 
-  /// Submit answer for audio challenge
+  /// Submits an answer for an audio challenge and gets validation results.
+  /// 
+  /// [challengeId]: The ID of the challenge being answered
+  /// [answer]: The user's answer (typically a letter like 'A', 'B', etc.)
+  /// [userId]: The ID of the user submitting the answer
+  /// 
+  /// Returns [AudioChallengeResult] - Validation result with correctness, XP, and feedback
+  /// Throws [Exception] on network errors or non-200 responses
   Future<AudioChallengeResult> submitAudioAnswer(
     int challengeId,
     String answer,
@@ -67,19 +97,36 @@ class AudioApiService {
     }
   }
 
-  /// Get audio URL for specific option
+  /// Generates the audio URL for a specific challenge option.
+  /// 
+  /// [challengeId]: The ID of the challenge
+  /// [optionLetter]: The letter identifier of the option (e.g., 'A', 'B')
+  /// 
+  /// Returns [String] - Full URL to the audio file for playback
   String getAudioUrl(int challengeId, String optionLetter) {
     return '$baseUrl/challenge/audio/$challengeId/option/$optionLetter';
   }
 }
 
-// Models
+// ===========================================================================
+// DATA MODELS
+// ===========================================================================
 
+/// Represents a difficulty level for audio challenges.
 class Difficulty {
+  /// Unique identifier for the difficulty level
   final String id;
+  
+  /// Display name (e.g., 'Easy', 'Medium', 'Hard')
   final String name;
+  
+  /// Description of what this difficulty entails
   final String description;
+  
+  /// XP reward for completing challenges at this difficulty
   final int xpReward;
+  
+  /// Icon identifier for UI representation
   final String icon;
 
   Difficulty({
@@ -90,6 +137,7 @@ class Difficulty {
     required this.icon,
   });
 
+  /// Creates a Difficulty instance from JSON data.
   factory Difficulty.fromJson(Map<String, dynamic> json) {
     return Difficulty(
       id: json['id'],
@@ -101,9 +149,15 @@ class Difficulty {
   }
 }
 
+/// Represents an individual audio option within a challenge.
 class AudioOption {
+  /// Letter identifier for the option (A, B, C, etc.)
   final String letter;
+  
+  /// URL to the audio file for this option
   final String audioUrl;
+  
+  /// Pattern or phonetic representation of the audio content
   final String pattern;
 
   AudioOption({
@@ -112,6 +166,7 @@ class AudioOption {
     required this.pattern,
   });
 
+  /// Creates an AudioOption instance from JSON data.
   factory AudioOption.fromJson(Map<String, dynamic> json) {
     return AudioOption(
       letter: json['letter'],
@@ -121,15 +176,33 @@ class AudioOption {
   }
 }
 
+/// Represents a complete audio challenge with all options and metadata.
 class AudioChallenge {
+  /// Unique identifier for the challenge
   final int id;
+  
+  /// The target word or concept being tested
   final String word;
+  
+  /// Difficulty level of the challenge
   final String difficulty;
+  
+  /// Content or instruction for the challenge
   final String content;
+  
+  /// Type of audio challenge
   final String type;
+  
+  /// XP reward for correct completion
   final int xpReward;
+  
+  /// Optional hint to assist the user
   final String? hint;
+  
+  /// List of available audio options to choose from
   final List<AudioOption> options;
+  
+  /// The correct answer (option letter)
   final String correctAnswer;
 
   AudioChallenge({
@@ -144,6 +217,7 @@ class AudioChallenge {
     required this.correctAnswer,
   });
 
+  /// Creates an AudioChallenge instance from JSON data.
   factory AudioChallenge.fromJson(Map<String, dynamic> json) {
     return AudioChallenge(
       id: json['id'],
@@ -160,19 +234,37 @@ class AudioChallenge {
     );
   }
 
+  /// Generates the audio URL for a specific option in this challenge.
+  /// 
+  /// [optionLetter]: The letter identifier of the option
+  /// Returns [String] - Full URL to the option's audio file
   String getAudioUrl(String optionLetter) {
     final baseUrl = AudioApiService.baseUrl;
     return '$baseUrl/challenge/audio/$id/option/$optionLetter';
   }
 }
 
+/// Represents the result of submitting an answer to an audio challenge.
 class AudioChallengeResult {
+  /// ID of the challenge that was answered
   final int challengeId;
+  
+  /// ID of the user who submitted the answer
   final int userId;
+  
+  /// Whether the answer was correct
   final bool isCorrect;
+  
+  /// XP earned from this attempt
   final int xpEarned;
+  
+  /// Feedback message explaining the result
   final String feedback;
+  
+  /// The correct answer for the challenge
   final String correctAnswer;
+  
+  /// The correct word or concept
   final String correctWord;
 
   AudioChallengeResult({
@@ -185,6 +277,7 @@ class AudioChallengeResult {
     required this.correctWord,
   });
 
+  /// Creates an AudioChallengeResult instance from JSON data.
   factory AudioChallengeResult.fromJson(Map<String, dynamic> json) {
     return AudioChallengeResult(
       challengeId: json['challenge_id'],

@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: Integrate Domain Concepts into the Pronunciation F
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/143"
 author: "diegohdnz11"
-labels: ["documentation","Team 4","Task: lecture-topic","state: waiting for manager"]
+labels: [
+  "documentation",
+  "Team 4",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-07T01:03:17Z"
-updated_at: "2025-10-24T16:21:28Z"
+updated_at: "2025-11-23T00:41:40Z"
 ---
 
 # [Lecture Topic Task]: Integrate Domain Concepts into the Pronunciation Feedback System
 
 - **Issue:** [143](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/143)
 - **Author:** @diegohdnz11
-- **Labels:** ["documentation","Team 4","Task: lecture-topic","state: waiting for manager"]
+- **Labels:** [
+  "documentation",
+  "Team 4",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-07T01:03:17Z
 
 ## Details
@@ -64,3 +74,4 @@ Estimated completion time: 5 days
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: @diegohdnz11 
+

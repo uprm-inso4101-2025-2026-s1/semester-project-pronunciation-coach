@@ -8,10 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-22T03:01:53Z"
-updated_at: "2025-11-22T04:02:07Z"
+updated_at: "2025-11-23T00:54:10Z"
 ---
 
 # [Lecture Topic Task]: Apply Strategy Pattern to Pronunciation Feedback Generation
@@ -22,7 +22,7 @@ updated_at: "2025-11-22T04:02:07Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-22T03:01:53Z
 

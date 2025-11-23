@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// HOME SECTIONS - MAIN HOME PAGE CONTENT SECTIONS
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Provides structured content sections for the home page
+/// - Displays quick access activities and progress indicators
+/// - Implements consistent card-based layout
+/// 
+/// SECTIONS:
+/// - Lessons: Available pronunciation lessons
+/// - Daily Practice: Current practice session progress
+/// - Weekly Goals: Progress towards weekly objectives
+/// ===========================================================================
+
 class HomeSections extends StatelessWidget {
   const HomeSections({super.key});
 
@@ -42,6 +57,21 @@ class HomeSections extends StatelessWidget {
     );
   }
 }
+
+/// ===========================================================================
+/// ACTIVITY CARD - REUSABLE ACTIVITY DISPLAY CARD
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Consistent card layout for activity items
+/// - Interactive tap feedback with ripple effects
+/// - Flexible content arrangement with icon, text, and trailing widget
+/// 
+/// FEATURES:
+/// - Customizable icon, title, subtitle, and trailing content
+/// - Smooth tap animations and visual feedback
+/// - Consistent styling with rounded corners and shadows
+/// ===========================================================================
 
 class ActivityCard extends StatelessWidget {
   final IconData icon;

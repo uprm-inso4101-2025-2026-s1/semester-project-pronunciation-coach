@@ -1,17 +1,17 @@
 ---
 issue_number: 353
 title: "[Lecture Topic Task]: <Applying Documents Lecture to improve and apply previous Backend research>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/353"
 author: "ivxnmorxles"
 labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-22T20:17:47Z"
-updated_at: "2025-11-22T20:21:41Z"
+updated_at: "2025-11-23T15:13:15Z"
 ---
 
 # [Lecture Topic Task]: <Applying Documents Lecture to improve and apply previous Backend research>
@@ -22,7 +22,7 @@ updated_at: "2025-11-22T20:21:41Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-22T20:17:47Z
 
