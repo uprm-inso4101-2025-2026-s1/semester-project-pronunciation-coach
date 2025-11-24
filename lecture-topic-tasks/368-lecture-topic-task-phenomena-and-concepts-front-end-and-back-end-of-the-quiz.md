@@ -7,10 +7,11 @@ author: "Joy-Martinez"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-23T03:47:21Z"
-updated_at: "2025-11-23T15:22:27Z"
+updated_at: "2025-11-24T02:10:07Z"
 ---
 
 # [Lecture Topic Task]: Phenomena and concepts. Front end and back end of the quiz!
@@ -20,7 +21,8 @@ updated_at: "2025-11-23T15:22:27Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-23T03:47:21Z
 
