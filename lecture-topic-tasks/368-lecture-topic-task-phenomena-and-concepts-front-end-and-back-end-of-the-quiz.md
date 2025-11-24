@@ -1,16 +1,16 @@
 ---
 issue_number: 368
 title: "[Lecture Topic Task]: Phenomena and concepts. Front end and back end of the quiz!"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/368"
 author: "Joy-Martinez"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-23T03:47:21Z"
-updated_at: "2025-11-23T15:22:27Z"
+updated_at: "2025-11-24T02:53:00Z"
 ---
 
 # [Lecture Topic Task]: Phenomena and concepts. Front end and back end of the quiz!
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T15:22:27Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-23T03:47:21Z
 

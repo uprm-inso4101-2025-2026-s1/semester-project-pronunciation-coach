@@ -8,10 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-09T22:25:27Z"
-updated_at: "2025-11-23T20:25:39Z"
+updated_at: "2025-11-24T03:36:26Z"
 ---
 
 # [Lecture Topic Task]: Replace Dummy User Names with Supabase Profile Name Using UI-Data Synchronization
@@ -22,7 +22,7 @@ updated_at: "2025-11-23T20:25:39Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-09T22:25:27Z
 

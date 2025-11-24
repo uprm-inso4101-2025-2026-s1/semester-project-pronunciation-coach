@@ -1,17 +1,16 @@
 ---
 issue_number: 354
 title: "[Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/354"
 author: "iralys-sanchez18"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-22T20:50:32Z"
-updated_at: "2025-11-24T00:27:32Z"
+updated_at: "2025-11-24T01:25:36Z"
 ---
 
 # [Lecture Topic Task]: Apply the State Pattern to the Quiz State Machine
@@ -21,8 +20,7 @@ updated_at: "2025-11-24T00:27:32Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-22T20:50:32Z
 
