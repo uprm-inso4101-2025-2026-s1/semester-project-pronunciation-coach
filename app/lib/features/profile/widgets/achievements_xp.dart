@@ -193,7 +193,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       );
       await progressService.saveUserProgress(updatedProgress);
     } catch (e) {
-      print('Error saving achievements to Supabase: $e');
+      // If fail - achievements are still saved in SharedPreferences
     }
   }
 
