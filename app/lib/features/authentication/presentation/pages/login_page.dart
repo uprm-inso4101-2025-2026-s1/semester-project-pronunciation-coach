@@ -15,27 +15,6 @@ import '../widgets/background_music_manager.dart';
 /// ===========================================================================
 /// LOGIN PAGE - AUTHENTICATION INTERFACE
 /// ===========================================================================
-///
-/// PURPOSE:
-/// - Primary login screen for user authentication
-/// - Handles email/password login with Supabase backend
-/// - Provides navigation to signup and password recovery
-/// - Implements sound feedback for user interactions
-///
-/// KEY FEATURES:
-/// - Form validation for email and password
-/// - Loading states with visual feedback
-/// - Sound effects for user interactions
-/// - "Remember me" functionality
-/// - Error handling with user-friendly messages
-///
-/// ARCHITECTURE:
-/// - Stateful widget managing form state and authentication flow
-/// - Integration with LoadingSystem for loading states
-/// - SoundService for audio feedback
-/// - Supabase client for backend authentication
-/// ===========================================================================
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -73,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     // [MUSIC START]: Starts music when app opens.
-    // If returning from Sign In, it sees music is playing and does nothing (seamless).
     BackgroundMusicManager().playAuthMusic();
 
     _loadRememberedCredentials();
@@ -139,12 +117,10 @@ class _LoginPageState extends State<LoginPage> {
     // Play loading sound for authentication process
     _soundService.playFactReveal();
 
-    // Store context locally before async operations
-    final currentContext = context;
-
     // Show loading overlay using LoadingSystem
+    // We use 'context' directly because we are in a State class
     _loadingSystem.showLoading(
-      context: currentContext,
+      context: context,
       message: 'Signing you in...',
       contextType: 'authentication',
     );
@@ -153,12 +129,13 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
-      // Sign in with Supabase authentication
+      // 1. Sign in with Supabase authentication (Async Gap 1)
       await AppSupabase.client.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
+      // 2. Handle Shared Preferences (Async Gap 2)
       final prefs = await SharedPreferences.getInstance();
       if (_rememberMe) {
         await prefs.setBool(_rememberMeKey, true);
@@ -168,35 +145,37 @@ class _LoginPageState extends State<LoginPage> {
         await prefs.remove(_savedEmailKey);
       }
 
+      // CHECK MOUNTED before using context after async gaps
       if (!mounted) return;
 
       // Authentication successful
       _soundService.playLoadingSuccess();
-      _loadingSystem.hideLoading(currentContext);
+      _loadingSystem.hideLoading(context);
 
-      // [MUSIC STOP]: Stop music immediately on successful login
+      // 3. Stop music (Async Gap 3)
       await BackgroundMusicManager().stopMusic();
+
+      // CHECK MOUNTED AGAIN before navigation
+      if (!mounted) return;
 
       // Navigate to main app screen
       _soundService.playTransition();
-
-      if (!mounted) return;
-      Navigator.of(currentContext).pushReplacement(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
       // Handle authentication-specific errors
       if (!mounted) return;
       _soundService.playWrongAnswer();
-      _loadingSystem.hideLoading(currentContext);
-    
+      _loadingSystem.hideLoading(context);
+
       _showSnack(e.message);
     } catch (e) {
       // Handle generic errors
       if (!mounted) return;
       _soundService.playWrongAnswer();
-      _loadingSystem.hideLoading(currentContext);
-      
+      _loadingSystem.hideLoading(context);
+
       _showSnack('Unexpected error. Please try again.');
     } finally {
       // Reset loading state
@@ -208,7 +187,9 @@ class _LoginPageState extends State<LoginPage> {
   void _onCreateAccount() {
     _soundService.playButtonClick();
     // Music does not stop here. It continues playing in the next screen.
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SigninPage()));
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
   /// Handle forgot password flow (placeholder)
@@ -436,7 +417,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onChanged: _onRememberMeChanged,
                                 activeColor: AppColors.primary,
                                 materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
+                                    MaterialTapTargetSize.shrinkWrap,
                               ),
                               Text(
                                 'Remember me',
@@ -490,28 +471,28 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: _loading
                               ? SizedBox(
-                            width: 6.w,
-                            height: 6.w,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
+                                  width: 6.w,
+                                  height: 6.w,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
                               : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.login, size: 18.sp),
-                              SizedBox(width: 3.w),
-                              Text(
-                                'Sign In to Continue',
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.login, size: 18.sp),
+                                    SizedBox(width: 3.w),
+                                    Text(
+                                      'Sign In to Continue',
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
 
