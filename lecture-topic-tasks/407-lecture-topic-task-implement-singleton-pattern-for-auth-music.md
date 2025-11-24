@@ -8,11 +8,10 @@ labels: [
   "Team 1",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for dev",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-24T04:50:04Z"
-updated_at: "2025-11-24T18:01:44Z"
+updated_at: "2025-11-24T18:22:31Z"
 ---
 
 # [Lecture Topic Task]: Implement "Singleton" Pattern for Auth Music
@@ -23,8 +22,7 @@ updated_at: "2025-11-24T18:01:44Z"
   "Team 1",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for dev",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-24T04:50:04Z
 
@@ -49,7 +47,7 @@ Why Singleton? The user will frequently switch between the "Login" and "Sign Up"
 - [x] Background music starts automatically when the user lands on the Auth screen.
 - [x] Crucial: The audio track does not restart or glitch when the user clicks between "Login" and "Sign Up" tabs.
 - [x] Music stops or fades out immediately upon successful login or navigation to the Dashboard.
-- [ ] Music volume is set to a non-intrusive background level.
+- [x] Music volume is set to a non-intrusive background level.
 ---
 
 ## 🧪 Testing Plan
