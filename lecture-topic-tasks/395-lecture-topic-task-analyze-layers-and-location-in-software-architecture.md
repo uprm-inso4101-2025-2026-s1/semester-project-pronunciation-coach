@@ -1,17 +1,16 @@
 ---
 issue_number: 395
 title: "[Lecture Topic Task]: Analyze "Layers and Location" in Software Architecture"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/395"
 author: "alondra-arce"
 labels: [
-  "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-24T01:18:47Z"
-updated_at: "2025-11-24T18:41:37Z"
+updated_at: "2025-11-24T18:41:56Z"
 ---
 
 # [Lecture Topic Task]: Analyze "Layers and Location" in Software Architecture
@@ -19,10 +18,9 @@ updated_at: "2025-11-24T18:41:37Z"
 - **Issue:** [395](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/395)
 - **Author:** @alondra-arce
 - **Labels:** [
-  "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-24T01:18:47Z
 
