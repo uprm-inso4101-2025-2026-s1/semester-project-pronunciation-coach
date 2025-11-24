@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T01:18:47Z"
-updated_at: "2025-11-24T17:45:35Z"
+updated_at: "2025-11-24T18:41:37Z"
 ---
 
 # [Lecture Topic Task]: Analyze "Layers and Location" in Software Architecture
