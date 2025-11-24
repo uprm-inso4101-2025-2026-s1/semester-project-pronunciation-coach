@@ -7,10 +7,11 @@ author: "Joy-Martinez"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-23T06:02:31Z"
-updated_at: "2025-11-23T15:06:08Z"
+updated_at: "2025-11-24T02:41:48Z"
 ---
 
 # [Lecture Topic Task]: Phases of developing a quiz
@@ -20,7 +21,8 @@ updated_at: "2025-11-23T15:06:08Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-23T06:02:31Z
 
