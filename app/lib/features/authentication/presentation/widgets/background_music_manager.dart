@@ -67,7 +67,7 @@ class BackgroundMusicManager {
 
       _isPlaying = true;
     } catch (e) {
-      print("⚠️ Error playing auth music: $e");
+      // print("⚠️ Error playing auth music: $e");
       _isPlaying = false;
     }
   }
@@ -83,7 +83,7 @@ class BackgroundMusicManager {
         _isPlaying = false;
       }
     } catch (e) {
-      print("Error stopping music: $e");
+      // print("Error stopping music: $e");
     }
   }
 }
