@@ -186,17 +186,17 @@ class _LoginPageState extends State<LoginPage> {
       );
     } on AuthException catch (e) {
       // Handle authentication-specific errors
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(currentContext);
-      }
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(currentContext);
+    
       _showSnack(e.message);
     } catch (e) {
       // Handle generic errors
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(currentContext);
-      }
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(currentContext);
+      
       _showSnack('Unexpected error. Please try again.');
     } finally {
       // Reset loading state
