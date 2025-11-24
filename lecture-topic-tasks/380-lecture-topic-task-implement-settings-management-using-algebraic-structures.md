@@ -1,16 +1,16 @@
 ---
 issue_number: 380
 title: "[Lecture Topic Task]: Implement Settings Management Using Algebraic Structures"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/380"
 author: "amtrevisan"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-23T17:46:46Z"
-updated_at: "2025-11-23T17:52:18Z"
+updated_at: "2025-11-23T22:59:58Z"
 ---
 
 # [Lecture Topic Task]: Implement Settings Management Using Algebraic Structures
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T17:52:18Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-23T17:46:46Z
 

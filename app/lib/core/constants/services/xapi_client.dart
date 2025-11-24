@@ -9,12 +9,41 @@ import '../../common/env.dart' as env;
 /// to track user learning activities, progress, and interactions following
 /// the xAPI specification standard.
 class XApiClient {
-  XApiClient({http.Client? client}) : _client = client ?? http.Client();
-
+  // Private fields, follows encapsulation
+  final Uri _baseEndpoint;
   final http.Client _client;
+  final String? _apiKey;
 
+  // Private named constructor
+  // Forces controlled initialization
+  XApiClient._internal({
+    required Uri endpoint,
+    required http.Client client,
+    required String? apiKey,
+  })  : _baseEndpoint = endpoint,
+        _client = client,
+        _apiKey = apiKey;
+
+  // Public factory: encapsulates env.example lookup
+  factory XApiClient.create({http.Client? client}) {
+    final base = env.Env.xApiBaseUrl;
+    if (base.isEmpty) {
+      throw StateError("XAPI_BASE_URL not configured.");
+    }
+
+    return XApiClient._internal(
+      endpoint: Uri.parse(base),
+      client: client ?? http.Client(),
+      apiKey: env.Env.xApiKey.isEmpty ? null : env.Env.xApiKey,
+    );
+  }
+
+  // Private getter: building statement URI
+  Uri get _statementUri => Uri.parse("${_baseEndpoint.toString()}/xapi/statements");
+
+  // Public API: sending an xAPI statement
   /// Gets the xAPI statements endpoint URI from environment configuration
-  Uri get _statementsUri => Uri.parse('${env.Env.xApiBaseUrl}/xapi/statements');
+  //Uri get _statementsUri => Uri.parse('${env.Env.xApiBaseUrl}/xapi/statements');
 
   /// Sends an xAPI statement to the Learning Record Store (LRS).
   /// 
@@ -37,36 +66,37 @@ class XApiClient {
   }) async {
     final headers = <String, String>{
       'Content-Type': 'application/json',
-      if (env.Env.xApiKey.isNotEmpty)
-        'Authorization': 'Bearer ${env.Env.xApiKey}',
+      if (_apiKey != null) 'Authorization': 'Bearer $_apiKey',
     };
 
     try {
       final res = await _client.post(
-        _statementsUri,
+        _statementUri,
         headers: headers,
         body: jsonEncode(statement),
       );
 
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        if (kDebugMode) debugPrint('[xAPI] OK ${res.statusCode}: ${res.body}');
-        return true;
-      } else {
+      final ok = res.statusCode >= 200 && res.statusCode < 300;
+
+      if (!ok) {
         if (kDebugMode) {
           debugPrint('[xAPI] ERROR ${res.statusCode}: ${res.body}');
         }
-        if (!silent) {
-          throw StateError('xAPI send failed: ${res.statusCode}');
-        }
-        return false;
+        if (!silent) throw StateError('xAPI send failed');
       }
-    } catch (e) {
-      if (kDebugMode) debugPrint('[xAPI] EXCEPTION: $e');
+
+      if (kDebugMode && ok) {
+        debugPrint('[xAPI] OK: ${res.statusCode}');
+      }
+      return ok;
+    } catch (err) {
+      if (kDebugMode) debugPrint('[xAPI] EXCEPTION: $err');
       if (!silent) rethrow;
       return false;
     }
   }
 
+  // Public API: Health Check
   /// Performs a health check on the xAPI service endpoint.
   /// 
   /// This method checks if the xAPI backend service is reachable and responsive.
@@ -76,7 +106,7 @@ class XApiClient {
   /// Returns [true] if the health endpoint returns 200 OK,
   /// [false] if the endpoint is unreachable or returns an error status.
   Future<bool> health() async {
-    final uri = Uri.parse('${env.Env.xApiBaseUrl}/health');
+    final uri = _baseEndpoint.replace(path: "health");
     try {
       final res = await _client.get(uri);
       return res.statusCode == 200;
