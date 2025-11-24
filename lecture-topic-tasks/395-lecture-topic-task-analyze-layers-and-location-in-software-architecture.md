@@ -11,7 +11,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-24T01:18:47Z"
-updated_at: "2025-11-24T02:09:18Z"
+updated_at: "2025-11-24T02:14:02Z"
 ---
 
 # [Lecture Topic Task]: Analyze "Layers and Location" in Software Architecture
@@ -29,32 +29,31 @@ updated_at: "2025-11-24T02:09:18Z"
 ## Details
 ## 🎯 Objective
 
-Document the specific Rules and Regulations for the domain to distinguish between expected behaviors and remedial actions.
+Analyze and document the distinction between the logical Layers of the application and the physical Location of its components.
 
 ---
 
 ## 📝 Description
 
-As part of the Domain Engineering process, we need to analyze the Rules and Regulations facet of our system.
+Based on the Software Design lecture, "Layers" represent the logical structure of the system (hierarchy based on abstractness), while "Location" is an independent deployment concern.
 
-- Rules are texts in the domain that govern how people or equipment are expected to behave.
-- Regulations are texts that govern the remedial action taken when a rule has not been followed.
-
-This task involves identifying these constraints from sources such as the enterprise itself, industry standards, or societal laws , and documenting them clearly to ensure the system handles violations correctly.
+We need to create a mapping document that explicitly defines:
+- The Logical Layers (e.g., Domain, Application, Presentation, Infrastructure).
+- The Physical Locations (e.g., Client Browser, API Server, Database).
+- How the layers are distributed across these locations (e.g., does the Domain layer exist on both the Client and Server, or just the Server?)
 
 ---
 
 ## ✅ Acceptance Criteria
 
-- [ ] At least 3 specific Rules governing user or system behavior are identified.
-- [ ] At least 3 corresponding Regulations (remedial actions) are defined for when those rules are broken.
-- [ ] The distinction between the rule (the behavior) and the regulation (the consequence) is clearly documented.
+- [ ] A diagram or table mapping Logical Layers to Physical Locations is created.
+- [ ] Constraints regarding location (e.g., "persistence must happen on the server") are documented.
+- [ ] The analysis is attached below. 
 
 ---
 
 ## 🧪 Testing Plan
-- Peer review to verify the distinction between Rules and Regulations matches lecture definitions.
-- Cross-reference with current requirements to ensure no conflicts exist.
+- Peer review of the architecture document.
 
 ---
 
