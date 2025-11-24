@@ -11,7 +11,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T15:34:43Z"
-updated_at: "2025-11-24T15:20:16Z"
+updated_at: "2025-11-24T15:28:20Z"
 ---
 
 # [Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention
@@ -43,8 +43,6 @@ The output should include a structured list of mechanics, trigger conditions, an
 ✅ Acceptance Criteria
 	•	Document outlining 6–10 gamification mechanics
 	•	Defined reward/feedback logic for each mechanic
-	•	Wireframes or mockups for the main gamified UI elements
-	•	Interaction rules explaining how users earn, lose, or maintain rewards
 	•	Clear KPIs to measure success (retention, daily active users, lesson completion)
 
 ⸻
