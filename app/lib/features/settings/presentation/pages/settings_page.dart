@@ -313,6 +313,7 @@ class _SettingsPageState extends State<SettingsPage> {
   /// [context]: BuildContext for showing the dialog
   /// [title]: Dialog title
   /// [message]: Dialog content message
+  // ignore: unused_element
   void _showWorkInProgressDialog(
     BuildContext context, {
     required String title,
