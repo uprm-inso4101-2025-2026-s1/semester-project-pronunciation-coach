@@ -6,7 +6,7 @@ Modified for: FastAPI backend integration
 """
 """
 Modified by: iralys-sanchez18
-Integrated with JSON word bank and word difficulty classifier.
+Replaces NLTK Brown corpus with 57k-word JSON wordbank.
 """
 
 import random
@@ -14,9 +14,9 @@ import random
 from collections import Counter
 from typing import List
 from quiz_wordbank import data_access as wb
-from domain.utils.word_difficulty import classify_word_difficulty
 
-from nltk.corpus import brown
+# import nltk
+# from nltk.corpus import brown
 
 # # SSL workaround for macOS
 # try:
@@ -26,40 +26,12 @@ from nltk.corpus import brown
 # else:
 #     ssl._create_default_https_context = _create_unverified_https_context
 
-# Download required NLTK data (run once)
-# def _ensure_brown_corpus():
-#     """Ensure Brown corpus is downloaded"""
-#     try:
-#         nltk.data.find("corpora/brown")
-#         return True
-#     except LookupError:
-#         try:
-#             print("Downloading NLTK Brown corpus (first time only)...")
-#             nltk.download("brown", quiet=True)
-#             return True
-#         except Exception as e:
-#             print(f"Error downloading Brown corpus: {e}")
-#             print("Please run: python3 download_nltk_data.py")
-#             return False
-
-
-# Initialize corpus on module import
-# _ensure_brown_corpus()
-
 # Cache word list in memory so it's not reloaded every call
 _WORD_CACHE: List[str] | None = None
 
-# Difficulty buckets cache
-_DIFFICULTY_BUCKETS: dict[str, list[str]] = {
-    "easy": [],
-    "medium": [],
-    "hard": [],
-}
-_DIFFICULTY_READY: bool = False
-
 def _load_words() -> List[str]:
     """
-    Loads and caches words from the wordbank.
+    Load and cache words from the wordbank.
 
     Function by: iralys-sanchez18
     """
@@ -95,81 +67,26 @@ def _load_words() -> List[str]:
 
     return _WORD_CACHE
 
-_FREQUENCY_LIST = None
+# Download required NLTK data (run once)
+# def _ensure_brown_corpus():
+#     """Ensure Brown corpus is downloaded"""
+#     try:
+#         nltk.data.find("corpora/brown")
+#         return True
+#     except LookupError:
+#         try:
+#             print("Downloading NLTK Brown corpus (first time only)...")
+#             nltk.download("brown", quiet=True)
+#             return True
+#         except Exception as e:
+#             print(f"Error downloading Brown corpus: {e}")
+#             print("Please run: python3 download_nltk_data.py")
+#             return False
 
-def _build_frequency_list():
-    global _FREQUENCY_LIST
-    if _FREQUENCY_LIST is not None:
-        return _FREQUENCY_LIST
 
-    print("[WordPicker] Building Brown frequency list…")
+# Initialize corpus on module import
+# _ensure_brown_corpus()
 
-    # Only extracts words that are alphabetic and lowercase
-    words = [w.lower() for w in brown.words() if w.isalpha()]
-
-    # Counts frequencies
-    freq = Counter(words)
-
-    # Sorts by descending frequency
-    _FREQUENCY_LIST = [w for w, _ in freq.most_common()]
-
-    print(f"[WordPicker] Loaded {len(_FREQUENCY_LIST)} ranked words from Brown corpus")
-
-    return _FREQUENCY_LIST
-
-def _pick_easy_frequency_based(top_n: int = 2000) -> str:
-    # Picks an easy word using real-world English frequency.
-    # Takes the top-N most common words (default: 2000)
-    # and picks one at random.
-
-    freq_list = _build_frequency_list()
-
-    # Limit size
-    limit = min(top_n, len(freq_list))
-    slice_top = freq_list[:limit]
-
-    # Only chooses words that also exist in the wordbank
-    wordbank = set(_load_words())
-    candidates = [w for w in slice_top if w in wordbank]
-
-    # If enough candidates exist, use them
-    if len(candidates) > 200:
-        return random.choice(candidates)
-
-    # If scarce, fallback to the plain top slice
-    if slice_top:
-        print("[WordPicker] Few easy candidates, falling back to top-N slice.")
-        return random.choice(slice_top)
-
-    # Last fallback: complete word list
-    return random.choice(list(wordbank))
-
-def _build_difficulty_buckets() -> None:
-    # Builds easy/medium/hard word lists from the cached wordbank.
-    # Runs once per backend process.
-
-    global _DIFFICULTY_BUCKETS, _DIFFICULTY_READY
-
-    words = _load_words()
-    buckets = {"easy": [], "medium": [], "hard": []}
-
-    for w in words:
-        level = classify_word_difficulty(w)  # "easy" / "medium" / "hard"
-        if level not in buckets:
-            level = "medium"
-        buckets[level].append(w)
-
-    _DIFFICULTY_BUCKETS = buckets
-    _DIFFICULTY_READY = True
-
-    total = sum(len(v) for v in buckets.values())
-    print(
-        f"[WordPicker] Difficulty buckets built: "
-        f"easy={len(buckets['easy'])}, "
-        f"medium={len(buckets['medium'])}, "
-        f"hard={len(buckets['hard'])}, "
-        f"total={total}"
-    )
 
 def get_random_english_word() -> str:
     """
@@ -202,11 +119,6 @@ def get_random_english_word() -> str:
 
     # Modified by: iralys-sanchez18
     # Returns a random word from the filtered wordbank.
-
-    """
-    Unused. The difficulty system now uses classifier buckets.
-    """
-
     words = _load_words()
     return random.choice(words)
 
@@ -236,12 +148,6 @@ def get_random_common_word(top_n: int = 1000) -> str:
     # Modified by: iralys-sanchez18
     # Since the wordbank has no data regarding frequency, this approximates
     # “common” by taking from the first 1000 words of the list.
-
-    """
-    Unused. The difficulty system now uses classifier buckets. The original function
-    has been repurposed to create a frequency list instead.
-    """
-
     words = _load_words()
 
     if len(words) <= top_n:
@@ -270,23 +176,22 @@ def get_word_by_difficulty(difficulty: str) -> str:
 
     # Modified by: iralys-sanchez18
 
-    global _DIFFICULTY_READY
+    # Difficulty ranges:
+    # - easy   = first 100 filtered words
+    # - medium = first 1000 filtered words
+    # - hard   = first 5000 filtered words
 
-    # Ensures the difficulty buckets are built
-    if not _DIFFICULTY_READY:
-        _build_difficulty_buckets()
-
-    diff = (difficulty or "").lower()
-
-    # EASY -> frequency-based
-    if diff == "easy":
-        return _pick_easy_frequency_based(top_n=2000)
-
-    # MEDIUM / HARD -> phonetic buckets
-    bucket = _DIFFICULTY_BUCKETS.get(diff)
+    words = _load_words()
     
-    if bucket:
-        return random.choice(bucket)
+    ranges = {"easy": 100, "medium": 1000, "hard": 5000}
+    top_n = ranges.get(difficulty, 1000)
 
-    # fallback
-    return random.choice(_load_words())
+    pool_size = min(top_n, len(words))
+    pool = words[:pool_size]
+
+    print(
+    f"[WordPicker] Ready: {len(words)} words loaded, "
+    f"difficulty={difficulty}, pool_size={pool_size}"
+    ) # Debug log
+
+    return random.choice(pool)
