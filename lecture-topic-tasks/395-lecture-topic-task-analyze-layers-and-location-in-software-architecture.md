@@ -8,11 +8,10 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress",
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T01:18:47Z"
-updated_at: "2025-11-24T03:37:02Z"
+updated_at: "2025-11-24T17:45:35Z"
 ---
 
 # [Lecture Topic Task]: Analyze "Layers and Location" in Software Architecture
@@ -23,7 +22,6 @@ updated_at: "2025-11-24T03:37:02Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-24T01:18:47Z
