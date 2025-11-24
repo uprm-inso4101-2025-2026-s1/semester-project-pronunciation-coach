@@ -1,19 +1,25 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
-import 'package:app/word_bank.dart'; 
+import 'audio_quiz_history_page.dart';
+
+/// Fast practice configuration shared between home and navigation
+class FastPracticeConfig {
+  static bool autoStartRandomQuiz = false;
+}
 
 /// ===========================================================================
-/// AUDIO QUIZ HOME PAGE
-///
+/// AUDIO QUIZ HOME PAGE 
+/// 
 /// This file contains the main entry point for the audio quiz feature.
 /// It provides:
 /// - Difficulty selection interface
 /// - Animated transitions
 /// - Quiz initialization and navigation
-///
+/// 
 /// MAIN COMPONENTS:
 /// - AudioQuizHomePage: Main difficulty selection screen
 /// - _QuizLoadingPage: Loading screen while generating quiz
@@ -21,7 +27,12 @@ import 'package:app/word_bank.dart';
 /// ===========================================================================
 
 class AudioQuizHomePage extends StatefulWidget {
-  const AudioQuizHomePage({super.key});
+  final bool autoStartRandom;
+
+  const AudioQuizHomePage({
+    super.key,
+    this.autoStartRandom = false,
+  });
 
   @override
   State<AudioQuizHomePage> createState() => _AudioQuizHomePageState();
@@ -34,7 +45,6 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  bool _isWordBankLoaded = WordBank.isInitialized;
 
   // Static difficulties - no need to fetch from backend
   final List<Difficulty> _difficulties = [
@@ -42,7 +52,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
       id: 'easy',
       name: 'Easy',
       description:
-          'Perfect for beginners. Simple words with clear pronunciations.',
+      'Perfect for beginners. Simple words with clear pronunciations.',
       xpReward: 10,
       icon: 'sentiment_very_satisfied',
     ),
@@ -50,7 +60,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
       id: 'medium',
       name: 'Medium',
       description:
-          'Moderate challenge. Words with varying pronunciation patterns.',
+      'Moderate challenge. Words with varying pronunciation patterns.',
       xpReward: 15,
       icon: 'sentiment_neutral',
     ),
@@ -58,39 +68,29 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
       id: 'hard',
       name: 'Hard',
       description:
-          'Expert level. Complex words requiring precise pronunciation.',
+      'Expert level. Complex words requiring precise pronunciation.',
       xpReward: 20,
       icon: 'sentiment_very_dissatisfied',
     ),
   ];
 
+  Difficulty _getRandomDifficulty() {
+    final rand = Random();
+    return _difficulties[rand.nextInt(_difficulties.length)];
+  }
+
   @override
   void initState() {
     super.initState();
     _setupAnimations();
-    _loadWordBank();
-  }
 
-  Future<void> _loadWordBank() async {
-    try {
-      // If already loaded, skip
-      if (WordBank.isInitialized) {
-        setState(() {
-          _isWordBankLoaded = true;
-        });
-        return;
-      }
-
-      await WordBank().load(); // loads assets/sounds/wordbank.json
-
-      setState(() {
-        _isWordBankLoaded = true;
-      });
-    } catch (e) {
-      debugPrint('Failed to load word bank: $e');
-      // Lets the user in even if something went wrong
-      setState(() {
-        _isWordBankLoaded = true;
+    // If triggered from Fast Practice or configured to auto-start,
+    // immediately launch a random quiz question.
+    if (FastPracticeConfig.autoStartRandomQuiz || widget.autoStartRandom) {
+      FastPracticeConfig.autoStartRandomQuiz = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final difficulty = _getRandomDifficulty();
+        _startQuiz(difficulty);
       });
     }
   }
@@ -134,15 +134,15 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: !_isWordBankLoaded
-          ? const Center(child: CircularProgressIndicator())
-          : FadeTransition(
-              opacity: _fadeAnimation,
-              child: SlideTransition(
-                position: _slideAnimation,
-                child: _buildDifficultyList(),
-              ),
-            ),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SlideTransition(
+          position: _slideAnimation,
+          // 🔴 IMPORTANT: this must point to the difficulty list,
+          // not to a blank Container.
+          child: _buildDifficultyList(),
+        ),
+      ),
     );
   }
 
@@ -166,8 +166,36 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         ),
         const SizedBox(height: 16),
 
+        // (optional) history button
+        ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const QuizHistoryPage(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.history),
+          label: const Text(
+            'View Quiz History',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Difficulty cards
         ..._difficulties.asMap().entries.map(
-          (entry) => TweenAnimationBuilder<double>(
+              (entry) => TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (entry.key * 100)),
             tween: Tween(begin: 0.0, end: 1.0),
             builder: (context, value, child) {
@@ -278,8 +306,8 @@ class _QuizLoadingPageState extends State<_QuizLoadingPage>
                   ),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
+                return FadeTransition(opacity: animation, child: child);
+              },
               transitionDuration: const Duration(milliseconds: 500),
             ),
           );

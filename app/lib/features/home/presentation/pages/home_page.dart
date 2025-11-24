@@ -12,17 +12,17 @@ import '../../../../core/common/user_progress.dart';
 /// ===========================================================================
 /// HOME SCREEN - MAIN APPLICATION LANDING PAGE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Primary landing page and navigation hub for the application
 /// - Centralized access point to all main features and activities
 /// - Personalized user dashboard with quick access to key functions
-/// 
+///
 /// ARCHITECTURE:
 /// - Stateful widget managing the main home interface
 /// - Integrates multiple dashboard widgets for comprehensive overview
 /// - Provides floating action button for quick chatbot access
-/// 
+///
 /// LAYOUT STRUCTURE:
 /// 1. App Bar: Branding and navigation
 /// 2. User Info Box: Profile summary and statistics
@@ -32,24 +32,25 @@ import '../../../../core/common/user_progress.dart';
 /// ===========================================================================
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onFastPractice;
+
+  const HomeScreen({super.key, this.onFastPractice});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ProgressService _progressService = ProgressService();
 
-  bool _isLoading = true;
   String? _errorMessage;
 
   String _displayName = 'Guest';
   String _avatarUrl =
       'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
   String _proficiencyLevel = 'Pronunciation learner';
-  int _activeDays = 0;      
-  int _challengesCompleted = 0;  
+
+  int _activeDays = 0;
+  int _challengesCompleted = 0;
 
   @override
   void initState() {
@@ -66,12 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
       if (user == null) {
         if (!mounted) return;
         setState(() {
-          _isLoading = false;
           _errorMessage = null;
 
           _displayName = 'Guest';
           _avatarUrl =
-              'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
+          'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
           _proficiencyLevel = 'Guest mode';
 
           _activeDays = 0;
@@ -80,35 +80,28 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       }
 
-      // ------------------------
-      // 1) Load profile (name)
-      // ------------------------
-      final profile = await client
-          .from('profiles')
-          .select('full_name')
-          .eq('id', user.id)
-          .maybeSingle();
+      // Authenticated user: load profile + progress
+      final userId = user.id;
 
-      String? fullName;
-      if (profile != null &&
-          profile['full_name'] != null &&
-          (profile['full_name'] as String).trim().isNotEmpty) {
-        fullName = (profile['full_name'] as String).trim();
-      }
+      final profileResponse =
+      await client.from('profiles').select().eq('id', userId).single();
 
-      final metaName = user.userMetadata?['full_name'];
-      final computedName = fullName ??
-          (metaName is String && metaName.trim().isNotEmpty
-              ? metaName.trim()
-              : (user.email ?? 'User'));
+      final String fullName = profileResponse['full_name'] ?? 'Learner';
+      final String? avatarUrl = profileResponse['avatar_url'];
+
+      // Use first name if available, else full name
+      final String firstName =
+      fullName.trim().split(' ').isNotEmpty ? fullName.split(' ').first : fullName;
+
+      final ProgressService progressService = ProgressService();
 
       // ------------------------
       // 2) Load user_progress stats
       // ------------------------
-      UserProgress? progress = await _progressService.getUserProgress();
+      UserProgress? progress = await progressService.getUserProgress();
 
       // If there is no row yet, create one
-      progress ??= await _progressService.initializeUserProgress();
+      progress ??= await progressService.initializeUserProgress();
 
       // Fallback in case initializeUserProgress returns null somehow
       final int activeDays = progress.currentStreak;
@@ -116,32 +109,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (!mounted) return;
       setState(() {
-        _isLoading = false;
         _errorMessage = null;
-
-        _displayName = computedName;
-        _avatarUrl =
-            'https://ui-avatars.com/api/?name=${Uri.encodeComponent(computedName)}&background=3B82F6&color=ffffff';
+        _displayName = firstName;
+        _avatarUrl = avatarUrl ??
+            'https://ui-avatars.com/api/?name=$firstName&background=3B82F6&color=ffffff';
         _proficiencyLevel = 'Pronunciation learner';
-
-        // Map Supabase stats -> home UI
-        _activeDays = activeDays;                     // "Active Days"
-        _challengesCompleted = challengesCompleted;   // "Challenges Completed"
+        _activeDays = activeDays;
+        _challengesCompleted = challengesCompleted;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _isLoading = false;
-        _errorMessage =
-            'Could not load your profile or progress. Showing default data.';
-
-        _displayName = 'User';
-        _avatarUrl =
-            'https://ui-avatars.com/api/?name=User&background=3B82F6&color=ffffff';
-        _proficiencyLevel = 'Pronunciation learner';
-
-        _activeDays = 0;
-        _challengesCompleted = 0;
+        _errorMessage = 'Failed to load your data. Please try again later.';
       });
     }
   }
@@ -154,50 +133,32 @@ class _HomeScreenState extends State<HomeScreen> {
       statusBarIconBrightness: Brightness.dark,
     ));
 
-    if (_isLoading) {
-      return const Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
-      // Main background color from app theme
       backgroundColor: AppColors.background,
-      
-      // Application header with branding
-      appBar: AppBar(
-        title: const Text(
-          'Home Page',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.background,
-        elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        automaticallyImplyLeading: false,
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (_errorMessage != null) ...[
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
+        child: RefreshIndicator(
+          onRefresh: _loadCurrentUserAndProgress,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(bottom: 80),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Error banner (if any)
+                if (_errorMessage != null)
+                  Container(
+                    margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.08),
+                      color: Colors.red.shade50,
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.red.shade200),
                     ),
                     child: Row(
                       children: [
                         const Icon(
-                          Icons.info_outline,
-                          size: 18,
+                          Icons.error_outline,
                           color: Colors.red,
                         ),
                         const SizedBox(width: 8),
@@ -213,33 +174,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+
+                const SizedBox(height: 16),
+
+                // Top user info card (now with real stats)
+                UserInfoBox(
+                  name: _displayName,
+                  avatarURL: _avatarUrl,
+                  proficiencyLevel: _proficiencyLevel,
+                  activeDays: _activeDays,
+                  challengesCompleted: _challengesCompleted,
                 ),
+
+                const SizedBox(height: 8),
+
+                // Welcome back header – shows first name or full name
+                WelcomeBackBox(
+                  name: _displayName,
+                  onFastPractice: widget.onFastPractice,
+                ),
+
+                const SizedBox(height: 16),
+                const HomeSections(),
               ],
-              const SizedBox(height: 16),
-
-              // Top user info card (now with real stats)
-              UserInfoBox(
-                name: _displayName,
-                avatarURL: _avatarUrl,
-                proficiencyLevel: _proficiencyLevel,
-                activeDays: _activeDays,
-                challengesCompleted: _challengesCompleted,
-              ),
-
-              const SizedBox(height: 8),
-
-              // Welcome back header – shows first name or full name
-              WelcomeBackBox(
-                name: _displayName,
-              ),
-
-              const SizedBox(height: 16),
-              const HomeSections(),
-            ],
+            ),
           ),
         ),
       ),
-      
+
       // Quick access floating action button for AI chatbot
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 /// ===========================================================================
 /// HOME SECTIONS - MAIN HOME PAGE CONTENT SECTIONS
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Provides structured content sections for the home page
 /// - Displays quick access activities and progress indicators
 /// - Implements consistent card-based layout
-/// 
+///
 /// SECTIONS:
 /// - Lessons: Available pronunciation lessons
 /// - Daily Practice: Current practice session progress
@@ -23,35 +23,31 @@ class HomeSections extends StatelessWidget {
     return Column(
       children: const [
         ActivityCard(
-          icon: Icons.menu_book,
-          title: 'Lessons',
-          subtitle: '12 available',
-          trailing: Text(
-            'Pronunciation',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        ActivityCard(
           icon: Icons.mic,
           title: 'Daily Practice',
-          subtitle: '5 minutes left',
+          subtitle: '5 questions left',
           trailing: CircleAvatar(
             radius: 14,
             backgroundColor: Colors.greenAccent,
             child: Text(
-              '3/5',
+              '0/5',
               style: TextStyle(fontSize: 12, color: Colors.black87),
             ),
           ),
         ),
+        SizedBox(height: 12),
         ActivityCard(
           icon: Icons.flag,
-          title: 'Objetivos semanales',
-          subtitle: '4 of 7 days completed',
-          trailing: Icon(Icons.remove, color: Colors.orange, size: 20),
+          title: 'Weekly Objectives',
+          subtitle: '35 questions left',
+          trailing: CircleAvatar(
+            radius: 14,
+            backgroundColor: Colors.greenAccent,
+            child: Text(
+              '0/35',
+              style: TextStyle(fontSize: 12, color: Colors.black87),
+            ),
+          ),
         ),
       ],
     );
@@ -61,18 +57,6 @@ class HomeSections extends StatelessWidget {
 /// ===========================================================================
 /// ACTIVITY CARD - REUSABLE ACTIVITY DISPLAY CARD
 /// ===========================================================================
-/// 
-/// PURPOSE:
-/// - Consistent card layout for activity items
-/// - Interactive tap feedback with ripple effects
-/// - Flexible content arrangement with icon, text, and trailing widget
-/// 
-/// FEATURES:
-/// - Customizable icon, title, subtitle, and trailing content
-/// - Smooth tap animations and visual feedback
-/// - Consistent styling with rounded corners and shadows
-/// ===========================================================================
-
 class ActivityCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -90,10 +74,11 @@ class ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        // Currently just visual, not a button that navigates anywhere
         onTap: () {
           debugPrint('$title tapped!');
         },

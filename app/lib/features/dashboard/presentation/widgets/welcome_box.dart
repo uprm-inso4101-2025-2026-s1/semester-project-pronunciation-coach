@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 /// ===========================================================================
 /// WELCOME BACK BOX - USER WELCOME AND QUICK ACTIONS
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Welcome message for returning users
 /// - Quick action buttons for common tasks
 /// - Progress continuation prompts
-/// 
+///
 /// FEATURES:
 /// - Personalized welcome message
 /// - Continue lesson and fast practice buttons
@@ -19,10 +19,12 @@ import 'package:flutter/material.dart';
 
 class WelcomeBackBox extends StatelessWidget {
   final String name;
+  final VoidCallback? onFastPractice;
 
   const WelcomeBackBox({
     super.key,
     required this.name,
+    this.onFastPractice,
   });
 
   @override
@@ -54,49 +56,29 @@ class WelcomeBackBox extends StatelessWidget {
 
           // Subtext
           Text(
-            "Continue your progress",
+            "Ready for a quick pronunciation workout?",
             style: Theme.of(context).textTheme.bodyMedium ??
                 const TextStyle(fontSize: 14, color: Colors.grey),
           ),
           const SizedBox(height: 20),
 
-          // Buttons to continue
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary, // your theme color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: const Text(
-                    "Continue Lesson",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+          // Quick access action
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: onFastPractice,
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: AppColors.primary, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                padding: const EdgeInsets.symmetric(vertical: 14),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: null,
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.primary, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(
-                    "Fast Practice",
-                    style: TextStyle(color: AppColors.primary, fontSize: 16),
-                  ),
-                ),
+              child: Text(
+                "Fast Practice",
+                style: TextStyle(color: AppColors.primary, fontSize: 16),
               ),
-            ],
+            ),
           ),
         ],
       ),
