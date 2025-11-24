@@ -19,6 +19,7 @@ class UserProgress {
   /// Date of the last challenge completed in string format (optional)
   final String? lastChallengeDate;
 
+  /// Used to persist achievement progress and unlock status across sessions
   final String? achievementsData;
 
   UserProgress({
