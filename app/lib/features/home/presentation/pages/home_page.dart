@@ -12,17 +12,17 @@ import '../../../../core/common/user_progress.dart';
 /// ===========================================================================
 /// HOME SCREEN - MAIN APPLICATION LANDING PAGE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Primary landing page and navigation hub for the application
 /// - Centralized access point to all main features and activities
 /// - Personalized user dashboard with quick access to key functions
-/// 
+///
 /// ARCHITECTURE:
 /// - Stateful widget managing the main home interface
 /// - Integrates multiple dashboard widgets for comprehensive overview
 /// - Provides floating action button for quick chatbot access
-/// 
+///
 /// LAYOUT STRUCTURE:
 /// 1. App Bar: Branding and navigation
 /// 2. User Info Box: Profile summary and statistics
@@ -48,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _avatarUrl =
       'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
   String _proficiencyLevel = 'Pronunciation learner';
-  int _activeDays = 0;      
-  int _challengesCompleted = 0;  
+  int _activeDays = 0;
+  int _challengesCompleted = 0;
 
   @override
   void initState() {
@@ -97,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       final metaName = user.userMetadata?['full_name'];
-      final computedName = fullName ??
+      final computedName =
+          fullName ??
           (metaName is String && metaName.trim().isNotEmpty
               ? metaName.trim()
               : (user.email ?? 'User'));
@@ -125,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _proficiencyLevel = 'Pronunciation learner';
 
         // Map Supabase stats -> home UI
-        _activeDays = activeDays;                     // "Active Days"
-        _challengesCompleted = challengesCompleted;   // "Challenges Completed"
+        _activeDays = activeDays; // "Active Days"
+        _challengesCompleted = challengesCompleted; // "Challenges Completed"
       });
     } catch (e) {
       if (!mounted) return;
@@ -149,10 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Match the rest of the app status bar style
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
 
     if (_isLoading) {
       return const Scaffold(
@@ -164,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       // Main background color from app theme
       backgroundColor: AppColors.background,
-      
+
       // Application header with branding
       appBar: AppBar(
         title: const Text(
@@ -229,9 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 8),
 
               // Welcome back header – shows first name or full name
-              WelcomeBackBox(
-                name: _displayName,
-              ),
+              WelcomeBackBox(name: _displayName),
 
               const SizedBox(height: 16),
               const HomeSections(),
@@ -239,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      
+
       // Quick access floating action button for AI chatbot
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
