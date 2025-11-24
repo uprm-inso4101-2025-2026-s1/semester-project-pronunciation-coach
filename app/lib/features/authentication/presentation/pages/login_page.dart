@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
+import 'dart:async'; // NEW
+import 'reset_password_page.dart'; // NEW
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show AuthException, AuthChangeEvent; // UPDATED (was only AuthException)
 
 // ignore_for_file: use_build_context_synchronously
 
@@ -29,9 +32,33 @@ class _LoginPageState extends State<LoginPage> {
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
 
+  late final StreamSubscription _authSubscription;
+
   @override
   void initState() {
     super.initState();
+
+    // Listen for Supabase auth state changes (including password recovery)
+    _authSubscription = AppSupabase.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
+      final event = data.event;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        // This means the user came back from the reset email link
+        if (!mounted) return;
+
+        // Optional: sound effect
+        _soundService.playTransition();
+
+        // Navigate to the ResetPasswordPage
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
+        );
+      }
+    });
+
+    // Existing loading listener
     _loadingSystem.addLoadingListener((isLoading) {
       if (mounted) {
         setState(() {
@@ -43,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _authSubscription.cancel();
     _loadingSystem.removeLoadingListener((isLoading) {});
     _emailCtrl.dispose();
     _passCtrl.dispose();
@@ -144,7 +172,8 @@ class _LoginPageState extends State<LoginPage> {
   void _onForgotPassword() {
     // Play button click for forgot password
     _soundService.playButtonClick();
-    _showSnack('Password reset feature coming soon!');
+    // _showSnack('Password reset feature coming soon!');
+    Navigator.of(context).pushNamed('/forgot-password');
   }
 
   void _onRememberMeChanged(bool? value) {

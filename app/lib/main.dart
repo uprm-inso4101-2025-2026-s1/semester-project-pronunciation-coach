@@ -14,6 +14,8 @@ import 'core/network/session_manager.dart';
 import 'core/di/service_locator.dart';
 import 'core/constants/services/xapi_client.dart';
 import 'core/constants/services/xapi_provider.dart';
+import 'features/authentication/presentation/pages/forgot_password_page.dart';
+import 'features/authentication/presentation/pages/reset_password_page.dart';
 
 class ErrorApp extends StatelessWidget {
   const ErrorApp({super.key, required this.error});
@@ -129,6 +131,8 @@ class MyApp extends StatelessWidget {
             '/audio-quiz': (context) => const AudioQuizHomePage(),
             '/quiz': (context) => const AudioQuizHomePage(),
             '/settings': (context) => const SettingsPage(),
+            '/forgot-password': (context) => const ForgotPasswordPage(),
+            '/reset-password': (context) => const ResetPasswordPage(),
           },
         );
       },

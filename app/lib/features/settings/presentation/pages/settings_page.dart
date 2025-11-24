@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,12 +28,28 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _autoPlayEnabled = false;
   bool _analyticsEnabled = true;
 
+  late final StreamSubscription _authSubscription;
+
   SharedPreferences? _prefs;
 
   @override
   void initState() {
     super.initState();
     _loadPreferences();
+
+    _authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
+      final event = data.event;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        if (!mounted) return;
+
+        // When the app comes back from a password reset link,
+        // send the user to the Reset Password screen.
+        Navigator.of(context).pushReplacementNamed('/reset-password');
+      }
+    });
   }
 
   Future<void> _loadPreferences() async {
@@ -51,6 +69,12 @@ class _SettingsPageState extends State<SettingsPage> {
     final prefs = _prefs;
     if (prefs == null) return;
     await prefs.setBool(key, value);
+  }
+
+  @override
+  void dispose() {
+    _authSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -107,12 +131,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: const Text(
                             'Update your account security settings',
                           ),
-                          onTap: () => _showWorkInProgressDialog(
-                            context,
-                            title: 'Change password',
-                            message:
-                                'Password updates will be available soon. You can update your password via the web dashboard for now.',
-                          ),
+                          onTap: () {
+                            // Reuse the Forgot Password flow
+                            Navigator.of(context).pushNamed('/forgot-password');
+                          },
                         ),
                       ],
                       if (isGuest) ...[
