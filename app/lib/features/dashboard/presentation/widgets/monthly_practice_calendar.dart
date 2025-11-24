@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 
+/// ===========================================================================
+/// MONTHLY PRACTICE CALENDAR - VISUAL PRACTICE TRACKER
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Visual calendar display of practice days
+/// - Animated feedback for practice completion
+/// - Monthly progress tracking with star indicators
+/// 
+/// FEATURES:
+/// - Animated star indicators for practice days
+/// - Gradient backgrounds and smooth transitions
+/// - Today highlighting and practice day recognition
+/// - Responsive grid layout for calendar days
+/// ===========================================================================
+
 class MonthlyPracticeCalendar extends StatefulWidget {
   final Set<int> practiceDays;
   final bool isLoading;
@@ -126,6 +142,7 @@ class _MonthlyPracticeCalendarState extends State<MonthlyPracticeCalendar>
     );
   }
 
+  /// Build the calendar grid with practice day indicators
   Widget _buildCalendar() {
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -278,6 +295,7 @@ class _MonthlyPracticeCalendarState extends State<MonthlyPracticeCalendar>
     );
   }
 
+  /// Get month name from month number
   String _getMonthName(int month) {
     const months = [
       'January',

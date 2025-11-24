@@ -5,6 +5,23 @@ import '../../../../core/common/text_styles.dart';
 import 'package:app/features/authentication/presentation/pages/login_page.dart';
 import '/core/common/sound_service.dart';
 
+/// ===========================================================================
+/// WELCOME SCREEN - APPLICATION ENTRY POINT
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Initial app loading screen with brand introduction
+/// - Animated transitions and visual effects
+/// - Automatic navigation to login after animation sequence
+/// 
+/// ANIMATIONS:
+/// - Scale animation for logo
+/// - Fade animations for text elements
+/// - Slide animations for subtitles
+/// - Color transitions for background
+/// - Rotation animations for loading indicator
+/// ===========================================================================
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -80,6 +97,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     });
   }
 
+  /// Navigate to login screen with custom page transition
   void _navigateToLogin() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -266,6 +284,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
   }
 
+  /// Build pulsating circle animations around logo
   List<Widget> _buildPulsatingCircles() {
     return [
       // Outer circle

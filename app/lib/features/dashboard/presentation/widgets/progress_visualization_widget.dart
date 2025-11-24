@@ -3,6 +3,21 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import '../../domain/entities/course_progress.dart';
 
+/// ===========================================================================
+/// PROGRESS VISUALIZATION WIDGET - ANIMATED PROGRESS BARS
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Visual representation of course progress with animated bars
+/// - Smooth progress animations with easing curves
+/// - Color-coded progress indicators for different courses
+/// 
+/// FEATURES:
+/// - Animated progress bar transitions
+/// - Percentage display and color coding
+/// - Smooth loading animations
+/// ===========================================================================
+
 class ProgressVisualizationWidget extends StatefulWidget {
   final List<CourseProgress>? courses;
 
@@ -69,6 +84,7 @@ class _ProgressVisualizationWidgetState
     );
   }
 
+  /// Build individual animated progress bar
   Widget _buildProgressBar(CourseProgress course) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),

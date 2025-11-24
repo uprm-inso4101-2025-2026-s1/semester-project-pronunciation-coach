@@ -4,6 +4,24 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 
+/// ===========================================================================
+/// CUSTOM TEXT FIELD COMPONENT
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Reusable text input field with consistent styling
+/// - Supports various input types (text, password, email)
+/// - Provides validation and error display
+/// - Consistent theming across the application
+/// 
+/// FEATURES:
+/// - Customizable label, hint text, and icon
+/// - Password visibility toggle support
+/// - Form validation integration
+/// - Responsive design using Sizer package
+/// - Consistent border styling and focus states
+/// ===========================================================================
+
 class MyTextField extends StatefulWidget {
   const MyTextField({
     super.key,
@@ -14,7 +32,11 @@ class MyTextField extends StatefulWidget {
     this.validator,
     this.isPass,
   });
+  
+  // Text editing controller
   final TextEditingController controller;
+  
+  // Field configuration
   final String labelText;
   final String hintText;
   final Icon icon;
@@ -44,6 +66,7 @@ class _MyTextFieldState extends State<MyTextField> {
           fontSize: 14.sp,
           color: AppColors.textMuted.withValues(alpha: 0.6),
         ),
+        // Border states for different interaction modes
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(3.w),
           borderSide: BorderSide(color: Colors.grey.shade400),

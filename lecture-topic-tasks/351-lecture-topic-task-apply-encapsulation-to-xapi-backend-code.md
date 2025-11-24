@@ -1,17 +1,16 @@
 ---
 issue_number: 351
 title: "[Lecture Topic Task]:  <Apply Encapsulation to xAPI Backend code>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/351"
 author: "ivxnmorxles"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: in progress"
+  "task: development"
 ]
 created_at: "2025-11-22T18:40:30Z"
-updated_at: "2025-11-23T00:53:07Z"
+updated_at: "2025-11-23T22:36:31Z"
 ---
 
 # [Lecture Topic Task]:  <Apply Encapsulation to xAPI Backend code>
@@ -21,8 +20,7 @@ updated_at: "2025-11-23T00:53:07Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: in progress"
+  "task: development"
 ]
 - **Created:** 2025-11-22T18:40:30Z
 
@@ -46,9 +44,9 @@ No new features are added, the goal is to align the existing xAPI code with the 
 
 ## ✅ Acceptance Criteria
 List the conditions that must be met for this issue to be considered complete.  
-- [ ] xapi_client.dart only exposes a small public API and hides HTTP details
-- [ ] xapi_helpers.dart contains pure functions to build xAPI statements and does not perform any network calls. 
-- [ ] xapi_helpers.dart contains pure functions to build xAPI statements and does not perform any network calls.
+- [x] xapi_client.dart only exposes a small public API and hides HTTP details
+- [x] xapi_helpers.dart contains pure functions to build xAPI statements and does not perform any network calls. 
+- [x] xapi_helpers.dart contains pure functions to build xAPI statements and does not perform any network calls.
 
 ---
 

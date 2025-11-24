@@ -2,16 +2,36 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// USER INFO BOX - USER PROFILE SUMMARY DISPLAY
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Compact user profile display with avatar and stats
+/// - Proficiency level and activity statistics
+/// - Responsive layout for different screen sizes
+/// 
+/// FEATURES:
+/// - User avatar and name display
+/// - Proficiency level indicator
+/// - Activity statistics with icons
+/// - Responsive design using LayoutBuilder
+/// ===========================================================================
+
 class UserInfoBox extends StatelessWidget {
   final String name;
   final String avatarURL;
   final String proficiencyLevel;
+  final int activeDays;     
+  final int challengesCompleted; 
 
   const UserInfoBox({
     super.key,
     required this.name,
     required this.avatarURL,
     required this.proficiencyLevel,
+    required this.activeDays,
+    required this.challengesCompleted,
   });
 
   @override
@@ -80,8 +100,8 @@ class UserInfoBox extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,          
                 children: [
-                  _buildStatBox(Icons.calendar_month, "15", "Active Days"),
-                  _buildStatBox(Icons.arrow_outward_rounded, "92%", "Precision"),
+                  _buildStatBox(Icons.calendar_month, "$activeDays", "Active Days"),
+                  _buildStatBox(Icons.arrow_outward_rounded, "$challengesCompleted", "Challenges Completed"),
                 ],
               );
             },
@@ -91,6 +111,7 @@ class UserInfoBox extends StatelessWidget {
     );
   }
 
+    /// Build individual statistic box
     Widget _buildStatBox(IconData icon, String value, String label) {
       return Column(
         children: [

@@ -7,11 +7,10 @@ author: "ivxnmorxles"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: in progress"
+  "task: development"
 ]
 created_at: "2025-11-22T19:19:03Z"
-updated_at: "2025-11-23T00:45:51Z"
+updated_at: "2025-11-23T22:37:01Z"
 ---
 
 # [Lecture Topic Task]: <Applying Software Risks and Fault Analysis to current backend code>
@@ -21,8 +20,7 @@ updated_at: "2025-11-23T00:45:51Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: in progress"
+  "task: development"
 ]
 - **Created:** 2025-11-22T19:19:03Z
 

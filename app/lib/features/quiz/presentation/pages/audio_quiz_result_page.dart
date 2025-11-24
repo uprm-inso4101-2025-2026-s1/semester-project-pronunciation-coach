@@ -7,6 +7,23 @@ import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_home_page.dart';
 import 'audio_quiz_question_page.dart';
 
+/// ===========================================================================
+/// AUDIO QUIZ RESULT PAGE 
+/// 
+/// This file displays the final results of the quiz including:
+/// - Correct/incorrect result with visual feedback
+/// - Correct word and pronunciation playback
+/// - XP earned calculation
+/// - Navigation options (Home, Try Again)
+/// 
+/// KEY COMPONENTS:
+/// - Result summary with icon and title
+/// - Word display with audio playback
+/// - XP reward section
+/// - Difficulty badge
+/// - Action buttons for navigation
+/// ===========================================================================
+
 class AudioQuizResultPage extends StatefulWidget {
   final AudioChallengeResult result;
   final Difficulty difficulty;
@@ -67,6 +84,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     super.dispose();
   }
 
+  /// Plays the correct pronunciation audio with error handling
   Future<void> _playCorrectAudio() async {
     if (_isPlayingCorrectAudio) {
       await _audioPlayer.stop();
@@ -113,6 +131,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     }
   }
 
+  /// Navigates back to the quiz home page
   void _goToQuizHome(BuildContext context) {
     // Send go home event to state machine
     _stateController.sendEvent(GoHomeEvent());
@@ -126,6 +145,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     });
   }
 
+  /// Generates a new quiz with the same difficulty and navigates to it
   Future<void> _retryQuiz(BuildContext context) async {
     // Send retry quiz event to state machine
     _stateController.sendEvent(RetryQuizEvent());
@@ -165,6 +185,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     }
   }
 
+  /// Returns color based on difficulty level
   Color _getDifficultyColor() {
     switch (widget.difficulty.id) {
       case 'easy':
@@ -178,6 +199,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     }
   }
 
+  /// Returns icon based on difficulty level
   IconData _getDifficultyIcon() {
     switch (widget.difficulty.id) {
       case 'easy':
@@ -269,6 +291,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// Large icon showing correct/incorrect result
   Widget _buildResultIcon() {
     return Container(
       width: 85,
@@ -287,6 +310,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// Title showing "Correct!" or "Incorrect"
   Widget _buildResultTitle() {
     return Text(
       widget.result.isCorrect ? 'Correct!' : 'Incorrect',
@@ -298,6 +322,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// Section displaying the correct word and audio playback
   Widget _buildWordSection() {
     return Container(
       padding: const EdgeInsets.all(14),
@@ -360,6 +385,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// XP reward section with visual styling
   Widget _buildXpSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -402,6 +428,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// Difficulty level badge with color coding
   Widget _buildDifficultyBadge() {
     String cleanName = _cleanDifficultyName(widget.difficulty.name);
 
@@ -429,6 +456,7 @@ class _AudioQuizResultPageState extends State<AudioQuizResultPage>
     );
   }
 
+  /// Home and Try Again action buttons
   Widget _buildActionButtons(BuildContext context) {
     return Row(
       children: [
