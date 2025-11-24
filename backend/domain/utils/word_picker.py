@@ -6,41 +6,14 @@ Modified for: FastAPI backend integration
 """
 
 import random
-import ssl
 from collections import Counter
 from typing import List
 from nltk.corpus import brown
 from quiz_wordbank import data_access as wb
 from domain.utils.word_difficulty import classify_word_difficulty
 
-# # SSL workaround for macOS
-# try:
-#     _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-#     pass
-# else:
-#     ssl._create_default_https_context = _create_unverified_https_context
-
-# Download required NLTK data (run once)
-def _ensure_brown_corpus():
-    """Ensure Brown corpus is downloaded"""
-    try:
-        nltk.data.find("corpora/brown")
-        return True
-    except LookupError:
-        try:
-            print("Downloading NLTK Brown corpus (first time only)...")
-            nltk.download("brown", quiet=True)
-            return True
-        except Exception as e:
-            print(f"Error downloading Brown corpus: {e}")
-            print("Please run: python3 download_nltk_data.py")
-            return False
-
-
-# Initialize corpus on module import
-_ensure_brown_corpus()
-
+# Cache word list in memory so it's not reloaded every call
+_WORD_CACHE: List[str] | None = None
 
 def get_random_english_word() -> str:
     """
