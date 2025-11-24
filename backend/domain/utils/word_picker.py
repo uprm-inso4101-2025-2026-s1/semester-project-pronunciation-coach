@@ -3,8 +3,7 @@ Word Picker Utility
 Original Author: uziellopez7
 Moved from: QuizPython/Random_Word_Picker.py
 Modified for: FastAPI backend integration
-"""
-"""
+
 Modified by: iralys-sanchez18
 Integrated with JSON word bank and word difficulty classifier.
 """
