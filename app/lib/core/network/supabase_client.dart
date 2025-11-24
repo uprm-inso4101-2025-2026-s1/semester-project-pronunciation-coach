@@ -51,18 +51,4 @@ class AppSupabase {
 
     client = Supabase.instance.client;
   }
-
-  static Future<String?> getUserName() async {
-    final user = client.auth.currentUser;
-
-    if (user == null) return null;
-
-    final response = await client
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
-        .single();
-
-    return response['full_name'] as String?;
-  }
 }

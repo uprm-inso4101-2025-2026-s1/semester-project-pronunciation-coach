@@ -18,7 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String? _error;
   bool _isGuest = false;
 
-  String _userEmail = 'Loading...';
+  String _displayName = 'Loading...';
 
   int _getUserLevel(int xp) {
     if (xp >= 15000) return 5;
@@ -33,7 +33,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _loadUserProgress();
-    _loadUserName();
   }
 
   Future<void> _loadUserProgress() async {
@@ -48,19 +47,40 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       final currentUser = AppSupabase.client.auth.currentUser;
+
+      String displayName = 'Guest';
+
       if (currentUser != null) {
+        // Try getting full name from 'profiles' table
+        final profile = await AppSupabase.client
+            .from('profiles')
+            .select('full_name')
+            .eq('id', currentUser.id)
+            .maybeSingle();
+
+        String? fullName;
+        if (profile != null &&
+            profile['full_name'] != null &&
+            (profile['full_name'] as String).trim().isNotEmpty) {
+          fullName = (profile['full_name'] as String).trim();
+        }
+
+        final metaName = currentUser.userMetadata?['full_name'];
+        displayName =
+            fullName ??
+            (metaName is String && metaName.trim().isNotEmpty
+                ? metaName.trim()
+                : (currentUser.email ?? 'User'));
+      }
+
+      if (mounted) {
         setState(() {
-          _userEmail = currentUser.email ?? 'user@example.com';
-        });
-      } else {
-        setState(() {
-          _userEmail = 'guest@example.com';
+          _displayName = displayName;
         });
       }
 
       if (!isGuest) {
         final userProgress = await progressService.getUserProgress();
-
         if (mounted) {
           setState(() {
             _userProgress = userProgress;
@@ -80,25 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           _error = e.toString();
           _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _loadUserName() async {
-    try {
-      final name = await AppSupabase.getUserName();
-      if (mounted) {
-        setState(() {
-          _fullName = name ?? "Guest User";
-          _isNameLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _fullName = "Guest User";
-          _isNameLoading = false;
         });
       }
     }
@@ -215,18 +216,16 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
-
           SizedBox(
             width: double.infinity,
             child: Text(
-              _userEmail,
+              _displayName,
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 24,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),

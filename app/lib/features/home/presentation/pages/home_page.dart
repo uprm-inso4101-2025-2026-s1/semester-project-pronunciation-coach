@@ -48,8 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _avatarUrl =
       'https://ui-avatars.com/api/?name=Guest&background=3B82F6&color=ffffff';
   String _proficiencyLevel = 'Pronunciation learner';
-  int _activeDays = 0;      
-  int _challengesCompleted = 0;  
+  int _activeDays = 0;
+  int _challengesCompleted = 0;
 
   @override
   void initState() {
@@ -97,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       final metaName = user.userMetadata?['full_name'];
-      final computedName = fullName ??
+      final computedName =
+          fullName ??
           (metaName is String && metaName.trim().isNotEmpty
               ? metaName.trim()
               : (user.email ?? 'User'));
@@ -125,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _proficiencyLevel = 'Pronunciation learner';
 
         // Map Supabase stats -> home UI
-        _activeDays = activeDays;                     // "Active Days"
-        _challengesCompleted = challengesCompleted;   // "Challenges Completed"
+        _activeDays = activeDays; // "Active Days"
+        _challengesCompleted = challengesCompleted; // "Challenges Completed"
       });
     } catch (e) {
       if (!mounted) return;
@@ -149,10 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Match the rest of the app status bar style
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
 
     if (_isLoading) {
       return const Scaffold(
@@ -229,9 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 8),
 
               // Welcome back header – shows first name or full name
-              WelcomeBackBox(
-                name: _displayName,
-              ),
+              WelcomeBackBox(name: _displayName),
 
               const SizedBox(height: 16),
               const HomeSections(),
@@ -240,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
+      // Quick access floating action button for AI chatbot
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.chat),
