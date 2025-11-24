@@ -12,7 +12,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T04:50:04Z"
-updated_at: "2025-11-24T18:01:40Z"
+updated_at: "2025-11-24T18:01:42Z"
 ---
 
 # [Lecture Topic Task]: Implement "Singleton" Pattern for Auth Music
@@ -47,7 +47,7 @@ Why Singleton? The user will frequently switch between the "Login" and "Sign Up"
 ## ✅ Acceptance Criteria
 - [x] A BackgroundMusicManager class is created following the Singleton pattern (private constructor, private static instance, public getInstance method).
 - [x] Background music starts automatically when the user lands on the Auth screen.
-- [ ] Crucial: The audio track does not restart or glitch when the user clicks between "Login" and "Sign Up" tabs.
+- [x] Crucial: The audio track does not restart or glitch when the user clicks between "Login" and "Sign Up" tabs.
 - [ ] Music stops or fades out immediately upon successful login or navigation to the Dashboard.
 - [ ] Music volume is set to a non-intrusive background level.
 ---
