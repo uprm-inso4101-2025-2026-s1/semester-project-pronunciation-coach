@@ -6,6 +6,7 @@ import '../../../../core/common/text_styles.dart' as common_text_styles;
 import '../../../../core/common/user_progress_stats.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../quiz/presentation/pages/audio_quiz_home_page.dart';
+import '../../../quiz/presentation/pages/audio_quiz_history_page.dart';
 import '../../../authentication/presentation/pages/login_page.dart';
 import '../widgets/monthly_practice_calendar.dart';
 import 'package:app/features/profile/presentation/pages/profile_page.dart';
@@ -294,6 +295,7 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           // Loading/Error states
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
@@ -329,6 +331,52 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             // Practice Statistics
             _buildPracticeStatistics(),
             const SizedBox(height: 20),
+
+            SizedBox(height: 0),
+
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.history, color: Colors.blue),
+                    SizedBox(width: 12),
+                    Text(
+                      'View Quiz History',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
 
             // Recent Practice Sessions
             MonthlyPracticeCalendar(
