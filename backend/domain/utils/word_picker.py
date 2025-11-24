@@ -13,10 +13,9 @@ import random
 # import ssl
 from collections import Counter
 from typing import List
+from nltk.corpus import brown
 from quiz_wordbank import data_access as wb
 from domain.utils.word_difficulty import classify_word_difficulty
-
-from nltk.corpus import brown
 
 # # SSL workaround for macOS
 # try:
