@@ -225,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 26,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
