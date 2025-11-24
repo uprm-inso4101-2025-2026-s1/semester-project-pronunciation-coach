@@ -8,10 +8,11 @@ labels: [
   "Team 1",
   "Task: lecture-topic",
   "task: development",
+  "state: waiting for dev",
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T04:50:04Z"
-updated_at: "2025-11-24T04:50:15Z"
+updated_at: "2025-11-24T04:52:16Z"
 ---
 
 # [Lecture Topic Task]: Implement "Singleton" Pattern for Auth Music
@@ -22,6 +23,7 @@ updated_at: "2025-11-24T04:50:15Z"
   "Team 1",
   "Task: lecture-topic",
   "task: development",
+  "state: waiting for dev",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-24T04:50:04Z
