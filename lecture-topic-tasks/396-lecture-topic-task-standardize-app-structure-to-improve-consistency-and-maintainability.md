@@ -12,7 +12,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T02:17:30Z"
-updated_at: "2025-11-24T02:17:30Z"
+updated_at: "2025-11-24T02:17:41Z"
 ---
 
 # [Lecture Topic Task]: Standardize App Structure to Improve Consistency and Maintainability
