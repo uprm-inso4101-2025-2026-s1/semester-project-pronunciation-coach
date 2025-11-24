@@ -7,12 +7,11 @@ author: "ignaaaaacio"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
   "state: in progress",
   "state: waiting for manager"
 ]
 created_at: "2025-11-13T15:35:56Z"
-updated_at: "2025-11-24T15:55:10Z"
+updated_at: "2025-11-24T15:55:14Z"
 ---
 
 # [Lecture Topic Task]: Using Dependency Injection to Simplify Audio Analysis Services – Documentation Guidelines
@@ -22,7 +21,6 @@ updated_at: "2025-11-24T15:55:10Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
   "state: in progress",
   "state: waiting for manager"
 ]
