@@ -10,7 +10,7 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-24T05:40:21Z"
-updated_at: "2025-11-24T18:19:08Z"
+updated_at: "2025-11-24T18:19:26Z"
 ---
 
 # [Lecture Topic Task]: Preventing inconsitencies, missing requirementes, and general evaluation
