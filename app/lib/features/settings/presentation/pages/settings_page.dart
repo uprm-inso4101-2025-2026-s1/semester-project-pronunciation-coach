@@ -52,7 +52,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   late final StreamSubscription _authSubscription;
 
-  SharedPreferences? _prefs;
   // Algebraic state getters
   bool get _notificationsEnabled => _currentSettings.notifications;
 
@@ -64,8 +63,9 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadSettings();
 
     // Listen for Supabase auth state changes (password recovery from email link)
-    _authSubscription =
-        Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    _authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
       final event = data.event;
 
       if (event == AuthChangeEvent.passwordRecovery) {

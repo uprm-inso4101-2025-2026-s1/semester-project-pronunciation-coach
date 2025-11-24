@@ -43,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
 
+  late final void Function(bool) _loadingListener;
   late final StreamSubscription _authSubscription;
 
   @override
@@ -50,17 +51,19 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     // Observer pattern: Listen to loading state changes
-    _loadingSystem.addLoadingListener((isLoading) {
+    _loadingListener = (isLoading) {
       if (mounted) {
         setState(() {
           _loading = isLoading;
         });
       }
-    });
+    };
+    _loadingSystem.addLoadingListener(_loadingListener);
 
     // Listen for Supabase auth state changes (including password recovery)
-    _authSubscription =
-        AppSupabase.client.auth.onAuthStateChange.listen((data) {
+    _authSubscription = AppSupabase.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
       final event = data.event;
 
       if (event == AuthChangeEvent.passwordRecovery) {
@@ -74,17 +77,6 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
         );
-      }
-    });
-  }
-
-    // Existing loading listener
-    // Observer pattern: Listen to loading state changes
-    _loadingSystem.addLoadingListener((isLoading) {
-      if (mounted) {
-        setState(() {
-          _loading = isLoading;
-        });
       }
     });
 
@@ -130,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
     _authSubscription.cancel();
 
     // Cleanup: Remove listeners and controllers
-    _loadingSystem.removeLoadingListener((isLoading) {});
+    _loadingSystem.removeLoadingListener(_loadingListener);
     _emailCtrl.dispose();
     _passCtrl.dispose();
     super.dispose();
