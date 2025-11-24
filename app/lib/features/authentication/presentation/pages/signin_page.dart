@@ -5,10 +5,33 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-// import '../widgets/loading_screens_factory.dart';
+import '../widgets/background_music_manager.dart'; // Import the Singleton Manager
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
+
+/// ===========================================================================
+/// SIGNUP PAGE - USER REGISTRATION INTERFACE
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - User registration screen for new account creation
+/// - Collects user information and creates Supabase authentication
+/// - Handles email confirmation flow
+/// - Creates user profile in database
+/// 
+/// KEY FEATATURES:
+/// - Multi-field form validation (name, email, password, confirmation)
+/// - Password strength validation with specific requirements
+/// - Email confirmation handling
+/// - Profile creation in Supabase database
+/// 
+/// ARCHITECTURE:
+/// - Stateful widget with form management
+/// - Integration with LoadingSystem for async operations
+/// - Supabase authentication and database operations
+/// - Navigation back to login page
+/// ===========================================================================
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -18,21 +41,22 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
+  // Form management
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmPassCtrl = TextEditingController();
 
+  // Loading state management
   late final void Function(bool) _loadingListener;
-
   bool _loading = false;
   final LoadingSystem _loadingSystem = LoadingSystem();
 
   @override
   void initState() {
     super.initState();
-    // Optional: Add listener for loading state changes
+    // Observer pattern: Listen to loading state changes
     _loadingListener = (isLoading) {
       if (mounted) {
         setState(() {
@@ -41,18 +65,29 @@ class _SigninPageState extends State<SigninPage> {
       }
     };
     _loadingSystem.addLoadingListener(_loadingListener);
+
+    // [BACKGROUND MUSIC LOGIC]
+    // 1. If user comes from Login Page: Music is already playing. The Manager checks
+    //    "if (_isPlaying) return;" so it WON'T restart. It continues seamlessly.
+    // 2. If user lands here directly (or refreshes): Music starts fresh.
+    BackgroundMusicManager().playAuthMusic();
   }
 
   @override
   void dispose() {
+    // Cleanup: Remove listeners and controllers
     _loadingSystem.removeLoadingListener(_loadingListener);
     _nameCtrl.dispose();
     _emailCtrl.dispose();
     _passCtrl.dispose();
     _confirmPassCtrl.dispose();
+
+    // NOTE: We do NOT stop music here. If we did, going "Back" to Login would kill the audio.
+    // The music persists until successful login/signup.
     super.dispose();
   }
 
+  /// Display snackbar message for user feedback
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -63,7 +98,7 @@ class _SigninPageState extends State<SigninPage> {
       ),
     );
   }
-
+  
   // =============================================================================
   // DEMONSTRATING DESIGN PATTERNS IN USAGE:
   // =============================================================================
@@ -81,11 +116,13 @@ class _SigninPageState extends State<SigninPage> {
   // - Automatic UI updates based on loading state
   // =============================================================================
 
+  /// Handle user registration process
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
+    // Show loading overlay during registration
     _loadingSystem.showLoading(
       context: context,
       message: 'Creating your account...',
@@ -119,6 +156,11 @@ class _SigninPageState extends State<SigninPage> {
       _loadingSystem.hideLoading(context);
 
       if (res.session != null) {
+        // [BACKGROUND MUSIC LOGIC]
+        // User successfully signed up and is entering the app.
+        // Stop the background music now.
+        await BackgroundMusicManager().stopMusic();
+        if (!mounted) return;
         // Email confirmation OFF → we have a session; go to app
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
@@ -132,24 +174,28 @@ class _SigninPageState extends State<SigninPage> {
         // Navigator.of(context).pop();
       }
     } on AuthException catch (e) {
+      // Handle authentication-specific errors
       if (!mounted) return;
       _loadingSystem.hideLoading(context);
       _showSnack(e.message);
     } catch (e) {
+      // Handle generic errors
       if (!mounted) return;
       _loadingSystem.hideLoading(context);
       _showSnack('Unexpected error. Please try again.');
     } finally {
+      // Reset loading state
       if (mounted) setState(() => _loading = false);
     }
   }
 
+  /// Validate full name format
   String? _validateName(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your name';
     final nameReg = RegExp(
       r"^[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]"
-      r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F'’\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ])"
+      r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F''\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ])"
       r"(?:\s+[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]"
       r"(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ\u0300-\u036F'’\-]*[A-Za-zÀ-ÖØ-öø-ÿĀ-ſƀ-ɏ]))+$",
       unicode: true,
@@ -161,6 +207,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate email format
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';
     if (value.isEmpty) return 'Please enter your email';
@@ -171,6 +218,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate password strength requirements
   String? _validatePass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';
@@ -183,6 +231,7 @@ class _SigninPageState extends State<SigninPage> {
     return null;
   }
 
+  /// Validate password confirmation matches
   String? _validateConfPass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please confirm your password';
@@ -230,7 +279,7 @@ class _SigninPageState extends State<SigninPage> {
                 textAlign: TextAlign.center,
                 TextSpan(
                   text:
-                      'Already have an account? ', // Default style for this part
+                  'Already have an account? ', // Default style for this part
                   style: AppTextStyles.welcomeSubtitle.copyWith(
                     fontSize: 15.sp,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -254,7 +303,7 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                     TextSpan(
                       text:
-                          ' to continue your pronunciation journey', // This part will be bold
+                      ' to continue your pronunciation journey', // This part will be bold
                       style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.normal,
@@ -368,28 +417,28 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                           child: _loading
                               ? SizedBox(
-                                  width: 6.w,
-                                  height: 6.w,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
+                            width: 6.w,
+                            height: 6.w,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
                               : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.person_add, size: 18.sp),
-                                    SizedBox(width: 3.w),
-                                    Text(
-                                      'Create New Account',
-                                      style: AppTextStyles.bodyLarge.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.person_add, size: 18.sp),
+                              SizedBox(width: 3.w),
+                              Text(
+                                'Create New Account',
+                                style: AppTextStyles.bodyLarge.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.sp,
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
 

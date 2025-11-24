@@ -3,6 +3,21 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import '../../domain/entities/activity.dart';
 
+/// ===========================================================================
+/// RECENT ACTIVITY TIMELINE - ACTIVITY HISTORY DISPLAY
+/// ===========================================================================
+/// 
+/// PURPOSE:
+/// - Timeline display of recent user activities
+/// - Chronological activity tracking with icons and timestamps
+/// - Compact list layout for activity history
+/// 
+/// FEATURES:
+/// - Icon-based activity categorization
+/// - Color-coded activity types
+/// - Time-stamped activity entries
+/// ===========================================================================
+
 class RecentActivityTimeline extends StatelessWidget {
   final List<Activity>? activities;
 
@@ -45,6 +60,7 @@ class RecentActivityTimeline extends StatelessWidget {
     );
   }
 
+  /// Build individual activity timeline item
   Widget _buildActivityItem(Activity activity) {
     return Row(
       children: [

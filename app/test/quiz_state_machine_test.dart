@@ -133,4 +133,56 @@ void main() {
       expect(controller.isActiveQuiz, true);
     });
   });
+
+  group('Condition Event Network (CEN) Tests', () {
+    late QuizStateMachine stateMachine;
+
+    setUp(() {
+      stateMachine = QuizStateMachine();
+    });
+
+    test('Place marking works', () {
+      final place = Place('test');
+      expect(place.isMarked, false);
+      place.mark();
+      expect(place.isMarked, true);
+      place.unmark();
+      expect(place.isMarked, false);
+    });
+
+    test('Transition firing works', () {
+      final pre = Place('pre');
+      final post = Place('post');
+      final transition = Transition(
+        'test',
+        preConditions: [pre],
+        postConditions: [post],
+      );
+      expect(transition.canFire(), false);
+      pre.mark();
+      expect(transition.canFire(), true);
+      transition.fire();
+      expect(pre.isMarked, false);
+      expect(post.isMarked, true);
+    });
+
+    test('Initial CEN marks', () {
+      expect(stateMachine.idlePlace.marks, 1);
+      expect(stateMachine.selectingPlace.marks, 0);
+      expect(stateMachine.answeringPlace.marks, 0);
+    });
+
+    test('CEN marks update after sendEvent', () {
+      stateMachine.sendEvent(StartQuizEvent('easy'));
+      expect(stateMachine.idlePlace.marks, 0);
+      expect(stateMachine.selectingPlace.marks, 1);
+    });
+
+    test('CEN marks update on reset', () {
+      stateMachine.sendEvent(StartQuizEvent('easy'));
+      stateMachine.reset();
+      expect(stateMachine.idlePlace.marks, 1);
+      expect(stateMachine.selectingPlace.marks, 0);
+    });
+  });
 }

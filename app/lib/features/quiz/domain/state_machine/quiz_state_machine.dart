@@ -1,5 +1,62 @@
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// QUIZ STATE MACHINE
+///
+/// This file implements a finite state machine (FSM) for managing quiz flow.
+/// The state machine handles transitions between different quiz states and
+/// ensures proper state management throughout the user journey.
+///
+/// STATE MACHINE FLOW:
+/// Idle → SelectingDifficulty → LoadingQuiz → Answering → Evaluating → Results
+///
+/// Events trigger state transitions, and each state defines valid transitions.
+/// ===========================================================================
+
+/// ===========================================================================
+/// CONDITION EVENT NETWORK (CEN) COMPONENTS
+/// ===========================================================================
+
+class Place {
+  final String name;
+  int marks;
+
+  Place(this.name, {this.marks = 0});
+
+  bool get isMarked => marks > 0;
+
+  void mark() => marks++;
+  void unmark() {
+    if (marks > 0) marks--;
+  }
+}
+
+class Transition {
+  final String name;
+  final List<Place> preConditions;
+  final List<Place> postConditions;
+
+  Transition(
+    this.name, {
+    required this.preConditions,
+    required this.postConditions,
+  });
+
+  bool canFire() => preConditions.every((p) => p.isMarked);
+
+  void fire() {
+    if (!canFire()) return;
+    for (final place in preConditions) {
+      place.unmark();
+    }
+    for (final place in postConditions) {
+      place.mark();
+    }
+  }
+}
+
+/// ===========================================================================
+
 /// Base event class for state machine events
 abstract class QuizEvent {}
 
@@ -182,15 +239,41 @@ class ResultsState extends ActiveQuizState {
 class QuizStateMachine {
   QuizState _currentState;
 
+  /// CEN places for each state
+  Place idlePlace = Place('Idle', marks: 1);
+  Place selectingPlace = Place('SelectingDifficulty');
+  Place loadingPlace = Place('LoadingQuiz');
+  Place answeringPlace = Place('Answering');
+  Place evaluatingPlace = Place('EvaluatingAnswer');
+  Place resultsPlace = Place('Results');
+
   QuizStateMachine() : _currentState = const IdleState();
 
   /// Get the current state
   QuizState get currentState => _currentState;
 
+  /// Update CEN marks to match current state
+  void _updateMarks() {
+    idlePlace.marks = isInState<IdleState>() ? 1 : 0;
+    selectingPlace.marks = isInState<SelectingDifficultyState>() ? 1 : 0;
+    loadingPlace.marks = isInState<LoadingQuizState>() ? 1 : 0;
+    answeringPlace.marks = isInState<AnsweringState>() ? 1 : 0;
+    evaluatingPlace.marks = isInState<EvaluatingAnswerState>() ? 1 : 0;
+    resultsPlace.marks = isInState<ResultsState>() ? 1 : 0;
+  }
+
   /// Send an event to the state machine
   void sendEvent(QuizEvent event) {
+    // final oldState = _currentState; // For debugging
     final newState = _currentState.handleEvent(event);
+
+    // Debug print for testing state transitions
+    // if (oldState.runtimeType != newState.runtimeType) {
+    //   debugPrint('State transition: ${oldState.name} → ${newState.name}');
+    // }
+
     _currentState = newState;
+    _updateMarks();
   }
 
   /// Check if we're in a specific state type
@@ -204,6 +287,7 @@ class QuizStateMachine {
   /// Reset to initial state
   void reset() {
     _currentState = const IdleState();
+    _updateMarks();
   }
 }
 
@@ -258,3 +342,43 @@ class QuizStateController extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+// -----------------------------------------------------------------------------
+//  STATE PATTERN IMPLEMENTATION COMMENTARY
+// -----------------------------------------------------------------------------
+//
+// This file implements the State pattern as mentioned in the Software 
+// Design lecture. The State pattern lets objects alter their behavior based on their 
+// internal state rather than conditional logic. Each state is represented as a class 
+// responsible for its own transitions.
+//
+// In this quiz application, the State pattern is applied as follows:
+//
+//  - "QuizState" is the abstract base state, defining how states respond to 
+//     events through "handleEvent(QuizEvent event)".
+//
+//  - Concrete states like "IdleState", "SelectingDifficultyState",
+//     "LoadingQuizState", "AnsweringState", "EvaluatingAnswerState", and 
+//     "ResultsState" define behavior for a specific phase of the quiz.
+//
+//  - "QuizStateMachine" acts as the context, holding the current state and 
+//     delegating transitions to it. Instead of using if/else chains, the 
+//     machine calls "_currentState.handleEvent(event)", and the state itself 
+//     determines the next state.
+//
+//  - "ActiveQuizState" and "QuestionState" act as superstates that encapsulate
+//     shared behavior for related states, a common characteristic of the
+//     State pattern.
+//
+//  - State transitions can be observed through the debug print used during testing
+//    in QuizStateMachine.sendEvent():
+//
+//        if (oldState.runtimeType != newState.runtimeType) {
+//        debugPrint('State transition: ${oldState.name} → ${newState.name}');
+//        }
+//
+// No behavioral logic was modified as part of this lecture topic task, and all UI
+// and quiz structure remain identical. This task simply formalizes and comments on
+// the pattern already used internally, aligning the implementation with the 
+// lecture's discussion of behavioral design patterns.
+// -----------------------------------------------------------------------------

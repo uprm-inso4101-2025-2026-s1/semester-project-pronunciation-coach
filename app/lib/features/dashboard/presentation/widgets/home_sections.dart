@@ -1,5 +1,20 @@
 import 'package:flutter/material.dart';
 
+/// ===========================================================================
+/// HOME SECTIONS - MAIN HOME PAGE CONTENT SECTIONS
+/// ===========================================================================
+///
+/// PURPOSE:
+/// - Provides structured content sections for the home page
+/// - Displays quick access activities and progress indicators
+/// - Implements consistent card-based layout
+///
+/// SECTIONS:
+/// - Lessons: Available pronunciation lessons
+/// - Daily Practice: Current practice session progress
+/// - Weekly Goals: Progress towards weekly objectives
+/// ===========================================================================
+
 class HomeSections extends StatelessWidget {
   const HomeSections({super.key});
 
@@ -8,10 +23,10 @@ class HomeSections extends StatelessWidget {
     return Column(
       children: const [
         ActivityCard(
-          icon: Icons.menu_book,
-          title: 'Lessons',
-          subtitle: '12 available',
-          trailing: Text(
+          leadingIcon: Icons.menu_book,
+          titleText: 'Lessons',
+          subtitleText: '12 available',
+          trailingWidget: Text(
             'Pronunciation',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -20,10 +35,10 @@ class HomeSections extends StatelessWidget {
           ),
         ),
         ActivityCard(
-          icon: Icons.mic,
-          title: 'Daily Practice',
-          subtitle: '5 minutes left',
-          trailing: CircleAvatar(
+          leadingIcon: Icons.mic,
+          titleText: 'Daily Practice',
+          subtitleText: '5 minutes left',
+          trailingWidget: CircleAvatar(
             radius: 14,
             backgroundColor: Colors.greenAccent,
             child: Text(
@@ -33,28 +48,43 @@ class HomeSections extends StatelessWidget {
           ),
         ),
         ActivityCard(
-          icon: Icons.flag,
-          title: 'Objetivos semanales',
-          subtitle: '4 of 7 days completed',
-          trailing: Icon(Icons.remove, color: Colors.orange, size: 20),
+          leadingIcon: Icons.flag,
+          titleText: 'Weekly Challenges',
+          subtitleText: '4 of 7 days completed',
+          trailingWidget: Icon(Icons.remove, color: Colors.orange, size: 20),
         ),
       ],
     );
   }
 }
 
+/// ===========================================================================
+/// ACTIVITY CARD - REUSABLE ACTIVITY DISPLAY CARD
+/// ===========================================================================
+///
+/// PURPOSE:
+/// - Consistent card layout for activity items
+/// - Interactive tap feedback with ripple effects
+/// - Flexible content arrangement with icon, text, and trailing widget
+///
+/// FEATURES:
+/// - Customizable icon, title, subtitle, and trailing content
+/// - Smooth tap animations and visual feedback
+/// - Consistent styling with rounded corners and shadows
+/// ===========================================================================
+
 class ActivityCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Widget trailing;
+  final IconData leadingIcon;
+  final String titleText;
+  final String subtitleText;
+  final Widget trailingWidget;
 
   const ActivityCard({
     super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.trailing,
+    required this.leadingIcon,
+    required this.titleText,
+    required this.subtitleText,
+    required this.trailingWidget,
   });
 
   @override
@@ -64,19 +94,17 @@ class ActivityCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          debugPrint('$title tapped!');
-        },
+        onTap: () => debugPrint('$titleText tapped!'),
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
         highlightColor: Colors.blueAccent.withValues(alpha: 0.05),
         child: ListTile(
-          leading: Icon(icon, size: 30, color: Colors.blueAccent),
+          leading: Icon(leadingIcon, size: 30, color: Colors.blueAccent),
           title: Text(
-            title,
+            titleText,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(subtitle),
-          trailing: trailing,
+          subtitle: Text(subtitleText),
+          trailing: trailingWidget,
         ),
       ),
     );

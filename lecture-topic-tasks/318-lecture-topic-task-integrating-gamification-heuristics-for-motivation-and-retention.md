@@ -1,27 +1,25 @@
 ---
 issue_number: 318
-title: "[Lecture Topic Task] Integrating Gamification Heuristics for Motivation and Retention"
+title: "[Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/318"
 author: "ignaaaaacio"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
   "state: in progress"
 ]
 created_at: "2025-11-13T15:34:43Z"
-updated_at: "2025-11-13T19:38:58Z"
+updated_at: "2025-11-24T18:44:30Z"
 ---
 
-# [Lecture Topic Task] Integrating Gamification Heuristics for Motivation and Retention
+# [Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention
 
 - **Issue:** [318](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/318)
 - **Author:** @ignaaaaacio
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: waiting for dev",
   "state: in progress"
 ]
 - **Created:** 2025-11-13T15:34:43Z
@@ -43,8 +41,6 @@ The output should include a structured list of mechanics, trigger conditions, an
 ✅ Acceptance Criteria
 	•	Document outlining 6–10 gamification mechanics
 	•	Defined reward/feedback logic for each mechanic
-	•	Wireframes or mockups for the main gamified UI elements
-	•	Interaction rules explaining how users earn, lose, or maintain rewards
 	•	Clear KPIs to measure success (retention, daily active users, lesson completion)
 
 ⸻

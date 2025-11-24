@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import 'features/authentication/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import 'features/dashboard/presentation/widgets/welcome_screen.dart';
 import 'features/quiz/presentation/pages/audio_quiz_home_page.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
-import 'core/common/pace_selector.dart';
+
 import 'core/network/supabase_client.dart';
 import 'core/network/session_manager.dart';
 import 'core/di/service_locator.dart';
@@ -17,6 +16,29 @@ import 'core/constants/services/xapi_provider.dart';
 import 'features/authentication/presentation/pages/forgot_password_page.dart';
 import 'features/authentication/presentation/pages/reset_password_page.dart';
 
+/// ===========================================================================
+/// MAIN APPLICATION
+///
+/// This file serves as the entry point for the Pronunciation Coach application.
+/// It handles:
+/// - Application initialization and dependency setup
+/// - Error handling for configuration issues
+/// - Provider setup for state management
+/// - Navigation structure and routing
+/// - Main application widget tree
+///
+/// KEY RESPONSIBILITIES:
+/// - Environment configuration validation
+/// - Supabase and xAPI client initialization
+/// - Dependency injection setup
+/// - Global state management with Provider
+/// - Main navigation structure
+/// ===========================================================================
+
+/// Error Application Widget
+///
+/// Displays a user-friendly error screen when critical configuration fails.
+/// Used when Supabase initialization fails due to missing environment variables.
 class ErrorApp extends StatelessWidget {
   const ErrorApp({super.key, required this.error});
 
@@ -66,7 +88,12 @@ class ErrorApp extends StatelessWidget {
   }
 }
 
+/// Application Entry Point
+///
+/// Initializes all required services and dependencies before running the app.
+/// Handles critical failures gracefully by showing error screens.
 Future<void> main() async {
+  // Ensure Flutter binding is initialized before any platform calls
   WidgetsFlutterBinding.ensureInitialized();
 
   // Terminal command to run with environment variables:
@@ -75,7 +102,7 @@ Future<void> main() async {
   // --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY
   // --dart-define=XAPI_BASE_URL=https://your-backend.example.com/xapi
 
-  // Initialize Supabase (required)
+  // Initialize Supabase (required) - Critical dependency
   try {
     await AppSupabase.init();
   } catch (e) {
@@ -90,25 +117,30 @@ Future<void> main() async {
   }
 
   // Initialize xAPI client (optional - will use defaults if not configured)
-  final XApiClient xapi = XApiClient();
+  final XApiClient xapi = XApiClient.create();
 
-  // Run app with multiple providers
+  // Initialize session management
   await SessionManager.instance.start();
 
-  // Setup dependency injection
+  // Setup dependency injection for service location
   setupServiceLocator();
 
+  // Run main application with providers for state management
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => MyAppState()),
-        ChangeNotifierProvider(create: (_) => XApiNotifier(xapi)),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => XApiNotifier(xapi))],
       child: const MyApp(),
     ),
   );
 }
 
+/// Main Application Widget
+///
+/// Root widget of the application that sets up:
+/// - Global theme and styling
+/// - Navigation routes
+/// - Responsive design with Sizer
+/// - Application title and configuration
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -124,7 +156,9 @@ class MyApp extends StatelessWidget {
             fontFamily: 'SF Pro Display',
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
+          // Start with welcome screen as initial route
           home: const WelcomeScreen(),
+          // Named routes for navigation throughout the app
           routes: {
             '/login': (context) => const LoginPage(),
             '/dashboard': (context) => const MainNavigationScreen(),
@@ -140,6 +174,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Main Navigation Screen
+///
+/// Provides bottom navigation between main app sections:
+/// - Home/Dashboard
+/// - Audio Quiz
+/// - User Profile
+///
+/// Uses a persistent bottom navigation bar for easy access to core features.
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -150,12 +192,14 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
+  // Main application pages corresponding to bottom navigation items
   final List<Widget> _pages = const [
-    UserProgressDashboard(),
-    AudioQuizHomePage(),
-    ProfilePage(),
+    UserProgressDashboard(), // Home tab - Progress tracking
+    AudioQuizHomePage(), // Quiz tab - Audio challenges
+    ProfilePage(), // Profile tab - User information
   ];
 
+  /// Handles bottom navigation item selection
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -165,7 +209,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Display the selected page based on navigation index
       body: _pages[_selectedIndex],
+      // Bottom navigation bar with three main sections
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

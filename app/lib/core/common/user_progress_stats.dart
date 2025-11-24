@@ -1,18 +1,46 @@
 import 'user_progress.dart';
 import 'quiz_attempt.dart';
 
+/// Comprehensive user progress statistics and analytics data model.
+/// 
+/// This class aggregates and calculates various user performance metrics
+/// including XP, streaks, accuracy rates, session counts, and improvement
+/// trends over time. It provides both current stats and comparative analytics.
 class UserProgressStats {
+  /// Unique identifier of the user
   final int userId;
+  
+  /// Total experience points earned by the user
   final int totalXp;
+  
+  /// Current consecutive days of activity streak
   final int currentStreak;
+  
+  /// Total number of challenges successfully completed
   final int challengesCompleted;
+  
+  /// Overall accuracy rate as a percentage (0-100)
   final double accuracyRate;
+  
+  /// Total number of words/items practiced across all attempts
   final int wordsPracticed;
+  
+  /// Number of unique days the user has practiced
   final int sessionsCount;
+  
+  /// Average score formatted as a percentage string (e.g., "85.5%")
   final String avgScore;
+  
+  /// Count of recent correct answers (typically last 10 attempts)
   final int improvedCount;
+  
+  /// Highest consecutive correct streak achieved this week
   final int highestStreak;
+  
+  /// Week-over-week accuracy improvement percentage
   final double accuracyImprovement;
+  
+  /// Week-over-week words practiced improvement percentage
   final double wordsImprovement;
 
   UserProgressStats({
@@ -30,6 +58,10 @@ class UserProgressStats {
     required this.wordsImprovement,
   });
 
+  /// Creates an empty UserProgressStats instance for a new user.
+  /// 
+  /// [userId]: The user ID to associate with the empty stats
+  /// Returns a UserProgressStats with all values initialized to zero
   factory UserProgressStats.empty(int userId) {
     return UserProgressStats(
       userId: userId,
@@ -47,6 +79,17 @@ class UserProgressStats {
     );
   }
 
+  /// Calculates comprehensive user statistics from progress and quiz attempt data.
+  /// 
+  /// This method processes user progress and quiz attempts to generate detailed
+  /// analytics including accuracy rates, streaks, session counts, and week-over-week
+  /// improvements.
+  /// 
+  /// [progress]: The user's basic progress information
+  /// [allAttempts]: All quiz attempts made by the user
+  /// [weeklyAttempts]: Quiz attempts from the current week for weekly metrics
+  /// 
+  /// Returns a fully populated UserProgressStats instance with calculated metrics
   static UserProgressStats calculate(
     UserProgress progress,
     List<QuizAttempt> allAttempts,
@@ -162,6 +205,10 @@ class UserProgressStats {
     );
   }
 
+  /// Converts the UserProgressStats instance to a JSON-serializable map.
+  /// 
+  /// Returns a Map with snake_case keys suitable for API communication
+  /// or local storage. All numeric values are preserved as-is.
   Map<String, dynamic> toJson() {
     return {
       'user_id': userId,

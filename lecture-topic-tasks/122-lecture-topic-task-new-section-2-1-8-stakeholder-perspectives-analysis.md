@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: new Section 2.1.8 "Stakeholder Perspectives Analys
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/122"
 author: "jose-valentin"
-labels: ["documentation","Team 2","Task: lecture-topic","state: in progress","state: waiting for manager"]
+labels: [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-02T00:27:07Z"
-updated_at: "2025-10-14T18:29:21Z"
+updated_at: "2025-11-23T00:37:52Z"
 ---
 
 # [Lecture Topic Task]: new Section 2.1.8 "Stakeholder Perspectives Analysis"
 
 - **Issue:** [122](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/122)
 - **Author:** @jose-valentin
-- **Labels:** ["documentation","Team 2","Task: lecture-topic","state: in progress","state: waiting for manager"]
+- **Labels:** [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-02T00:27:07Z
 
 ## Details

@@ -1,16 +1,16 @@
 ---
 issue_number: 259
 title: "[Lecture Topic Task]: <Requirements Evaluation — Managing Conflicts and Risks>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/259"
 author: "klrskevin"
 labels: [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: concluded"
 ]
 created_at: "2025-11-05T13:04:42Z"
-updated_at: "2025-11-13T16:25:44Z"
+updated_at: "2025-11-24T18:55:33Z"
 ---
 
 # [Lecture Topic Task]: <Requirements Evaluation — Managing Conflicts and Risks>
@@ -20,7 +20,7 @@ updated_at: "2025-11-13T16:25:44Z"
 - **Labels:** [
   "Team 1",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: concluded"
 ]
 - **Created:** 2025-11-05T13:04:42Z
 

@@ -8,13 +8,17 @@ import '../../../../core/common/text_styles.dart';
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
-import 'dart:async'; // NEW
-import 'reset_password_page.dart'; // NEW
+
+import 'dart:async'; // for auth state subscription
+import 'reset_password_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'
-    show AuthException, AuthChangeEvent; // UPDATED (was only AuthException)
+    show AuthException, AuthChangeEvent;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/background_music_manager.dart';
 
-// ignore_for_file: use_build_context_synchronously
-
+/// ===========================================================================
+/// LOGIN PAGE - AUTHENTICATION INTERFACE
+/// ===========================================================================
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -23,12 +27,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Form management
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
 
+  // UI state management
   bool _rememberMe = false;
   bool _loading = false;
+
+  static const _rememberMeKey = 'remember_me';
+  static const _savedEmailKey = 'saved_email';
+
+  // Service dependencies
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
 
@@ -38,10 +49,18 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
+    // Observer pattern: Listen to loading state changes
+    _loadingSystem.addLoadingListener((isLoading) {
+      if (mounted) {
+        setState(() {
+          _loading = isLoading;
+        });
+      }
+    });
+
     // Listen for Supabase auth state changes (including password recovery)
-    _authSubscription = AppSupabase.client.auth.onAuthStateChange.listen((
-      data,
-    ) {
+    _authSubscription =
+        AppSupabase.client.auth.onAuthStateChange.listen((data) {
       final event = data.event;
 
       if (event == AuthChangeEvent.passwordRecovery) {
@@ -57,8 +76,10 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     });
+  }
 
     // Existing loading listener
+    // Observer pattern: Listen to loading state changes
     _loadingSystem.addLoadingListener((isLoading) {
       if (mounted) {
         setState(() {
@@ -66,18 +87,58 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     });
+
+    // [MUSIC START]: Starts music when app opens.
+    BackgroundMusicManager().playAuthMusic();
+
+    _loadRememberedCredentials();
+  }
+
+  Future<void> _loadRememberedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    final remember = prefs.getBool(_rememberMeKey) ?? false;
+    final savedEmail = prefs.getString(_savedEmailKey);
+
+    if (!mounted) return;
+
+    setState(() {
+      _rememberMe = remember;
+      if (remember && savedEmail != null && savedEmail.isNotEmpty) {
+        _emailCtrl.text = savedEmail;
+      }
+    });
+
+    // RememberMe logic
+    if (remember && AppSupabase.client.auth.currentSession != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        _soundService.playTransition();
+
+        // [MUSIC STOP]: Stop music before entering app automatically
+        await BackgroundMusicManager().stopMusic();
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+          );
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
     _authSubscription.cancel();
+
+    // Cleanup: Remove listeners and controllers
     _loadingSystem.removeLoadingListener((isLoading) {});
     _emailCtrl.dispose();
     _passCtrl.dispose();
     super.dispose();
   }
 
+  /// Display snackbar message for user feedback
   void _showSnack(String msg) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
@@ -88,111 +149,133 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Handle user sign-in authentication
   Future<void> _onSignIn() async {
     if (!_formKey.currentState!.validate()) return;
 
     // Play loading sound for authentication process
     _soundService.playFactReveal();
 
+    // Show loading overlay using LoadingSystem
+    // We use 'context' directly because we are in a State class
     _loadingSystem.showLoading(
       context: context,
       message: 'Signing you in...',
       contextType: 'authentication',
     );
 
-    final navigator = Navigator.of(context);
-
     try {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
-      // Sign in with Supabase
+      // 1. Sign in with Supabase authentication (Async Gap 1)
       await AppSupabase.client.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
+      // 2. Handle Shared Preferences (Async Gap 2)
+      final prefs = await SharedPreferences.getInstance();
+      if (_rememberMe) {
+        await prefs.setBool(_rememberMeKey, true);
+        await prefs.setString(_savedEmailKey, email);
+      } else {
+        await prefs.setBool(_rememberMeKey, false);
+        await prefs.remove(_savedEmailKey);
+      }
+
+      // CHECK MOUNTED before using context after async gaps
       if (!mounted) return;
 
-      // Play success sound for successful login
+      // Authentication successful
       _soundService.playLoadingSuccess();
       _loadingSystem.hideLoading(context);
 
-      // Play transition sound before navigation
-      _soundService.playTransition();
+      // 3. Stop music (Async Gap 3)
+      await BackgroundMusicManager().stopMusic();
 
-      navigator.pushReplacement(
+      // CHECK MOUNTED AGAIN before navigation
+      if (!mounted) return;
+
+      // Navigate to main app screen
+      _soundService.playTransition();
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(context);
-      }
+      // Handle authentication-specific errors
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(context);
+
       _showSnack(e.message);
     } catch (e) {
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(context);
-      }
+      // Handle generic errors
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(context);
+
       _showSnack('Unexpected error. Please try again.');
     } finally {
+      // Reset loading state
       if (mounted) setState(() => _loading = false);
     }
   }
 
-  Future<void> _onContinueAsGuest() async {
-    // Play transition sound for guest mode
-    _soundService.playTransition();
-
-    try {
-      await AppSupabase.client.auth.signOut();
-    } catch (e) {
-      // Ignore sign out errors for guests
-    }
-
-    if (!mounted) return;
-
-    _showSnack('Continuing as guest - progress will not be saved');
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-    );
-  }
-
+  /// Navigate to account creation screen
   void _onCreateAccount() {
-    // Play button click for create account navigation
     _soundService.playButtonClick();
-
+    // Music does not stop here. It continues playing in the next screen.
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
+  /// Handle forgot password flow (placeholder)
   void _onForgotPassword() {
-    // Play button click for forgot password
     _soundService.playButtonClick();
     // _showSnack('Password reset feature coming soon!');
     Navigator.of(context).pushNamed('/forgot-password');
   }
 
+  /// Toggle remember me preference
   void _onRememberMeChanged(bool? value) {
-    // Play button click for checkbox
     _soundService.playButtonClick();
-    setState(() => _rememberMe = value ?? false);
+    final newValue = value ?? false;
+
+    setState(() => _rememberMe = newValue);
+
+    // Actualizar SharedPreferences en segundo plano
+    () async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_rememberMeKey, newValue);
+
+      if (!newValue) {
+        // Si el usuario apagó Remember me, limpiamos el email guardado
+        await prefs.remove(_savedEmailKey);
+      } else {
+        // Si lo prende y ya hay email escrito, lo guardamos
+        final currentEmail = _emailCtrl.text.trim();
+        if (currentEmail.isNotEmpty) {
+          await prefs.setString(_savedEmailKey, currentEmail);
+        }
+      }
+    }();
   }
 
-  // Wrap the MyTextField with GestureDetector for tap sounds
+  /// Build email field with tap sound functionality
   Widget _buildEmailField() {
     return GestureDetector(
       onTap: () {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _emailCtrl.selection = TextSelection.collapsed(
-            offset: _emailCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _emailCtrl.selection = TextSelection.collapsed(
+              offset: _emailCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -209,16 +292,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Build password field with tap sound functionality
   Widget _buildPasswordField() {
     return GestureDetector(
       onTap: () {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _passCtrl.selection = TextSelection.collapsed(
-            offset: _passCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _passCtrl.selection = TextSelection.collapsed(
+              offset: _passCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -236,6 +322,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Validate email format
   String? _validateEmail(String? v) {
     final value = v?.trim() ?? '';
     if (value.isEmpty) return 'Please enter your email';
@@ -244,6 +331,7 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  /// Validate password requirements
   String? _validatePass(String? v) {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';
@@ -347,7 +435,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Email Field with tap sound
+                      // Email field with tap sound
                       _buildEmailField(),
 
                       SizedBox(height: 4.h),
@@ -381,7 +469,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
 
-                          // Forgot Password
+                          // Forgot password
                           TextButton(
                             onPressed: _onForgotPassword,
                             style: TextButton.styleFrom(
@@ -404,7 +492,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Main Sign In Button
+                      // Main Sign In button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -450,7 +538,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Create Account Button
+                      // Create Account button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -485,85 +573,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
 
-                      SizedBox(height: 4.h),
-
-                      // Divider
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: Colors.grey.shade400,
-                              thickness: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text(
-                              'or, continue as guest',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.textMuted,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: Colors.grey.shade400,
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      // Continue as Guest Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 7.h,
-                        child: OutlinedButton(
-                          onPressed: _onContinueAsGuest,
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3.w),
-                            ),
-                            side: BorderSide(
-                              color: AppColors.primary,
-                              width: 2,
-                            ),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.person_off_outlined,
-                                color: AppColors.primary,
-                                size: 16.sp,
-                              ),
-                              SizedBox(width: 3.w),
-                              Text(
-                                'Continue as Guest',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 1.h),
-                      Text(
-                        'Note: Progress will not be saved',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: Colors.orange[700],
-                          fontSize: 11.sp,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                       SizedBox(height: 2.h),
                     ],
                   ),
@@ -573,7 +582,7 @@ class _LoginPageState extends State<LoginPage> {
               // Bottom Spacing
               SizedBox(height: 5.h),
 
-              // App Info Footer
+              // App info footer
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(4.w),
