@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../common/env.example.dart'; // Changed back to env.example.dart for it to work
+import '../common/env.dart';
 
 /// Main Supabase client wrapper for initializing and accessing Supabase services.
 ///

@@ -4,12 +4,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/session_manager.dart';
+import '../../domain/settings_algebra.dart';
 
 // ignore_for_file: use_build_context_synchronously
 
 /// ===========================================================================
-/// SETTINGS PAGE 
-/// 
+/// SETTINGS PAGE
+///
 /// This file implements the user settings interface for the Pronunciation Coach app.
 /// It provides:
 /// - User account management and authentication status
@@ -17,7 +18,7 @@ import '../../../../core/network/session_manager.dart';
 /// - Notification settings control
 /// - Privacy and analytics preferences
 /// - Persistent settings storage using SharedPreferences
-/// 
+///
 /// KEY FEATURES:
 /// - Guest vs authenticated user differentiation
 /// - Persistent preference storage
@@ -36,47 +37,66 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   // SharedPreferences keys for persistent storage
   static const _notificationsKey = 'settings.notifications_enabled';
-  static const _remindersKey = 'settings.daily_reminders_enabled';
   static const _autoPlayKey = 'settings.autoplay_audio_enabled';
-  static const _analyticsKey = 'settings.analytics_enabled';
 
-  // State variables for settings toggles
+  // Algebraic settings state management
   bool _isLoading = true;
-  bool _notificationsEnabled = true;
-  bool _dailyRemindersEnabled = true;
-  bool _autoPlayEnabled = false;
-  bool _analyticsEnabled = true;
+  late SettingsState _currentSettings;
+  final SettingsAlgebra _settingsAlgebra = SettingsAlgebraImplementation();
+  late SharedPreferences _prefs;
 
-  SharedPreferences? _prefs;
+  // Legacy boolean variables (could be migrated to algebra later)
+  late bool _autoPlayEnabled;
+
+  // Algebraic state getters
+  bool get _notificationsEnabled => _currentSettings.notifications;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
+    _loadSettings();
   }
 
-  /// Loads user preferences from SharedPreferences storage
-  /// Initializes default values if preferences don't exist
-  Future<void> _loadPreferences() async {
+  /// Loads settings from SharedPreferences
+  Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // Load all preferences
+    final notifications = prefs.getBool(_notificationsKey) ?? true;
+    final autoPlay = prefs.getBool(_autoPlayKey) ?? false;
+
+    // Load legacy boolean variables
+    _autoPlayEnabled = autoPlay;
+
+    // Create algebraic state - start with default and override notifications
+    _currentSettings = SettingsState.defaultState();
+    if (!notifications) {
+      _currentSettings = _settingsAlgebra.toggleNotifications(_currentSettings);
+    }
 
     setState(() {
       _prefs = prefs;
-      _notificationsEnabled = prefs.getBool(_notificationsKey) ?? true;
-      _dailyRemindersEnabled = prefs.getBool(_remindersKey) ?? true;
-      _autoPlayEnabled = prefs.getBool(_autoPlayKey) ?? false;
-      _analyticsEnabled = prefs.getBool(_analyticsKey) ?? true;
       _isLoading = false;
     });
   }
 
+  /// Algebraic wrapper for toggle notifications
+  void _toggleNotifications() {
+    setState(() {
+      _currentSettings = _settingsAlgebra.toggleNotifications(_currentSettings);
+    });
+    _saveSettings(); // Save to SharedPreferences
+  }
+
+  /// Saves current algebraic state to SharedPreferences
+  Future<void> _saveSettings() async {
+    await _prefs.setBool(_notificationsKey, _currentSettings.notifications);
+    // Could save other settings here in the future
+  }
+
   /// Updates a preference value in SharedPreferences
-  /// [key]: The preference key to update
-  /// [value]: The new boolean value to store
   Future<void> _updatePreference(String key, bool value) async {
-    final prefs = _prefs;
-    if (prefs == null) return;
-    await prefs.setBool(key, value);
+    await _prefs.setBool(key, value);
   }
 
   @override
@@ -161,99 +181,49 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // LEARNING PREFERENCES SECTION
                 _buildSection(
                   title: 'Learning preferences',
                   child: Column(
                     children: [
-                      // AUTO-PLAY PRONUNCIATIONS SETTING
+                      // AUTO-PLAY AUDIO SETTING
                       SwitchListTile(
                         value: _autoPlayEnabled,
-                        title: const Text('Auto-play pronunciations'),
+                        title: const Text('Automatically play audio options'),
                         subtitle: const Text(
-                          'Automatically play audio examples on new lessons',
+                          'Auto-play pronunciation options in quizzes',
                         ),
                         onChanged: (value) {
                           setState(() => _autoPlayEnabled = value);
                           _updatePreference(_autoPlayKey, value);
                         },
                       ),
-                      // DAILY PRACTICE REMINDERS SETTING
-                      SwitchListTile(
-                        value: _dailyRemindersEnabled,
-                        title: const Text('Daily practice reminders'),
-                        subtitle: const Text(
-                          'Stay on track with motivational nudges',
-                        ),
-                        onChanged: (value) {
-                          setState(() => _dailyRemindersEnabled = value);
-                          _updatePreference(_remindersKey, value);
-                        },
-                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // NOTIFICATIONS SECTION
                 _buildSection(
                   title: 'Notifications',
                   child: Column(
                     children: [
-                      // APP NOTIFICATIONS SETTING
+                      // APP NOTIFICATIONS SETTING - Using Algebraic Operations
                       SwitchListTile(
                         value: _notificationsEnabled,
                         title: const Text('App notifications'),
                         subtitle: const Text(
                           'Be notified about new challenges and streaks',
                         ),
-                        onChanged: (value) {
-                          setState(() => _notificationsEnabled = value);
-                          _updatePreference(_notificationsKey, value);
-                        },
+                        onChanged: (_) =>
+                            _toggleNotifications(), // Algebraic operation
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                
-                // PRIVACY SECTION
-                _buildSection(
-                  title: 'Privacy',
-                  child: Column(
-                    children: [
-                      // ANALYTICS SHARING SETTING
-                      SwitchListTile(
-                        value: _analyticsEnabled,
-                        title: const Text('Share anonymous usage analytics'),
-                        subtitle: const Text(
-                          'Help us improve Pronunciation Coach',
-                        ),
-                        onChanged: (value) {
-                          setState(() => _analyticsEnabled = value);
-                          _updatePreference(_analyticsKey, value);
-                        },
-                      ),
-                      // PRIVACY POLICY LINK
-                      ListTile(
-                        leading: const Icon(
-                          Icons.description_outlined,
-                          color: Colors.blue,
-                        ),
-                        title: const Text('Privacy policy'),
-                        onTap: () => _showWorkInProgressDialog(
-                          context,
-                          title: 'Privacy policy',
-                          message:
-                              'The privacy policy is being finalized. Please check back soon or contact support for details.',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
+
                 // SECURITY SECTION (AUTHENTICATED USERS ONLY)
                 if (!isGuest)
                   _buildSection(

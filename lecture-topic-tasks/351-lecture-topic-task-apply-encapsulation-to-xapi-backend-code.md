@@ -1,17 +1,16 @@
 ---
 issue_number: 351
 title: "[Lecture Topic Task]:  <Apply Encapsulation to xAPI Backend code>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/351"
 author: "ivxnmorxles"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: waiting for team lead"
+  "task: development"
 ]
 created_at: "2025-11-22T18:40:30Z"
-updated_at: "2025-11-23T17:12:55Z"
+updated_at: "2025-11-23T22:36:31Z"
 ---
 
 # [Lecture Topic Task]:  <Apply Encapsulation to xAPI Backend code>
@@ -21,8 +20,7 @@ updated_at: "2025-11-23T17:12:55Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "task: development",
-  "state: waiting for team lead"
+  "task: development"
 ]
 - **Created:** 2025-11-22T18:40:30Z
 

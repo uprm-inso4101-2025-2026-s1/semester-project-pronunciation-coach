@@ -1,6 +1,4 @@
 import 'package:app/features/home/presentation/pages/home_page.dart';
-import 'package:provider/provider.dart';
-import 'package:app/core/common/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/common/colors.dart' as common_colors;
@@ -41,12 +39,12 @@ class MyApp extends StatelessWidget {
 /// ===========================================================================
 /// MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Root navigation container with bottom tab bar
 /// - Manages screen transitions between main app sections
 /// - Provides consistent navigation structure
-/// 
+///
 /// SECTIONS:
 /// - Home: Main landing page with activities
 /// - Dashboard: Progress tracking and statistics
@@ -148,13 +146,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 /// ===========================================================================
 /// USER PROGRESS DASHBOARD - PROGRESS TRACKING INTERFACE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Comprehensive progress tracking and visualization
 /// - Real-time statistics from ProgressService
 /// - Practice calendar and achievement display
 /// - Guest user handling with login prompts
-/// 
+///
 /// FEATURES:
 /// - Progress overview cards with improvement indicators
 /// - Practice statistics and streak tracking
@@ -279,27 +277,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
-        actions: _isGuest
-            ? null // Hide actions for guests
-            : [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ChallengesPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Select Pace",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -317,10 +294,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Display Selected Pace
-          _buildSelectedPace(context),
-          const SizedBox(height: 20),
-
           // Loading/Error states
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
@@ -367,48 +340,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           // Add bottom padding for tab bar
           const SizedBox(height: 20),
         ],
-      ),
-    );
-  }
-
-  /// Display current learning pace selection
-  Widget _buildSelectedPace(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    String paceText = '⚡ Not selected ⚡';
-    switch (appState.selectedPace) {
-      case LearningPace.casual:
-        paceText = '🚲 Casual 🚲';
-        break;
-      case LearningPace.standard:
-        paceText = '🚗 Standard 🚗';
-        break;
-      case LearningPace.intensive:
-        paceText = '🚀 Intensive 🚀';
-        break;
-    }
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: common_colors.AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: common_colors.AppColors.cardShadow,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Text(
-        'Selected Pace: $paceText',
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: common_colors.AppColors.textPrimary,
-        ),
       ),
     );
   }
