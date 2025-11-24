@@ -160,7 +160,7 @@ class _SigninPageState extends State<SigninPage> {
         // User successfully signed up and is entering the app.
         // Stop the background music now.
         await BackgroundMusicManager().stopMusic();
-
+        if (!mounted) return;
         // Email confirmation OFF → we have a session; go to app
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const MainNavigationScreen()),

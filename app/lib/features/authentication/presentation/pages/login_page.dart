@@ -180,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
       // Navigate to main app screen
       _soundService.playTransition();
 
+      if (!mounted) return;
       Navigator.of(currentContext).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
