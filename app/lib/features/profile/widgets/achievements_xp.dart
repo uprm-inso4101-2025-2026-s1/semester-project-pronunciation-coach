@@ -3,16 +3,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/user_progress.dart';
+import '../../../../core/network/progress_service.dart';
 
 /// ===========================================================================
 /// ACHIEVEMENT ENTITY - ACHIEVEMENT DATA MODEL
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Represents individual user achievements with progress tracking
 /// - Supports JSON serialization for persistent storage
 /// - Manages achievement states (locked/unlocked) and progress
-/// 
+///
 /// PROPERTIES:
 /// - id: Unique identifier for the achievement
 /// - groupId: Category grouping (xp, streak, etc.)
@@ -83,13 +84,13 @@ class Achievement {
 /// ===========================================================================
 /// ACHIEVEMENTS SECTION - ACHIEVEMENT DISPLAY AND MANAGEMENT
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Main widget for displaying and managing user achievements
 /// - Integrates with UserProgress for real-time data
 /// - Provides expandable achievement groups and progress tracking
 /// - Handles achievement unlocking and persistence
-/// 
+///
 /// FEATURES:
 /// - Grouped achievement display with expand/collapse
 /// - Progress visualization with linear progress bars
@@ -114,7 +115,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   int totalXP = 0;
   int currentStreak = 0;
   List<Achievement> achievements = [];
-  
+
   /// Track which achievement groups are expanded
   Map<String, bool> expandedGroups = {};
 
@@ -126,35 +127,48 @@ class _AchievementsSectionState extends State<AchievementsSection> {
 
   /// Load user profile data and achievements
   Future<void> _loadProfileData() async {
-    // Load stored achievements from persistent storage
-    final prefs = await SharedPreferences.getInstance();
-    final userId = widget.userProgress.userId;
-    final data = prefs.getString('achievements_$userId');
-
-    if (data != null) {
-      final decoded = jsonDecode(data) as List;
-      achievements = decoded.map((e) => Achievement.fromJson(e)).toList();
-    } else {
-      // Initialize with default achievements if none exist
-      achievements = _defaultAchievements();
-    }
-
     // Use real data from userProgress
     totalXP = widget.userProgress.totalXp;
     currentStreak = widget.userProgress.currentStreak;
 
+    if (widget.userProgress.achievementsData != null &&
+        widget.userProgress.achievementsData!.isNotEmpty) {
+      try {
+        final decoded =
+            jsonDecode(widget.userProgress.achievementsData!) as List;
+        achievements = decoded.map((e) => Achievement.fromJson(e)).toList();
+      } catch (e) {
+        achievements = _defaultAchievements();
+      }
+    } else {
+      // If no data in Supabase, try SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final userId = widget.userProgress.userId;
+      final data = prefs.getString('achievements_$userId');
+
+      if (data != null) {
+        final decoded = jsonDecode(data) as List;
+        achievements = decoded.map((e) => Achievement.fromJson(e)).toList();
+      } else {
+        // If neither in SharedPresences, use default
+        achievements = _defaultAchievements();
+      }
+    }
+
     // Update achievement progress based on user data
     for (var a in achievements) {
-      if (a.groupId == 'xp') {
-        a.currentProgress = totalXP;
-      } else if (a.groupId == 'streak') {
-        a.currentProgress = currentStreak;
-      }
+      if (!a.isUnlocked) {
+        if (a.groupId == 'xp') {
+          a.currentProgress = totalXP;
+        } else if (a.groupId == 'streak') {
+          a.currentProgress = currentStreak;
+        }
 
-      // Automatically unlock if progress requirements are met
-      if (!a.isUnlocked && a.currentProgress >= a.totalRequired) {
-        a.isUnlocked = true;
-        a.unlockedDate = DateTime.now();
+        // Automatically unlock if progress requirements are met
+        if (a.currentProgress >= a.totalRequired) {
+          a.isUnlocked = true;
+          a.unlockedDate = DateTime.now();
+        }
       }
     }
 
@@ -162,13 +176,25 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     setState(() {});
   }
 
-  /// Save achievements to persistent storage
+  /// Save achievements to both SharedPreferences AND Supabase
   Future<void> _saveAchievements() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-      'achievements',
-      jsonEncode(achievements.map((a) => a.toJson()).toList()),
+    final achievementsJson = jsonEncode(
+      achievements.map((a) => a.toJson()).toList(),
     );
+
+    final prefs = await SharedPreferences.getInstance();
+    final userId = widget.userProgress.userId;
+    await prefs.setString('achievements_$userId', achievementsJson);
+
+    try {
+      final progressService = ProgressService();
+      final updatedProgress = widget.userProgress.copyWith(
+        achievementsData: achievementsJson,
+      );
+      await progressService.saveUserProgress(updatedProgress);
+    } catch (e) {
+      print('Error saving achievements to Supabase: $e');
+    }
   }
 
   /// Define default achievement structure
@@ -299,7 +325,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 24),
-        
+
         // Section Header
         const Text(
           'Achievements',
