@@ -1,6 +1,6 @@
 ---
 issue_number: 319
-title: "[Lecture Topic Task]: Using Dependency Injection to Simplify Audio Analysis Services"
+title: "[Lecture Topic Task]: Using Dependency Injection to Simplify Audio Analysis Services – Documentation Guidelines"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/319"
 author: "ignaaaaacio"
@@ -11,10 +11,10 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T15:35:56Z"
-updated_at: "2025-11-13T19:38:12Z"
+updated_at: "2025-11-24T15:40:14Z"
 ---
 
-# [Lecture Topic Task]: Using Dependency Injection to Simplify Audio Analysis Services
+# [Lecture Topic Task]: Using Dependency Injection to Simplify Audio Analysis Services – Documentation Guidelines
 
 - **Issue:** [319](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/319)
 - **Author:** @ignaaaaacio
