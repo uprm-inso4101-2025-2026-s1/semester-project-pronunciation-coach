@@ -57,18 +57,30 @@ class HomeSections extends StatelessWidget {
 /// ===========================================================================
 /// ACTIVITY CARD - REUSABLE ACTIVITY DISPLAY CARD
 /// ===========================================================================
+///
+/// PURPOSE:
+/// - Consistent card layout for activity items
+/// - Interactive tap feedback with ripple effects
+/// - Flexible content arrangement with icon, text, and trailing widget
+///
+/// FEATURES:
+/// - Customizable icon, title, subtitle, and trailing content
+/// - Smooth tap animations and visual feedback
+/// - Consistent styling with rounded corners and shadows
+/// ===========================================================================
+
 class ActivityCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Widget trailing;
+  final IconData leadingIcon;
+  final String titleText;
+  final String subtitleText;
+  final Widget trailingWidget;
 
   const ActivityCard({
     super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.trailing,
+    required this.leadingIcon,
+    required this.titleText,
+    required this.subtitleText,
+    required this.trailingWidget,
   });
 
   @override
@@ -85,13 +97,13 @@ class ActivityCard extends StatelessWidget {
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
         highlightColor: Colors.blueAccent.withValues(alpha: 0.05),
         child: ListTile(
-          leading: Icon(icon, size: 30, color: Colors.blueAccent),
+          leading: Icon(leadingIcon, size: 30, color: Colors.blueAccent),
           title: Text(
-            title,
+            titleText,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(subtitle),
-          trailing: trailing,
+          subtitle: Text(subtitleText),
+          trailing: trailingWidget,
         ),
       ),
     );

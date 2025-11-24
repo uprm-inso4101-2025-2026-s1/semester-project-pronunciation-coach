@@ -94,6 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
       fullName.trim().split(' ').isNotEmpty ? fullName.split(' ').first : fullName;
 
       final ProgressService progressService = ProgressService();
+      final metaName = user.userMetadata?['full_name'];
+      final computedName =
+          fullName ??
+          (metaName is String && metaName.trim().isNotEmpty
+              ? metaName.trim()
+              : (user.email ?? 'User'));
 
       // ------------------------
       // 2) Load user_progress stats
@@ -128,10 +134,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Match the rest of the app status bar style
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,

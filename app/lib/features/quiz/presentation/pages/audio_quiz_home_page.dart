@@ -4,12 +4,7 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
-import 'audio_quiz_history_page.dart';
-
-/// Fast practice configuration shared between home and navigation
-class FastPracticeConfig {
-  static bool autoStartRandomQuiz = false;
-}
+import 'package:app/word_bank.dart'; 
 
 /// ===========================================================================
 /// AUDIO QUIZ HOME PAGE 
@@ -45,6 +40,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  bool _isWordBankLoaded = WordBank.isInitialized;
 
   // Static difficulties - no need to fetch from backend
   final List<Difficulty> _difficulties = [
@@ -83,14 +79,29 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   void initState() {
     super.initState();
     _setupAnimations();
+    _loadWordBank();
+  }
 
-    // If triggered from Fast Practice or configured to auto-start,
-    // immediately launch a random quiz question.
-    if (FastPracticeConfig.autoStartRandomQuiz || widget.autoStartRandom) {
-      FastPracticeConfig.autoStartRandomQuiz = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final difficulty = _getRandomDifficulty();
-        _startQuiz(difficulty);
+  Future<void> _loadWordBank() async {
+    try {
+      // If already loaded, skip
+      if (WordBank.isInitialized) {
+        setState(() {
+          _isWordBankLoaded = true;
+        });
+        return;
+      }
+
+      await WordBank().load(); // loads assets/sounds/wordbank.json
+
+      setState(() {
+        _isWordBankLoaded = true;
+      });
+    } catch (e) {
+      debugPrint('Failed to load word bank: $e');
+      // Lets the user in even if something went wrong
+      setState(() {
+        _isWordBankLoaded = true;
       });
     }
   }
@@ -134,15 +145,15 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          // 🔴 IMPORTANT: this must point to the difficulty list,
-          // not to a blank Container.
-          child: _buildDifficultyList(),
-        ),
-      ),
+      body: !_isWordBankLoaded
+          ? const Center(child: CircularProgressIndicator())
+          : FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: _buildDifficultyList(),
+              ),
+            ),
     );
   }
 

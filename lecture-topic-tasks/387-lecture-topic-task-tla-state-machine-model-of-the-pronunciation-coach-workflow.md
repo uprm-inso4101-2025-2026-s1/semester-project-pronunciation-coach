@@ -7,10 +7,10 @@ author: "noelcolon"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-23T18:43:41Z"
-updated_at: "2025-11-24T00:38:39Z"
+updated_at: "2025-11-24T18:29:56Z"
 ---
 
 # [Lecture Topic Task]: TLA+ State Machine Model of the Pronunciation Coach Workflow
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T00:38:39Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-23T18:43:41Z
 
