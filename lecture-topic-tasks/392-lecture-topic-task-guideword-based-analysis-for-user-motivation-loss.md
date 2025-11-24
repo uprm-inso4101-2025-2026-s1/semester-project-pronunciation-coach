@@ -7,10 +7,10 @@ author: "omar-cordero"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-24T00:16:37Z"
-updated_at: "2025-11-24T00:16:47Z"
+updated_at: "2025-11-24T00:17:56Z"
 ---
 
 # [Lecture Topic Task]: Guideword-Based Analysis for User Motivation Loss
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T00:16:47Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-24T00:16:37Z
 
