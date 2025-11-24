@@ -7,7 +7,7 @@ import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
-import '/core/common/sound_service.dart';
+import 'package:app/core/common/sound_service.dart';
 
 import 'dart:async'; // for auth state subscription
 import 'reset_password_page.dart';
