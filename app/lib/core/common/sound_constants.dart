@@ -48,7 +48,7 @@ class SoundConstants {
   static const double highVolume = 1.0;
   
   /// Background music volume (20% volume - lower for ambient audio)
-  static const double backgroundVolume = 0.2;
+  static const double backgroundVolume = 1.0;
   
   // ===========================================================================
   // SOUND CATEGORIES

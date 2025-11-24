@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'signin_page.dart';
 import 'package:app/features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import '../widgets/text_field.dart';
@@ -12,6 +10,7 @@ import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/background_music_manager.dart';
 
 /// ===========================================================================
 /// LOGIN PAGE - AUTHENTICATION INTERFACE
@@ -73,6 +72,10 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
+    // [MUSIC START]: Starts music when app opens.
+    // If returning from Sign In, it sees music is playing and does nothing (seamless).
+    BackgroundMusicManager().playAuthMusic();
+
     _loadRememberedCredentials();
   }
 
@@ -90,13 +93,19 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
-    // Opcional: si hay sesión activa y rememberMe está encendido, saltar login
+    // RememberMe logic
     if (remember && AppSupabase.client.auth.currentSession != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         _soundService.playTransition();
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-        );
+
+        // [MUSIC STOP]: Stop music before entering app automatically
+        await BackgroundMusicManager().stopMusic();
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+          );
+        }
       });
     }
   }
@@ -165,8 +174,12 @@ class _LoginPageState extends State<LoginPage> {
       _soundService.playLoadingSuccess();
       _loadingSystem.hideLoading(currentContext);
 
+      // [MUSIC STOP]: Stop music immediately on successful login
+      await BackgroundMusicManager().stopMusic();
+
       // Navigate to main app screen
       _soundService.playTransition();
+
       Navigator.of(currentContext).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
@@ -193,9 +206,8 @@ class _LoginPageState extends State<LoginPage> {
   /// Navigate to account creation screen
   void _onCreateAccount() {
     _soundService.playButtonClick();
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
+    // Music does not stop here. It continues playing in the next screen.
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
   /// Handle forgot password flow (placeholder)
@@ -236,10 +248,12 @@ class _LoginPageState extends State<LoginPage> {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _emailCtrl.selection = TextSelection.collapsed(
-            offset: _emailCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _emailCtrl.selection = TextSelection.collapsed(
+              offset: _emailCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -263,10 +277,12 @@ class _LoginPageState extends State<LoginPage> {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _passCtrl.selection = TextSelection.collapsed(
-            offset: _passCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _passCtrl.selection = TextSelection.collapsed(
+              offset: _passCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -397,7 +413,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Email Field with tap sound
+                      // Email field with tap sound
                       _buildEmailField(),
 
                       SizedBox(height: 4.h),
@@ -419,7 +435,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onChanged: _onRememberMeChanged,
                                 activeColor: AppColors.primary,
                                 materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
+                                MaterialTapTargetSize.shrinkWrap,
                               ),
                               Text(
                                 'Remember me',
@@ -431,7 +447,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
 
-                          // Forgot Password
+                          // Forgot password
                           TextButton(
                             onPressed: _onForgotPassword,
                             style: TextButton.styleFrom(
@@ -454,7 +470,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Main Sign In Button
+                      // Main Sign In button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -473,34 +489,34 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: _loading
                               ? SizedBox(
-                                  width: 6.w,
-                                  height: 6.w,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
+                            width: 6.w,
+                            height: 6.w,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
                               : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.login, size: 18.sp),
-                                    SizedBox(width: 3.w),
-                                    Text(
-                                      'Sign In to Continue',
-                                      style: AppTextStyles.bodyLarge.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.login, size: 18.sp),
+                              SizedBox(width: 3.w),
+                              Text(
+                                'Sign In to Continue',
+                                style: AppTextStyles.bodyLarge.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.sp,
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
 
                       SizedBox(height: 4.h),
 
-                      // Create Account Button
+                      // Create Account button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -544,7 +560,7 @@ class _LoginPageState extends State<LoginPage> {
               // Bottom Spacing
               SizedBox(height: 5.h),
 
-              // App Info Footer
+              // App info footer
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(4.w),
