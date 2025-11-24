@@ -10,7 +10,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T00:16:37Z"
-updated_at: "2025-11-24T00:16:37Z"
+updated_at: "2025-11-24T00:16:47Z"
 ---
 
 # [Lecture Topic Task]: Guideword-Based Analysis for User Motivation Loss
