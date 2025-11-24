@@ -8,11 +8,10 @@ labels: [
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-24T02:17:30Z"
-updated_at: "2025-11-24T02:17:41Z"
+updated_at: "2025-11-24T02:42:45Z"
 ---
 
 # [Lecture Topic Task]: Standardize App Structure to Improve Consistency and Maintainability
@@ -23,8 +22,7 @@ updated_at: "2025-11-24T02:17:41Z"
   "Team 3",
   "Task: lecture-topic",
   "task: development",
-  "state: waiting for team lead",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-24T02:17:30Z
 

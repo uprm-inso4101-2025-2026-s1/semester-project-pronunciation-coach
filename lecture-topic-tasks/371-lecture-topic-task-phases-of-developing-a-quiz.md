@@ -1,16 +1,17 @@
 ---
 issue_number: 371
 title: "[Lecture Topic Task]: Phases of developing a quiz"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/371"
 author: "Joy-Martinez"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: concluded"
 ]
 created_at: "2025-11-23T06:02:31Z"
-updated_at: "2025-11-23T15:06:08Z"
+updated_at: "2025-11-24T02:52:28Z"
 ---
 
 # [Lecture Topic Task]: Phases of developing a quiz
@@ -20,7 +21,8 @@ updated_at: "2025-11-23T15:06:08Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: in progress",
+  "state: concluded"
 ]
 - **Created:** 2025-11-23T06:02:31Z
 
