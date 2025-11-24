@@ -11,24 +11,25 @@ import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// ===========================================================================
 /// LOGIN PAGE - AUTHENTICATION INTERFACE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Primary login screen for user authentication
 /// - Handles email/password login with Supabase backend
 /// - Provides navigation to signup and password recovery
 /// - Implements sound feedback for user interactions
-/// 
+///
 /// KEY FEATURES:
 /// - Form validation for email and password
 /// - Loading states with visual feedback
 /// - Sound effects for user interactions
 /// - "Remember me" functionality
 /// - Error handling with user-friendly messages
-/// 
+///
 /// ARCHITECTURE:
 /// - Stateful widget managing form state and authentication flow
 /// - Integration with LoadingSystem for loading states
@@ -52,7 +53,10 @@ class _LoginPageState extends State<LoginPage> {
   // UI state management
   bool _rememberMe = false;
   bool _loading = false;
-  
+
+  static const _rememberMeKey = 'remember_me';
+  static const _savedEmailKey = 'saved_email';
+
   // Service dependencies
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
@@ -68,6 +72,33 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     });
+
+    _loadRememberedCredentials();
+  }
+
+  Future<void> _loadRememberedCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    final remember = prefs.getBool(_rememberMeKey) ?? false;
+    final savedEmail = prefs.getString(_savedEmailKey);
+
+    if (!mounted) return;
+
+    setState(() {
+      _rememberMe = remember;
+      if (remember && savedEmail != null && savedEmail.isNotEmpty) {
+        _emailCtrl.text = savedEmail;
+      }
+    });
+
+    // Opcional: si hay sesión activa y rememberMe está encendido, saltar login
+    if (remember && AppSupabase.client.auth.currentSession != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _soundService.playTransition();
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+        );
+      });
+    }
   }
 
   @override
@@ -119,6 +150,15 @@ class _LoginPageState extends State<LoginPage> {
         password: password,
       );
 
+      final prefs = await SharedPreferences.getInstance();
+      if (_rememberMe) {
+        await prefs.setBool(_rememberMeKey, true);
+        await prefs.setString(_savedEmailKey, email);
+      } else {
+        await prefs.setBool(_rememberMeKey, false);
+        await prefs.remove(_savedEmailKey);
+      }
+
       if (!mounted) return;
 
       // Authentication successful
@@ -153,7 +193,9 @@ class _LoginPageState extends State<LoginPage> {
   /// Navigate to account creation screen
   void _onCreateAccount() {
     _soundService.playButtonClick();
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SigninPage()));
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
   /// Handle forgot password flow (placeholder)
@@ -165,7 +207,26 @@ class _LoginPageState extends State<LoginPage> {
   /// Toggle remember me preference
   void _onRememberMeChanged(bool? value) {
     _soundService.playButtonClick();
-    setState(() => _rememberMe = value ?? false);
+    final newValue = value ?? false;
+
+    setState(() => _rememberMe = newValue);
+
+    // Actualizar SharedPreferences en segundo plano
+    () async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_rememberMeKey, newValue);
+
+      if (!newValue) {
+        // Si el usuario apagó Remember me, limpiamos el email guardado
+        await prefs.remove(_savedEmailKey);
+      } else {
+        // Si lo prende y ya hay email escrito, lo guardamos
+        final currentEmail = _emailCtrl.text.trim();
+        if (currentEmail.isNotEmpty) {
+          await prefs.setString(_savedEmailKey, currentEmail);
+        }
+      }
+    }();
   }
 
   /// Build email field with tap sound functionality
