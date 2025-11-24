@@ -7,10 +7,10 @@ author: "noelcolon"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-23T17:51:02Z"
-updated_at: "2025-11-24T00:18:05Z"
+updated_at: "2025-11-24T00:59:18Z"
 ---
 
 # [Lecture Topic Task]: Model Audio Analysis Workflow as a Petri Net
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T00:18:05Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-23T17:51:02Z
 
