@@ -7,10 +7,10 @@ author: "Joy-Martinez"
 labels: [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-24T05:40:21Z"
-updated_at: "2025-11-24T05:40:35Z"
+updated_at: "2025-11-24T18:19:08Z"
 ---
 
 # [Lecture Topic Task]: Preventing inconsitencies, missing requirementes, and general evaluation
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T05:40:35Z"
 - **Labels:** [
   "Team 4",
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-24T05:40:21Z
 
