@@ -8,11 +8,10 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-24T01:18:47Z"
-updated_at: "2025-11-24T01:18:58Z"
+updated_at: "2025-11-24T01:23:49Z"
 ---
 
 # [Lecture Topic Task]: Define "Rules and Regulations" Facet for the Domain
@@ -23,8 +22,7 @@ updated_at: "2025-11-24T01:18:58Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-24T01:18:47Z
 
