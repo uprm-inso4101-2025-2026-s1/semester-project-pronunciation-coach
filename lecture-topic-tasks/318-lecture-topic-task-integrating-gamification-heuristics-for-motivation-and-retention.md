@@ -1,6 +1,6 @@
 ---
 issue_number: 318
-title: "[Lecture Topic Task] Integrating Gamification Heuristics for Motivation and Retention"
+title: "[Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/318"
 author: "ignaaaaacio"
@@ -11,10 +11,10 @@ labels: [
   "state: in progress"
 ]
 created_at: "2025-11-13T15:34:43Z"
-updated_at: "2025-11-13T19:38:58Z"
+updated_at: "2025-11-24T15:20:16Z"
 ---
 
-# [Lecture Topic Task] Integrating Gamification Heuristics for Motivation and Retention
+# [Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention
 
 - **Issue:** [318](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/318)
 - **Author:** @ignaaaaacio
