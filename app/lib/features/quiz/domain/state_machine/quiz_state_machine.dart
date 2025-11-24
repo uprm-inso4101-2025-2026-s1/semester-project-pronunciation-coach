@@ -264,7 +264,14 @@ class QuizStateMachine {
 
   /// Send an event to the state machine
   void sendEvent(QuizEvent event) {
+    // final oldState = _currentState; // For debugging
     final newState = _currentState.handleEvent(event);
+
+    // Debug print for testing state transitions
+    // if (oldState.runtimeType != newState.runtimeType) {
+    //   debugPrint('State transition: ${oldState.name} → ${newState.name}');
+    // }
+
     _currentState = newState;
     _updateMarks();
   }
@@ -335,3 +342,43 @@ class QuizStateController extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+// -----------------------------------------------------------------------------
+//  STATE PATTERN IMPLEMENTATION COMMENTARY
+// -----------------------------------------------------------------------------
+//
+// This file implements the State pattern as mentioned in the Software 
+// Design lecture. The State pattern lets objects alter their behavior based on their 
+// internal state rather than conditional logic. Each state is represented as a class 
+// responsible for its own transitions.
+//
+// In this quiz application, the State pattern is applied as follows:
+//
+//  - "QuizState" is the abstract base state, defining how states respond to 
+//     events through "handleEvent(QuizEvent event)".
+//
+//  - Concrete states like "IdleState", "SelectingDifficultyState",
+//     "LoadingQuizState", "AnsweringState", "EvaluatingAnswerState", and 
+//     "ResultsState" define behavior for a specific phase of the quiz.
+//
+//  - "QuizStateMachine" acts as the context, holding the current state and 
+//     delegating transitions to it. Instead of using if/else chains, the 
+//     machine calls "_currentState.handleEvent(event)", and the state itself 
+//     determines the next state.
+//
+//  - "ActiveQuizState" and "QuestionState" act as superstates that encapsulate
+//     shared behavior for related states, a common characteristic of the
+//     State pattern.
+//
+//  - State transitions can be observed through the debug print used during testing
+//    in QuizStateMachine.sendEvent():
+//
+//        if (oldState.runtimeType != newState.runtimeType) {
+//        debugPrint('State transition: ${oldState.name} → ${newState.name}');
+//        }
+//
+// No behavioral logic was modified as part of this lecture topic task, and all UI
+// and quiz structure remain identical. This task simply formalizes and comments on
+// the pattern already used internally, aligning the implementation with the 
+// lecture's discussion of behavioral design patterns.
+// -----------------------------------------------------------------------------
