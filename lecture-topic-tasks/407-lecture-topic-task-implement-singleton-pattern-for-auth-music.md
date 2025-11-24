@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-24T04:50:04Z"
-updated_at: "2025-11-24T04:50:04Z"
+updated_at: "2025-11-24T04:50:15Z"
 ---
 
 # [Lecture Topic Task]: Implement "Singleton" Pattern for Auth Music
