@@ -7,11 +7,10 @@ author: "ignaaaaacio"
 labels: [
   "Team 3",
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-13T15:34:43Z"
-updated_at: "2025-11-24T15:55:40Z"
+updated_at: "2025-11-24T18:44:30Z"
 ---
 
 # [Lecture Topic Task]: Integrating Gamification Heuristics for Motivation and Retention
@@ -21,8 +20,7 @@ updated_at: "2025-11-24T15:55:40Z"
 - **Labels:** [
   "Team 3",
   "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-13T15:34:43Z
 
