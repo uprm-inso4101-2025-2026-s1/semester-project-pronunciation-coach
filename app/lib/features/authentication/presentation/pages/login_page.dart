@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'signin_page.dart';
 import 'package:app/features/dashboard/presentation/pages/user_progress_dashboard.dart';
 import '../widgets/text_field.dart';
@@ -12,31 +10,11 @@ import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import '/core/common/sound_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/background_music_manager.dart';
 
 /// ===========================================================================
 /// LOGIN PAGE - AUTHENTICATION INTERFACE
 /// ===========================================================================
-///
-/// PURPOSE:
-/// - Primary login screen for user authentication
-/// - Handles email/password login with Supabase backend
-/// - Provides navigation to signup and password recovery
-/// - Implements sound feedback for user interactions
-///
-/// KEY FEATURES:
-/// - Form validation for email and password
-/// - Loading states with visual feedback
-/// - Sound effects for user interactions
-/// - "Remember me" functionality
-/// - Error handling with user-friendly messages
-///
-/// ARCHITECTURE:
-/// - Stateful widget managing form state and authentication flow
-/// - Integration with LoadingSystem for loading states
-/// - SoundService for audio feedback
-/// - Supabase client for backend authentication
-/// ===========================================================================
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -73,6 +51,9 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
+    // [MUSIC START]: Starts music when app opens.
+    BackgroundMusicManager().playAuthMusic();
+
     _loadRememberedCredentials();
   }
 
@@ -90,13 +71,19 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
 
-    // Opcional: si hay sesión activa y rememberMe está encendido, saltar login
+    // RememberMe logic
     if (remember && AppSupabase.client.auth.currentSession != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         _soundService.playTransition();
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
-        );
+
+        // [MUSIC STOP]: Stop music before entering app automatically
+        await BackgroundMusicManager().stopMusic();
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+          );
+        }
       });
     }
   }
@@ -130,12 +117,10 @@ class _LoginPageState extends State<LoginPage> {
     // Play loading sound for authentication process
     _soundService.playFactReveal();
 
-    // Store context locally before async operations
-    final currentContext = context;
-
     // Show loading overlay using LoadingSystem
+    // We use 'context' directly because we are in a State class
     _loadingSystem.showLoading(
-      context: currentContext,
+      context: context,
       message: 'Signing you in...',
       contextType: 'authentication',
     );
@@ -144,12 +129,13 @@ class _LoginPageState extends State<LoginPage> {
       final email = _emailCtrl.text.trim();
       final password = _passCtrl.text;
 
-      // Sign in with Supabase authentication
+      // 1. Sign in with Supabase authentication (Async Gap 1)
       await AppSupabase.client.auth.signInWithPassword(
         email: email,
         password: password,
       );
 
+      // 2. Handle Shared Preferences (Async Gap 2)
       final prefs = await SharedPreferences.getInstance();
       if (_rememberMe) {
         await prefs.setBool(_rememberMeKey, true);
@@ -159,30 +145,37 @@ class _LoginPageState extends State<LoginPage> {
         await prefs.remove(_savedEmailKey);
       }
 
+      // CHECK MOUNTED before using context after async gaps
       if (!mounted) return;
 
       // Authentication successful
       _soundService.playLoadingSuccess();
-      _loadingSystem.hideLoading(currentContext);
+      _loadingSystem.hideLoading(context);
+
+      // 3. Stop music (Async Gap 3)
+      await BackgroundMusicManager().stopMusic();
+
+      // CHECK MOUNTED AGAIN before navigation
+      if (!mounted) return;
 
       // Navigate to main app screen
       _soundService.playTransition();
-      Navigator.of(currentContext).pushReplacement(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
       );
     } on AuthException catch (e) {
       // Handle authentication-specific errors
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(currentContext);
-      }
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(context);
+
       _showSnack(e.message);
     } catch (e) {
       // Handle generic errors
-      if (mounted) {
-        _soundService.playWrongAnswer();
-        _loadingSystem.hideLoading(currentContext);
-      }
+      if (!mounted) return;
+      _soundService.playWrongAnswer();
+      _loadingSystem.hideLoading(context);
+
       _showSnack('Unexpected error. Please try again.');
     } finally {
       // Reset loading state
@@ -193,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Navigate to account creation screen
   void _onCreateAccount() {
     _soundService.playButtonClick();
+    // Music does not stop here. It continues playing in the next screen.
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => const SigninPage()));
@@ -236,10 +230,12 @@ class _LoginPageState extends State<LoginPage> {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _emailCtrl.selection = TextSelection.collapsed(
-            offset: _emailCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _emailCtrl.selection = TextSelection.collapsed(
+              offset: _emailCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -263,10 +259,12 @@ class _LoginPageState extends State<LoginPage> {
         _soundService.playButtonClick();
         FocusScope.of(context).requestFocus(FocusNode());
         Future.delayed(Duration.zero, () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          _passCtrl.selection = TextSelection.collapsed(
-            offset: _passCtrl.text.length,
-          );
+          if (mounted) {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _passCtrl.selection = TextSelection.collapsed(
+              offset: _passCtrl.text.length,
+            );
+          }
         });
       },
       child: MyTextField(
@@ -397,7 +395,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Email Field with tap sound
+                      // Email field with tap sound
                       _buildEmailField(),
 
                       SizedBox(height: 4.h),
@@ -431,7 +429,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
 
-                          // Forgot Password
+                          // Forgot password
                           TextButton(
                             onPressed: _onForgotPassword,
                             style: TextButton.styleFrom(
@@ -454,7 +452,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Main Sign In Button
+                      // Main Sign In button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -500,7 +498,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       SizedBox(height: 4.h),
 
-                      // Create Account Button
+                      // Create Account button
                       SizedBox(
                         width: double.infinity,
                         height: 8.h,
@@ -544,7 +542,7 @@ class _LoginPageState extends State<LoginPage> {
               // Bottom Spacing
               SizedBox(height: 5.h),
 
-              // App Info Footer
+              // App info footer
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(4.w),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
+import '../widgets/background_music_manager.dart'; // Import the Singleton Manager
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
@@ -64,6 +65,12 @@ class _SigninPageState extends State<SigninPage> {
       }
     };
     _loadingSystem.addLoadingListener(_loadingListener);
+
+    // [BACKGROUND MUSIC LOGIC]
+    // 1. If user comes from Login Page: Music is already playing. The Manager checks
+    //    "if (_isPlaying) return;" so it WON'T restart. It continues seamlessly.
+    // 2. If user lands here directly (or refreshes): Music starts fresh.
+    BackgroundMusicManager().playAuthMusic();
   }
 
   @override
@@ -74,6 +81,9 @@ class _SigninPageState extends State<SigninPage> {
     _emailCtrl.dispose();
     _passCtrl.dispose();
     _confirmPassCtrl.dispose();
+
+    // NOTE: We do NOT stop music here. If we did, going "Back" to Login would kill the audio.
+    // The music persists until successful login/signup.
     super.dispose();
   }
 
@@ -88,7 +98,7 @@ class _SigninPageState extends State<SigninPage> {
       ),
     );
   }
-
+  
   // =============================================================================
   // DEMONSTRATING DESIGN PATTERNS IN USAGE:
   // =============================================================================
@@ -146,6 +156,11 @@ class _SigninPageState extends State<SigninPage> {
       _loadingSystem.hideLoading(context);
 
       if (res.session != null) {
+        // [BACKGROUND MUSIC LOGIC]
+        // User successfully signed up and is entering the app.
+        // Stop the background music now.
+        await BackgroundMusicManager().stopMusic();
+        if (!mounted) return;
         // Email confirmation OFF → we have a session; go to app
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
@@ -264,7 +279,7 @@ class _SigninPageState extends State<SigninPage> {
                 textAlign: TextAlign.center,
                 TextSpan(
                   text:
-                      'Already have an account? ', // Default style for this part
+                  'Already have an account? ', // Default style for this part
                   style: AppTextStyles.welcomeSubtitle.copyWith(
                     fontSize: 15.sp,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -288,7 +303,7 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                     TextSpan(
                       text:
-                          ' to continue your pronunciation journey', // This part will be bold
+                      ' to continue your pronunciation journey', // This part will be bold
                       style: AppTextStyles.welcomeSubtitle.copyWith(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.normal,
@@ -402,28 +417,28 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                           child: _loading
                               ? SizedBox(
-                                  width: 6.w,
-                                  height: 6.w,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  ),
-                                )
+                            width: 6.w,
+                            height: 6.w,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
                               : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.person_add, size: 18.sp),
-                                    SizedBox(width: 3.w),
-                                    Text(
-                                      'Create New Account',
-                                      style: AppTextStyles.bodyLarge.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.sp,
-                                      ),
-                                    ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.person_add, size: 18.sp),
+                              SizedBox(width: 3.w),
+                              Text(
+                                'Create New Account',
+                                style: AppTextStyles.bodyLarge.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.sp,
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
 
