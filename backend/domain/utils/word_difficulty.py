@@ -111,10 +111,16 @@ def categorize(word: str) -> Dict[str, object]:
              W["stress"]     * stress)
 
     # Determines the level based on the score and the thresholds from the config.
-    easy_max = T["easy_max"]; interm_max = T["intermediate_max"]
-    level: Level = ("Easy" if score <= easy_max                 # score <= easy_max -> Easy
-                    else "Intermediate" if score <= interm_max  # easy_max < score <= interm_max -> Intermediate
-                    else "Hard")                                # interm_max < score -> Hard
+    easy_max = T["easy_max"]
+    interm_max = T["intermediate_max"]
+    
+    level: Level = (
+        "Easy"
+        if score <= easy_max                 # score <= easy_max -> Easy
+        else "Intermediate"
+        if score <= interm_max  # easy_max < score <= interm_max -> Intermediate
+        else "Hard"
+    )                                # interm_max < score -> Hard
 
     # Returns the assembled word profile.
     return {
@@ -142,7 +148,8 @@ def _count_consonant_clusters(phones: List[str], VOWELS: set) -> int:
         if p not in VOWELS: # Adds 1 to the current consonant streak if the phone is a consonant.
             current += 1
         else:
-            if current >= 2: total += 1 # If the streak ends and current is 2 or more, then it's a cluster.
+            if current >= 2:
+                total += 1 # If the streak ends and current is 2 or more, then it's a cluster.
             current = 0 # Resets current to 0.
     return total + (1 if current >= 2 else 0)  # Returns the total clusters, adding 1 if the list ends with a cluster.
 
