@@ -7,10 +7,10 @@ author: "noelcolon"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-23T18:43:41Z"
-updated_at: "2025-11-24T02:58:30Z"
+updated_at: "2025-11-24T04:06:53Z"
 ---
 
 # [Lecture Topic Task]: TLA+ State Machine Model of the Pronunciation Coach Workflow
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T02:58:30Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-23T18:43:41Z
 
