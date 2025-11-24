@@ -7,10 +7,10 @@ author: "Uriel-D"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 created_at: "2025-11-23T15:41:17Z"
-updated_at: "2025-11-23T20:41:46Z"
+updated_at: "2025-11-24T02:25:04Z"
 ---
 
 # [Lecture Topic Taks]: <Weighted Matrix in order to choose best countermeasures for Acoustic Analysis>
@@ -20,7 +20,7 @@ updated_at: "2025-11-23T20:41:46Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 - **Created:** 2025-11-23T15:41:17Z
 
