@@ -6,10 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Fernando18Torres"
 labels: [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 created_at: "2025-11-25T00:35:44Z"
-updated_at: "2025-11-25T00:35:54Z"
+updated_at: "2025-11-25T00:44:27Z"
 ---
 
 # [Lecture Topic Task]: <Automated PDF Theming for Project Documentation (AsciiDoctor + GitHub Actions)>
@@ -18,7 +18,7 @@ updated_at: "2025-11-25T00:35:54Z"
 - **Author:** @Fernando18Torres
 - **Labels:** [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: in progress"
 ]
 - **Created:** 2025-11-25T00:35:44Z
 
