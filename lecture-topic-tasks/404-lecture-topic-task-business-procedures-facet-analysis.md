@@ -7,10 +7,10 @@ author: "omar-cordero"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 created_at: "2025-11-24T03:41:15Z"
-updated_at: "2025-11-24T18:29:02Z"
+updated_at: "2025-11-25T06:25:48Z"
 ---
 
 # [Lecture Topic Task]: Business Procedures Facet Analysis
@@ -20,7 +20,7 @@ updated_at: "2025-11-24T18:29:02Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 - **Created:** 2025-11-24T03:41:15Z
 
