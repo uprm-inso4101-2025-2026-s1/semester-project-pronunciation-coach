@@ -223,10 +223,10 @@ class _SigninPageState extends State<SigninPage> {
     final value = v ?? '';
     if (value.isEmpty) return 'Please enter your password';
     final RegExp passReg = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&*$%#])[A-Za-z\d&*$%#]{8,}$',
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&*$%#])[A-Za-z\d&*%#]{8,}$',
     );
     if (!passReg.hasMatch(value)) {
-      return 'Password must include: \n1. Lower case letters, \n2. At least 1 special character (& * % #), \n3. At least 1 Upper case letter.';
+      return 'Password must include: \n1. Lower case letters, \n2. At least 1 special character from these: (& * % #), \n3. At least 1 Upper case letter, \n4. At least 1 digit, \n5. 8 characters or more';
     }
     return null;
   }

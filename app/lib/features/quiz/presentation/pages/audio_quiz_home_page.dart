@@ -1,9 +1,11 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
-import 'package:app/word_bank.dart'; 
+import 'package:app/word_bank.dart';
+
 
 /// ===========================================================================
 /// AUDIO QUIZ HOME PAGE
@@ -21,11 +23,24 @@ import 'package:app/word_bank.dart';
 /// ===========================================================================
 
 class AudioQuizHomePage extends StatefulWidget {
-  const AudioQuizHomePage({super.key});
+  /// When true, the page will automatically start a random quiz
+  /// once the word bank has finished loading.
+  final bool autoStartRandom;
+
+  /// When true, the AppBar will show a back button so that
+  /// the user can return to the rest of the app.
+  final bool showBackButton;
+
+  const AudioQuizHomePage({
+    super.key,
+    this.autoStartRandom = false,
+    this.showBackButton = false,
+  });
 
   @override
   State<AudioQuizHomePage> createState() => _AudioQuizHomePageState();
 }
+
 
 class _AudioQuizHomePageState extends State<AudioQuizHomePage>
     with SingleTickerProviderStateMixin {
@@ -35,6 +50,9 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isWordBankLoaded = WordBank.isInitialized;
+  final Random _random = Random();
+  bool _hasAutoStartedRandom = false;
+
 
   // Static difficulties - no need to fetch from backend
   final List<Difficulty> _difficulties = [
@@ -78,6 +96,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         setState(() {
           _isWordBankLoaded = true;
         });
+        _maybeAutoStartRandomQuiz();
         return;
       }
 
@@ -86,14 +105,31 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
       setState(() {
         _isWordBankLoaded = true;
       });
+      _maybeAutoStartRandomQuiz();
     } catch (e) {
       debugPrint('Failed to load word bank: $e');
       // Lets the user in even if something went wrong
       setState(() {
         _isWordBankLoaded = true;
       });
+      _maybeAutoStartRandomQuiz();
     }
   }
+
+  void _maybeAutoStartRandomQuiz() {
+    if (!mounted) return;
+    if (!widget.autoStartRandom) return;
+    if (!_isWordBankLoaded) return;
+    if (_hasAutoStartedRandom) return;
+    if (_difficulties.isEmpty) return;
+
+    _hasAutoStartedRandom = true;
+
+    final randomDifficulty =
+        _difficulties[_random.nextInt(_difficulties.length)];
+    _startQuiz(randomDifficulty);
+  }
+
 
   void _setupAnimations() {
     _animController = AnimationController(
@@ -132,7 +168,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: widget.showBackButton,
       ),
       body: !_isWordBankLoaded
           ? const Center(child: CircularProgressIndicator())
