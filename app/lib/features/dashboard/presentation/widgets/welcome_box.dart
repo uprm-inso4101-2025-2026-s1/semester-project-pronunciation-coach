@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
 
@@ -82,9 +83,9 @@ class WelcomeBackBox extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 24,
+                padding: EdgeInsets.symmetric(
+                  vertical: 1.4.h,
+                  horizontal: 30.5.w,
                 ),
               ),
               child: const Text(
