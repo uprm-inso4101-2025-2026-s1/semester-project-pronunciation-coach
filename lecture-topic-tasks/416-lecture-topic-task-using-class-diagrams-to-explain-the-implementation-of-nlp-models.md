@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "ClaudiaI-Guzman"
 labels: [
   "Team 2",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-25T01:44:26Z"
-updated_at: "2025-11-25T01:44:37Z"
+updated_at: "2025-11-25T22:09:46Z"
 ---
 
 # [Lecture Topic Task]: <Using Class Diagrams to explain the implementation of NLP models>
@@ -19,8 +18,7 @@ updated_at: "2025-11-25T01:44:37Z"
 - **Author:** @ClaudiaI-Guzman
 - **Labels:** [
   "Team 2",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-25T01:44:26Z
 
