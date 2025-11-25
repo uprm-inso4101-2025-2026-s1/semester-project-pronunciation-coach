@@ -8,10 +8,11 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
+  "state: waiting for dev",
   "state: waiting for manager"
 ]
 created_at: "2025-11-25T01:10:51Z"
-updated_at: "2025-11-25T01:11:01Z"
+updated_at: "2025-11-25T02:14:16Z"
 ---
 
 # [Lecture Topic Task]: Threat Modeling & Security Guidelines for Password Reset / Account Recovery
@@ -22,6 +23,7 @@ updated_at: "2025-11-25T01:11:01Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
+  "state: waiting for dev",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-25T01:10:51Z
