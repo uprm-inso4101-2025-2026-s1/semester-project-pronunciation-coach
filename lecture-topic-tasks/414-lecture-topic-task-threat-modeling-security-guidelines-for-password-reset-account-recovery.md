@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-25T01:10:51Z"
-updated_at: "2025-11-25T01:10:51Z"
+updated_at: "2025-11-25T01:11:01Z"
 ---
 
 # [Lecture Topic Task]: Threat Modeling & Security Guidelines for Password Reset / Account Recovery
