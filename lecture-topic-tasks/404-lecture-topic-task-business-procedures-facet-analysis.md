@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "omar-cordero"
 labels: [
   "Team 2",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-24T03:41:15Z"
-updated_at: "2025-11-25T16:23:14Z"
+updated_at: "2025-11-25T22:05:11Z"
 ---
 
 # [Lecture Topic Task]: Business Procedures Facet Analysis
@@ -19,8 +18,7 @@ updated_at: "2025-11-25T16:23:14Z"
 - **Author:** @omar-cordero
 - **Labels:** [
   "Team 2",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-24T03:41:15Z
 
