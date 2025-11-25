@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Yulio7"
 labels: [
   "Task: lecture-topic",
-  "state: in progress",
   "state: waiting for manager"
 ]
 created_at: "2025-11-19T19:31:29Z"
-updated_at: "2025-11-24T19:11:18Z"
+updated_at: "2025-11-25T22:02:57Z"
 ---
 
 # [Lecture Topic Task]: <Facets of Domain Description Pronunciation Coach>
@@ -19,7 +18,6 @@ updated_at: "2025-11-24T19:11:18Z"
 - **Author:** @Yulio7
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress",
   "state: waiting for manager"
 ]
 - **Created:** 2025-11-19T19:31:29Z
