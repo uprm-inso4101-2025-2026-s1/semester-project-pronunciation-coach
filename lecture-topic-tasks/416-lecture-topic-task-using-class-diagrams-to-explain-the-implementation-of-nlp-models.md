@@ -10,7 +10,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-25T01:44:26Z"
-updated_at: "2025-11-25T01:44:26Z"
+updated_at: "2025-11-25T01:44:37Z"
 ---
 
 # [Lecture Topic Task]: <Using Class Diagrams to explain the implementation of NLP models>
