@@ -52,6 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _activeDays = 0;
   int _challengesCompleted = 0;
 
+  int _dailyLessonsCompleted = 0;
+  int _weeklyLessonsCompleted = 0;
+
   @override
   void initState() {
     super.initState();
@@ -76,6 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
           _activeDays = 0;
           _challengesCompleted = 0;
+          _dailyLessonsCompleted = 0;
+          _weeklyLessonsCompleted = 0;
         });
         return;
       }
@@ -94,12 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
       fullName.trim().split(' ').isNotEmpty ? fullName.split(' ').first : fullName;
 
       final ProgressService progressService = ProgressService();
-      final metaName = user.userMetadata?['full_name'];
-      final computedName =
-          fullName ??
-          (metaName is String && metaName.trim().isNotEmpty
-              ? metaName.trim()
-              : (user.email ?? 'User'));
 
       // ------------------------
       // 2) Load user_progress stats
@@ -113,6 +112,19 @@ class _HomeScreenState extends State<HomeScreen> {
       final int activeDays = progress.currentStreak;
       final int challengesCompleted = progress.challengesCompleted;
 
+      // 3) Calculate daily and weekly practice counters based on quiz attempts
+      final DateTime now = DateTime.now();
+      final DateTime todayStart = DateTime(now.year, now.month, now.day);
+      final DateTime weekStart = now.subtract(const Duration(days: 6));
+
+      final dailyAttempts =
+          await progressService.getQuizAttempts(since: todayStart);
+      final weeklyAttempts =
+          await progressService.getQuizAttempts(since: weekStart);
+
+      final int dailyLessonsCompleted = dailyAttempts.length;
+      final int weeklyLessonsCompleted = weeklyAttempts.length;
+
       if (!mounted) return;
       setState(() {
         _errorMessage = null;
@@ -122,6 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _proficiencyLevel = 'Pronunciation learner';
         _activeDays = activeDays;
         _challengesCompleted = challengesCompleted;
+        _dailyLessonsCompleted = dailyLessonsCompleted;
+        _weeklyLessonsCompleted = weeklyLessonsCompleted;
       });
     } catch (e) {
       if (!mounted) return;
@@ -203,7 +217,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 const SizedBox(height: 16),
-                const HomeSections(),
+                HomeSections(
+                  dailyLessonsCompleted: _dailyLessonsCompleted,
+                  dailyGoal: 5,
+                  weeklyLessonsCompleted: _weeklyLessonsCompleted,
+                  weeklyGoal: 35,
+                ),
               ],
             ),
           ),
