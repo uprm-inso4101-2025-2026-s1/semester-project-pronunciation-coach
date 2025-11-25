@@ -68,13 +68,35 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   void initState() {
     super.initState();
+
     _screens = [
-      const HomeScreen(),
+      // HOME TAB – we pass a callback for Fast Practice
+      HomeScreen(
+        onFastPractice: () {
+          // Play a transition sound (optional, consistent with tab changes)
+          SoundService().playTransition();
+
+          // Push a quiz home that:
+          // - auto starts a random difficulty
+          // - shows a back button so the user can return
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const AudioQuizHomePage(
+                autoStartRandom: true,
+                showBackButton: true,
+              ),
+            ),
+          );
+        },
+      ),
+
+      // OTHER TABS
       const UserProgressDashboard(),
-      const AudioQuizHomePage(),
+      const AudioQuizHomePage(), // standard quiz tab from bottom nav
       const ProfilePage(),
     ];
   }
+
 
   /// Handle tab navigation with sound feedback
   void _onTabTapped(int index) {

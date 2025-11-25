@@ -23,10 +23,10 @@ class HomeSections extends StatelessWidget {
     return Column(
       children: const [
         ActivityCard(
-          icon: Icons.mic,
-          title: 'Daily Practice',
-          subtitle: '5 questions left',
-          trailing: CircleAvatar(
+          leadingIcon: Icons.mic,
+          titleText: 'Daily Practice',
+          subtitleText: '5 questions left',
+          trailingWidget: CircleAvatar(
             radius: 14,
             backgroundColor: Colors.greenAccent,
             child: Text(
@@ -37,10 +37,10 @@ class HomeSections extends StatelessWidget {
         ),
         SizedBox(height: 12),
         ActivityCard(
-          icon: Icons.flag,
-          title: 'Weekly Objectives',
-          subtitle: '35 questions left',
-          trailing: CircleAvatar(
+          leadingIcon: Icons.flag,
+          titleText: 'Weekly Objectives',
+          subtitleText: '35 questions left',
+          trailingWidget: CircleAvatar(
             radius: 14,
             backgroundColor: Colors.greenAccent,
             child: Text(
@@ -92,7 +92,7 @@ class ActivityCard extends StatelessWidget {
       child: InkWell(
         // Currently just visual, not a button that navigates anywhere
         onTap: () {
-          debugPrint('$title tapped!');
+          debugPrint('$titleText tapped!');
         },
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
         highlightColor: Colors.blueAccent.withValues(alpha: 0.05),

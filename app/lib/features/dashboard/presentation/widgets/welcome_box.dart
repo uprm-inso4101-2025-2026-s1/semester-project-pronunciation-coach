@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-import 'package:flutter/material.dart';
 
 /// ===========================================================================
 /// WELCOME BACK BOX - USER WELCOME AND QUICK ACTIONS
@@ -8,15 +8,12 @@ import 'package:flutter/material.dart';
 ///
 /// PURPOSE:
 /// - Welcome message for returning users
-/// - Quick action buttons for common tasks
-/// - Progress continuation prompts
+/// - Quick action button for Fast Practice
 ///
 /// FEATURES:
 /// - Personalized welcome message
-/// - Continue lesson and fast practice buttons
-/// - Gradient background with border styling
+/// - Single Fast Practice button (no Continue Lesson)
 /// ===========================================================================
-
 class WelcomeBackBox extends StatelessWidget {
   final String name;
   final VoidCallback? onFastPractice;
@@ -56,27 +53,43 @@ class WelcomeBackBox extends StatelessWidget {
 
           // Subtext
           Text(
-            "Ready for a quick pronunciation workout?",
-            style: Theme.of(context).textTheme.bodyMedium ??
-                const TextStyle(fontSize: 14, color: Colors.grey),
+            "Hit Fast Practice to jump into a quick pronunciation quiz.",
+            style: AppTextStyles.bodyMedium,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
-          // Quick access action
-          SizedBox(
-            width: double.infinity,
+          // Fast Practice button ONLY
+          Align(
+            alignment: Alignment.centerLeft,
             child: OutlinedButton(
-              onPressed: onFastPractice,
+              onPressed: onFastPractice ??
+                  () {
+                    // Fallback if no callback is wired
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Fast Practice is not connected yet. Please try again later.',
+                        ),
+                      ),
+                    );
+                  },
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: AppColors.primary, width: 2),
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 24,
+                ),
               ),
-              child: Text(
+              child: const Text(
                 "Fast Practice",
-                style: TextStyle(color: AppColors.primary, fontSize: 16),
+                style: TextStyle(fontSize: 16),
               ),
             ),
           ),
