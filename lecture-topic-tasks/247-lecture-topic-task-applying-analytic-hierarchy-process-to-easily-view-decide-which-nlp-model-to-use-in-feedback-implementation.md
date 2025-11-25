@@ -8,11 +8,11 @@ labels: [
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-10-29T05:03:22Z"
-updated_at: "2025-11-24T21:18:40Z"
+updated_at: "2025-11-25T23:41:26Z"
 ---
 
 # [Lecture Topic Task]: <Applying Analytic Hierarchy Process to easily view/decide which NLP model to use in feedback implementation>
@@ -23,8 +23,8 @@ updated_at: "2025-11-24T21:18:40Z"
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-10-29T05:03:22Z
 
