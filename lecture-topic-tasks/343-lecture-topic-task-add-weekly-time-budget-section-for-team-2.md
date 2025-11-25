@@ -8,10 +8,10 @@ labels: [
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-19T22:05:50Z"
-updated_at: "2025-11-24T18:37:08Z"
+updated_at: "2025-11-25T23:34:13Z"
 ---
 
 # [Lecture Topic Task]:  Add Weekly Time Budget Section for Team 2
@@ -22,7 +22,7 @@ updated_at: "2025-11-24T18:37:08Z"
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-19T22:05:50Z
 
