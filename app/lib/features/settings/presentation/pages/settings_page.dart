@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -48,13 +50,32 @@ class _SettingsPageState extends State<SettingsPage> {
   // Legacy boolean variables (could be migrated to algebra later)
   late bool _autoPlayEnabled;
 
+  late final StreamSubscription _authSubscription;
+
   // Algebraic state getters
   bool get _notificationsEnabled => _currentSettings.notifications;
 
   @override
   void initState() {
     super.initState();
+
+    // Load settings using the new algebraic model
     _loadSettings();
+
+    // Listen for Supabase auth state changes (password recovery from email link)
+    _authSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
+      final event = data.event;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        if (!mounted) return;
+
+        // When the app comes back from a password reset link,
+        // send the user to the Reset Password screen.
+        Navigator.of(context).pushReplacementNamed('/reset-password');
+      }
+    });
   }
 
   /// Loads settings from SharedPreferences
@@ -97,6 +118,12 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Updates a preference value in SharedPreferences
   Future<void> _updatePreference(String key, bool value) async {
     await _prefs.setBool(key, value);
+  }
+
+  @override
+  void dispose() {
+    _authSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -155,12 +182,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: const Text(
                             'Update your account security settings',
                           ),
-                          onTap: () => _showWorkInProgressDialog(
-                            context,
-                            title: 'Change password',
-                            message:
-                                'Password updates will be available soon. You can update your password via the web dashboard for now.',
-                          ),
+                          onTap: () {
+                            // Reuse the Forgot Password flow
+                            Navigator.of(context).pushNamed('/forgot-password');
+                          },
                         ),
                       ],
                       // ACCOUNT CREATION (GUEST USERS ONLY)
@@ -288,6 +313,7 @@ class _SettingsPageState extends State<SettingsPage> {
   /// [context]: BuildContext for showing the dialog
   /// [title]: Dialog title
   /// [message]: Dialog content message
+  // ignore: unused_element
   void _showWorkInProgressDialog(
     BuildContext context, {
     required String title,

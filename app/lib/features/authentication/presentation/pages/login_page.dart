@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 import '../widgets/loading_screens_manager.dart';
 import 'package:app/core/network/supabase_client.dart';
-import '/core/common/sound_service.dart';
+import 'package:app/core/common/sound_service.dart';
+
+import 'dart:async'; // for auth state subscription
+import 'reset_password_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show AuthException, AuthChangeEvent;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/background_music_manager.dart';
 
@@ -39,15 +43,40 @@ class _LoginPageState extends State<LoginPage> {
   final LoadingSystem _loadingSystem = LoadingSystem();
   final SoundService _soundService = SoundService();
 
+  late final void Function(bool) _loadingListener;
+  late final StreamSubscription _authSubscription;
+
   @override
   void initState() {
     super.initState();
+
     // Observer pattern: Listen to loading state changes
-    _loadingSystem.addLoadingListener((isLoading) {
+    _loadingListener = (isLoading) {
       if (mounted) {
         setState(() {
           _loading = isLoading;
         });
+      }
+    };
+    _loadingSystem.addLoadingListener(_loadingListener);
+
+    // Listen for Supabase auth state changes (including password recovery)
+    _authSubscription = AppSupabase.client.auth.onAuthStateChange.listen((
+      data,
+    ) {
+      final event = data.event;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        // This means the user came back from the reset email link
+        if (!mounted) return;
+
+        // Optional: sound effect
+        _soundService.playTransition();
+
+        // Navigate to the ResetPasswordPage
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ResetPasswordPage()),
+        );
       }
     });
 
@@ -90,8 +119,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    _authSubscription.cancel();
+
     // Cleanup: Remove listeners and controllers
-    _loadingSystem.removeLoadingListener((isLoading) {});
+    _loadingSystem.removeLoadingListener(_loadingListener);
     _emailCtrl.dispose();
     _passCtrl.dispose();
     super.dispose();
@@ -195,7 +226,8 @@ class _LoginPageState extends State<LoginPage> {
   /// Handle forgot password flow (placeholder)
   void _onForgotPassword() {
     _soundService.playButtonClick();
-    _showSnack('Password reset feature coming soon!');
+    // _showSnack('Password reset feature coming soon!');
+    Navigator.of(context).pushNamed('/forgot-password');
   }
 
   /// Toggle remember me preference
