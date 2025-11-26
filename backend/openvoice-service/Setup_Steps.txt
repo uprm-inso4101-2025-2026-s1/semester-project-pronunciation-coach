@@ -21,7 +21,8 @@ To activate the FastAPI and make use of OpenVoice's Text-to-Speech:
        current one) and run the app as normal. For Voice Cloning to work,
        the API needs to be hosted.
 
-    NOTE: Voice-Cloning feature only works on desktop when running on desktop.
+    NOTE: Voice-Cloning feature only works on desktop when running on desktop. 
+          Additional setup
 
     
 
