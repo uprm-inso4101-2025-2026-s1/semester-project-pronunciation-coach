@@ -7,11 +7,10 @@ author: "kevinlara1"
 labels: [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-25T01:10:51Z"
-updated_at: "2025-11-26T02:37:37Z"
+updated_at: "2025-11-26T03:37:59Z"
 ---
 
 # [Lecture Topic Task]: Threat Modeling & Security Guidelines for Password Reset / Account Recovery
@@ -21,8 +20,7 @@ updated_at: "2025-11-26T02:37:37Z"
 - **Labels:** [
   "documentation",
   "Team 1",
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-25T01:10:51Z
 
