@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../voice-cloning/UI/voice_cloning_page.dart';
 
 /// ===========================================================================
 /// HOME SECTIONS - MAIN HOME PAGE CONTENT SECTIONS
@@ -21,7 +22,7 @@ class HomeSections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
+      children: [
         ActivityCard(
           icon: Icons.menu_book,
           title: 'Lessons',
@@ -53,6 +54,19 @@ class HomeSections extends StatelessWidget {
           subtitle: '4 of 7 days completed',
           trailing: Icon(Icons.remove, color: Colors.orange, size: 20),
         ),
+
+        ActivityCard(
+          icon: Icons.voice_chat,
+          title: 'Voice Cloning',
+          subtitle: 'Activate/Update voice-cloning',
+          trailing: Icon(Icons.check, color: Colors.red, size: 20),
+          onTap: () async {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const VoiceCloningScreen()),
+            );
+          }
+        ),
       ],
     );
   }
@@ -78,6 +92,7 @@ class ActivityCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final Widget trailing;
+  final VoidCallback? onTap;
 
   const ActivityCard({
     super.key,
@@ -85,6 +100,7 @@ class ActivityCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.trailing,
+    this.onTap
   });
 
   @override
@@ -95,7 +111,11 @@ class ActivityCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          debugPrint('$title tapped!');
+          if (onTap != null) {
+            onTap!();          // Run the custom action
+          } else {
+            debugPrint('$title tapped!');
+          }
         },
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
         highlightColor: Colors.blueAccent.withValues(alpha: 0.05),

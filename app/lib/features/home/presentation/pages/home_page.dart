@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16), // Espacio
                 
                 // Main activity sections and feature cards
-                const HomeSections(),
+                HomeSections(), //Removed const for Activity Card functionality on tap
            ],
         ),
       ),
