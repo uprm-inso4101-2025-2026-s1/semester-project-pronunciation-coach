@@ -42,13 +42,13 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
-  app_links: 05a6ec2341985eb05e9f97dc63f5837c39895c3f
-  audioplayers_darwin: 4f9ca89d92d3d21cec7ec580e78ca888e5fb68bd
-  flutter_secure_storage_macos: 7f45e30f838cf2659862a4e4e3ee1c347c2b3b54
+  app_links: c3185399a5cabc2e610ee5ad52fb7269b84ff869
+  audioplayers_darwin: 4027b33a8f471d996c13f71cb77f0b1583b5d923
+  flutter_secure_storage_macos: c2754d3483d20bb207bb9e5a14f1b8e771abcdb9
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  url_launcher_macos: f87a979182d112f911de6820aefddaf56ee9fbfd
+  path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_macos: 175a54c831f4375a6cf895875f716ee5af3888ce
 
 PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 

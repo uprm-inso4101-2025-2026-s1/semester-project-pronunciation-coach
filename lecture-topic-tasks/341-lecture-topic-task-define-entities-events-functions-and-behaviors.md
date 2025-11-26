@@ -5,11 +5,10 @@ state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/341"
 author: "Yulio7"
 labels: [
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-19T19:41:15Z"
-updated_at: "2025-11-22T04:00:40Z"
+updated_at: "2025-11-25T22:03:26Z"
 ---
 
 # [Lecture Topic Task] <Define Entities, Events, Functions, and Behaviors>
@@ -17,8 +16,7 @@ updated_at: "2025-11-22T04:00:40Z"
 - **Issue:** [341](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/341)
 - **Author:** @Yulio7
 - **Labels:** [
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-19T19:41:15Z
 

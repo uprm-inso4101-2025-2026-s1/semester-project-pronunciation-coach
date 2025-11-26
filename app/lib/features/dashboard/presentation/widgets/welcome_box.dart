@@ -1,28 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/common/text_styles.dart';
-import 'package:flutter/material.dart';
 
 /// ===========================================================================
 /// WELCOME BACK BOX - USER WELCOME AND QUICK ACTIONS
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Welcome message for returning users
-/// - Quick action buttons for common tasks
-/// - Progress continuation prompts
-/// 
+/// - Quick action button for Fast Practice
+///
 /// FEATURES:
 /// - Personalized welcome message
-/// - Continue lesson and fast practice buttons
-/// - Gradient background with border styling
+/// - Single Fast Practice button (no Continue Lesson)
 /// ===========================================================================
-
 class WelcomeBackBox extends StatelessWidget {
   final String name;
+  final VoidCallback? onFastPractice;
 
   const WelcomeBackBox({
     super.key,
     required this.name,
+    this.onFastPractice,
   });
 
   @override
@@ -54,49 +54,45 @@ class WelcomeBackBox extends StatelessWidget {
 
           // Subtext
           Text(
-            "Continue your progress",
-            style: Theme.of(context).textTheme.bodyMedium ??
-                const TextStyle(fontSize: 14, color: Colors.grey),
+            "Hit Fast Practice to jump into a quick pronunciation quiz.",
+            style: AppTextStyles.bodyMedium,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
-          // Buttons to continue
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary, // your theme color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: const Text(
-                    "Continue Lesson",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+          // Fast Practice button ONLY
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton(
+              onPressed: onFastPractice ??
+                  () {
+                    // Fallback if no callback is wired
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Fast Practice is not connected yet. Please try again later.',
+                        ),
+                      ),
+                    );
+                  },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                side: const BorderSide(
+                  color: AppColors.primary,
+                  width: 2,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: 1.4.h,
+                  horizontal: 30.5.w,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: null,
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.primary, width: 2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Text(
-                    "Fast Practice",
-                    style: TextStyle(color: AppColors.primary, fontSize: 16),
-                  ),
-                ),
+              child: const Text(
+                "Fast Practice",
+                style: TextStyle(fontSize: 16),
               ),
-            ],
+            ),
           ),
         ],
       ),

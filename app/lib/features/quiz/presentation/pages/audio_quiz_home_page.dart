@@ -1,20 +1,21 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../core/common/colors.dart';
 import '../../../../core/network/audio_api_service.dart';
 import '../../domain/state_machine/quiz_state_machine.dart';
 import 'audio_quiz_question_page.dart';
-import 'audio_quiz_history_page.dart';
+import 'package:app/word_bank.dart';
 
 
 /// ===========================================================================
-/// AUDIO QUIZ HOME PAGE 
-/// 
+/// AUDIO QUIZ HOME PAGE
+///
 /// This file contains the main entry point for the audio quiz feature.
 /// It provides:
 /// - Difficulty selection interface
 /// - Animated transitions
 /// - Quiz initialization and navigation
-/// 
+///
 /// MAIN COMPONENTS:
 /// - AudioQuizHomePage: Main difficulty selection screen
 /// - _QuizLoadingPage: Loading screen while generating quiz
@@ -22,11 +23,24 @@ import 'audio_quiz_history_page.dart';
 /// ===========================================================================
 
 class AudioQuizHomePage extends StatefulWidget {
-  const AudioQuizHomePage({super.key});
+  /// When true, the page will automatically start a random quiz
+  /// once the word bank has finished loading.
+  final bool autoStartRandom;
+
+  /// When true, the AppBar will show a back button so that
+  /// the user can return to the rest of the app.
+  final bool showBackButton;
+
+  const AudioQuizHomePage({
+    super.key,
+    this.autoStartRandom = false,
+    this.showBackButton = false,
+  });
 
   @override
   State<AudioQuizHomePage> createState() => _AudioQuizHomePageState();
 }
+
 
 class _AudioQuizHomePageState extends State<AudioQuizHomePage>
     with SingleTickerProviderStateMixin {
@@ -35,6 +49,10 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   late AnimationController _animController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  bool _isWordBankLoaded = WordBank.isInitialized;
+  final Random _random = Random();
+  bool _hasAutoStartedRandom = false;
+
 
   // Static difficulties - no need to fetch from backend
   final List<Difficulty> _difficulties = [
@@ -68,7 +86,50 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
   void initState() {
     super.initState();
     _setupAnimations();
+    _loadWordBank();
   }
+
+  Future<void> _loadWordBank() async {
+    try {
+      // If already loaded, skip
+      if (WordBank.isInitialized) {
+        setState(() {
+          _isWordBankLoaded = true;
+        });
+        _maybeAutoStartRandomQuiz();
+        return;
+      }
+
+      await WordBank().load(); // loads assets/sounds/wordbank.json
+
+      setState(() {
+        _isWordBankLoaded = true;
+      });
+      _maybeAutoStartRandomQuiz();
+    } catch (e) {
+      debugPrint('Failed to load word bank: $e');
+      // Lets the user in even if something went wrong
+      setState(() {
+        _isWordBankLoaded = true;
+      });
+      _maybeAutoStartRandomQuiz();
+    }
+  }
+
+  void _maybeAutoStartRandomQuiz() {
+    if (!mounted) return;
+    if (!widget.autoStartRandom) return;
+    if (!_isWordBankLoaded) return;
+    if (_hasAutoStartedRandom) return;
+    if (_difficulties.isEmpty) return;
+
+    _hasAutoStartedRandom = true;
+
+    final randomDifficulty =
+        _difficulties[_random.nextInt(_difficulties.length)];
+    _startQuiz(randomDifficulty);
+  }
+
 
   void _setupAnimations() {
     _animController = AnimationController(
@@ -107,15 +168,17 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.background,
         elevation: 0,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: widget.showBackButton,
       ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: _buildDifficultyList(),
-        ),
-      ),
+      body: !_isWordBankLoaded
+          ? const Center(child: CircularProgressIndicator())
+          : FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: _buildDifficultyList(),
+              ),
+            ),
     );
   }
 
@@ -138,28 +201,7 @@ class _AudioQuizHomePageState extends State<AudioQuizHomePage>
           style: TextStyle(color: Colors.grey[600], fontSize: 14),
         ),
         const SizedBox(height: 16),
-        ElevatedButton.icon(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
-            );
-          },
-          icon: const Icon(Icons.history),
-          label: const Text(
-            'View Quiz History',
-            style: TextStyle(fontWeight: FontWeight.w700),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
+
         ..._difficulties.asMap().entries.map(
           (entry) => TweenAnimationBuilder<double>(
             duration: Duration(milliseconds: 400 + (entry.key * 100)),

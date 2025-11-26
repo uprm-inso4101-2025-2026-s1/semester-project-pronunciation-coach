@@ -1,6 +1,4 @@
 import 'package:app/features/home/presentation/pages/home_page.dart';
-import 'package:provider/provider.dart';
-import 'package:app/core/common/pace_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/common/colors.dart' as common_colors;
@@ -8,6 +6,7 @@ import '../../../../core/common/text_styles.dart' as common_text_styles;
 import '../../../../core/common/user_progress_stats.dart';
 import '../../../../core/network/progress_service.dart';
 import '../../../quiz/presentation/pages/audio_quiz_home_page.dart';
+import '../../../quiz/presentation/pages/audio_quiz_history_page.dart';
 import '../../../authentication/presentation/pages/login_page.dart';
 import '../widgets/monthly_practice_calendar.dart';
 import 'package:app/features/profile/presentation/pages/profile_page.dart';
@@ -41,12 +40,12 @@ class MyApp extends StatelessWidget {
 /// ===========================================================================
 /// MAIN NAVIGATION SCREEN WITH BOTTOM TAB BAR
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Root navigation container with bottom tab bar
 /// - Manages screen transitions between main app sections
 /// - Provides consistent navigation structure
-/// 
+///
 /// SECTIONS:
 /// - Home: Main landing page with activities
 /// - Dashboard: Progress tracking and statistics
@@ -69,13 +68,35 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   void initState() {
     super.initState();
+
     _screens = [
-      const HomeScreen(),
+      // HOME TAB – we pass a callback for Fast Practice
+      HomeScreen(
+        onFastPractice: () {
+          // Play a transition sound (optional, consistent with tab changes)
+          SoundService().playTransition();
+
+          // Push a quiz home that:
+          // - auto starts a random difficulty
+          // - shows a back button so the user can return
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const AudioQuizHomePage(
+                autoStartRandom: true,
+                showBackButton: true,
+              ),
+            ),
+          );
+        },
+      ),
+
+      // OTHER TABS
       const UserProgressDashboard(),
-      const AudioQuizHomePage(),
+      const AudioQuizHomePage(), // standard quiz tab from bottom nav
       const ProfilePage(),
     ];
   }
+
 
   /// Handle tab navigation with sound feedback
   void _onTabTapped(int index) {
@@ -148,13 +169,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 /// ===========================================================================
 /// USER PROGRESS DASHBOARD - PROGRESS TRACKING INTERFACE
 /// ===========================================================================
-/// 
+///
 /// PURPOSE:
 /// - Comprehensive progress tracking and visualization
 /// - Real-time statistics from ProgressService
 /// - Practice calendar and achievement display
 /// - Guest user handling with login prompts
-/// 
+///
 /// FEATURES:
 /// - Progress overview cards with improvement indicators
 /// - Practice statistics and streak tracking
@@ -279,27 +300,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
-        actions: _isGuest
-            ? null // Hide actions for guests
-            : [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ChallengesPage(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Select Pace",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
@@ -317,9 +317,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Display Selected Pace
-          _buildSelectedPace(context),
-          const SizedBox(height: 20),
 
           // Loading/Error states
           if (_isLoading)
@@ -357,6 +354,52 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
             _buildPracticeStatistics(),
             const SizedBox(height: 20),
 
+            SizedBox(height: 0),
+
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const QuizHistoryPage()),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.history, color: Colors.blue),
+                    SizedBox(width: 12),
+                    Text(
+                      'View Quiz History',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
+
             // Recent Practice Sessions
             MonthlyPracticeCalendar(
               practiceDays: _practiceDays,
@@ -367,48 +410,6 @@ class _UserProgressDashboardState extends State<UserProgressDashboard>
           // Add bottom padding for tab bar
           const SizedBox(height: 20),
         ],
-      ),
-    );
-  }
-
-  /// Display current learning pace selection
-  Widget _buildSelectedPace(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    String paceText = '⚡ Not selected ⚡';
-    switch (appState.selectedPace) {
-      case LearningPace.casual:
-        paceText = '🚲 Casual 🚲';
-        break;
-      case LearningPace.standard:
-        paceText = '🚗 Standard 🚗';
-        break;
-      case LearningPace.intensive:
-        paceText = '🚀 Intensive 🚀';
-        break;
-    }
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: common_colors.AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: common_colors.AppColors.cardShadow,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Text(
-        'Selected Pace: $paceText',
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: common_colors.AppColors.textPrimary,
-        ),
       ),
     );
   }

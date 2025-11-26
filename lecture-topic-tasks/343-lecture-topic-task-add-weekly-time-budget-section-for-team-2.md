@@ -7,11 +7,10 @@ author: "Dieg0Rios"
 labels: [
   "documentation",
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-19T22:05:50Z"
-updated_at: "2025-11-21T17:40:27Z"
+updated_at: "2025-11-26T00:34:04Z"
 ---
 
 # [Lecture Topic Task]:  Add Weekly Time Budget Section for Team 2
@@ -21,8 +20,7 @@ updated_at: "2025-11-21T17:40:27Z"
 - **Labels:** [
   "documentation",
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-19T22:05:50Z
 

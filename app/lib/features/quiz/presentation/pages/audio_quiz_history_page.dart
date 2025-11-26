@@ -41,7 +41,9 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
     }
 
     final lettered = filterDificulty.toLowerCase();
-    return attempts.where((a) => a.difficulty.toLowerCase() == lettered).toList();
+    return attempts
+        .where((a) => a.difficulty.toLowerCase() == lettered)
+        .toList();
   }
 
   @override
@@ -105,8 +107,6 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             children: [
-              _HistoryInsights(attempts: attempts),
-              const SizedBox(height: 16),
               DifficultySlider(
                 selectedDifficulty: filterDificulty,
                 onPressed: (i) {
@@ -125,7 +125,7 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
                 ),
               ),
               const SizedBox(height: 12),
-              if(filteredAttempts.isEmpty)
+              if (filteredAttempts.isEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
                   child: Text(
@@ -160,123 +160,12 @@ class _QuizHistoryPageState extends State<QuizHistoryPage> {
   }
 }
 
-class _HistoryInsights extends StatelessWidget {
-  final List<QuizAttempt> attempts;
-
-  const _HistoryInsights({required this.attempts});
-
-  @override
-  Widget build(BuildContext context) {
-    final accuracy = attempts.isEmpty
-        ? 0
-        : ((attempts.where((a) => a.isCorrect).length / attempts.length) * 100)
-              .round();
-    final totalXp = attempts.fold<int>(0, (sum, a) => sum + a.xpEarned);
-    final mostRecent = attempts.first;
-    final best = findBestAttempt(attempts);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cardShadow,
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Insights',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: InsightStat(
-                  title: 'Accuracy',
-                  value: '$accuracy%',
-                  icon: Icons.bolt,
-                  color: AppColors.success,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: InsightStat(
-                  title: 'Total XP',
-                  value: '$totalXp',
-                  icon: Icons.stars,
-                  color: Colors.amber[700]!,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: InsightStat(
-                  title: 'Attempts',
-                  value: '${attempts.length}',
-                  icon: Icons.history,
-                  color: AppColors.secondary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: HighlightCard(
-                  title: 'Most Recent',
-                  attempt: mostRecent,
-                  icon: Icons.update,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: HighlightCard(
-                  title: 'Top Score',
-                  attempt: best ?? mostRecent,
-                  icon: Icons.emoji_events,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  static QuizAttempt? findBestAttempt(List<QuizAttempt> attempts) {
-    if (attempts.isEmpty) {
-      return null;
-    }
-
-    return attempts.reduce((prev, current) {
-      if (current.xpEarned == prev.xpEarned) {
-        return current.createdAt.isAfter(prev.createdAt) ? current : prev;
-      }
-      return current.xpEarned > prev.xpEarned ? current : prev;
-    });
-  }
-}
-
 class DifficultySlider extends StatelessWidget {
   final String selectedDifficulty;
   final ValueChanged<String> onPressed;
 
-  const DifficultySlider({super.key, 
+  const DifficultySlider({
+    super.key,
     required this.selectedDifficulty,
     required this.onPressed,
   });
@@ -293,16 +182,13 @@ class DifficultySlider extends StatelessWidget {
           children: [
             for (final i in dificulties)
               ChoiceChip(
-                label: Text(
-                  capitalizeDifficulty(i),
-                ),
+                label: Text(capitalizeDifficulty(i)),
                 selected: selectedDifficulty.toLowerCase() == i,
                 selectedColor: AppColors.primary.withValues(alpha: 0.15),
                 backgroundColor: AppColors.background,
                 onSelected: (_) => onPressed(i),
               ),
           ],
-          
         ),
       ],
     );
@@ -431,7 +317,11 @@ class FindHistoryError extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const FindHistoryError({super.key, required this.message, required this.onRetry});
+  const FindHistoryError({
+    super.key,
+    required this.message,
+    required this.onRetry,
+  });
 
   @override
   Widget build(BuildContext context) {

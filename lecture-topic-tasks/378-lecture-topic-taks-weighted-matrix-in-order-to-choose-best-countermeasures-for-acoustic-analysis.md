@@ -6,11 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "Uriel-D"
 labels: [
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-23T15:41:17Z"
-updated_at: "2025-11-23T20:41:46Z"
+updated_at: "2025-11-24T02:42:05Z"
 ---
 
 # [Lecture Topic Taks]: <Weighted Matrix in order to choose best countermeasures for Acoustic Analysis>
@@ -19,8 +18,7 @@ updated_at: "2025-11-23T20:41:46Z"
 - **Author:** @Uriel-D
 - **Labels:** [
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-23T15:41:17Z
 

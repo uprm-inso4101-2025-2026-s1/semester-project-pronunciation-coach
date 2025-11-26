@@ -7,16 +7,18 @@ import 'features/dashboard/presentation/widgets/welcome_screen.dart';
 import 'features/quiz/presentation/pages/audio_quiz_home_page.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
-import 'core/common/pace_selector.dart';
+
 import 'core/network/supabase_client.dart';
 import 'core/network/session_manager.dart';
 import 'core/di/service_locator.dart';
 import 'core/constants/services/xapi_client.dart';
 import 'core/constants/services/xapi_provider.dart';
+import 'features/authentication/presentation/pages/forgot_password_page.dart';
+import 'features/authentication/presentation/pages/reset_password_page.dart';
 
 /// ===========================================================================
-/// MAIN APPLICATION 
-/// 
+/// MAIN APPLICATION
+///
 /// This file serves as the entry point for the Pronunciation Coach application.
 /// It handles:
 /// - Application initialization and dependency setup
@@ -24,7 +26,7 @@ import 'core/constants/services/xapi_provider.dart';
 /// - Provider setup for state management
 /// - Navigation structure and routing
 /// - Main application widget tree
-/// 
+///
 /// KEY RESPONSIBILITIES:
 /// - Environment configuration validation
 /// - Supabase and xAPI client initialization
@@ -34,7 +36,7 @@ import 'core/constants/services/xapi_provider.dart';
 /// ===========================================================================
 
 /// Error Application Widget
-/// 
+///
 /// Displays a user-friendly error screen when critical configuration fails.
 /// Used when Supabase initialization fails due to missing environment variables.
 class ErrorApp extends StatelessWidget {
@@ -87,7 +89,7 @@ class ErrorApp extends StatelessWidget {
 }
 
 /// Application Entry Point
-/// 
+///
 /// Initializes all required services and dependencies before running the app.
 /// Handles critical failures gracefully by showing error screens.
 Future<void> main() async {
@@ -115,7 +117,7 @@ Future<void> main() async {
   }
 
   // Initialize xAPI client (optional - will use defaults if not configured)
-  final XApiClient xapi = XApiClient();
+  final XApiClient xapi = XApiClient.create();
 
   // Initialize session management
   await SessionManager.instance.start();
@@ -126,17 +128,14 @@ Future<void> main() async {
   // Run main application with providers for state management
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => MyAppState()),
-        ChangeNotifierProvider(create: (_) => XApiNotifier(xapi)),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => XApiNotifier(xapi))],
       child: const MyApp(),
     ),
   );
 }
 
 /// Main Application Widget
-/// 
+///
 /// Root widget of the application that sets up:
 /// - Global theme and styling
 /// - Navigation routes
@@ -166,6 +165,8 @@ class MyApp extends StatelessWidget {
             '/audio-quiz': (context) => const AudioQuizHomePage(),
             '/quiz': (context) => const AudioQuizHomePage(),
             '/settings': (context) => const SettingsPage(),
+            '/forgot-password': (context) => const ForgotPasswordPage(),
+            '/reset-password': (context) => const ResetPasswordPage(),
           },
         );
       },
@@ -174,12 +175,12 @@ class MyApp extends StatelessWidget {
 }
 
 /// Main Navigation Screen
-/// 
+///
 /// Provides bottom navigation between main app sections:
 /// - Home/Dashboard
 /// - Audio Quiz
 /// - User Profile
-/// 
+///
 /// Uses a persistent bottom navigation bar for easy access to core features.
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -193,9 +194,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   // Main application pages corresponding to bottom navigation items
   final List<Widget> _pages = const [
-    UserProgressDashboard(),    // Home tab - Progress tracking
-    AudioQuizHomePage(),        // Quiz tab - Audio challenges  
-    ProfilePage(),              // Profile tab - User information
+    UserProgressDashboard(), // Home tab - Progress tracking
+    AudioQuizHomePage(), // Quiz tab - Audio challenges
+    ProfilePage(), // Profile tab - User information
   ];
 
   /// Handles bottom navigation item selection

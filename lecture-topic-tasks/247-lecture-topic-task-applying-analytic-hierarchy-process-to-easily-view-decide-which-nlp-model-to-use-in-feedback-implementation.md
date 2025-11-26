@@ -4,16 +4,28 @@ title: "[Lecture Topic Task]: <Applying Analytic Hierarchy Process to easily vie
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/247"
 author: "ClaudiaI-Guzman"
-labels: ["documentation","Team 2","Task: lecture-topic","state: in progress"]
+labels: [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: in progress",
+  "state: waiting for manager"
+]
 created_at: "2025-10-29T05:03:22Z"
-updated_at: "2025-11-03T17:41:07Z"
+updated_at: "2025-11-25T23:41:26Z"
 ---
 
 # [Lecture Topic Task]: <Applying Analytic Hierarchy Process to easily view/decide which NLP model to use in feedback implementation>
 
 - **Issue:** [247](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/247)
 - **Author:** @ClaudiaI-Guzman
-- **Labels:** ["documentation","Team 2","Task: lecture-topic","state: in progress"]
+- **Labels:** [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: in progress",
+  "state: waiting for manager"
+]
 - **Created:** 2025-10-29T05:03:22Z
 
 ## Details
@@ -61,3 +73,4 @@ Estimated completion time: _1 week_
 
 ## 👨‍💻 Recommended Assigned Developer
 Suggested developer: _@ClaudiaI-Guzman_  
+

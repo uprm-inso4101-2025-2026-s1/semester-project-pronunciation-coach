@@ -4,16 +4,26 @@ title: "[Lecture Topic Task]: Quality & Traceability Checklist"
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/159"
 author: "kevinlara1"
-labels: ["documentation","Team 1","Task: lecture-topic","state: waiting for dev","state: in progress"]
+labels: [
+  "documentation",
+  "Team 1",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-07T19:25:04Z"
-updated_at: "2025-11-10T18:08:48Z"
+updated_at: "2025-11-25T01:39:38Z"
 ---
 
 # [Lecture Topic Task]: Quality & Traceability Checklist
 
 - **Issue:** [159](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/159)
 - **Author:** @kevinlara1
-- **Labels:** ["documentation","Team 1","Task: lecture-topic","state: waiting for dev","state: in progress"]
+- **Labels:** [
+  "documentation",
+  "Team 1",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-07T19:25:04Z
 
 ## Details
