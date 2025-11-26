@@ -11,7 +11,7 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-26T20:11:46Z"
-updated_at: "2025-11-26T20:11:46Z"
+updated_at: "2025-11-26T20:11:56Z"
 ---
 
 # [Lecture Topic Task]: Using RSL Pre/Post Specifications for Pronunciation Feedback Functions
