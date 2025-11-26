@@ -1,0 +1,188 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:app/features/quiz/domain/state_machine/quiz_state_machine.dart';
+
+void main() {
+  group('Quiz State Machine Tests', () {
+    late QuizStateMachine stateMachine;
+
+    setUp(() {
+      stateMachine = QuizStateMachine();
+    });
+
+    test('Initial state should be IdleState', () {
+      expect(stateMachine.currentState, isA<IdleState>());
+      expect(stateMachine.currentStateName, 'Idle');
+    });
+
+    test(
+      'StartQuizEvent should transition from Idle to SelectingDifficulty',
+      () {
+        stateMachine.sendEvent(StartQuizEvent('easy'));
+        expect(stateMachine.currentState, isA<SelectingDifficultyState>());
+        expect(stateMachine.currentStateName, 'SelectingDifficulty');
+      },
+    );
+
+    test(
+      'SelectAnswerEvent should transition from Answering to Evaluating',
+      () {
+        final answeringState = AnsweringState('easy', null, false);
+
+        // Test the transition logic directly
+        final newState = answeringState.handleEvent(SelectAnswerEvent('A'));
+        expect(newState, isA<AnsweringState>());
+        // ignore: unnecessary_cast
+        expect((newState as AnsweringState).selectedAnswer, 'A');
+      },
+    );
+
+    test(
+      'SubmitAnswerEvent should transition from Answering to Evaluating',
+      () {
+        final answeringState = AnsweringState('easy', 'A', false);
+        final newState = answeringState.handleEvent(SubmitAnswerEvent());
+        expect(newState, isA<EvaluatingAnswerState>());
+        // ignore: unnecessary_cast
+        expect((newState as EvaluatingAnswerState).selectedAnswer, 'A');
+        // ignore: unnecessary_cast
+        expect((newState as EvaluatingAnswerState).hasAnswered, true);
+      },
+    );
+
+    test('ViewResultsEvent should transition from Evaluating to Results', () {
+      final evaluatingState = EvaluatingAnswerState('easy', 'A', true);
+      final newState = evaluatingState.handleEvent(ViewResultsEvent());
+      expect(newState, isA<ResultsState>());
+      // ignore: unnecessary_cast
+      expect((newState as ResultsState).selectedAnswer, 'A');
+      // ignore: unnecessary_cast
+      expect((newState as ResultsState).hasAnswered, true);
+    });
+
+    test(
+      'RetryQuizEvent should transition from Results to SelectingDifficulty',
+      () {
+        final resultsState = ResultsState('easy', 'A', true);
+        final newState = resultsState.handleEvent(RetryQuizEvent());
+        expect(newState, isA<SelectingDifficultyState>());
+      },
+    );
+
+    test(
+      'GoHomeEvent should transition to IdleState from any active state',
+      () {
+        // Test from SelectingDifficulty
+        stateMachine.sendEvent(StartQuizEvent('easy'));
+        stateMachine.sendEvent(GoHomeEvent());
+        expect(stateMachine.currentState, isA<IdleState>());
+
+        // Test from Results state
+        stateMachine.sendEvent(StartQuizEvent('easy'));
+        final resultsState = ResultsState('easy', 'A', true);
+        final newState = resultsState.handleEvent(GoHomeEvent());
+        expect(newState, isA<IdleState>());
+      },
+    );
+
+    test('State machine should handle invalid transitions gracefully', () {
+      // Starting from idle, sending SelectAnswer should not change state
+      stateMachine.sendEvent(SelectAnswerEvent('A'));
+      expect(stateMachine.currentState, isA<IdleState>());
+
+      // Starting from idle, sending SubmitAnswer should not change state
+      stateMachine.sendEvent(SubmitAnswerEvent());
+      expect(stateMachine.currentState, isA<IdleState>());
+    });
+
+    test('State machine reset should return to IdleState', () {
+      stateMachine.sendEvent(StartQuizEvent('easy'));
+      expect(stateMachine.currentState, isNot(isA<IdleState>()));
+
+      stateMachine.reset();
+      expect(stateMachine.currentState, isA<IdleState>());
+    });
+  });
+
+  group('Quiz State Controller Tests', () {
+    late QuizStateController controller;
+
+    setUp(() {
+      controller = QuizStateController();
+    });
+
+    test('Controller should initialize with IdleState', () {
+      expect(controller.isIdle, true);
+      expect(controller.isAnswering, false);
+      expect(controller.isShowingResults, false);
+    });
+
+    test('Controller should notify listeners on state changes', () {
+      bool notified = false;
+      controller.addListener(() {
+        notified = true;
+      });
+
+      controller.sendEvent(StartQuizEvent('easy'));
+      expect(notified, true);
+      expect(controller.isSelectingDifficulty, true);
+    });
+
+    test('Controller should provide correct state information', () {
+      controller.sendEvent(StartQuizEvent('easy'));
+      expect(controller.currentDifficulty, 'easy');
+      expect(controller.isActiveQuiz, true);
+    });
+  });
+
+  group('Condition Event Network (CEN) Tests', () {
+    late QuizStateMachine stateMachine;
+
+    setUp(() {
+      stateMachine = QuizStateMachine();
+    });
+
+    test('Place marking works', () {
+      final place = Place('test');
+      expect(place.isMarked, false);
+      place.mark();
+      expect(place.isMarked, true);
+      place.unmark();
+      expect(place.isMarked, false);
+    });
+
+    test('Transition firing works', () {
+      final pre = Place('pre');
+      final post = Place('post');
+      final transition = Transition(
+        'test',
+        preConditions: [pre],
+        postConditions: [post],
+      );
+      expect(transition.canFire(), false);
+      pre.mark();
+      expect(transition.canFire(), true);
+      transition.fire();
+      expect(pre.isMarked, false);
+      expect(post.isMarked, true);
+    });
+
+    test('Initial CEN marks', () {
+      expect(stateMachine.idlePlace.marks, 1);
+      expect(stateMachine.selectingPlace.marks, 0);
+      expect(stateMachine.answeringPlace.marks, 0);
+    });
+
+    test('CEN marks update after sendEvent', () {
+      stateMachine.sendEvent(StartQuizEvent('easy'));
+      expect(stateMachine.idlePlace.marks, 0);
+      expect(stateMachine.selectingPlace.marks, 1);
+    });
+
+    test('CEN marks update on reset', () {
+      stateMachine.sendEvent(StartQuizEvent('easy'));
+      stateMachine.reset();
+      expect(stateMachine.idlePlace.marks, 1);
+      expect(stateMachine.selectingPlace.marks, 0);
+    });
+  });
+}
