@@ -719,9 +719,6 @@ def main():
             # child already dead
             pass
 
-    silent = args.silent
-    verbose = not args.quiet
-
     if args.install:
         install(args.destination)
 
