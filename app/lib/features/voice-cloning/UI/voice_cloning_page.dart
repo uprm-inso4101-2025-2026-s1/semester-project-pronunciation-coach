@@ -94,7 +94,6 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
     var streamedResponse = await request.send();
     
     if (streamedResponse.statusCode == 200) {
-     // Success! The response body is the synthesized WAV audio file.
      final synthesizedBytes = await streamedResponse.stream.toBytes();
      debugPrint("Synthesis successful! Received ${synthesizedBytes.length} bytes of audio.");
 
@@ -118,7 +117,7 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
      player.resume(); // Removed 'await' so the function finishes instantly
 
     } else {
-     // API returned an error (e.g., 400 or 500)
+     // API returned an error
      final responseBody = await streamedResponse.stream.bytesToString();
      
      setState(() {
@@ -142,9 +141,7 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
   }
 
   Future<void> startRecording() async {
-   // --- FIX 1: Stop Playback to prevent resource conflict and crashing ---
    await player.stop(); 
-   // -------------------------------------------------------------------
 
    if (!await recorder.hasPermission()) {
     debugPrint("Permission denied");
@@ -152,8 +149,7 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
    }
 
    debugPrint('Pressed record button');
-   // final dir = await getApplicationDocumentsDirectory();
-   // final filePath = '${dir.path}\reference_audio.wav';
+
    final dir = await getApplicationSupportDirectory();
   // Create a subdirectory for your reference audio to keep things tidy
    final voiceCloningDir = Directory('${dir.path}/voice_cloning_page');
@@ -162,10 +158,8 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
    }
    final filePath = '${voiceCloningDir.path}/reference_audio.wav';
    
-   // --- UPDATE 2: Clear synthesized file when starting a new recording ---
    setState(() {
     synthesizedFile = null;
-    // Also ensure isPlaying is false since we called player.stop()
     isPlaying = false;
       duration = Duration.zero; // Reset duration for new recording
    });
@@ -205,14 +199,12 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
 
   }
 
-  // --- MODIFIED: Implement clean up on dispose ---
   @override
   void dispose() {
    player.dispose();
    recorder.dispose();
    
    // Clean up temporary files when the screen is closed
-   // We intentionally do NOT clean up the recordedFile to preserve it as a resource.
    _cleanupFiles(synthesizedFile);
 
    super.dispose();
@@ -232,7 +224,6 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
    }
   }
 
-  // ---------------------------------------------
 
   @override
   void initState(){
@@ -261,10 +252,8 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
   }
 
   Future<void> togglePlayback() async {
-  // --- MODIFIED: Use null-aware operator to prioritize synthesizedFile ---
   // If synthesizedFile is not null, use it. Otherwise, fall back to recordedFile.
   final fileToPlay = synthesizedFile ?? recordedFile;
-  // ----------------------------------------------------------------------
 
   if (fileToPlay == null) {
    debugPrint("No audio file to play.");
@@ -379,7 +368,7 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
 
           const SizedBox(height: 20),
 
-            // State-based Feedback and Playback Controls (Wrapped in a Card)
+            // State-based Feedback and Playback Controls 
             if (recordedFile != null && !isRecording)
               Card(
                 elevation: 4,
@@ -540,6 +529,7 @@ class _VoiceCloningPage extends State<VoiceCloningScreen> {
     );    
   }
 }
+// Bullet points build
 class Bullet extends StatelessWidget {
   const Bullet({super.key, required this.text});
   final String text;
