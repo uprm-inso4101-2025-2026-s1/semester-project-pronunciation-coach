@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../voice-cloning/UI/voice_cloning_page.dart';
 
 /// ===========================================================================
 /// HOME SECTIONS - MAIN HOME PAGE CONTENT SECTIONS
@@ -80,6 +81,25 @@ class HomeSections extends StatelessWidget {
             ),
           ),
         ),
+        ActivityCard(
+          leadingIcon: Icons.flag,
+          titleText: 'Objetivos semanales',
+          subtitleText: '4 of 7 days completed',
+          trailingWidget: Icon(Icons.remove, color: Colors.orange, size: 20),
+        ),
+
+        ActivityCard(
+          leadingIcon: Icons.voice_chat,
+          titleText: 'Voice Cloning',
+          subtitleText: 'Activate/Update voice-cloning',
+          trailingWidget: Icon(Icons.check, color: Colors.red, size: 20),
+          onTap: () async {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const VoiceCloningScreen()),
+            );
+          }
+        ),
       ],
     );
   }
@@ -124,8 +144,14 @@ class ActivityCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          if (onTap != null) {
+            onTap!();          // Run the custom action
+          } else {
+            debugPrint('$titleText tapped!');
+          }
+        },
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
         highlightColor: Colors.blueAccent.withValues(alpha: 0.05),
         child: ListTile(

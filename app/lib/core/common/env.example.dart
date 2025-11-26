@@ -17,7 +17,7 @@ class Env {
   /// Expected format: 'https://your-project-id.supabase.co'
   static const supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://your-project-id.supabase.co',
+    defaultValue: 'https://xslhteoqlnvmrtphrhkg.supabase.co',
   );
 
   /// Supabase anonymous API key
@@ -28,7 +28,7 @@ class Env {
   /// This key is safe to use in client-side code but should still be kept secure.
   static const supabaseAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
-    defaultValue: 'your-anon-key-here',
+    defaultValue: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzbGh0ZW9xbG52bXJ0cGhyaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3MzA3MzUsImV4cCI6MjA3ODMwNjczNX0.YSbDCpg35a5V49H5gckkMWhVL0vVfZICGr0GGqEZ8qU',
   );
 
   // ==========================================

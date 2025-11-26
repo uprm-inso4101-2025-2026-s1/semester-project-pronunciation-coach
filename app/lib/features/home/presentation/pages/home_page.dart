@@ -223,23 +223,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   weeklyLessonsCompleted: _weeklyLessonsCompleted,
                   weeklyGoal: 35,
                 ),
-              ],
+                const SizedBox(height: 16), // Espacio
+                
+                ],
+              ),
             ),
-          ),
+          )
         ),
-      ),
-
-      // Quick access floating action button for AI chatbot
-      floatingActionButton: FloatingActionButton(
+        
+        // Quick access floating action button for AI chatbot
+        floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.chat),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ChatbotPage()),
-          );
-        },
-      ),
-    );
+            );
+          }
+        )
+      );   
+    }
   }
-}
