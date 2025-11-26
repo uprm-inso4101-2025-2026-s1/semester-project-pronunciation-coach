@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../../common/env.dart' as env;
+import '../../common/env.example.dart' as env;
 
 /// xAPI (Experience API) client for sending learning analytics statements.
 /// 

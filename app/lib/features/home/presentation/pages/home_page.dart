@@ -225,23 +225,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 16), // Espacio
                 
-                // Main activity sections and feature cards
-                HomeSections(), //Removed const for Activity Card functionality on tap
-           ],
+                ],
+              ),
+            ),
+          )
         ),
-      ),
-
-      // Quick access floating action button for AI chatbot
-      floatingActionButton: FloatingActionButton(
+        
+        // Quick access floating action button for AI chatbot
+        floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.chat),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ChatbotPage()),
-          );
-        },
-      ),
-    );
+            );
+          }
+        )
+      );   
+    }
   }
-}

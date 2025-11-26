@@ -82,17 +82,17 @@ class HomeSections extends StatelessWidget {
           ),
         ),
         ActivityCard(
-          icon: Icons.flag,
-          title: 'Objetivos semanales',
-          subtitle: '4 of 7 days completed',
-          trailing: Icon(Icons.remove, color: Colors.orange, size: 20),
+          leadingIcon: Icons.flag,
+          titleText: 'Objetivos semanales',
+          subtitleText: '4 of 7 days completed',
+          trailingWidget: Icon(Icons.remove, color: Colors.orange, size: 20),
         ),
 
         ActivityCard(
-          icon: Icons.voice_chat,
-          title: 'Voice Cloning',
-          subtitle: 'Activate/Update voice-cloning',
-          trailing: Icon(Icons.check, color: Colors.red, size: 20),
+          leadingIcon: Icons.voice_chat,
+          titleText: 'Voice Cloning',
+          subtitleText: 'Activate/Update voice-cloning',
+          trailingWidget: Icon(Icons.check, color: Colors.red, size: 20),
           onTap: () async {
             Navigator.push(
             context,
@@ -149,7 +149,7 @@ class ActivityCard extends StatelessWidget {
           if (onTap != null) {
             onTap!();          // Run the custom action
           } else {
-            debugPrint('$title tapped!');
+            debugPrint('$titleText tapped!');
           }
         },
         splashColor: Colors.blueAccent.withValues(alpha: 0.2),
