@@ -5,12 +5,10 @@ state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/342"
 author: "Yulio7"
 labels: [
-  "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-19T19:44:54Z"
-updated_at: "2025-11-24T19:14:02Z"
+updated_at: "2025-11-27T22:55:56Z"
 ---
 
 # [Lecture Topic Task] <Layered Architecture Mapping (Domain / Application / Presentation / Infrastructure)>
@@ -18,9 +16,7 @@ updated_at: "2025-11-24T19:14:02Z"
 - **Issue:** [342](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/342)
 - **Author:** @Yulio7
 - **Labels:** [
-  "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-19T19:44:54Z
 
