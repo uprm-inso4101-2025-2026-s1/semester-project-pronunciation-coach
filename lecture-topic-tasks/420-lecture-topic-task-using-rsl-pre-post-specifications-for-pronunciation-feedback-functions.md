@@ -8,10 +8,10 @@ labels: [
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 created_at: "2025-11-26T20:11:46Z"
-updated_at: "2025-11-27T01:16:55Z"
+updated_at: "2025-11-27T01:21:31Z"
 ---
 
 # [Lecture Topic Task]: Using RSL Pre/Post Specifications for Pronunciation Feedback Functions
@@ -22,7 +22,7 @@ updated_at: "2025-11-27T01:16:55Z"
   "documentation",
   "Team 1",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-26T20:11:46Z
 
