@@ -7,10 +7,11 @@ author: "ClaudiaI-Guzman"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for team lead",
+  "state: in progress"
 ]
 created_at: "2025-11-25T01:44:26Z"
-updated_at: "2025-11-27T00:34:12Z"
+updated_at: "2025-11-27T00:37:10Z"
 ---
 
 # [Lecture Topic Task]: <Using Class Diagrams to explain the implementation of NLP models>
@@ -20,7 +21,8 @@ updated_at: "2025-11-27T00:34:12Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead"
+  "state: waiting for team lead",
+  "state: in progress"
 ]
 - **Created:** 2025-11-25T01:44:26Z
 
