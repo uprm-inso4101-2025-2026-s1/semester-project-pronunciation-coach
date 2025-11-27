@@ -6,10 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "jorge-belgo2"
 labels: [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-17T18:00:53Z"
-updated_at: "2025-11-27T04:04:52Z"
+updated_at: "2025-11-27T22:49:31Z"
 ---
 
 # [Lecture Topic Task]: <Create a Work Breakdown Structure (WBS) for the AI Pronunciation Coach>
@@ -18,7 +18,7 @@ updated_at: "2025-11-27T04:04:52Z"
 - **Author:** @jorge-belgo2
 - **Labels:** [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-17T18:00:53Z
 
