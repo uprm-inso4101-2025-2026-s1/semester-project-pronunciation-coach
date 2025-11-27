@@ -1,6 +1,6 @@
 ---
 issue_number: 422
-title: "[Lecture Topic Task]: <Enter short title here>"
+title: "[Lecture Topic Task]: <Importance of Feedback Loops in Pronunciation Learning>"
 state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/422"
 author: "abdielvelazquez"
@@ -11,10 +11,10 @@ labels: [
   "state: waiting for manager"
 ]
 created_at: "2025-11-27T14:11:09Z"
-updated_at: "2025-11-27T14:11:22Z"
+updated_at: "2025-11-27T14:11:37Z"
 ---
 
-# [Lecture Topic Task]: <Enter short title here>
+# [Lecture Topic Task]: <Importance of Feedback Loops in Pronunciation Learning>
 
 - **Issue:** [422](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/422)
 - **Author:** @abdielvelazquez
