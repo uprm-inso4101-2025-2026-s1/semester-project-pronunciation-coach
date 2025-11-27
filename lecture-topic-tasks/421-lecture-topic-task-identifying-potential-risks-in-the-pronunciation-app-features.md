@@ -1,15 +1,18 @@
 ---
 issue_number: 421
 title: "[Lecture Topic Task]: Identifying Potential Risks in the Pronunciation App Features"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/421"
 author: "abdielvelazquez"
 labels: [
+  "documentation",
   "Team 3",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: concluded",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-27T13:41:27Z"
-updated_at: "2025-11-27T14:03:44Z"
+updated_at: "2025-11-27T14:04:15Z"
 ---
 
 # [Lecture Topic Task]: Identifying Potential Risks in the Pronunciation App Features
@@ -17,8 +20,11 @@ updated_at: "2025-11-27T14:03:44Z"
 - **Issue:** [421](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/421)
 - **Author:** @abdielvelazquez
 - **Labels:** [
+  "documentation",
   "Team 3",
-  "Task: lecture-topic"
+  "Task: lecture-topic",
+  "state: concluded",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-27T13:41:27Z
 
