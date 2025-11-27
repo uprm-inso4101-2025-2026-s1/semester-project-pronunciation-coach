@@ -7,12 +7,10 @@ author: "ClaudiaI-Guzman"
 labels: [
   "documentation",
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-10-29T05:03:22Z"
-updated_at: "2025-11-25T23:41:26Z"
+updated_at: "2025-11-27T01:17:39Z"
 ---
 
 # [Lecture Topic Task]: <Applying Analytic Hierarchy Process to easily view/decide which NLP model to use in feedback implementation>
@@ -22,9 +20,7 @@ updated_at: "2025-11-25T23:41:26Z"
 - **Labels:** [
   "documentation",
   "Team 2",
-  "Task: lecture-topic",
-  "state: in progress",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-10-29T05:03:22Z
 
