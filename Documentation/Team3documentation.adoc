@@ -225,6 +225,17 @@ This logbook summarizes the key activities throughout the project, categorized b
 | 2025-11-08               | 🔧 Maintenance       | Fixed Flutter analyze errors by correcting import paths, removed empty directories and unused files, cleaned up backend by removing Supabase dependencies and .env files.                                                         | ✅ Done    | —                                  |
 | 2025-11-28               | 💻 Features/Tasks    | Completed remaining milestone 3 development tasks (7).                                                                                                                                                                            | ✅ Done    | —                                  |
 
+=== 1.8 Identifying Potential Risks in the Pronunciation Assessment Feature 
+
+| Risk                          | Likelihood | Consequence                          | Consequence Likelihood | Severity | Conflict Resolution Idea                                                               |
+| ----------------------------- | ---------- | ------------------------------------ | ---------------------- | -------- | -------------------------------------------------------------------------------------- |
+| Learner ignores feedback      | Medium     | No improvement in pronunciation      | High                   | Medium   | Make feedback less strict so learners can follow it at their own pace.                 |
+| Misinterpretation of feedback | Low        | Learner develops wrong pronunciation | Medium                 | High     | Fix confusion by showing clearer feedback or repeating instructions when needed.       |
+| Overwhelming learners         | Medium     | Reduced motivation                   | High                   | High     | Skip less important corrections so learners don’t feel overloaded.                     |
+| Audio lag during recording    | Low        | Frustration                          | Medium                 | Medium   | Prevent lag by improving audio performance before showing feedback.                    |
+| Incorrect scoring             | Low        | Reduced trust in app                 | High                   | High     | Apply scoring only when recordings are well verified or meet quality standards.        |
+
+
 ---
 
 == 2. Descriptive Part
