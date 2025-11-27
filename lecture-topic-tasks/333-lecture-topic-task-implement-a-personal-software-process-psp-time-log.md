@@ -1,15 +1,15 @@
 ---
 issue_number: 333
 title: "[Lecture Topic Task]: <Implement a Personal Software Process (PSP) Time Log>"
-state: "open"
+state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/333"
 author: "jorge-belgo2"
 labels: [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 created_at: "2025-11-17T18:03:19Z"
-updated_at: "2025-11-27T05:05:50Z"
+updated_at: "2025-11-27T22:48:53Z"
 ---
 
 # [Lecture Topic Task]: <Implement a Personal Software Process (PSP) Time Log>
@@ -18,7 +18,7 @@ updated_at: "2025-11-27T05:05:50Z"
 - **Author:** @jorge-belgo2
 - **Labels:** [
   "Task: lecture-topic",
-  "state: waiting for manager"
+  "state: concluded"
 ]
 - **Created:** 2025-11-17T18:03:19Z
 
