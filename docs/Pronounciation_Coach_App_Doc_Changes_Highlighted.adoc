@@ -170,7 +170,7 @@ Sections that have been removed from previous documentation will be indicated
 === 1.2 Current Situation, Needs, Ideas
 
 [.changed]
-=== 1.2.1 Current Situation
+==== 1.2.1 Current Situation
 
 Native Spanish speakers face significant pronunciation challenges due to fundamental phonetic differences between English and Spanish, particularly with sounds like /θ/ (as in "three") and vowel contrasts that don't exist in their native language. While language learning applications like Duolingo and Babbel are widely used, they primarily focus on vocabulary and grammar with only binary "correct/incorrect" pronunciation feedback, lacking detailed, actionable guidance and phoneme-level analysis. Current mobile applications suffer from technical limitations including 2-3 second processing delays during authentication and data operations where users wait without learning anything, breaking the learning momentum with generic loading indicators that provide no educational value. 
 
