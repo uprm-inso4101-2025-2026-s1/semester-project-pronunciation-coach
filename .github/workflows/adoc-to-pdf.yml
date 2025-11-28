@@ -64,6 +64,7 @@ jobs:
           git pull --rebase origin "$BRANCH" || true
 
       - name: Commit PDFs back to repo
+        if: github.event_name == 'push' && github.ref_name == 'main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(docs): update generated PDFs"
