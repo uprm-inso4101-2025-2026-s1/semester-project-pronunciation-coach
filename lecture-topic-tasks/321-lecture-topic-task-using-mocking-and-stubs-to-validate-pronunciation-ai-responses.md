@@ -6,10 +6,10 @@ url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciati
 author: "pedroamorales"
 labels: [
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 created_at: "2025-11-13T20:01:33Z"
-updated_at: "2025-11-13T20:01:43Z"
+updated_at: "2025-11-28T15:33:11Z"
 ---
 
 # [Lecture Topic Task]: Using Mocking and Stubs to Validate Pronunciation AI Responses
@@ -18,7 +18,7 @@ updated_at: "2025-11-13T20:01:43Z"
 - **Author:** @pedroamorales
 - **Labels:** [
   "Task: lecture-topic",
-  "state: in progress"
+  "state: concluded"
 ]
 - **Created:** 2025-11-13T20:01:33Z
 
