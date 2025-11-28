@@ -1591,7 +1591,7 @@ run CheckMergeProperties for 3
 
 *Class Diagram Overview*:
 
-image::class_diagram_png.png[Class Diagram for Quiz Session, Persistence, and Prosody Evaluation,width=600,align=center]
+image::class_diagram_png.png[ width=600, align=center]
 
 The class diagram illustrates the core architecture integrating session management, pronunciation evaluation, and offline synchronization. Key relationships include:
 
