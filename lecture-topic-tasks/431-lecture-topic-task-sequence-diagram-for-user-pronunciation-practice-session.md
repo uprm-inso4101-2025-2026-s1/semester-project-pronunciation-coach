@@ -5,11 +5,10 @@ state: "open"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/431"
 author: "Fernando18Torres"
 labels: [
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 created_at: "2025-11-28T19:17:00Z"
-updated_at: "2025-11-28T21:44:19Z"
+updated_at: "2025-11-28T22:45:57Z"
 ---
 
 # [Lecture Topic Task]: <Sequence Diagram for User Pronunciation Practice Session>
@@ -17,8 +16,7 @@ updated_at: "2025-11-28T21:44:19Z"
 - **Issue:** [431](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/431)
 - **Author:** @Fernando18Torres
 - **Labels:** [
-  "Task: lecture-topic",
-  "state: waiting for manager"
+  "Task: lecture-topic"
 ]
 - **Created:** 2025-11-28T19:17:00Z
 
