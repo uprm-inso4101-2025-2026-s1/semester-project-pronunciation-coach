@@ -8,11 +8,11 @@ labels: [
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-27T13:41:27Z"
-updated_at: "2025-11-27T22:58:38Z"
+updated_at: "2025-11-28T23:25:54Z"
 ---
 
 # [Lecture Topic Task]: Identifying Potential Risks in the Pronunciation App Features
@@ -23,8 +23,8 @@ updated_at: "2025-11-27T22:58:38Z"
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-27T13:41:27Z
 
