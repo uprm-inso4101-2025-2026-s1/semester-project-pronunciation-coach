@@ -56,6 +56,7 @@ jobs:
 
       # Rebase onto the latest remote to prevent non-fast-forward errors
       - name: Sync with remote (rebase)
+        if: github.event_name == 'push'
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
