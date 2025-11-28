@@ -8,10 +8,10 @@ labels: [
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 created_at: "2025-11-23T00:21:54Z"
-updated_at: "2025-11-23T00:26:11Z"
+updated_at: "2025-11-28T07:12:16Z"
 ---
 
 # [Lecture Topic Task]: Initial Risk Identification & Assessment for Voice-Cloning Feature
@@ -22,7 +22,7 @@ updated_at: "2025-11-23T00:26:11Z"
   "documentation",
   "Team 2",
   "Task: lecture-topic",
-  "state: in progress"
+  "state: waiting for team lead"
 ]
 - **Created:** 2025-11-23T00:21:54Z
 
