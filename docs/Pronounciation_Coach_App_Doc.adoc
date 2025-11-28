@@ -169,13 +169,13 @@ Native Spanish speakers face significant pronunciation challenges due to fundame
 
 * **Accessible Practice Environment**: Need for affordable, offline-capable tools that enable independent pronunciation practice outside classroom settings, without requiring constant teacher supervision or continuous internet connectivity.
 
-* **Personalized Learning Pathways**:  Structured progression through phonetically challenging sounds with adaptive difficulty that accommodates different accents, skill levels, and available practice time (5-30 minute sessions).
+* **Personalized Learning Pathways**: Structured progression through phonetically challenging sounds with adaptive difficulty that accommodates different accents, skill levels, and available practice time (5-30 minute sessions).
 
 * **Motivational Engagement Systems**: Gamified elements, progress tracking, and achievement systems to maintain long-term engagement, support consistent daily practice habits, and prevent skill degradation.
 
 * **Comprehensive Progress Analytics**: Tools for learners to monitor improvement over time, identify persistent pronunciation difficulties, and access exportable data (CSV) for personal review or educational purposes.
 
-* **Technical Performance & Usability**: Engaging visual feedback during application processing delays, educational content utilization during loading periods, graceful fallback mechanisms for audio playback failures, and intuitive interfaces suitable for diverse age groups and technical skill levels.
+* **Technical Performance & Usability**: Engaging visual feedback during application processing delays, educational content utilization during loading periods, Learners must be able to continue their lesson without interruption when audio files don't play, and intuitive interfaces suitable for diverse age groups and technical skill levels.
 
 * **Educational Ecosystem Support**: Platforms for native speakers to contribute authentic pronunciation samples and tools for educators to supplement classroom instruction with student engagement data and progress analytics.
 
@@ -187,7 +187,8 @@ Native Spanish speakers face significant pronunciation challenges due to fundame
 
 * **Real-time Feedback Systems**: Advanced pronunciation analysis using MFCC analysis and similarity scoring, providing instant feedback (within 2-3 seconds) that highlights mispronounced words or phonemes with specific improvement suggestions.
 
-* **Adaptive Learning Pathways**: Progressive difficulty system using Elo rating to personalize pronunciation challenges, with multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day) that adapt to user improvement and available time.
+
+* **Adaptive Learning Pathways**: Progressive difficulty system using Elo rating to personalize pronunciation challenges, with multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day) that adapt to the Learner's goals and available time.
 
 * **Gamified Motivation Systems**: Daily challenge system with streak tracking, XP points, badges, and achievement systems to encourage regular practice, milestone completion, and maintain long-term engagement through visual progress indicators.
 
@@ -301,19 +302,19 @@ Feature-Oriented Sprint Planning:
 
 * *Sprint 1: Authentication & Onboarding*:
 
-- User stories: "As Maria, I want secure login with educational content during delays"
+- User Story: "As Maria, I want secure login with educational content during delays so I can learn even while waiting"
 - Deliverables: WelcomeScreen, LoginPage with Factory pattern loading strategies
 - Definition of Done: 3-second authentication, educational loading facts, form validation
 
 * *Sprint 2: Core Pronunciation Analysis*:
 
-- User stories: "As Carlos, I want specific feedback on vowel pronunciation errors"
+- User Story: "As Carlos, I want specific feedback on vowel pronunciation errors so I can finally master the difference between 'beach' and other similar words"
 - Deliverables: Audio recording pipeline, MFCC analysis, phoneme-level feedback
 - Definition of Done: ≤3-second feedback, accurate /θ/ sound detection, visual comparisons
 
 * *Sprint 3: Gamification & Progress Tracking*:
 
-- User stories: "As Ana, I want to track my 14-day streak and see accuracy improvements"
+- User Story: "As Ana, I want to track my 14-day streak and see accuracy improvements so I can stay motivated and see my progress"
 - Deliverables: Streak system, XP rewards, progress dashboards, offline sync
 - Definition of Done: Timezone-aware streak calculation, exportable CSV reports
 
@@ -359,9 +360,9 @@ This section documents our comprehensive approach to project management, progres
 
 *Carlos (45-year-old English teacher from Medellín)*: "My students are too polite to correct me, but I see them exchange smiles when I say we're going to the 'beach' for our field trip. I've been teaching for twenty years, but these vowel sounds still betray me. Every morning at 7 AM, before my family wakes up, I practice with language apps that flash red or green - 'incorrect, try again' - but never show me where to put my tongue. Is it closer to my teeth? Higher in my mouth? The loading screens feel like eternity, showing only spinning circles when they could be teaching me something. I worry my students are learning my mistakes."
 
-*Ana (17-year-old high school student from San Juan)*: "My friends from online gaming tease me about my accent when I say 'sheet' - it comes out like 'shit' and everyone laughs. I watch American shows and try to mimic the actors, but my Puerto Rican accent sticks to certain sounds. The apps I've tried make me feel stupid with their generic 'wrong again' messages. I wish someone would show me exactly how to shape my mouth instead of just telling me I failed."
+*Ana (17-year-old high school student from San Juan)*: "My friends from online gaming tease me about my accent when I say 'sheet' - it comes out like a bad 'sheet' pronunciation, and everyone laughs. I watch American shows and try to mimic the actors, but my Puerto Rican accent sticks to certain sounds. The apps I've tried make me feel stupid with their generic 'wrong again' messages. I wish someone would show me exactly how to shape my mouth instead of just telling me I failed."
 
-*Technical observation*: During usability testing, authentication consistently took 2.8 seconds with generic loading spinners. Users exhibited clear frustration behaviors - multiple screen taps, sighing, and phone shaking. One participant muttered, "Is it broken again?" Speech-to-text processing with Whisper required 4.2 seconds for a simple 3-second audio clip, during which users received zero educational value. The empty waiting time consistently broke learning focus and momentum.
+*Technical observation*: During usability testing, authentication consistently took 2.8 seconds with generic loading spinners. Users exhibited clear frustration behaviors - multiple screen taps, sighing, and phone shaking. One participant muttered, "Is it broken again?" Speech-to-text processing required 4.2 seconds for a simple 3-second audio clip, during which users received zero educational value. The empty waiting time consistently broke learning focus and momentum.
 
 *Classroom observation*: In a Medellín language center, Carlos demonstrates "minimal pairs" to his students - "ship" versus "sheep" - but his own pronunciation blurs the distinction. Students politely repeat after him, inheriting the same subtle errors. He later confides, "I'm teaching them my limitations." The existing apps on his phone show progress charts but no actionable guidance for specific phoneme improvement.
 
@@ -403,13 +404,13 @@ This section documents our comprehensive approach to project management, progres
 
 * *Origin*: Behavioral psychology principles and observed user motivation patterns around consistency.
 
--*Phoneme* (Entity):: The smallest contrastive sound unit in a language that distinguishes word meanings. 
+-*Phoneme* (Entity):: The smallest contrastive sound unit in a language that helps differentiate words. 
 
 * *Example*: English /θ/ (voiceless dental fricative) which Spanish speakers typically replace with /t/ or /s/. 
 
 * *Origin*: Linguistic analysis of systematic pronunciation challenges for Spanish speakers learning English.
 
--*Pronunciation Challenge* (Entity):: A specific linguistic target varying from individual phonemes to complex tongue twisters, scaled by difficulty. 
+-*Pronunciation Struggles* (Entity):: A specific linguistic target varying from individual phonemes to complex tongue twisters, scaled by difficulty. 
 
 * *Example*: Progressive challenges from "think" (single word) to "The thirty-three thieves thought..." (complex phrase). 
 
@@ -500,7 +501,7 @@ This section documents our comprehensive approach to project management, progres
 |===
 | Entity | Action | Input | Output | State Change
 | Learner Profile | Start Session | User authentication, Preferences | Personalized challenge set | Idle → Active Session
-| Pronunciation Challenge | Generate Difficulty | User performance history, Skill level | Appropriate challenge level | N/A (Calculation)
+| Pronunciation Struggles | Generate Difficulty | User performance history, Skill level | Appropriate challenge level | N/A (Calculation)
 | Feedback System | Provide Articulatory Guidance | Pronunciation accuracy, Error patterns | Visual/audio correction guidance | Analysis → Feedback Ready
 | Progress Analytics | Compute Trends | Historical accuracy data, Time series | Improvement metrics, Predictive analytics | Data Updated → Insights Generated
 | Gamification Engine | Award Achievement | Streak data, Accuracy milestones | Badge notification, XP allocation | Criteria Met → Awarded
@@ -537,8 +538,6 @@ Technological systems intersect this natural learning process when they attempt 
 *Learning Breakthrough Achieved*:: 
 * The moment when a previously challenging phoneme becomes consistently producible, representing a milestone in skill development.
 
-*Motivation Trigger Activated*:: 
-* The point when visible progress or external encouragement reinforces continued practice engagement.
 
 •*Time-Consuming Actions:*
 
@@ -549,7 +548,7 @@ Technological systems intersect this natural learning process when they attempt 
 * A learner listens to minimal pairs (ship/sheep, think/sink) to develop sensitivity to subtle phonetic differences in the target language.
 
 *Expert Correction Provision*:: 
-* A trained instructor observes a learner's articulation, identifies specific deviations, and demonstrates corrective techniques through explanation and modeling.
+* A trained instructor observes a learner's articulation while identifying specific deviations to demonstrate corrective techniques through explanation and modeling.
 
 *Progress Self-Assessment*:: 
 * A learner reviews their improvement over time, analyzing error patterns and adjusting practice focus based on perceived challenges.
@@ -673,7 +672,7 @@ exportProgressData(
 - As a student, I want to analyze my performance with insights so that I can identify patterns in my pronunciation challenges
 
 *Epic: Engaging Learning Experience*
-*Creating motivating and effective practice environments that maintain user engagement through varied content, timely feedback, and adaptive challenges.*
+*Creating motivating and effective practice environments that maintain user engagement.*
 
 - As an impatient user, I want to learn pronunciation tips during authentication delays so that waiting time becomes educational rather than frustrating
 
@@ -698,8 +697,6 @@ exportProgressData(
 
 - As a user with visual impairment, I want complete screen reader support so I can navigate all application features
 
-- As a security-conscious user, I want duplicate account prevention so my data remains secure
-
 *Epic: Technical Reliability and Performance*
 *Building a robust technical foundation that ensures consistent, secure, and efficient system operation supporting uninterrupted learning.*
 
@@ -719,7 +716,7 @@ Maria remembers the exact moment her career trajectory shifted - during a quarte
 
 - **Background**: 28-year-old professional who frequently presents to American clients, frustrated when her pronunciation of "three" is misunderstood as "tree"
 - **Daily Routine**: Practices during 15-minute breaks between meetings, uses smartphone for most work tasks
-- **Pronunciation Challenges**: Consistent difficulty with /θ/ sounds, vowel duration differences, and word stress patterns
+- **Pronunciation Struggles**: Consistent difficulty with /θ/ sounds, vowel duration differences, and word stress patterns
 - **Motivation**: Career advancement and professional credibility in international business meetings
 - **Technology Profile**: High smartphone comfort, expects professional-grade app performance, values efficiency over gamification
 - **Pain Points**: Current apps provide only binary feedback, authentication delays disrupt practice momentum, no specific guidance on articulation
@@ -730,18 +727,18 @@ Carlos still feels the heat in his cheeks when he remembers his students' suppre
 
 - **Background**: 45-year-old educator preparing to move abroad, embarrassed when students laugh at his pronunciation of "beach" due to it sounding like an inappropriate word
 - **Daily Routine**: Early morning practice sessions before school, prefers structured learning with clear goals
-- **Pronunciation Challenges**: Vowel contrasts (/iː/ vs /ɪ/), consonant clusters, and sentence-level intonation
+- **Pronunciation Struggles**: Vowel contrasts (/iː/ vs /ɪ/), consonant clusters, and sentence-level intonation
 - **Motivation**: Classroom effectiveness and social integration in English-speaking country
 - **Technology Profile**: Moderate technical comfort, values clear progress tracking and achievement systems
 - **Pain Points**: Generic error messages without specific corrections, difficulty tracking gradual improvement, inconsistent practice motivation
 
 *Ana Silva - Computer Science Student (San Juan)*
 
-Ana navigates campus life with her noise-cancelling headphones permanently attached, switching between coding tutorials and pronunciation practice. During her internship interview with a Silicon Valley company, the technical lead asked her to repeat "user authentication sheet" three times before understanding her. She now practices technical terms while walking between classes, her backpack heavy with programming textbooks and the laptop she saved six months to buy. Ana recently taught her grandmother to video call using WhatsApp, patiently explaining each step in Spanish. She creates detailed spreadsheets tracking her pronunciation accuracy across different phoneme categories and gets frustrated when apps don't provide exportable data for her personal analysis.
+Ana navigates campus life with her noise-cancelling headphones permanently attached, switching between coding tutorials and pronunciation practice. During her internship interview with a Silicon Valley company, the technical lead asked her to repeat "user authentication sheet" three times before understanding her. She now practices technical terms while walking between classes, her backpack heavy with programming textbooks and the laptop she saved for six months to buy. Ana recently taught her grandmother to video call using WhatsApp, patiently explaining each step in Spanish. She creates detailed spreadsheets tracking her pronunciation accuracy across different phoneme categories and gets frustrated when apps don't provide exportable data for her personal analysis.
 
 - **Background**: 20-year-old computer science student who needs clear pronunciation for technical presentations and international internships
 - **Daily Routine**: Studies between classes, uses learning apps during campus downtime
-- **Pronunciation Challenges**: Technical vocabulary, rapid speech patterns, and academic presentation style
+- **Pronunciation Struggles**: Technical vocabulary, rapid speech patterns, and academic presentation style
 - **Motivation**: Academic success and preparation for global tech industry opportunities
 - **Technology Profile**: Digital native, expects seamless mobile experience, values data-driven progress insights
 - **Pain Points**: Limited practice time between classes, needs flexible session lengths, wants exportable progress reports for academic advisors
@@ -752,7 +749,7 @@ Elena can navigate complex codebases with her screen reader faster than most sig
 
 - **Background**: 32-year-old software developer with visual impairment advocating for accessibility in tech
 - **Daily Routine**: Integrates pronunciation practice into her coding workflow, uses voice commands extensively
-- **Pronunciation Challenges**: Technical terminology, consistent speech pacing, and clear articulation for international teams
+- **Pronunciation Struggles**: Technical terminology, consistent speech pacing, and clear articulation for international teams
 - **Motivation**: Professional equality and demonstrating that accessibility benefits all users
 - **Technology Profile**: Expert assistive technology user, values consistent navigation patterns and clear audio feedback
 - **Pain Points**: Inaccessible pronunciation visuals, inconsistent screen reader support, lack of keyboard navigation alternatives
@@ -1895,6 +1892,8 @@ class FeedbackStrategy {
 }
 ----
 
+*Code Explanation*: This adapter pattern resolves the feedback granularity conflict by providing different evaluation strategies for different user types. Academic users get detailed phoneme analysis, professionals get practical intelligibility feedback, and casual users get encouraging reinforcement - all while using the same underlying `Attempt` evaluation system.
+
 **Adaptive Practice Structures**:
 [source,dart]
 ----
@@ -1919,6 +1918,8 @@ class AdaptiveSessionPlanner {
   }
 }
 ----
+
+*Code Explanation*: This session scheduler resolves the timing conflict by creating different session types based on user context. Academic users get structured sessions with deadlines (for Ana's coursework), while professionals get flexible sessions that adapt to their available time (for Maria's and Carlos's busy schedules).
 
 **Stakeholder-Specific Service Integration**:
 
