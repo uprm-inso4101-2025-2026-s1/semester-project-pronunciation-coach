@@ -93,7 +93,7 @@ Sections that have been removed from previous documentation will be indicated
 | Prepare documentation for milestones
 |===
 
-=== 1.1.3 Team 3
+==== 1.1.3 Team 3
 
 [cols="1,1,3",options="header"]
 |===
@@ -182,6 +182,7 @@ Learners struggle with limited access to native speaker models, insufficient mot
 [.changed]
 The current landscape reveals a critical gap in user-friendly, accessible pronunciation coaching tools that provide personalized, adaptive feedback with the technical robustness needed for effective mobile learning, creating barriers to professional advancement and academic success for Spanish-speaking English learners.
 
+[.changed]
 ==== 1.2.2 Needs
 
 * **Immediate, Actionable Feedback**: Learners require real-time pronunciation assessment (within 2-3 seconds) with specific, understandable guidance beyond binary correct/incorrect judgments, including phoneme-level analysis and visual reinforcement of problem areas.
@@ -194,8 +195,10 @@ The current landscape reveals a critical gap in user-friendly, accessible pronun
 
 * **Comprehensive Progress Analytics**: Tools for learners to monitor improvement over time, identify persistent pronunciation difficulties, and access exportable data (CSV) for personal review or educational purposes.
 
+* **Technical Performance & Usability**: 
+
 [.changed]
-* **Technical Performance & Usability**: Engaging visual feedback during application processing delays, educational content utilization during loading periods, Learners must be able to continue their lesson without interruption when audio files don't play, and intuitive interfaces suitable for diverse age groups and technical skill levels.
+Engaging visual feedback during application processing delays, educational content utilization during loading periods, Learners must be able to continue their lesson without interruption when audio files don't play, and intuitive interfaces suitable for diverse age groups and technical skill levels.
 
 * **Educational Ecosystem Support**: Platforms for native speakers to contribute authentic pronunciation samples and tools for educators to supplement classroom instruction with student engagement data and progress analytics.
 
@@ -207,8 +210,10 @@ The current landscape reveals a critical gap in user-friendly, accessible pronun
 
 * **Real-time Feedback Systems**: Advanced pronunciation analysis using MFCC analysis and similarity scoring, providing instant feedback (within 2-3 seconds) that highlights mispronounced words or phonemes with specific improvement suggestions.
 
+* **Adaptive Learning Pathways**: 
+
 [.changed]
-* **Adaptive Learning Pathways**: Progressive difficulty system using Elo rating to personalize pronunciation challenges, with multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day) that adapt to the Learner's goals and available time.
+Progressive difficulty system using Elo rating to personalize pronunciation challenges, with multi-pace learning options (Casual: 5min/day, Standard: 15min/day, Intensive: 30min/day) that adapt to the Learner's goals and available time.
 
 * **Gamified Motivation Systems**: Daily challenge system with streak tracking, XP points, badges, and achievement systems to encourage regular practice, milestone completion, and maintain long-term engagement through visual progress indicators.
 
@@ -261,6 +266,7 @@ This solution addresses critical gaps in current language learning tools by prov
 * **Accessibility and Usability**: Implement responsive design systems, offline-first behavior with local data persistence, exportable analytics for research, and tools that promote learner independence without continuous teacher intervention.
 
 * **Formal Verification and Validation**: 
+
 [.added]
 Establish systematic validation frameworks for critical system states and develop comprehensive domain mappings with persistent data management for quiz attempts and analytics.
 
@@ -279,6 +285,7 @@ The Pronunciation Coach project follows comprehensive software engineering pract
 * **Deployment and Accessibility Planning**: Analysis of mobile app store requirements, ensuring lightweight performance on consumer devices, intuitive user interfaces for diverse technical proficiency, offline operation capabilities, and simple installation processes.
 
 * **Formal Methods and Risk Management**: 
+
 [.added]
 Integration of TLA+ for authentication state verification, Alloy Analyzer for learning state validation, and systematic risk analysis for feature prioritization and trade-off decision making.
 
@@ -327,8 +334,10 @@ The project follows an agile methodology with structured sprints to ensure conti
 - Comprehensive testing by team members (unit, widget, integration)
 - Documentation updates including domain impact analysis
 - Performance validation by testing on target devices (Android Device equivalents)
+
 [.added]
 - Formal verification for critical authentication and learning states
+
 [.added]
 - Data persistence validation and merge consistency testing
 
@@ -346,6 +355,7 @@ Feature-Oriented Sprint Planning:
 
 [.changed]
 - User Story: "As Maria, I want secure login with educational content during delays so I can learn even while waiting"
+
 - Deliverables: WelcomeScreen, LoginPage with Factory pattern loading strategies
 - Definition of Done: 3-second authentication, educational loading facts, form validation
 
@@ -353,6 +363,7 @@ Feature-Oriented Sprint Planning:
 
 [.changed]
 - User Story: "As Carlos, I want specific feedback on vowel pronunciation errors so I can finally master the difference between 'beach' and other similar words"
+
 - Deliverables: Audio recording pipeline, MFCC analysis, phoneme-level feedback
 - Definition of Done: ≤3-second feedback, accurate /θ/ sound detection, visual comparisons
 
@@ -360,6 +371,7 @@ Feature-Oriented Sprint Planning:
 
 [.changed]
 - User Story: "As Ana, I want to track my 14-day streak and see accuracy improvements so I can stay motivated and see my progress"
+
 - Deliverables: Streak system, XP rewards, progress dashboards, offline sync
 - Definition of Done: Timezone-aware streak calculation, exportable CSV reports
 
