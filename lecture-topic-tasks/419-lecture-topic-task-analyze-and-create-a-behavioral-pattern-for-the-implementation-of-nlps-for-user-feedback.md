@@ -7,11 +7,11 @@ author: "ClaudiaI-Guzman"
 labels: [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-26T13:43:38Z"
-updated_at: "2025-11-27T02:43:21Z"
+updated_at: "2025-11-28T22:00:38Z"
 ---
 
 # [Lecture Topic Task]: <Analyze and create a Behavioral Pattern for the implementation of NLPs for user feedback>
@@ -21,8 +21,8 @@ updated_at: "2025-11-27T02:43:21Z"
 - **Labels:** [
   "Team 2",
   "Task: lecture-topic",
-  "state: waiting for team lead",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-26T13:43:38Z
 
