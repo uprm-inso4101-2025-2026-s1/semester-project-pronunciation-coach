@@ -8,11 +8,11 @@ labels: [
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 created_at: "2025-11-27T14:11:09Z"
-updated_at: "2025-11-27T22:55:11Z"
+updated_at: "2025-11-28T23:15:28Z"
 ---
 
 # [Lecture Topic Task]: <Importance of Feedback Loops in Pronunciation Learning>
@@ -23,8 +23,8 @@ updated_at: "2025-11-27T22:55:11Z"
   "documentation",
   "Team 3",
   "Task: lecture-topic",
-  "state: needs fix",
-  "state: in progress"
+  "state: in progress",
+  "state: waiting for manager"
 ]
 - **Created:** 2025-11-27T14:11:09Z
 
