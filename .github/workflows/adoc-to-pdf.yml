@@ -57,7 +57,7 @@ jobs:
       # Rebase onto the latest remote to prevent non-fast-forward errors
       - name: Sync with remote (rebase)
         env:
-          BRANCH: ${{ github.ref_name }}
+          BRANCH: main
         run: |
           git fetch origin "$BRANCH"
           git checkout "$BRANCH"
@@ -68,7 +68,7 @@ jobs:
         with:
           commit_message: "chore(docs): update generated PDFs"
           file_pattern: docs/pdf/*.pdf
-          branch: ${{ github.ref_name }}
+          branch: main
           # Safe fallback in case new commits land between rebase and push
           push_options: --force-with-lease
 
