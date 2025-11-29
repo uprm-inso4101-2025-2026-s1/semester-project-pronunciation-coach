@@ -225,6 +225,53 @@ This logbook summarizes the key activities throughout the project, categorized b
 | 2025-11-08               | 🔧 Maintenance       | Fixed Flutter analyze errors by correcting import paths, removed empty directories and unused files, cleaned up backend by removing Supabase dependencies and .env files.                                                         | ✅ Done    | —                                  |
 | 2025-11-28               | 💻 Features/Tasks    | Completed remaining milestone 3 development tasks (7).                                                                                                                                                                            | ✅ Done    | —                                  |
 
+=== 1.8 Identifying Potential Risks in the Pronunciation Assessment Feature 
+
+| Risk                          | Likelihood | Consequence                          | Consequence Likelihood | Severity | Conflict Resolution Idea                                                               |
+| ----------------------------- | ---------- | ------------------------------------ | ---------------------- | -------- | -------------------------------------------------------------------------------------- |
+| Learner ignores feedback      | Medium     | No improvement in pronunciation      | High                   | Medium   | Make feedback less strict so learners can follow it at their own pace.                 |
+| Misinterpretation of feedback | Low        | Learner develops wrong pronunciation | Medium                 | High     | Fix confusion by showing clearer feedback or repeating instructions when needed.       |
+| Overwhelming learners         | Medium     | Reduced motivation                   | High                   | High     | Skip less important corrections so learners don’t feel overloaded.                     |
+| Audio lag during recording    | Low        | Frustration                          | Medium                 | Medium   | Prevent lag by improving audio performance before showing feedback.                    |
+| Incorrect scoring             | Low        | Reduced trust in app                 | High                   | High     | Apply scoring only when recordings are well verified or meet quality standards.        |
+
+=== 1.9 Feedback Loops
+Feedback loops are mechanisms that guide learners to notice mistakes and improve their pronunciation over time. 
+They provide information about performance, helping learners correct errors and reinforce correct pronunciation.
+Feedback loops are important in learning applications because they provide immediate guidance on performance, 
+they help learners correct mistakes efficiently and they support continuous improvement in pronunciation.
+
+1. Positive Feedback Loops
+These feedback inspires and encourages learners by highlighting their correct pronunciation and to continue practicing correctly. 
+Examples of positive feedback would be:
+- Points, badges, unlockables or checkmarks for correct answers.
+- Reinforcement messages like “Good job!” or "Great Work!"
+
+2. Negative Feedback Loops
+Although these focus on correcting mistakes, the learners get to know which part of a word was mispronounced,
+they can compare the correct pronunciation with theirs, and they are encouraged to try again and adjust their
+pronunciation for improvement. 
+Examples of negative feedback would be:
+- Showing which part of a word was mispronounced,
+- Playing the correct pronunciation for comparison.
+
+3. Adaptive Feedback Loops
+These feedback loops change depending on how the learner is doing. 
+They give more practice on things that are hard and less on things that are already easy. 
+This keeps learners challenged without feeling frustrated.
+Examples of adaptive feedback:
+- Giving extra exercises for sounds or words the learner struggles with
+- Reducing repetition for words the learner already pronounces well
+
+Simple Process Diagram on how Feedback Loops work: 
+
+```dart
+Attempt pronunciation → System evaluates → Feedback provided → Learner adjusts → Repeat
+```
+
+The reason Feedback Loops are important is because they provide immediate guidance on performance for the learner to adjust,
+they help learners correct mistakes efficiently and they also support continuous improvement in pronunciation.
+
 ---
 
 == 2. Descriptive Part
