@@ -1,6 +1,6 @@
 ---
 issue_number: 171
-title: "[Lecture Topic Task] Risk Identification & Mitigation Table Implementation for Team 2"
+title: "[Lecture Topic Task]: Risk Identification & Mitigation Table Implementation for Team 2"
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/171"
 author: "Dieg0Rios"
@@ -11,10 +11,10 @@ labels: [
   "state: concluded"
 ]
 created_at: "2025-10-10T04:09:29Z"
-updated_at: "2025-11-23T00:33:55Z"
+updated_at: "2025-11-30T17:33:55Z"
 ---
 
-# [Lecture Topic Task] Risk Identification & Mitigation Table Implementation for Team 2
+# [Lecture Topic Task]: Risk Identification & Mitigation Table Implementation for Team 2
 
 - **Issue:** [171](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/171)
 - **Author:** @Dieg0Rios
