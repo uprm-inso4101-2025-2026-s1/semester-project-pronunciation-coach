@@ -1,19 +1,29 @@
 ---
 issue_number: 170
-title: "[ Lecture Topic Task] Documentation Logbook System for Team 2"
+title: "[ Lecture Topic Task]: Documentation Logbook System for Team 2"
 state: "closed"
 url: "https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/170"
 author: "Dieg0Rios"
-labels: ["documentation","Team 2","Task: lecture-topic","state: concluded"]
+labels: [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 created_at: "2025-10-10T03:48:15Z"
-updated_at: "2025-11-10T03:57:55Z"
+updated_at: "2025-11-30T17:34:09Z"
 ---
 
-# [ Lecture Topic Task] Documentation Logbook System for Team 2
+# [ Lecture Topic Task]: Documentation Logbook System for Team 2
 
 - **Issue:** [170](https://github.com/uprm-inso4101-2025-2026-s1/semester-project-pronunciation-coach/issues/170)
 - **Author:** @Dieg0Rios
-- **Labels:** ["documentation","Team 2","Task: lecture-topic","state: concluded"]
+- **Labels:** [
+  "documentation",
+  "Team 2",
+  "Task: lecture-topic",
+  "state: concluded"
+]
 - **Created:** 2025-10-10T03:48:15Z
 
 ## Details
